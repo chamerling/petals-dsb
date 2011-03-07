@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?><metadata>
+  <plugins>
+    <plugin>
+      <name>j2meconverter Maven Mojo</name>
+      <prefix>j2meconverter</prefix>
+      <artifactId>maven-j2meconverter-plugin</artifactId>
+    </plugin>
+  </plugins>
+</metadata>

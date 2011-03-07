@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<!-- ============== -->
+	<!-- Identification -->
+	<!-- ============== -->
+
+	<name>ESB-Kernel</name>
+	<artifactId>root-builder</artifactId>
+	<groupId>org.ow2.petals.esb</groupId>
+	<packaging>pom</packaging>
+	<version>SNAPSHOT</version>
+
+	<modules>
+		<module>parent</module>
+		<module>fractal-base</module>
+		<module>exchange</module>
+		<module>soap-handler</module>
+		<module>transporter-api</module>
+		<module>soap-transporter-impl</module>
+		<module>esb-kernel-api</module>
+		<module>esb-kernel-impl</module>
+		<module>esb-launcher</module>
+		<module>external.listener.soap</module>
+		<module>external.sender.soap</module>
+		<module>esb-impl</module>
+	</modules>
+	<build>
+		<defaultGoal>install</defaultGoal>
+	</build>
+</project>

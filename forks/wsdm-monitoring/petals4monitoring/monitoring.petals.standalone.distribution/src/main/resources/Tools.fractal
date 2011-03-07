@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE definition PUBLIC "-//objectweb.org//DTD Fractal ADL 2.0//EN" "classpath://org/objectweb/fractal/adl/xml/standard.dtd">
+
+<definition extends="ToolsType" name="Tools">
+
+  <!-- Defines the internal components -->
+  <component definition="org.ow2.petals.tools.ws.WebServiceManagerImpl" name="WebServiceManagerImpl"/>
+  
+  <!-- Web services -->
+  <component definition="org.ow2.petals.ws.ArtifactRepositoryServiceImpl" name="ArtifactRepositoryWebServiceImpl"/>
+  <component definition="org.ow2.petals.ws.EndpointServiceImpl" name="EndpointWebServiceImpl"/>
+  <component definition="org.ow2.petals.ws.StandaloneTopologyServiceImpl" name="TopologyWebServiceImpl"/>
+  <component definition="org.ow2.petals.ws.InformationServiceImpl" name="InformationWebServiceImpl"/>
+  <component definition="org.ow2.petals.ws.RuntimeServiceImpl" name="RuntimeWebServiceImpl"/>
+  <component definition="org.ow2.petals.ws.JBIArtefactsServiceImpl" name="JBIArtefactsWebServiceImpl"/>
+  <component definition="org.ow2.petals.ws.DeploymentServiceImpl" name="DeploymentWebServiceImpl"/>
+  <component definition="org.ow2.petals.ws.InstallationServiceImpl" name="InstallationWebServiceImpl"/>
+  <component definition="org.ow2.petals.ws.ServiceAssemblyStateServiceImpl" name="ServiceAssemblyStateWebServiceImpl"/>
+  
+  <!-- /Web services -->
+  
+  <!-- Connect to provider -->
+  <binding client="this.ws" server="WebServiceManagerImpl.service"/>
+  
+  <!-- Connect to consume -->
+  <binding client="ArtifactRepositoryWebServiceImpl.artifactrepository" server="this.artifactrepository"/>
+  <binding client="ArtifactRepositoryWebServiceImpl.configuration" server="this.configuration"/>
+  <binding client="EndpointWebServiceImpl.endpoint" server="this.endpoint"/>
+  <binding client="TopologyWebServiceImpl.configuration" server="this.configuration"/>
+  <binding client="InformationWebServiceImpl.adminService" server="this.adminService"/>
+  <binding client="RuntimeWebServiceImpl.petalsAdminService" server="this.petalsAdminService"/>
+  <binding client="JBIArtefactsWebServiceImpl.adminService" server="this.adminService"/>
+  <binding client="DeploymentWebServiceImpl.artifactrepository" server="this.artifactrepository"/>
+  <binding client="DeploymentWebServiceImpl.deployment" server="this.atomicDeploymentService"/>
+  <binding client="InstallationWebServiceImpl.artifactrepository" server="this.artifactrepository"/>
+  <binding client="InstallationWebServiceImpl.componentInstallation" server="this.componentInstallationService"/>
+  <binding client="ServiceAssemblyStateWebServiceImpl.adminService" server="this.adminService"/>
+
+  <!-- Web service manager -->  
+  <binding client="WebServiceManagerImpl.configuration" server="this.configuration"/>
+  
+  <!-- Give the list of all components to be exposed as web services, the manager will expose them at startup -->
+  <binding client="WebServiceManagerImpl.webservice-artifactrepository" server="ArtifactRepositoryWebServiceImpl.service"/>
+  <binding client="WebServiceManagerImpl.webservice-endpoint" server="EndpointWebServiceImpl.service"/>
+  <binding client="WebServiceManagerImpl.webservice-topology" server="TopologyWebServiceImpl.service"/>
+  <binding client="WebServiceManagerImpl.webservice-information" server="InformationWebServiceImpl.service"/>
+  <binding client="WebServiceManagerImpl.webservice-runtime" server="RuntimeWebServiceImpl.service"/>
+  <binding client="WebServiceManagerImpl.webservice-jbiartefacts" server="JBIArtefactsWebServiceImpl.service"/>
+  <binding client="WebServiceManagerImpl.webservice-installation" server="InstallationWebServiceImpl.service"/>
+  <binding client="WebServiceManagerImpl.webservice-deployment" server="DeploymentWebServiceImpl.service"/>
+  <binding client="WebServiceManagerImpl.webservice-sastateservice" server="ServiceAssemblyStateWebServiceImpl.service"/>
+  
+  <controller desc="composite"/>
+</definition>

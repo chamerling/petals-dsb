@@ -1,0 +1,270 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>dsb-parent</artifactId>
+		<groupId>org.petalslink.dsb</groupId>
+		<version>1-SNAPSHOT</version>
+	</parent>
+	
+	<name>Petals Binding Component :: SOAP</name>
+	<artifactId>petals-bc-soap</artifactId>
+	<groupId>org.petalslink.dsb</groupId>
+	<version>4.0.1</version>
+	<packaging>jbi-component</packaging>
+	<description> The PEtALS SOAP JBI binding component based on Axis2 and
+		Jetty. </description>
+		
+	<developers>
+		<developer>
+			<name>Christophe Hamerling</name>
+			<email>christophe.hamerling@ebmwebsourcing.com</email>
+			<id>chamerling</id>
+			<organization>eBM WebSourcing</organization>
+			<organizationUrl> http://www.ebmwebsourcing.com </organizationUrl>
+			<roles>
+				<role>Developer</role>
+			</roles>
+			<timezone>+1</timezone>
+			<url>http://www.ebmwebsourcing.com/chamerling</url>
+		</developer>
+		<developer>
+			<name>Christophe Deneux</name>
+			<email>christophe.deneux@capgemini.com</email>
+			<id>chamerling</id>
+			<organization>Capgemini Sud</organization>
+			<organizationUrl> http://www.capgemini.com </organizationUrl>
+			<roles>
+				<role>Developer</role>
+			</roles>
+			<timezone>+1</timezone>
+		</developer>
+	</developers>
+
+	<!-- Source code management -->
+	<scm>
+		<connection>scm:svn:svn://svn.forge.objectweb.org/svnroot/petals/tags/petals-bc-soap-4.0.1</connection>
+		<developerConnection>scm:svn:svn+ssh://svn.forge.objectweb.org/svnroot/petals/tags/petals-bc-soap-4.0.1</developerConnection>
+		<url>http://svn.forge.objectweb.org/cgi-bin/viewcvs.cgi/petals/tags/petals-bc-soap-4.0.1</url>
+	</scm>
+	<properties>
+		<axis2.version>1.4.1</axis2.version>
+		<rampart.version>1.4</rampart.version>
+		<topDirectoryLocation>../..</topDirectoryLocation>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>petals-cdk</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.ow2.petals</groupId>
+			<artifactId>petals-ws-star</artifactId>
+			<version>1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis2</groupId>
+			<artifactId>axis2-kernel</artifactId>
+			<version>${axis2.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>xerces</groupId>
+					<artifactId>xercesImpl</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>xalan</groupId>
+					<artifactId>xalan</artifactId>
+				</exclusion>
+				<!-- Ant dependencies are unneeded -->
+				<exclusion>
+					<groupId>org.apache.ant</groupId>
+					<artifactId>ant</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis2</groupId>
+			<artifactId>axis2-json</artifactId>
+			<version>${axis2.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>xerces</groupId>
+					<artifactId>xercesImpl</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>xalan</groupId>
+					<artifactId>xalan</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+		</dependency>
+		<!-- TODO: check why version of Axiom must be forced -->
+		<!--
+			<dependency> <groupId>org.apache.ws.commons.axiom</groupId>
+			<artifactId>axiom-api</artifactId> <version>1.2.5</version>
+			</dependency> <dependency>
+			<groupId>org.apache.ws.commons.axiom</groupId>
+			<artifactId>axiom-impl</artifactId> <version>1.2.5</version>
+			</dependency> <dependency>
+			<groupId>org.apache.ws.commons.axiom</groupId>
+			<artifactId>axiom-dom</artifactId> <version>1.2.5</version>
+			</dependency>
+		-->
+		<!-- End TODO -->
+		<!--
+			The dependency on org.apache.rampart:rampart:1.3:mar can not be used
+			because it depends on a version SNAPSHOT. So we add rampart jars
+			dependencies and add the file .mar in the directory META-INF
+		-->
+		<!--
+			<dependency> <groupId>org.apache.rampart</groupId>
+			<artifactId>rampart</artifactId> <version>${axis2.version}</version>
+			<type>mar</type> </dependency>
+		-->
+		<dependency>
+			<groupId>org.apache.rampart</groupId>
+			<artifactId>rampart-core</artifactId>
+			<version>${rampart.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.sun.jmx</groupId>
+					<artifactId>jmxri</artifactId>
+				</exclusion>
+				<!--
+					exclusion> <groupId>xalan</groupId> <artifactId>xalan</artifactId>
+					</exclusion -->
+				<exclusion>
+					<groupId>xerces</groupId>
+					<artifactId>xercesImpl</artifactId>
+				</exclusion>
+				<!--
+					exclusion> <groupId>bouncycastle</groupId>
+					<artifactId>bcprov-jdk15</artifactId> </exclusion -->
+				<exclusion>
+					<groupId>com.sun.jdmk</groupId>
+					<artifactId>jmxtools</artifactId>
+				</exclusion>
+				<!-- Ant dependencies are unneeded -->
+				<exclusion>
+					<groupId>org.apache.ant</groupId>
+					<artifactId>ant-launcher</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.ant</groupId>
+					<artifactId>ant</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.ant</groupId>
+					<artifactId>ant-nodeps</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.rampart</groupId>
+			<artifactId>rampart</artifactId>
+			<type>mar</type>
+			<version>${rampart.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.sun.jdmk</groupId>
+					<artifactId>jmxtools</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.jmx</groupId>
+					<artifactId>jmxri</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>xerces</groupId>
+					<artifactId>xercesImpl</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>xalan</groupId>
+					<artifactId>xalan</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>bouncycastle</groupId>
+					<artifactId>bcprov-jdk15</artifactId>
+				</exclusion>
+				<!-- Ant dependencies are unneeded -->
+				<exclusion>
+					<groupId>org.apache.ant</groupId>
+					<artifactId>ant-launcher</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.ant</groupId>
+					<artifactId>ant</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.ant</groupId>
+					<artifactId>ant-nodeps</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.mortbay.jetty</groupId>
+			<artifactId>jetty</artifactId>
+			<version>6.1.9</version>
+		</dependency>
+		<!--  JBI Shared Library -->
+		<!--
+			<dependency> <groupId>org.ow2.petals.sl.jms.activemq</groupId>
+			<artifactId>petals-sl-jms</artifactId> <version>5.2.0</version>
+			<type>jbi-shared-library</type> <scope>provided</scope> </dependency>
+		-->
+	</dependencies>
+	<repositories>
+		<!--
+			The following repository is needed to get
+			bouncycastle:bcprov-jdk15:jar:132 needed by
+			org.apache.rampart:rampart:1.3:mar, waiting
+			http://ws.zones.apache.org/repository2
+		-->
+		<repository>
+			<!-- This is to bypass the httpcore nio bad dependency on Apache which has moved and so the redirect does not work...-->
+			<id>ebmws-others.release</id>
+			<url>http://maven2.petalslink.org/others</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>ws02</id>
+			<name>WSO2 Oxygen Tank</name>
+			<url>http://dist.wso2.org/maven2</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<version>2.7</version>
+				<configuration>
+					<addGroupIdToProjectName>true</addGroupIdToProjectName>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.ow2.petals</groupId>
+				<artifactId>maven-petals-plugin</artifactId>
+				<version>2.1.1</version>
+				<extensions>true</extensions>
+			</plugin>
+		</plugins>
+	</build>
+</project>

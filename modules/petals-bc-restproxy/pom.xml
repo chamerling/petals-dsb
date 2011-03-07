@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>dsb-parent</artifactId>
+		<groupId>org.petalslink.dsb</groupId>
+		<version>1-SNAPSHOT</version>
+	</parent>
+	<groupId>org.petalslink.dsb</groupId>
+	<artifactId>petals-bc-rest</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	<name>Petals Binding Component :: REST Proxy</name>
+
+	<packaging>jbi-component</packaging>
+
+	<description>A simple component which proxify REST service calls.</description>
+
+	<developers>
+		<developer>
+			<name>Christophe Hamerling</name>
+			<email>christophe.hamerling@ebmwebsourcing.com</email>
+			<id>chamerling</id>
+			<organization>eBM WebSourcing</organization>
+			<organizationUrl>http://www.ebmwebsourcing.com</organizationUrl>
+			<roles>
+				<role>Developer</role>
+			</roles>
+			<timezone>+1</timezone>
+			<url>http://chamerling.wordpress.com</url>
+		</developer>
+	</developers>
+
+	<scm>
+		<connection>scm:svn:svn://svn.forge.objectweb.org/svnroot/petals/trunk/petals-components/petals-components-sandbox/petals-bc-restproxy</connection>
+		<developerConnection>scm:svn:svn+ssh://chamerling@svn.forge.objectweb.org/svnroot/petals/trunk/petals-components/petals-components-sandbox/petals-bc-restproxy</developerConnection>
+		<url>http://svn.forge.objectweb.org/cgi-bin/viewcvs.cgi/petals/trunk/petals-components/petals-components-sandbox/petals-bc-restproxy</url>
+	</scm>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>petals-cdk</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mortbay.jetty</groupId>
+			<artifactId>jetty</artifactId>
+			<version>6.1.22</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.activation</groupId>
+			<artifactId>activation</artifactId>
+			<version>1.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.0.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>petals-messaging</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<version>2.7</version>
+				<configuration>
+					<addGroupIdToProjectName>true</addGroupIdToProjectName>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.ow2.petals</groupId>
+				<artifactId>maven-petals-plugin</artifactId>
+				<version>2.1.0</version>
+				<extensions>true</extensions>
+			</plugin>
+		</plugins>
+	</build>
+</project>

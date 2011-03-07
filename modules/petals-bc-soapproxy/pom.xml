@@ -1,0 +1,160 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>dsb-parent</artifactId>
+		<groupId>org.petalslink.dsb</groupId>
+		<version>1-SNAPSHOT</version>
+	</parent>
+
+	<name>Petals DSB Binding Component :: SOAP Proxy</name>
+	<artifactId>petals-bc-soap-proxy</artifactId>
+	<groupId>org.petalslink.dsb</groupId>
+	<version>1.0-SNAPSHOT</version>
+	<packaging>jbi-component</packaging>
+	<description> The PEtALS SOAP JBI binding component based on Axis2 and
+		Jetty. </description>
+
+	<developers>
+		<developer>
+			<name>Christophe Hamerling</name>
+			<email>christophe.hamerling@ebmwebsourcing.com</email>
+			<id>chamerling</id>
+			<organization>eBM WebSourcing</organization>
+			<organizationUrl> http://www.ebmwebsourcing.com </organizationUrl>
+			<roles>
+				<role>Developer</role>
+			</roles>
+			<timezone>+1</timezone>
+			<url>http://chamerling.org</url>
+		</developer>
+	</developers>
+
+	<!-- Source code management -->
+	<scm>
+		<connection>scm:svn:svn://svn.forge.objectweb.org/svnroot/petals/trunk/petals-components/petals-bc-soap</connection>
+		<developerConnection>scm:svn:svn+ssh://svn.forge.objectweb.org/svnroot/petals/trunk/petals-components/petals-bc-soap</developerConnection>
+		<url>http://svn.forge.objectweb.org/cgi-bin/viewcvs.cgi/petals/trunk/petals-components/petals-bc-soap</url>
+	</scm>
+	<properties>
+		<axis2.version>1.4.1</axis2.version>
+		<topDirectoryLocation>../..</topDirectoryLocation>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.ow2.petals</groupId>
+			<artifactId>petals-cdk-core</artifactId>
+			<version>5.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.ow2.petals</groupId>
+			<artifactId>petals-ws-star</artifactId>
+			<version>1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis2</groupId>
+			<artifactId>axis2-kernel</artifactId>
+			<version>${axis2.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>xerces</groupId>
+					<artifactId>xercesImpl</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>xalan</groupId>
+					<artifactId>xalan</artifactId>
+				</exclusion>
+				<!-- Ant dependencies are unneeded -->
+				<exclusion>
+					<groupId>org.apache.ant</groupId>
+					<artifactId>ant</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis2</groupId>
+			<artifactId>axis2-json</artifactId>
+			<version>${axis2.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>xerces</groupId>
+					<artifactId>xercesImpl</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>xalan</groupId>
+					<artifactId>xalan</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+		</dependency>
+		<!-- TODO: check why version of Axiom must be forced -->
+		<!--
+			<dependency> <groupId>org.apache.ws.commons.axiom</groupId>
+			<artifactId>axiom-api</artifactId> <version>1.2.5</version>
+			</dependency> <dependency>
+			<groupId>org.apache.ws.commons.axiom</groupId>
+			<artifactId>axiom-impl</artifactId> <version>1.2.5</version>
+			</dependency> <dependency>
+			<groupId>org.apache.ws.commons.axiom</groupId>
+			<artifactId>axiom-dom</artifactId> <version>1.2.5</version>
+			</dependency>
+		-->
+		<!-- End TODO -->
+		<dependency>
+			<groupId>org.mortbay.jetty</groupId>
+			<artifactId>jetty</artifactId>
+			<version>6.1.9</version>
+		</dependency>
+		<!--  JBI Shared Library -->
+		<!--
+			<dependency> <groupId>org.ow2.petals.sl.jms.activemq</groupId>
+			<artifactId>petals-sl-jms</artifactId> <version>5.2.0</version>
+			<type>jbi-shared-library</type> <scope>provided</scope> </dependency>
+		-->
+	</dependencies>
+	<repositories>
+		<!--
+			The following repository is needed to get
+			bouncycastle:bcprov-jdk15:jar:132 needed by
+			org.apache.rampart:rampart:1.3:mar, waiting
+			http://ws.zones.apache.org/repository2
+		-->
+		<repository>
+			<id>ws02</id>
+			<name>WSO2 Oxygen Tank</name>
+			<url>http://dist.wso2.org/maven2</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.ow2.petals</groupId>
+				<artifactId>maven-petals-plugin</artifactId>
+				<version>2.1.1</version>
+				<extensions>true</extensions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<version>2.7</version>
+				<configuration>
+					<addGroupIdToProjectName>true</addGroupIdToProjectName>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+</project>

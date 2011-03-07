@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<topology xmlns="http://petals.ow2.org/topology">
+	<domain name="PEtALS" mode="dynamic">
+		<description>The static domain configuration</description>
+		<sub-domain name="subdomain1" mode="master-slave">
+			<description>description of the subdomain</description>
+			<container type="master" name="$installer.master.name">
+				<description>description of the container $installer.master.name</description>
+				<host>$installer.master.host</host>
+				<user>petals</user>
+				<password>petals</password>
+				<jmx-service>
+					<rmi-port>$installer.master.rmi</rmi-port>
+				</jmx-service>
+				<transport-service>
+					<tcp-port>$installer.master.transport</tcp-port>
+				</transport-service>
+				<registry-service>
+					<port>$installer.master.registry</port>
+				</registry-service>
+				<webservice-service>
+					<port>$installer.master.ws</port>
+					<prefix>petals/ws</prefix>
+				</webservice-service>
+			</container>
+			
+			<!-- The current node configuration details -->
+			<container type="slave" name="$installer.server.name">
+				<description>description of the container $installer.server.name</description>
+				<host>$installer.server.host</host>
+				<user>$installer.server.user</user>
+				<password>$installer.server.password</password>
+				<jmx-service>
+					<rmi-port>$installer.server.rmi</rmi-port>
+				</jmx-service>
+				<transport-service>
+					<tcp-port>$installer.server.transport</tcp-port>
+				</transport-service>
+				<registry-service>
+					<port>$installer.server.registry</port>
+				</registry-service>
+				<webservice-service>
+					<port>$installer.server.ws</port>
+					<prefix>petals/ws</prefix>
+				</webservice-service>
+			</container>
+		</sub-domain>
+	</domain>
+</topology>

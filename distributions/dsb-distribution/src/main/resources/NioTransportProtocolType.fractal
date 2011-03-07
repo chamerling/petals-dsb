@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    PETALS - PETALS Services Platform.
+    Copyright (C) 2009 Fossil E-Commerce, http://www.fossilec.com
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Lesser General Public
+    License as published by the Free Software Foundation; either
+    version 2.1 of the License, or (at your option) any later version.
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with this library; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+-->
+
+<!DOCTYPE definition PUBLIC "-//objectweb.org//DTD Fractal ADL 2.0//EN"
+    "classpath://org/objectweb/fractal/adl/xml/standard.dtd">
+
+<definition name="NioTransportProtocolType">
+
+  <!-- interfaces -->
+
+  <!-- server -->
+  <interface name="sender" role="server" signature="org.ow2.petals.transport.platform.nio.client.NioClientObjectPool"/>
+
+  <!-- client -->
+  <interface name="configuration" role="client" signature="org.ow2.petals.kernel.configuration.ConfigurationService"/>
+  <interface name="topology" role="client" signature="org.ow2.petals.communication.topology.TopologyService"/>
+  <interface name="receiver" role="client" signature="org.ow2.petals.transport.platform.nio.server.NioReceiver"/>
+
+</definition>

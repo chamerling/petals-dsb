@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:b="http://docs.oasis-open.org/wsn/b-2" xmlns:add="http://www.w3.org/2005/08/addressing">
+	<soapenv:Header />
+	<soapenv:Body>
+		<wsn:Subscribe xmlns:wsn="http://docs.oasis-open.org/wsn/b-2"
+			xmlns:add="http://www.w3.org/2005/08/addressing" targetnamespace="http://docs.oasis-open.org/wsn/b-2">
+			<wsn:ConsumerReference xmlns:wsn="http://docs.oasis-open.org/wsn/b-2"
+				xmlns:add="http://www.w3.org/2005/08/addressing">
+				<add:Address>http://localhost:9002/NotificationEndpoint</add:Address>
+			</wsn:ConsumerReference>
+			<wsn:Filter>
+				<wsn:TopicExpression Dialect="http://www.w3.org/TR/1999/REC-xpath-19991116"
+					xmlns:mows-ev="http://docs.oasis-open.org/wsdm/2004/12/mows/wsdm-mows-events.xml">
+					mows-ev:MetricsCapability
+		     </wsn:TopicExpression>
+			</wsn:Filter>
+		</wsn:Subscribe>
+	</soapenv:Body>
+</soapenv:Envelope>

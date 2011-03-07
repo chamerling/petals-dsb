@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+   <soapenv:Body>
+      <wsnt:SubscribeResponse xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2">
+         <wsnt:SubscriptionReference>
+            <wsa:Address xmlns:wsa="http://www.w3.org/2005/08/addressing">http://localhost:9002/NotificationEndpoint</wsa:Address>
+            <wsa:ReferenceParameters xmlns:wsa="http://www.w3.org/2005/08/addressing">
+               <ebm:SOAParameter xmlns:ebm="http://www.ebmwebsourcing.com/wsnotification/specificTypes">
+                  <ebm:InterfaceName xmlns="http://petals.ow2.org/wsdm">WSDMMonitoringServiceInterface</ebm:InterfaceName>
+                  <ebm:ServiceName xmlns="http://www.webserviceX.NET/">StockQuoteWSDMService</ebm:ServiceName>
+                  <ebm:Endpoint>StockQuoteWSDMSoap1</ebm:Endpoint>
+               </ebm:SOAParameter>
+               <ebm:ResourceUuidList xmlns:ebm="http://www.ebmwebsourcing.com/wsnotification/specificTypes">
+                  <ebm:Uuid>uuid:96554523-a098-43c2-befd-407d5e620272</ebm:Uuid>
+               </ebm:ResourceUuidList>
+            </wsa:ReferenceParameters>
+         </wsnt:SubscriptionReference>
+         <wsnt:TerminationTime xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+      </wsnt:SubscribeResponse>
+   </soapenv:Body>
+</soapenv:Envelope>

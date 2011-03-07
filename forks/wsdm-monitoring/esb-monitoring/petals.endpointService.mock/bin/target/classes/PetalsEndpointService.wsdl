@@ -1,0 +1,144 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions name="EndpointServiceService"
+	targetNamespace="http://api.ws.kernel.petals.ow2.org/" xmlns:ns1="http://schemas.xmlsoap.org/wsdl/soap/http"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://api.ws.kernel.petals.ow2.org/"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<wsdl:types>
+		<xs:schema attributeFormDefault="unqualified"
+			elementFormDefault="unqualified" targetNamespace="http://api.ws.kernel.petals.ow2.org/"
+			xmlns:ns1="http://petals.ow2.org/ws/1.0" xmlns:tns="http://api.ws.kernel.petals.ow2.org/"
+			xmlns:xs="http://www.w3.org/2001/XMLSchema">
+			<xs:import namespace="http://petals.ow2.org/ws/1.0" />
+			<xs:element name="getEndpoints" type="tns:getEndpoints" />
+			<xs:element name="getEndpointsResponse" type="tns:getEndpointsResponse" />
+			<xs:element name="query" type="tns:query" />
+			<xs:element name="queryResponse" type="tns:queryResponse" />
+			<xs:complexType name="query">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="arg0" type="ns1:EndpointQuery" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="queryResponse">
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="endpoints"
+						type="ns1:endpoint" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getEndpoints">
+				<xs:sequence />
+			</xs:complexType>
+			<xs:complexType name="getEndpointsResponse">
+				<xs:sequence>
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="endpoints"
+						type="ns1:endpoint" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="PEtALSWebServiceException" type="tns:PEtALSWebServiceException" />
+			<xs:complexType name="PEtALSWebServiceException">
+				<xs:sequence />
+			</xs:complexType>
+		</xs:schema>
+		<xs:schema attributeFormDefault="unqualified"
+			elementFormDefault="unqualified" targetNamespace="http://petals.ow2.org/ws/1.0"
+			xmlns="http://petals.ow2.org/ws/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+			<xs:complexType name="EndpointQuery">
+				<xs:sequence />
+				<xs:attribute name="endpoint" type="xs:QName" />
+				<xs:attribute name="service" type="xs:QName" />
+				<xs:attribute name="interface">
+					<xs:simpleType>
+						<xs:list itemType="xs:QName" />
+					</xs:simpleType>
+				</xs:attribute>
+				<xs:attribute name="containerName" type="xs:string" />
+				<xs:attribute name="componentName" type="xs:string" />
+				<xs:attribute name="subdomainName" type="xs:string" />
+			</xs:complexType>
+			<xs:complexType name="endpoint">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="service" type="xs:QName" />
+					<xs:element maxOccurs="unbounded" minOccurs="0" name="interface"
+						type="xs:QName" />
+					<xs:element minOccurs="0" name="container" type="xs:string" />
+					<xs:element minOccurs="0" name="component" type="xs:string" />
+					<xs:element minOccurs="0" name="subdomain" type="xs:string" />
+					<xs:element minOccurs="0" name="description" type="xs:string" />
+				</xs:sequence>
+				<xs:attribute name="name" type="xs:string" />
+			</xs:complexType>
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="getEndpoints">
+		<wsdl:part element="tns:getEndpoints" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="query">
+		<wsdl:part element="tns:query" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="PEtALSWebServiceException">
+		<wsdl:part element="tns:PEtALSWebServiceException" name="PEtALSWebServiceException">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="queryResponse">
+		<wsdl:part element="tns:queryResponse" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getEndpointsResponse">
+		<wsdl:part element="tns:getEndpointsResponse" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:portType name="EndpointService">
+		<wsdl:operation name="query">
+			<wsdl:input message="tns:query" name="query">
+			</wsdl:input>
+			<wsdl:output message="tns:queryResponse" name="queryResponse">
+			</wsdl:output>
+			<wsdl:fault message="tns:PEtALSWebServiceException" name="PEtALSWebServiceException">
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getEndpoints">
+			<wsdl:input message="tns:getEndpoints" name="getEndpoints">
+			</wsdl:input>
+			<wsdl:output message="tns:getEndpointsResponse" name="getEndpointsResponse">
+			</wsdl:output>
+			<wsdl:fault message="tns:PEtALSWebServiceException" name="PEtALSWebServiceException">
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="EndpointServiceServiceSoapBinding"
+		type="tns:EndpointService">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="query">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="query">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="queryResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="PEtALSWebServiceException">
+				<soap:fault name="PEtALSWebServiceException" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getEndpoints">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="getEndpoints">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="getEndpointsResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="PEtALSWebServiceException">
+				<soap:fault name="PEtALSWebServiceException" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="EndpointServiceService">
+		<wsdl:port binding="tns:EndpointServiceServiceSoapBinding"
+			name="EndpointServicePort">
+			<soap:address location="http://localhost:7600/petals/ws/EndpointService" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

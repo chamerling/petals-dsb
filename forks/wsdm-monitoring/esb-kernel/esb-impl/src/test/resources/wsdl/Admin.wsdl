@@ -1,0 +1,606 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:tns="http://ow2.petals.org/Admin/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="Admin"
+	targetNamespace="http://ow2.petals.org/Admin/">
+	<wsdl:types>
+		<xsd:schema targetNamespace="http://ow2.petals.org/Admin/">
+			<xsd:element name="createComponent">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="componentName" type="xsd:QName" />
+						<xsd:element name="fractalItfName" type="xsd:string" />
+						<xsd:element name="classComponentName" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="createComponentResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="componentName" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="createClient">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="componentName" type="xsd:QName" />
+						<xsd:element name="clientName" type="xsd:QName" />
+						<xsd:element name="fractalClientItfName" type="xsd:string" />
+						<xsd:element name="classClientName" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="createClientResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="clientName" type="xsd:string"
+							nillable="true" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="createProvider">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="componentName" type="xsd:QName" />
+						<xsd:element name="providerName" type="xsd:QName"></xsd:element>
+						<xsd:element name="fractalProviderItfName" type="xsd:string">
+						</xsd:element>
+						<xsd:element name="classProviderName" type="xsd:string"></xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="createProviderResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="providerName" type="xsd:string"></xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="createClientAndProvider">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="componentName" type="xsd:QName" />
+						<xsd:element name="clientAndProviderName" type="xsd:QName"></xsd:element>
+						<xsd:element name="fractalClientAndProviderInterfaceName"
+							type="xsd:string">
+						</xsd:element>
+						<xsd:element name="classClientAndProviderName" type="xsd:string"></xsd:element>
+						<xsd:element name="fractalClientItfName" type="xsd:string" />
+						<xsd:element name="classClientName" type="xsd:string" />
+						<xsd:element name="fractalProviderItfName" type="xsd:string"></xsd:element>
+						<xsd:element name="classProviderName" type="xsd:string"></xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="createClientAndProviderResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="clientAndProviderName" type="xsd:string"></xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="createService">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="providerName" type="xsd:QName"></xsd:element>
+						<xsd:element name="serviceName" type="xsd:QName"></xsd:element>
+						<xsd:element name="fractalServiceItfName" type="xsd:string" minOccurs="0"></xsd:element>
+						<xsd:element name="classServiceName" type="xsd:string" minOccurs="0"></xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="createServiceResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="serviceName" type="xsd:string"></xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="createClientEndpoint">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="clientName" type="xsd:QName" />
+						<xsd:element name="clientEndpointName" type="xsd:QName" />
+						<xsd:element name="fractalClientEndpointItfName" type="xsd:string"></xsd:element>
+						<xsd:element name="classClientEndpointName" type="xsd:string"></xsd:element>
+						<xsd:element name="classClientEndpointBehaviourName"
+							type="xsd:string"></xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="createClientEndpointResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="clientEndpointName" type="xsd:string"></xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="createProviderEndpoint">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="serviceName" type="xsd:QName" />
+						<xsd:element name="providerEndpointName" type="xsd:string" />
+						<xsd:element name="fractalProviderEndpointItfName"
+							type="xsd:string" minOccurs="0" ></xsd:element>
+						<xsd:element name="classProviderEndpointName" type="xsd:string" minOccurs="0"></xsd:element>
+						<xsd:element name="classProviderEndpointBehaviourName"
+							type="xsd:string"></xsd:element>
+						<xsd:element name="wsdl"
+							type="xsd:anyURI"></xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="createProviderEndpointResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="providerEndpointName" type="xsd:string"></xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="addSoapListener">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="clientEndpointName" type="xsd:QName" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="addSoapListenerResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="soapAddress" type="xsd:string"></xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="exposeInSoapOnClient">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="serviceName" type="xsd:QName" />
+						<xsd:element name="providerEndpointName" type="xsd:string" />
+						<xsd:element name="clientName" type="xsd:QName" minOccurs="0" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="exposeInSoapOnClientResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="soapAddress" type="xsd:string"></xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="createServiceEndpoint">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="providerName" type="xsd:QName" minOccurs="0"></xsd:element>
+						<xsd:element name="serviceName" type="xsd:QName"></xsd:element>
+						<xsd:element name="fractalServiceItfName" type="xsd:string"
+							minOccurs="0"></xsd:element>
+						<xsd:element name="classServiceName" type="xsd:string"
+							minOccurs="0"></xsd:element>
+						<xsd:element name="providerEndpointName" type="xsd:string" />
+						<xsd:element name="fractalProviderEndpointItfName"
+							type="xsd:string" minOccurs="0"></xsd:element>
+						<xsd:element name="classProviderEndpointName" type="xsd:string"
+							minOccurs="0"></xsd:element>
+						<xsd:element name="classProviderEndpointBehaviourName"
+							type="xsd:string"></xsd:element>
+						<xsd:element name="wsdl"
+							type="xsd:anyURI"></xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="createServiceEndpointResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="endpointName" type="xsd:string"></xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="createServiceEndpointOnSoapClient">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="providerName" type="xsd:QName" minOccurs="0" nillable="true" ></xsd:element>
+						<xsd:element name="serviceName" type="xsd:QName"></xsd:element>
+						<xsd:element name="fractalServiceItfName" type="xsd:string"
+							minOccurs="0" nillable="true" ></xsd:element>
+						<xsd:element name="classServiceName" type="xsd:string"
+							minOccurs="0" nillable="true" ></xsd:element>
+						<xsd:element name="providerEndpointName" type="xsd:string" />
+						<xsd:element name="fractalProviderEndpointItfName"
+							type="xsd:string" minOccurs="0" ></xsd:element>
+						<xsd:element name="classProviderEndpointName" type="xsd:string"
+							minOccurs="0"></xsd:element>
+						<xsd:element name="classProviderEndpointBehaviourName"
+							type="xsd:string"></xsd:element>
+						<xsd:element name="wsdl"
+							type="xsd:anyURI"></xsd:element>
+						<xsd:element name="clientName" type="xsd:QName" minOccurs="0" nillable="true" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="createServiceEndpointOnSoapClientResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="soapAddress" type="xsd:string"></xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="importSoapEndpoint">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="providerName" type="xsd:QName" minOccurs="0" nillable="true" ></xsd:element>
+						<xsd:element name="soapAddress" type="xsd:string"></xsd:element>
+						<xsd:element name="wsdl" type="xsd:anyURI"></xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="importSoapEndpointResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="endpointName" type="xsd:string"></xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="wrapSoapEndpoint">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="providerName" type="xsd:QName" minOccurs="0" nillable="true" ></xsd:element>
+						<xsd:element name="soapAddress" type="xsd:string"></xsd:element>
+						<xsd:element name="wsdl" type="xsd:anyURI"></xsd:element>
+						<xsd:element name="interceptorClassName" type="xsd:string" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+						<xsd:element name="clientName" type="xsd:QName" minOccurs="0" nillable="true" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="wrapSoapEndpointResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="soapAddress" type="xsd:string"></xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="createComponentRequest">
+		<wsdl:part element="tns:createComponent" name="parameters" />
+	</wsdl:message>
+	<wsdl:message name="createComponentResponse">
+		<wsdl:part element="tns:createComponentResponse" name="parameters" />
+	</wsdl:message>
+	<wsdl:message name="createClientRequest">
+		<wsdl:part element="tns:createClient" name="parameters" />
+	</wsdl:message>
+	<wsdl:message name="createClientResponse">
+		<wsdl:part element="tns:createClientResponse" name="parameters" />
+	</wsdl:message>
+	<wsdl:message name="createProviderRequest">
+		<wsdl:part name="parameters" element="tns:createProvider"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="createProviderResponse">
+		<wsdl:part name="parameters" element="tns:createProviderResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="createClientAndProviderRequest">
+		<wsdl:part name="parameters" element="tns:createClientAndProvider"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="createClientAndProviderResponse">
+		<wsdl:part name="parameters" element="tns:createClientAndProviderResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="createServiceRequest">
+		<wsdl:part name="parameters" element="tns:createService"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="createServiceResponse">
+		<wsdl:part name="parameters" element="tns:createServiceResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="createClientEndpointRequest">
+		<wsdl:part name="parameters" element="tns:createClientEndpoint"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="createClientEndpointResponse">
+		<wsdl:part name="parameters" element="tns:createClientEndpointResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="createProviderEndpointRequest">
+		<wsdl:part name="parameters" element="tns:createProviderEndpoint"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="createProviderEndpointResponse">
+		<wsdl:part name="parameters" element="tns:createProviderEndpointResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="addSoapListenerRequest">
+		<wsdl:part name="parameters" element="tns:addSoapListener"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="addSoapListenerResponse">
+		<wsdl:part name="parameters" element="tns:addSoapListenerResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="exposeInSoapOnClientRequest">
+		<wsdl:part name="parameters" element="tns:exposeInSoapOnClient"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="exposeInSoapOnClientResponse">
+		<wsdl:part name="parameters" element="tns:exposeInSoapOnClientResponse"></wsdl:part>
+	</wsdl:message>
+
+	<wsdl:message name="createServiceEndpointRequest">
+		<wsdl:part name="parameters" element="tns:createServiceEndpoint"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="createServiceEndpointResponse">
+		<wsdl:part name="parameters" element="tns:createServiceEndpointResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="createServiceEndpointOnSoapClientRequest">
+		<wsdl:part name="parameters" element="tns:createServiceEndpointOnSoapClient"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="createServiceEndpointOnSoapClientResponse">
+		<wsdl:part name="parameters"
+			element="tns:createServiceEndpointOnSoapClientResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="importSoapEndpointRequest">
+		<wsdl:part name="parameters" element="tns:importSoapEndpoint"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="importSoapEndpointResponse">
+		<wsdl:part name="parameters" element="tns:importSoapEndpointResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="wrapSoapEndpointRequest">
+		<wsdl:part name="parameters" element="tns:wrapSoapEndpoint"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="wrapSoapEndpointResponse">
+		<wsdl:part name="parameters" element="tns:wrapSoapEndpointResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:portType name="Admin">
+		<wsdl:operation name="createComponent">
+			<wsdl:input message="tns:createComponentRequest" />
+			<wsdl:output message="tns:createComponentResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="createClient">
+			<wsdl:input message="tns:createClientRequest" />
+			<wsdl:output message="tns:createClientResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="createProvider">
+			<wsdl:input message="tns:createProviderRequest"></wsdl:input>
+			<wsdl:output message="tns:createProviderResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="createClientAndProvider">
+			<wsdl:input message="tns:createClientAndProviderRequest"></wsdl:input>
+			<wsdl:output message="tns:createClientAndProviderResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="createService">
+			<wsdl:input message="tns:createServiceRequest"></wsdl:input>
+			<wsdl:output message="tns:createServiceResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="createClientEndpoint">
+			<wsdl:input message="tns:createClientEndpointRequest"></wsdl:input>
+			<wsdl:output message="tns:createClientEndpointResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="createProviderEndpoint">
+			<wsdl:input message="tns:createProviderEndpointRequest"></wsdl:input>
+			<wsdl:output message="tns:createProviderEndpointResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="addSoapListener">
+			<wsdl:input message="tns:addSoapListenerRequest"></wsdl:input>
+			<wsdl:output message="tns:addSoapListenerResponse"></wsdl:output>
+		</wsdl:operation>		<wsdl:operation name="exposeInSoapOnClient">			<wsdl:input message="tns:exposeInSoapOnClientRequest"></wsdl:input>			<wsdl:output message="tns:exposeInSoapOnClientResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="createServiceEndpoint">
+			<wsdl:input message="tns:createServiceEndpointRequest"></wsdl:input>
+			<wsdl:output message="tns:createServiceEndpointResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="createServiceEndpointOnSoapClient">
+			<wsdl:input message="tns:createServiceEndpointOnSoapClientRequest"></wsdl:input>
+			<wsdl:output message="tns:createServiceEndpointOnSoapClientResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="importSoapEndpoint">
+			<wsdl:input message="tns:importSoapEndpointRequest"></wsdl:input>
+			<wsdl:output message="tns:importSoapEndpointResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="wrapSoapEndpoint">
+			<wsdl:input message="tns:wrapSoapEndpointRequest"></wsdl:input>
+			<wsdl:output message="tns:wrapSoapEndpointResponse"></wsdl:output>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="AdminSOAP" type="tns:Admin">
+
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="createComponent">
+
+
+
+			<soap:operation
+				soapAction="http://ow2.petals.org/Admin/createComponent" />
+			<wsdl:input>
+
+
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="createClient">
+
+
+
+			<soap:operation
+				soapAction="http://ow2.petals.org/Admin/createClient" />
+			<wsdl:input>
+
+
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="createProvider">
+
+
+
+			<soap:operation
+				soapAction="http://ow2.petals.org/Admin/createProvider" />
+			<wsdl:input>
+
+
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="createClientAndProvider">
+
+
+
+			<soap:operation
+				soapAction="http://ow2.petals.org/Admin/createClientAndProvider" />
+			<wsdl:input>
+
+
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="createService">
+
+
+
+			<soap:operation
+				soapAction="http://ow2.petals.org/Admin/createService" />
+			<wsdl:input>
+
+
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="createClientEndpoint">
+
+
+
+			<soap:operation
+				soapAction="http://ow2.petals.org/Admin/createClientEndpoint" />
+			<wsdl:input>
+
+
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="createProviderEndpoint">
+
+
+
+			<soap:operation
+				soapAction="http://ow2.petals.org/Admin/createProviderEndpoint" />
+			<wsdl:input>
+
+
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+
+
+		<wsdl:operation name="addSoapListener">
+
+
+
+			<soap:operation
+				soapAction="http://ow2.petals.org/Admin/addSoapListener" />
+			<wsdl:input>
+
+
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="exposeInSoapOnClient">
+
+
+			<soap:operation
+				soapAction="http://ow2.petals.org/Admin/exposeInSoapOnClient" />
+			<wsdl:input>
+
+
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="createServiceEndpoint">
+
+			<soap:operation
+				soapAction="http://ow2.petals.org/Admin/createServiceEndpoint" />
+			<wsdl:input>
+
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="createServiceEndpointOnSoapClient">
+
+			<soap:operation
+				soapAction="http://ow2.petals.org/Admin/createServiceEndpointOnSoapClient" />
+			<wsdl:input>
+
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="importSoapEndpoint">
+			<soap:operation
+				soapAction="http://ow2.petals.org/Admin/importSoapEndpoint" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="wrapSoapEndpoint">
+			<soap:operation
+				soapAction="http://ow2.petals.org/Admin/wrapSoapEndpoint" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="Admin">
+		<wsdl:port binding="tns:AdminSOAP" name="AdminSOAP">
+			<soap:address location="http://www.example.org/" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

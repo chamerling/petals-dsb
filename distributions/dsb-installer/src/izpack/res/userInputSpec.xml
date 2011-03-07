@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+<userInput>
+
+	<!-- Panel used to select the JAVA_HOME petals will be launched with -->
+	<panel order="0" id="panel.java.home">
+		<field type="title" txt="Java(TM) installation" />
+		<field type="staticText" align="left"
+			txt="Petals needs Java to run. Specify a JDK or a JRE path (Deprecated)" />
+		<field type="space" />
+		<field type="space" />
+		<!--
+			<field type="dir" variable="petals.java.home">
+			<spec id="JDK/JRE path" size="25" set="${ENV[JAVA_HOME]}" />
+			<validator class="com.izforge.izpack.util.NotEmptyValidator"
+				txt="JDK/JRE path cannot be empty" />
+		</field>
+		-->
+	</panel>
+
+	<!-- Server.properties configuration -->
+	<panel order="1" id="panel.server.config">
+		<field type="title" txt="Local Node Configuration" />
+		<field type="text" variable="installer.server.name">
+			<description align="left" />
+			<spec txt="Server name : " size="15" set="server-0" />
+		</field>
+		<field type="radio" variable="slave_server">
+			<description align="left" txt="Local node mode : "/>
+			<spec>
+				<choice txt="Master" value="master" set="true" />
+				<choice txt="Slave" value="slave" />
+				<!-- <choice txt="Peer" value="peer" /> -->
+			</spec>
+		</field>
+
+		<field type="space" />
+		<field type="space" />
+
+		<field type="text" variable="installer.topology.update">
+			<description align="left" />
+			<spec txt="Topology update period (s) : " size="15" set="10" />
+		</field>
+		<field type="text" variable="installer.registry.update">
+			<description align="left" />
+			<spec txt="Registry update period (s) : " size="15" set="60" />
+		</field>
+		<field type="space" />
+		<field type="space" />
+		<createForPack name="Petals Advanced Configuration" />
+	</panel>
+
+	<!--  Master configuration, the current installed node is a slave -->
+	<panel order="2" id="panel.server.masterconfiguration">
+		<field type="title" txt="Master Node Configuration" />
+		<field type="staticText" align="left"
+			txt="You just have selected the slave mode for the local node, it means that you have to give the master node configuration details in order to be able to connect to it." />
+		<field type="space" />
+
+		<field type="text" variable="installer.master.name">
+			<description align="left" />
+			<spec txt="Server name : " size="15" set="master-0" />
+		</field>
+		<field type="text" variable="installer.master.host">
+			<description align="left" />
+			<spec txt="IP address : " size="15" set="localhost" />
+		</field>
+		<field type="staticText" align="left" txt="Management informations" />
+		<field type="text" variable="installer.master.user">
+			<description align="left" />
+			<spec txt="Login : " size="15" set="petals" />
+		</field>
+		<field type="text" variable="installer.master.password">
+			<description align="left" />
+			<spec txt="Password : " size="15" set="petals" />
+		</field>
+		<field type="space" />
+		<field type="staticText" align="left" txt="Port configuration" />
+		<field type="text" variable="installer.master.rmi">
+			<description align="left" />
+			<spec txt="JMX : " size="15" set="7700" />
+		</field>
+		<field type="text" variable="installer.master.transport">
+			<description align="left" />
+			<spec txt="Transport : " size="15" set="7800" />
+		</field>
+		<field type="text" variable="installer.master.registry">
+			<description align="left" />
+			<spec txt="Registry : " size="15" set="7900" />
+		</field>
+		<field type="text" variable="installer.master.ws">
+			<description align="left" />
+			<spec txt="Web services : " size="15" set="7600" />
+		</field>
+		<createForPack name="Petals Advanced Configuration" />
+	</panel>
+
+	<!-- Topology.xml configuration -->
+	<panel order="3" id="panel.topology.config">
+		<field type="title" txt="Local Node Configuration" />
+		<field type="staticText" align="left"
+			txt="Please fill the local node information" />
+		<field type="space" />
+
+		<field type="text" variable="installer.server.host">
+			<description align="left" />
+			<spec txt="IP address : " size="15" set="localhost" />
+		</field>
+		<field type="staticText" align="left" txt="Management informations" />
+		<field type="text" variable="installer.server.user">
+			<description align="left" />
+			<spec txt="Login : " size="15" set="petals" />
+		</field>
+		<field type="text" variable="installer.server.password">
+			<description align="left" />
+			<spec txt="Password : " size="15" set="petals" />
+		</field>
+		<field type="space" />
+		<field type="staticText" align="left" txt="Port configuration" />
+		<field type="text" variable="installer.server.rmi">
+			<description align="left" />
+			<spec txt="JMX : " size="15" set="7700" />
+		</field>
+		<field type="text" variable="installer.server.transport">
+			<description align="left" />
+			<spec txt="Transport : " size="15" set="7800" />
+		</field>
+		<field type="text" variable="installer.server.registry">
+			<description align="left" />
+			<spec txt="Registry : " size="15" set="7900" />
+		</field>
+		<field type="text" variable="installer.server.ws">
+			<description align="left" />
+			<spec txt="Web services : " size="15" set="7600" />
+		</field>
+		<field type="text" variable="installer.webapp.port">
+			<description align="left" />
+			<spec txt="Web application : " size="15" set="8080" />
+		</field>
+		<createForPack name="Petals Advanced Configuration" />
+	</panel>
+
+	<!-- This has to be modified if more component are needed -->
+	<panel order="4" id="panel.component.config">
+		<field type="title" txt="Components Configuration" />
+		<field type="staticText" align="left"
+			txt="Select the components which will be installed by Petals ESB at startup" />
+		<field type="space" />
+		<field type="space" />
+		
+		<field type="check" variable="installer.component.soap">
+			<description align="left" />
+			<spec txt="SOAP Component" true="petals-bc-soap" false="" set="false" />
+		</field>
+		<field type="text" variable="installer.soap.port">
+			<description align="left" />
+			<spec txt="Port : " size="6" set="8084" />
+		</field>
+		<field type="space" />
+
+		<field type="check" variable="installer.component.rest">
+			<description align="left" />
+			<spec txt="REST Component" true="petals-bc-rest"
+				false="" set="false" />
+		</field>
+		<field type="text" variable="installer.rest.port">
+			<description align="left" />
+			<spec txt="Port : " size="6" set="8082" />
+		</field>
+		<field type="space" />
+
+		<field type="check" variable="installer.component.soapproxy">
+			<description align="left" />
+			<spec txt="SOAP Proxy Component" true="petals-bc-soap-proxy" false="" set="false" />
+		</field>
+		<field type="text" variable="installer.soapproxy.port">
+			<description align="left" />
+			<spec txt="Port : " size="6" set="8083" />
+		</field>
+		<field type="space" />
+
+		<field type="check" variable="installer.component.sca">
+			<description align="left" />
+			<spec txt="SCA Component" true="petals-se-sca" false="" set="false" />
+		</field>
+		<createForPack name="Petals Advanced Configuration" />
+	</panel>
+	
+	<panel order="5" id="panel.service2bind.config">
+		<field type="title" txt="Service Configuration" />
+		<field type="staticText" align="left"
+			txt="Give URLs of Services to bind to the Distributed Service Bus at startup. If more than one service is needed, give a list as CSV like 'http://localhost:8989/rest/foo,http://localhost:8989/rest/bar'" />
+		<field type="space" />
+		<field type="space" />
+		
+		<field type="text" variable="installer.soap.service2bind">
+			<description align="left"/>
+			<spec txt="WSDL URL(s) : " size="100" set="" />
+		</field>
+		<field type="space" />
+		
+		<field type="text" variable="installer.rest.service2bind">
+			<description align="left"/>
+			<spec txt="REST URL(s) : " size="100" set="" />
+		</field>
+		
+		<createForPack name="Petals Advanced Configuration" />
+	</panel>
+	
+	<panel order="6" id="panel.federation.config">
+		<field type="title" txt="Federation Configuration" />
+		<field type="staticText" align="left"
+			txt="Here we define parameters to join the Federation the current DSB belongs to" />
+		<field type="space" />
+		<field type="space" />
+		
+		<field type="check" variable="installer.federation.aware">
+			<description align="left"/>
+			<spec txt="Activate Federation Feature" true="true" false="false" set="false" />
+		</field>
+		<field type="space" />
+		
+		<field type="text" variable="installer.federation.url">
+			<description align="left"/>
+			<spec txt="Federation URL : " size="100" set="" />
+		</field>
+		
+		<createForPack name="Petals Advanced Configuration" />
+	</panel>
+	
+	<panel order="7" id="panel.loglevel.config">
+		<field type="title" txt="Loggers Level Configuration (Advanced User)" />
+		<field type="staticText" align="left"
+			txt="Define the DSB loggers level (default values are OK in standard use)" />
+		<field type="space" />
+		<field type="space" />
+		
+		<field type="combo" variable="installer.log.petals" >
+  			<description align="left" txt="Petals Kernel" />
+  			<spec>
+          		<choice txt="INFO" id="INFO" value="INFO" set="true"/>
+          		<choice txt="DEBUG" id="DEBUG" value="DEBUG"/>
+  			</spec>
+		</field>
+		<field type="combo" variable="installer.log.soa4all" >
+  			<description align="left" txt="SOA4All Kernel"/>
+  			<spec>
+          		<choice txt="INFO" id="INFO" value="INFO" set="true"/>
+          		<choice txt="DEBUG" id="DEBUG" value="DEBUG"/>
+  			</spec>
+		</field>
+		<field type="combo" variable="installer.log.wsdm" >
+  			<description align="left" txt="WSDM Kernel"/>
+  			<spec>
+          		<choice txt="INFO" id="INFO" value="INFO" set="true"/>
+          		<choice txt="DEBUG" id="DEBUG" value="DEBUG"/>
+  			</spec>
+		</field>
+		<field type="combo" variable="installer.log.components" >
+  			<description align="left" txt="JBI Components"/>
+  			<spec>
+          		<choice txt="INFO" id="INFO" value="INFO" set="true"/>
+          		<choice txt="DEBUG" id="DEBUG" value="DEBUG"/>
+  			</spec>
+		</field>
+		
+		<createForPack name="Petals Advanced Configuration" />
+	</panel>
+</userInput>
+

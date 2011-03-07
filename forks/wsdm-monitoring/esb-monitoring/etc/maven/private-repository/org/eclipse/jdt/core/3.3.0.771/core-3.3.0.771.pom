@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.eclipse</groupId>
+		<artifactId>parent</artifactId>
+		<version>1</version>
+	</parent>
+	<groupId>org.eclipse.jdt</groupId>
+	<artifactId>core</artifactId>
+	<version>3.3.0.771</version>
+	<packaging>jar</packaging>
+	<name>Eclipse JDT Core</name>
+	<url>http://www.eclipse.org/jdt/</url>
+	<description>JDT Core is the Java infrastructure of the Java IDE. It includes: java compiler, java model, java document,...</description>
+</project>

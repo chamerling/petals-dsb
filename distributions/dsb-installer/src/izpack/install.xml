@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+<installation version="1.0">
+	<info>
+		<appname>SOA4AllDSB</appname>
+		<appversion>1.0</appversion>
+		<authors>
+			<author name="Christophe Hamerling" email="christophe.hamerling@petalslink.com" />
+		</authors>
+		<url>http://petals.ow2.org/</url>
+		<javaversion>1.5</javaversion>
+		<!-- <run-privileged condition="izpack.windowsinstall.vista|izpack.macinstall" /> -->
+		<!-- webdir is only used when Web installer is generated, this is where packs need to be available -->
+		<webdir>http://petals.ow2.org/esb/installer/</webdir>
+	</info>
+	<!--
+        The gui preferences indication.
+    -->
+	<guiprefs width="820" height="560" resizable="yes">
+		<laf name="kunststoff">
+			<os family="unix" />
+		</laf>
+		<modifier key="layoutAnchor" value="CENTER" />
+		<modifier key="labelGap" value="2" />
+		<modifier key="useHeadingPanel" value="yes" />
+		<modifier key="headingImageOnLeft" value="yes" />
+		<modifier key="headingLineCount" value="1" />
+		<modifier key="headingFontSize" value="1.5" />
+		<modifier key="fontSize" value="3.5" />
+		<modifier key="headingBackgroundColor" value="0x00ffffff" />
+		<modifier key="headingPanelCounter" value="text" />
+		<modifier key="headingPanelCounterPos" value="inHeading" />
+	</guiprefs>
+
+	<!--
+		The locale section. Asks here to include the English langpack.
+	-->
+	<locale>
+		<langpack iso3="eng" />
+	</locale>
+
+	<resources>
+		<res id="Installer.image" src="./res/logo-petals-esb.png" />
+		<res id="LicencePanel.licence" src="./res/LicenceAgreement.txt" />
+		<res id="userInputSpec.xml" src="./res/userInputSpec.xml" />
+		<!-- <res id="Heading.image" src="./res/logo_petals.jpg" />-->
+		<res id="HTMLInfoPanel.info" src="./res/hello.html" />
+		<!-- <res id="installer.langsel.img" src="./res/petals.png" />-->
+		<!-- <res id="ProcessPanel.Spec.xml" src="./res/process-panel.xml" />-->
+		<res id="packsLang.xml_eng" src="./res/packsLang_eng.xml" />
+	</resources>
+
+	<native type="izpack" name="ShellLink.dll" />
+	<native type="3rdparty" name="COIOSHelper.dll" stage="both">
+		<os family="windows" />
+	</native>
+
+	<!-- condition for showing base configuration if package is selected -->
+	<conditions>
+		<!-- Start petals after installation? -->
+		<condition type="variable" id="start.petals">
+			<name>start_petals</name>
+			<value>false</value>
+		</condition>
+
+		<condition type="variable" id="server.is.slave">
+			<name>slave_server</name>
+			<value>slave</value>
+		</condition>
+	</conditions>
+
+	<variables>
+		<variable name="UserPathPanelVariable" value="${INSTALL_PATH}_BASE" />
+	</variables>
+
+	<!-- Dynamic variables are processed on each panel load -->
+	<dynamicvariables>
+		<variable name="UserPathPanelDependsName" value="JOnAS Base (Advanced configuration)" />
+		<variable name="install.jonas.base" value="${UserPathPanelVariable}"
+			condition="izpack.selected.jonasbase" />
+		<variable name="install.jonas.base" value="${INSTALL_PATH}"
+			condition="!izpack.selected.jonasbase" />
+		<variable name="JONAS_BASE" value="${install.jonas.base}" />
+		<variable name="installer.http.port" value="9000"
+			condition="!izpack.selected.jonasbase" />
+	</dynamicvariables>
+
+	<!--
+		Defines all the panels which are needed for the installer
+	-->
+	<panels>
+		<!-- Simple panels for information -->
+		<panel classname="HTMLInfoPanel" />
+		<panel classname="LicencePanel" />
+
+		<!-- Select installation path -->
+		<panel classname="TargetPanel" />
+
+		<!-- An user input to select JAVA HOME -->
+		<panel classname="UserInputPanel" id="panel.java.home" />
+
+		<!-- Display the packs choice -->
+		<panel classname="PacksPanel" />
+
+		<!-- Selects the installation path -->
+		<panel classname="UserPathPanel" />
+
+		<!--
+			Lets get user inputs, @see userInputSpec.xml resource for details
+		-->
+		<panel classname="UserInputPanel" id="panel.server.config" />
+		<panel classname="UserInputPanel" id="panel.server.masterconfiguration"
+			condition="server.is.slave" />
+		<panel classname="UserInputPanel" id="panel.topology.config" />
+		<panel classname="UserInputPanel" id="panel.component.config" />
+		<panel classname="UserInputPanel" id="panel.service2bind.config" />
+		<panel classname="UserInputPanel" id="panel.federation.config" />
+		<panel classname="UserInputPanel" id="panel.loglevel.config" />
+		
+		
+		<!--
+			<panel classname="UserInputPanel" id="panel.profiles" /> <panel
+			classname="UserInputPanel" id="panel.services.1" condition="custom"
+			/> <panel classname="UserInputPanel" id="panel.services.2"
+			condition="custom" /> <panel classname="UserInputPanel"
+			id="panel.protocols.config" />
+		-->
+
+		<!-- Really install things -->
+		<panel classname="InstallPanel" />
+
+		<!-- Process additional things -->
+		<!-- <panel classname="ProcessPanel" />-->
+		<!-- <panel classname="ShortcutPanel"/> -->
+
+		<!-- Soft is installed -->
+		<panel classname="SimpleFinishPanel" />
+	</panels>
+
+	<!--
+        The packs section.
+    -->
+    <packs>
+		<pack name="Petals Advanced Configuration" id="petalsadvanced"
+			required="yes" preselected="yes">
+			<description>Configure and install SOA4All DSB. You will have to configure settings in the following panels.</description>
+			<!-- Copying distribution files -->
+			<fileset dir="PETALS" targetdir="$INSTALL_PATH" />
+			<!-- Copying files needed for configuration -->
+			<file src="./res/petals/server.properties" targetdir="$INSTALL_PATH/conf" />
+			<singlefile src="./res/petals/masterslave-topology.xml"
+				target="$INSTALL_PATH/conf/topology.xml" condition="server.is.slave" />
+			<singlefile src="./res/petals/master-topology.xml" target="$INSTALL_PATH/conf/topology.xml"
+				condition="!server.is.slave" />
+
+			<file src="./res/petals/soa4all.cfg" targetdir="$INSTALL_PATH/conf" />
+			<file src="./res/petals/wsdm.cfg" targetdir="$INSTALL_PATH/conf" />
+			<file src="./res/petals/services2bind.cfg" targetdir="$INSTALL_PATH/conf" />
+			<file src="./res/petals/loggers.properties" targetdir="$INSTALL_PATH/conf" />
+			<file src="./res/petals/components.properties" targetdir="$INSTALL_PATH/conf" />
+			
+			<!-- Parsing files with good variables values -->
+			<parsable targetfile="$INSTALL_PATH/conf/server.properties" />
+			<parsable targetfile="$INSTALL_PATH/conf/topology.xml" />
+			<parsable targetfile="$INSTALL_PATH/conf/soa4all.cfg" />
+			<parsable targetfile="$INSTALL_PATH/conf/services2bind.cfg" />
+			<parsable targetfile="$INSTALL_PATH/conf/loggers.properties" />
+			<parsable targetfile="$INSTALL_PATH/conf/components.properties" />
+			
+			<!-- Set +x mode on Unix* -->
+			<executable targetfile="$INSTALL_PATH/bin/startup.sh" stage="never"/>
+			<executable targetfile="$INSTALL_PATH/bin/shutdown.sh" stage="never"/>
+			<executable targetfile="$INSTALL_PATH/bin/environment.sh" stage="never"/>
+			<executable targetfile="$INSTALL_PATH/bin/stop.sh" stage="never"/>
+			<executable targetfile="$INSTALL_PATH/bin/setenv.sh" stage="never"/>
+
+		</pack>
+	</packs>
+</installation>
+

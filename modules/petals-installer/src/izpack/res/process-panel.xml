@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<processing>
+
+	<!--
+		<job name="Setting up environment"> <os family="unix" /> <executefile
+		name="${INSTALL_PATH}/bin/environment.sh" keep="false" /> </job>
+	-->
+	<!--
+		<job name="JOnAS Startup" conditionid="start.jonas"> <os
+		family="windows" /> <executefile
+		name="${INSTALL_PATH}\shortcuts_scripts\jonas-start-embedded.bat"/>
+		</job> <job name="JOnAS Startup" conditionid="start.jonas"> <os
+		family="unix" /> <executefile
+		name="${INSTALL_PATH}/shortcuts_scripts/jonas-start-embedded" />
+		</job>
+	-->
+</processing>

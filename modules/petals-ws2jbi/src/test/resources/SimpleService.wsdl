@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="MyService" targetNamespace="http://petals.ow2.org" xmlns:tns="http://petals.ow2.org" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://petals.ow2.org" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://petals.ow2.org">
+    <xs:complexType name="person">
+        <xs:sequence>
+            <xs:element name="age" type="xs:int"/>
+            <xs:element minOccurs="0" name="firstName" type="xs:string"/>
+            <xs:element name="id" type="xs:int"/>
+            <xs:element minOccurs="0" name="lastName" type="xs:string"/>
+            <xs:element minOccurs="0" name="state" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="getTime" type="getTime"/>
+    <xs:complexType name="getTime">
+        <xs:sequence/>
+    </xs:complexType>
+    <xs:element name="getTimeResponse" type="getTimeResponse"/>
+    <xs:complexType name="getTimeResponse">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="return" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="sayGoodBye" type="sayGoodBye"/>
+    <xs:complexType name="sayGoodBye">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+            <xs:element minOccurs="0" name="arg1" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="sayGoodByeResponse" type="sayGoodByeResponse"/>
+    <xs:complexType name="sayGoodByeResponse">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="return" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="getPerson" type="getPerson"/>
+    <xs:complexType name="getPerson">
+        <xs:sequence>
+            <xs:element name="arg0" type="xs:int"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="getPersonResponse" type="getPersonResponse"/>
+    <xs:complexType name="getPersonResponse">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="return" type="person"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="specializedOperation" type="specializedOperation"/>
+    <xs:complexType name="specializedOperation">
+        <xs:sequence/>
+    </xs:complexType>
+    <xs:element name="specializedOperationResponse" type="specializedOperationResponse"/>
+    <xs:complexType name="specializedOperationResponse">
+        <xs:sequence/>
+    </xs:complexType>
+    <xs:element name="sayHello" type="sayHello"/>
+    <xs:complexType name="sayHello">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="sayHelloResponse" type="sayHelloResponse"/>
+    <xs:complexType name="sayHelloResponse">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="return" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="voidvoid" type="voidvoid"/>
+    <xs:complexType name="voidvoid">
+        <xs:sequence/>
+    </xs:complexType>
+    <xs:element name="voidvoidResponse" type="voidvoidResponse"/>
+    <xs:complexType name="voidvoidResponse">
+        <xs:sequence/>
+    </xs:complexType>
+    <xs:element name="displayContext" type="displayContext"/>
+    <xs:complexType name="displayContext">
+        <xs:sequence/>
+    </xs:complexType>
+    <xs:element name="displayContextResponse" type="displayContextResponse"/>
+    <xs:complexType name="displayContextResponse">
+        <xs:sequence/>
+    </xs:complexType>
+    <xs:element name="checkMessageSender" type="checkMessageSender"/>
+    <xs:complexType name="checkMessageSender">
+        <xs:sequence/>
+    </xs:complexType>
+    <xs:element name="checkMessageSenderResponse" type="checkMessageSenderResponse"/>
+    <xs:complexType name="checkMessageSenderResponse">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="return" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="iAmThrowingAnException" type="iAmThrowingAnException"/>
+    <xs:complexType name="iAmThrowingAnException">
+        <xs:sequence/>
+    </xs:complexType>
+    <xs:element name="iAmThrowingAnExceptionResponse" type="iAmThrowingAnExceptionResponse"/>
+    <xs:complexType name="iAmThrowingAnExceptionResponse">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="return" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="sayHello">
+    <wsdl:part name="parameters" element="tns:sayHello">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="displayContext">
+    <wsdl:part name="parameters" element="tns:displayContext">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="checkMessageSender">
+    <wsdl:part name="parameters" element="tns:checkMessageSender">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="specializedOperation">
+    <wsdl:part name="parameters" element="tns:specializedOperation">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="checkMessageSenderResponse">
+    <wsdl:part name="parameters" element="tns:checkMessageSenderResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="iAmThrowingAnExceptionResponse">
+    <wsdl:part name="parameters" element="tns:iAmThrowingAnExceptionResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="iAmThrowingAnException">
+    <wsdl:part name="parameters" element="tns:iAmThrowingAnException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="specializedOperationResponse">
+    <wsdl:part name="parameters" element="tns:specializedOperationResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getTimeResponse">
+    <wsdl:part name="parameters" element="tns:getTimeResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getPersonResponse">
+    <wsdl:part name="parameters" element="tns:getPersonResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="voidvoidResponse">
+    <wsdl:part name="parameters" element="tns:voidvoidResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="voidvoid">
+    <wsdl:part name="parameters" element="tns:voidvoid">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="sayGoodBye">
+    <wsdl:part name="parameters" element="tns:sayGoodBye">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getTime">
+    <wsdl:part name="parameters" element="tns:getTime">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="sayGoodByeResponse">
+    <wsdl:part name="parameters" element="tns:sayGoodByeResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="displayContextResponse">
+    <wsdl:part name="parameters" element="tns:displayContextResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="sayHelloResponse">
+    <wsdl:part name="parameters" element="tns:sayHelloResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getPerson">
+    <wsdl:part name="parameters" element="tns:getPerson">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="MyService">
+    <wsdl:operation name="getTime">
+      <wsdl:input name="getTime" message="tns:getTime">
+    </wsdl:input>
+      <wsdl:output name="getTimeResponse" message="tns:getTimeResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sayGoodBye">
+      <wsdl:input name="sayGoodBye" message="tns:sayGoodBye">
+    </wsdl:input>
+      <wsdl:output name="sayGoodByeResponse" message="tns:sayGoodByeResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getPerson">
+      <wsdl:input name="getPerson" message="tns:getPerson">
+    </wsdl:input>
+      <wsdl:output name="getPersonResponse" message="tns:getPersonResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="specializedOperation">
+      <wsdl:input name="specializedOperation" message="tns:specializedOperation">
+    </wsdl:input>
+      <wsdl:output name="specializedOperationResponse" message="tns:specializedOperationResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sayHello">
+      <wsdl:input name="sayHello" message="tns:sayHello">
+    </wsdl:input>
+      <wsdl:output name="sayHelloResponse" message="tns:sayHelloResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="voidvoid">
+      <wsdl:input name="voidvoid" message="tns:voidvoid">
+    </wsdl:input>
+      <wsdl:output name="voidvoidResponse" message="tns:voidvoidResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="displayContext">
+      <wsdl:input name="displayContext" message="tns:displayContext">
+    </wsdl:input>
+      <wsdl:output name="displayContextResponse" message="tns:displayContextResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="checkMessageSender">
+      <wsdl:input name="checkMessageSender" message="tns:checkMessageSender">
+    </wsdl:input>
+      <wsdl:output name="checkMessageSenderResponse" message="tns:checkMessageSenderResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="iAmThrowingAnException">
+      <wsdl:input name="iAmThrowingAnException" message="tns:iAmThrowingAnException">
+    </wsdl:input>
+      <wsdl:output name="iAmThrowingAnExceptionResponse" message="tns:iAmThrowingAnExceptionResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="MyServiceSoapBinding" type="tns:MyService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getTime">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getTime">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getTimeResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sayGoodBye">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="sayGoodBye">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sayGoodByeResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getPerson">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getPerson">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getPersonResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="specializedOperation">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="specializedOperation">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="specializedOperationResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sayHello">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="sayHello">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sayHelloResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="voidvoid">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="voidvoid">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="voidvoidResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="displayContext">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="displayContext">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="displayContextResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="checkMessageSender">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="checkMessageSender">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="checkMessageSenderResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="iAmThrowingAnException">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="iAmThrowingAnException">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="iAmThrowingAnExceptionResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="MyService">
+    <wsdl:port name="MyServicePort" binding="tns:MyServiceSoapBinding">
+      <soap:address location="http://localhost:8084/axis2/services/SimpleService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

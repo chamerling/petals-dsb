@@ -1,0 +1,274 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.ow2.petals.esb.monitoring</groupId>
+		<artifactId>esb-monitoring</artifactId>
+		<version>0.9.1-SNAPSHOT</version>
+	</parent>
+	<groupId>org.ow2.petals.esb.monitoring</groupId>
+	<artifactId>data-collector</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	<packaging>jar</packaging>
+	<name>ESB-Monitoring: data-collector</name>
+	<properties>
+		<topDirectoryLocation>.</topDirectoryLocation>
+	</properties>
+
+	<!-- ======= -->
+	<!-- License -->
+	<!-- ======= -->
+	<licenses>
+		<license>
+			<name>GNU LESSER GENERAL PUBLIC LICENSE Version 2.1</name>
+			<url>http://www.gnu.org/copyleft/lesser.html</url>
+		</license>
+	</licenses>
+	<scm>
+		<connection>scm:svn:svn+ssh://forge.ebmwebsourcing.com/svnroot/commons/trunk/commons-wsdl</connection>
+		<developerConnection>scm:svn:svn+ssh://ofabre@forge.ebmwebsourcing.com/svnroot/commons/trunk/commons-wsdl</developerConnection>
+	</scm>
+
+	<!-- ========== -->
+	<!-- Developers -->
+	<!-- ========== -->
+	<developers>
+		<developer>
+			<name>Nicolas Salatge</name>
+			<id>nsalatge</id>
+			<email>nicolas.salatge@ebmwebsourcing.com</email>
+			<organization>EBM WebSourcing</organization>
+			<roles>
+				<role>Project manager</role>
+				<role>Architect</role>
+				<role>Developer</role>
+			</roles>
+			<timezone>+1</timezone>
+		</developer>
+	</developers>
+	
+	<dependencies>
+		
+		<dependency>
+			<groupId>org.ow2.petals.esb.monitoring</groupId>
+			<artifactId>base-monitoring</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.ow2.petals.esb.monitoring</groupId>
+			<artifactId>raw-report</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+
+
+		<!-- test dependency -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.ow2.petals.esb.monitoring</groupId>
+			<artifactId>generic-notifier-server</artifactId>
+			<version>1.0-SNAPSHOT</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<!-- XML Security dependencies -->
+		<dependency>
+			<groupId>org.apache.santuario</groupId>
+			<artifactId>xmlsec</artifactId>
+			<version>1.4.2</version>
+			<scope>test</scope>
+		</dependency>
+		
+	</dependencies>
+	
+	<build>
+		<plugins>
+
+			<!-- SPOON FOR FRACLET PLUGIN -->
+			<plugin>
+				<groupId>net.sf.alchim</groupId>
+				<artifactId>spoon-maven-plugin</artifactId>
+				<version>0.7.1</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>recompile</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- Copy fractal adl for test -->
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>process-test-resources</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<tasks>
+								<echo message="Copy fractal adl in test" />
+								<copy todir="src/test/resources" overwrite="yes"
+									includeEmptyDirs="no">
+									<fileset dir="./target/classes/">
+										<exclude name="**/*.class" />
+										<exclude name="**/*.cfg" />
+										<exclude name="**/*.xsd" />
+										<exclude name="**/*.xjb" />
+									</fileset>
+								</copy>
+							</tasks>
+						</configuration>
+					</execution>
+					
+					<execution>
+						<id>scripts</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<tasks>
+								<echo message="Copy script file" />
+								<copy todir="./target/scripts" overwrite="yes"
+									includeEmptyDirs="no">
+									<fileset dir="../base-monitoring/src/main/resources/scripts">
+									</fileset>
+								</copy>
+								<echo message="Copy assembly file" />
+								<copy todir="./target/assembly" overwrite="yes"
+									includeEmptyDirs="no">
+									<fileset dir="../base-monitoring/src/main/resources/assembly">
+									</fileset>
+								</copy>
+							</tasks>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<finalName>server</finalName>
+					<archive>
+						<manifest>
+							<mainClass>org.ow2.petals.monitoring.datacollector.Main</mainClass>
+							<addClasspath>true</addClasspath>
+						</manifest>
+						<!--						<manifestEntries>-->
+						<!--							<Class-Path>../lib/esb-launcher-0.9.1-SNAPSHOT.jar -->
+						<!--							../lib/esb-impl-0.9.1-SNAPSHOT.jar -->
+						<!--							../lib/esb-kernel-impl-0.9.1-SNAPSHOT.jar -->
+						<!--							../lib/esb-kernel-api-0.9.1-SNAPSHOT.jar</Class-Path>-->
+						<!--						</manifestEntries>-->
+					</archive>
+				</configuration>
+			</plugin>
+			
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>bugfix</id>
+						<phase>install</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<tasks>
+								<echo message="Rename easy-wsdl 2.0-SNAPSHOT" />
+								<move
+									todir="/${project.build.directory}/${project.artifactId}-${version}/${project.artifactId}-${version}/bin/">
+									<fileset
+										dir="/${project.build.directory}/${project.artifactId}-${version}/${project.artifactId}-${version}/bin/">
+										<include name="easywsdl-ext-wsdl4complexwsdl-2.0-*.jar" />
+									</fileset>
+									<mapper type="merge" from="easywsdl-ext-wsdl4complexwsdl-2.0-*.jar"
+										to="easywsdl-ext-wsdl4complexwsdl-2.0-SNAPSHOT.jar" />
+								</move>
+
+								<move
+									todir="/${project.build.directory}/${project.artifactId}-${version}/${project.artifactId}-${version}/bin/">
+									<fileset
+										dir="/${project.build.directory}/${project.artifactId}-${version}/${project.artifactId}-${version}/bin/">
+										<include name="easywsdl-schema-2.0-*.jar" />
+									</fileset>
+									<mapper type="merge" from="easywsdl-schema-2.0-*.jar"
+										to="easywsdl-schema-2.0-SNAPSHOT.jar" />
+								</move>
+
+								<move
+									todir="/${project.build.directory}/${project.artifactId}-${version}/${project.artifactId}-${version}/bin/">
+									<fileset
+										dir="/${project.build.directory}/${project.artifactId}-${version}/${project.artifactId}-${version}/bin/">
+										<include name="easywsdl-wsdl-2.0-*.jar" />
+									</fileset>
+									<mapper type="merge" from="easywsdl-wsdl-2.0-*.jar"
+										to="easywsdl-wsdl-2.0-SNAPSHOT.jar" />
+								</move>
+
+								<echo message="Rename fractal-rmi 0.3.6-SNAPSHOT" />
+								<move
+									todir="/${project.build.directory}/${project.artifactId}-${version}/${project.artifactId}-${version}/bin/">
+									<fileset
+										dir="/${project.build.directory}/${project.artifactId}-${version}/${project.artifactId}-${version}/bin/">
+										<include name="fractal-rmi-0.3.6-*.jar" />
+									</fileset>
+									<mapper type="merge" from="fractal-rmi-0.3.6-*.jar"
+										to="fractal-rmi-0.3.6-SNAPSHOT.jar" />
+								</move>
+							</tasks>
+						</configuration>
+					</execution>
+
+				</executions>
+			</plugin>
+			
+		</plugins>
+	</build>
+		<profiles>
+		<profile>
+			<id>development</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-assembly-plugin</artifactId>
+						<version>2.2-beta-3</version>
+						<executions>
+							<execution>
+								<id>dev-assembly</id>
+								<configuration>
+									<appendAssemblyId>false</appendAssemblyId>
+									<attach>false</attach>
+									<descriptors>
+										<descriptor>
+											target/assembly/dev.xml
+										</descriptor>
+									</descriptors>
+								</configuration>
+								<phase>package</phase>
+								<goals>
+									<goal>attached</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+</project>

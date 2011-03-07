@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+	* This library is free software; you can redistribute it and/or
+	* modify it under the terms of the GNU Lesser General Public
+	* License as published by the Free Software Foundation; either
+	* version 2 of the License, or (at your option) any later version.
+	*
+	* This library is distributed in the hope that it will be useful,
+	* but WITHOUT ANY WARRANTY; without even the implied warranty of
+	* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+	* Lesser General Public License for more details.
+	*
+	* You should have received a copy of the GNU Lesser General Public
+	* License along with this library; if not, write to the Free Software
+	* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.objectweb.fractal</groupId>
+		<artifactId>parent</artifactId>
+		<version>2.0</version>
+	</parent>
+
+	<groupId>org.objectweb.fractal.fraclet</groupId>
+	<artifactId>parent</artifactId>
+	<name>Fractal Fraclet parent project</name>
+	
+	<!-- a generic 2.0 to stress that if the parent of Fraclet 2.x modules -->
+	<version>2.0</version>
+	<packaging>pom</packaging>
+
+	<description>
+		The various Fraclet projects aim at easying the definition of a
+		Fractal application architecture.
+	</description>
+
+    <!-- Fraclet web page -->
+	<url>http://fractal.objectweb.org/fraclet/index.html</url>
+
+	<scm>
+		<connection>${scm.connection}/fraclet</connection>
+		<developerConnection>
+			${scm.developerConnection}/fraclet
+		</developerConnection>
+		<url>${scm.url}/fraclet</url>
+	</scm>
+
+
+	<modules>
+		<module>fraclet-annotation</module>
+		<module>fraclet-xdoc</module>
+	</modules>
+
+</project>

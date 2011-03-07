@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="xmlmap://org.ow2.opensuit.xml.spring/v1.0" xmlns:base="xmlmap://org.ow2.opensuit.xml.base/v1.0" targetNamespace="xmlmap://org.ow2.opensuit.xml.spring/v1.0">
+  <xs:import namespace="xmlmap://org.ow2.opensuit.xml.base/v1.0" schemaLocation="base.xsd"/>
+  <xs:complexType name="__import">
+    <xs:annotation>
+      <xs:documentation><![CDATA[Path to the XML file to import.<br>The path must be relative to the origin XML (may not start with a '/').]]></xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="File" type="xs:string" use="required"/>
+  </xs:complexType>
+  <xs:simpleType name="ConfigLocation">
+    <xs:annotation>
+      <xs:documentation><![CDATA[Allow to specify the Spring Application Context location. You must  precise it if, you need to perform build-time validation. Exceptionvalues: <ul><li>CLASSPATH: allow to specify the Spring Application Context location from your classpath</li><li>WAR: allow to specify the Spring Application Context location from your war file</li></ul>]]></xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="CLASSPATH">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Enumeration item that represent classpath location for Spring Application Context]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="WAR">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Enumeration item that represent war location for Spring Application Context]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="_XmlConfig">
+    <xs:attribute name="File" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation><![CDATA[Defines the path and name of one Spring Application Context file <br/><br/>Example: /ApplicationContext.xml]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="XmlConfig" type="_XmlConfig">
+    <xs:annotation>
+      <xs:documentation><![CDATA[Represent a Spring Application Context file, with these attributes:<br/><ul><li>File</li></ul>]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_SpringBeans">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" name="ConfigFiles">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Spring configuration file(s).<br/>Note: This is not required at runtime if 'CreateContext' is false, but still it is useful to enable build-time validation.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="1" ref="XmlConfig"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="SearchIn" type="ConfigLocation" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[Defines where the Spring configuration file(s) should be searched.<br/><ul><li>WAR: in the WAR /WEB-INF directory.<li>CLASSPATH: in the application classpath.</ul>Default: WAR.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="CreateContext" type="xs:boolean" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[Determines whether Open SUIT has to create and initialize the Spring Application Context.<br/>If set to 'true', your Spring Application Context will be instantiated by Open SUIT, and made available for the whole application. As a result you won't have to declare it anywhere else.<br/>Otherwise Open SUIT assumes the Spring Application Context is declared and initialized by some other way (Spring servlet for instance), and will just retrieve it through the J2EE servlet context.<br/>Default: false.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="SpringBeans" substitutionGroup="base:binding.IDataSource" type="_SpringBeans">
+    <xs:annotation>
+      <xs:documentation><![CDATA[Allow to use several beans, declared into Spring context.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+</xs:schema>

@@ -1,0 +1,34 @@
+<!DOCTYPE definition PUBLIC "-//objectweb.org//DTD Fractal ADL 2.0//EN"
+    "classpath://org/objectweb/fractal/adl/xml/standard.dtd">
+
+<definition name="DSBManagementType">
+
+  <!-- provides -->
+  <interface signature="org.petalslink.dsb.kernel.management.binder.ServiceBinderRegistry" role="server" name="binder-registry"/>
+  <interface signature="org.petalslink.dsb.kernel.management.binder.ServiceExposerRegistry" role="server" name="exposer-registry"/>
+  <interface signature="org.petalslink.dsb.kernel.management.binder.ServiceRegistry" role="server" name="service-registry"/>
+  <interface signature="org.petalslink.dsb.kernel.management.component.ComponentInformationService" role="server" name="component-information"/>
+  <interface signature="org.petalslink.dsb.kernel.DSBConfigurationService" role="server" name="dsbconfiguration"/>
+  <interface signature="org.petalslink.dsb.kernel.management.binder.NewServiceExposer" role="server" name="new-service-exposer"/>
+  <interface signature="org.petalslink.dsb.kernel.management.cron.ServicePoller" role="server" name="service-poller"/>
+  
+  <!-- client -->
+  <interface signature="org.ow2.petals.kernel.configuration.ConfigurationService" role="client" name="configuration"/>
+  <interface signature="org.ow2.petals.jbi.management.deployment.AtomicDeploymentService" role="client" name="atomic-deployment"/>
+  <interface signature="org.ow2.petals.jbi.management.installation.ComponentInstallationService" role="client" name="installation"/>
+  <interface signature="org.ow2.petals.system.repository.artifact.ArtifactRepositoryService" role="client" name="artifact-repository"/>
+  <interface signature="org.ow2.petals.jbi.messaging.registry.EndpointRegistry" role="client" name="registry"/>
+  <interface signature="org.ow2.petals.jbi.management.admin.AdminService" role="client" name="adminService"/>
+  <interface signature="org.ow2.petals.communication.jndi.client.JNDIService" role="client" name="jndi"/>
+  <interface signature="org.ow2.petals.tools.ws.WebServiceManager" role="client" name="wsmanager"/>
+  
+  <!--<interface signature="org.petalslink.dsb.kernel.federation.FederationEngine" role="client" name="federationengine"/>-->
+  <interface signature="org.petalslink.dsb.kernel.ServiceFinder" role="client" name="service-finder"/>
+
+  <!-- All the management services goes here -->
+  <interface signature="org.ow2.petals.kernel.ws.api.InformationService" role="client" name="ws-information"/>
+  <interface signature="org.ow2.petals.kernel.ws.api.JBIArtefactsService" role="client" name="ws-jbiart"/>
+  <interface signature="org.petalslink.dsb.ws.api.ServiceInformation" role="client" name="ws-serviceinfo"/>
+  <interface signature="org.petalslink.dsb.ws.api.DSBInformationService" role="client" name="ws-dsbinformation"/>
+  
+</definition>

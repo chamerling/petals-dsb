@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:ns2="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:ns4="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:ns5="http://schemas.xmlsoap.org/wsdl/http/" xmlns:ns7="http://schemas.xmlsoap.org/wsdl/mime/"
+	xmlns:wsntw="http://docs.oasis-open.org/wsn/bw-2" xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2"
+	xmlns:wsrf-rpw="http://docs.oasis-open.org/wsrf/rpw-2" xmlns:wsa="http://www.w3.org/2005/08/addressing"
+	xmlns:wsrf-rw="http://docs.oasis-open.org/wsrf/rw-2" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	name="NotifierService_Description" targetNamespace="http://petals.ow2.org/notifier"
+	xmlns:tns="http://petals.ow2.org/notifier">
+
+	<wsdl:import namespace="http://docs.oasis-open.org/wsn/bw-2"
+		location="imports/bw-2.wsdl" />
+	<wsdl:import namespace="http://docs.oasis-open.org/wsrf/rpw-2"
+		location="imports/rpw-2.wsdl" />
+	<wsdl:import namespace="http://docs.oasis-open.org/wsrf/rw-2"
+		location="imports/rw-2.wsdl" />
+	<wsdl:types>
+		<xs:schema targetNamespace="http://petals.ow2.org/wsdm">
+			<xs:import namespace="http://docs.oasis-open.org/wsrf/rp-2"
+				schemaLocation="imports/rp-2.xsd" />
+			<xs:import namespace="http://docs.oasis-open.org/wsn/b-2"
+				schemaLocation="imports/b-2.xsd" />
+			<xs:import namespace="http://docs.oasis-open.org/wsdm/mows-2.xsd"
+				schemaLocation="imports/mows-2.xsd" />
+			<xs:import namespace="http://docs.oasis-open.org/wsdm/muws1-2.xsd"
+				schemaLocation="imports/muws1-2.xsd" />
+			<xs:import namespace="http://docs.oasis-open.org/wsdm/muws2-2.xsd"
+				schemaLocation="imports/muws2-2.xsd" />
+
+		
+
+		
+
+		</xs:schema>
+	</wsdl:types>
+
+
+
+
+	<!--
+		<wsdl:service name="InterceptorService"> <wsdl:port name="Interceptor"
+		binding="tns:InterceptorBinding"> <ns4:address
+		location="http://www.example.org/" /> </wsdl:port> </wsdl:service>
+	-->
+	<wsdl:binding name="NotifierBinding" type="wsntw:NotificationConsumer">
+		<ns4:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="Notify">
+			<ns4:operation
+				soapAction="http://petals.ow2.org/wsdm/Notify" />
+			<wsdl:input>
+				<ns4:body use="literal" />
+			</wsdl:input>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="NotifierService">
+		<wsdl:port name="NotifierEndpoint" binding="tns:NotifierBinding">
+			<ns4:address location="http://www.example.org/NotifierEndpoint" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

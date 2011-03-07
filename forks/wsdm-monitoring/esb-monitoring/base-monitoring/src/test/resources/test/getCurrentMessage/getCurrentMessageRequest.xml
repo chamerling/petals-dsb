@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:b="http://docs.oasis-open.org/wsn/b-2">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <b:GetCurrentMessage>
+         <b:Topic Dialect="http://www.w3.org/TR/1999/REC-xpath-19991116">
+    
+         </b:Topic>
+      </b:GetCurrentMessage>
+   </soapenv:Body>
+</soapenv:Envelope>

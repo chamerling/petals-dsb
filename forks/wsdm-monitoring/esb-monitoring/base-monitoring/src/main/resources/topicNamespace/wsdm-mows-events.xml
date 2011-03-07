@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wstop:TopicNamespace name="MOWS" 
+	targetNamespace="http://docs.oasis-open.org/wsdm/2004/12/mows/wsdm-mows-events.xml"
+	xmlns:muws-xs2="http://docs.oasis-open.org/wsdm/2004/12/muws/wsdm-muws-part2.xsd" 
+	xmlns:muws-xs1="http://docs.oasis-open.org/wsdm/2004/12/muws/wsdm-muws-part1.xsd"
+	xmlns:mows-xs="http://docs.oasis-open.org/wsdm/2004/12/mows/wsdm-mows.xsd"
+	xmlns:wstop="http://docs.oasis-open.org/wsn/t-1"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://docs.oasis-open.org/wsn/t-1 http://docs.oasis-open.org/wsn/t-1.xsd">
+
+<wstop:Topic name="IdentificationCapability" messageTypes="muws-xs1:ManagementEvent"/>
+<wstop:Topic name="MetricsCapability" messageTypes="muws-xs1:ManagementEvent"/>
+<wstop:Topic name="OperationalStateCapability" messageTypes="muws-xs1:ManagementEvent"/>
+<wstop:Topic name="OperationalStatusCapability" messageTypes="muws-xs1:ManagementEvent"/>
+<wstop:Topic name="RequestProcessingStateCapability" messageTypes="muws-xs1:ManagementEvent"/>
+
+
+<wstop:Topic name="RequestProcessingObservations" 
+	messageTypes="muws-xs1:ManagementEvent">
+	<wstop:MessagePattern Dialect="http://www.w3.org/TR/1999/REC-xpath-19991116">
+//muws-xs1:ManagementEvent[muws-xs2:Situation/muws-xs2:SituationCategory//muws-xs2:ReportSituation and muws-xs2:Severity="1" and count(mows-xs:RequestProcessingNotification)=1]
+	</wstop:MessagePattern>
+	<wstop:Topic name="RequestReceived"
+		messageTypes="muws-xs1:ManagementEvent">
+	<wstop:MessagePattern Dialect="http://www.w3.org/TR/1999/REC-xpath-19991116">
+//muws-xs1:ManagementEvent[muws-xs2:Situation/muws-xs2:SituationCategory//muws-xs2:ReportSituation and muws-xs2:Severity="1" and count(mows-xs:RequestProcessingNotification)=1]
+	</wstop:MessagePattern>
+	</wstop:Topic>
+	<wstop:Topic name="RequestProcessing"
+		messageTypes="muws-xs1:ManagementEvent">
+	<wstop:MessagePattern Dialect="http://www.w3.org/TR/1999/REC-xpath-19991116">
+//muws-xs1:ManagementEvent[muws-xs2:Situation/muws-xs2:SituationCategory//muws-xs2:ReportSituation and muws-xs2:Severity="1" and count(mows-xs:RequestProcessingNotification)=1]
+	</wstop:MessagePattern>
+	</wstop:Topic>
+	<wstop:Topic name="RequestCompleted"
+		messageTypes="muws-xs1:ManagementEvent">
+	<wstop:MessagePattern Dialect="http://www.w3.org/TR/1999/REC-xpath-19991116">
+//muws-xs1:ManagementEvent[muws-xs2:Situation/muws-xs2:SituationCategory//muws-xs2:ReportSituation and muws-xs2:Severity="1" and count(mows-xs:RequestProcessingNotification)=1]
+	</wstop:MessagePattern>
+	</wstop:Topic>
+	<wstop:Topic name="RequestFailed"
+		messageTypes="muws-xs1:ManagementEvent">
+	<wstop:MessagePattern Dialect="http://www.w3.org/TR/1999/REC-xpath-19991116">
+//muws-xs1:ManagementEvent[muws-xs2:Situation/muws-xs2:SituationCategory//muws-xs2:ReportSituation and muws-xs2:Severity="1" and count(mows-xs:RequestProcessingNotification)=1]
+	</wstop:MessagePattern>
+	</wstop:Topic>
+	<wstop:Topic name="Digest"
+		messageTypes="muws-xs1:ManagementEvent">
+	<wstop:MessagePattern Dialect="http://www.w3.org/TR/1999/REC-xpath-19991116">
+//muws-xs1:ManagementEvent[muws-xs2:Situation/muws-xs2:SituationCategory//muws-xs2:ReportSituation and muws-xs2:Severity="1" and count(mows-xs:RequestProcessingNotification)=1]
+	</wstop:MessagePattern>
+	</wstop:Topic>
+</wstop:Topic>
+
+<wstop:Topic name="RequestProcessingObservationsWithAttachments" 
+	messageTypes="muws-xs1:ManagementEvent">
+	<wstop:MessagePattern Dialect="http://www.w3.org/TR/1999/REC-xpath-19991116">
+//muws-xs1:ManagementEvent[muws-xs2:Situation/muws-xs2:SituationCategory//muws-xs2:ReportSituation and muws-xs2:Severity="1" and count(mows-xs:RequestProcessingNotification)=1]
+	</wstop:MessagePattern>
+	<wstop:Topic name="RequestReceived"
+		messageTypes="muws-xs1:ManagementEvent">
+	<wstop:MessagePattern Dialect="http://www.w3.org/TR/1999/REC-xpath-19991116">
+//muws-xs1:ManagementEvent[muws-xs2:Situation/muws-xs2:SituationCategory//muws-xs2:ReportSituation and muws-xs2:Severity="1" and count(mows-xs:RequestProcessingNotification)=1]
+	</wstop:MessagePattern>
+	</wstop:Topic>
+	<wstop:Topic name="RequestProcessing"
+		messageTypes="muws-xs1:ManagementEvent">
+	<wstop:MessagePattern Dialect="http://www.w3.org/TR/1999/REC-xpath-19991116">
+//muws-xs1:ManagementEvent[muws-xs2:Situation/muws-xs2:SituationCategory//muws-xs2:ReportSituation and muws-xs2:Severity="1" and count(mows-xs:RequestProcessingNotification)=1]
+	</wstop:MessagePattern>
+	</wstop:Topic>
+	<wstop:Topic name="RequestCompleted"
+		messageTypes="muws-xs1:ManagementEvent">
+	<wstop:MessagePattern Dialect="http://www.w3.org/TR/1999/REC-xpath-19991116">
+//muws-xs1:ManagementEvent[muws-xs2:Situation/muws-xs2:SituationCategory//muws-xs2:ReportSituation and muws-xs2:Severity="1" and count(mows-xs:RequestProcessingNotification)=1]
+	</wstop:MessagePattern>
+	</wstop:Topic>
+	<wstop:Topic name="RequestFailed"
+		messageTypes="muws-xs1:ManagementEvent">
+	<wstop:MessagePattern Dialect="http://www.w3.org/TR/1999/REC-xpath-19991116">
+//muws-xs1:ManagementEvent[muws-xs2:Situation/muws-xs2:SituationCategory//muws-xs2:ReportSituation and muws-xs2:Severity="1" and count(mows-xs:RequestProcessingNotification)=1]
+	</wstop:MessagePattern>
+	</wstop:Topic>
+	<wstop:Topic name="Digest"
+		messageTypes="muws-xs1:ManagementEvent">
+	<wstop:MessagePattern Dialect="http://www.w3.org/TR/1999/REC-xpath-19991116">
+//muws-xs1:ManagementEvent[muws-xs2:Situation/muws-xs2:SituationCategory//muws-xs2:ReportSituation and muws-xs2:Severity="1" and count(mows-xs:RequestProcessingNotification)=1]
+	</wstop:MessagePattern>
+	</wstop:Topic>
+</wstop:Topic>
+</wstop:TopicNamespace>

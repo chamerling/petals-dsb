@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wstop:TopicNamespace name="MuwsNotificationTopics"
+    targetNamespace="http://docs.oasis-open.org/wsdm/2004/12/muws/wsdm-muws-part2-events.xml"
+    xmlns:muws-p1-xs="http://docs.oasis-open.org/wsdm/2004/12/muws/wsdm-muws-part1.xsd"
+    xmlns:muws-p2-xs="http://docs.oasis-open.org/wsdm/2004/12/muws/wsdm-muws-part2.xsd"
+    xmlns:wstop="http://docs.oasis-open.org/wsn/t-1"
+    xmlns:wsrf-rp="http://docs.oasis-open.org/wsrf/rp-2" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://docs.oasis-open.org/wsn/t-1 http://docs.oasis-open.org/wsn/t-1.xsd">
+
+  <wstop:Topic name="IdentityCapability"
+               messageTypes="muws-p1-xs:ManagementEvent">
+  </wstop:Topic>
+
+  <wstop:Topic name="ManageabilityCharacteristicsCapability"
+               messageTypes="muws-p1-xs:ManagementEvent">
+  </wstop:Topic>
+
+  <wstop:Topic name="CorrelatablePropertiesCapability"
+               messageTypes="muws-p1-xs:ManagementEvent">
+  </wstop:Topic>
+
+  <wstop:Topic name="DescriptionCapability"
+               messageTypes="muws-p1-xs:ManagementEvent">
+  </wstop:Topic>
+
+  <wstop:Topic name="StateCapability"
+               messageTypes="muws-p1-xs:ManagementEvent">
+  </wstop:Topic>
+
+  <wstop:Topic name="OperationalStatusCapability"
+               messageTypes="muws-p1-xs:ManagementEvent">
+  </wstop:Topic>
+
+  <wstop:Topic name="MetricsCapability"
+               messageTypes="muws-p1-xs:ManagementEvent">
+  </wstop:Topic>
+
+  <wstop:Topic name="ConfigurationCapability"
+               messageTypes="muws-p1-xs:ManagementEvent">
+  </wstop:Topic>
+
+  <wstop:Topic name="RelationshipsCapability"
+               messageTypes="muws-p1-xs:ManagementEvent">
+
+    <wstop:Topic name="RelationshipCreated"
+                 messageTypes="muws-p1-xs:ManagementEvent">
+      <wstop:MessagePattern Dialect="http://www.w3.org/TR/1999/REC-xpath-19991116">
+        //muws-p1-xs:ManagementEvent[count(muws-p2-xs:RelationshipCreatedNotification)=1]
+      </wstop:MessagePattern>
+    </wstop:Topic>
+
+    <wstop:Topic name="RelationshipDeleted"
+                 messageTypes="muws-p1-xs:ManagementEvent">
+      <wstop:MessagePattern Dialect="http://www.w3.org/TR/1999/REC-xpath-19991116">
+        //muws-p1-xs:ManagementEvent[count(muws-p2-xs:RelationshipDeletedNotification)=1]
+      </wstop:MessagePattern>
+    </wstop:Topic>
+
+  </wstop:Topic>
+
+  <wstop:Topic name="RelationshipAccessCapability"
+               messageTypes="muws-p1-xs:ManagementEvent">
+  </wstop:Topic>
+
+  <wstop:Topic name="RelationshipResourceCapability"
+               messageTypes="muws-p1-xs:ManagementEvent">
+  </wstop:Topic>
+
+  <wstop:Topic name="ManageabilityEndpointCreation"
+               messageTypes="muws-p1-xs:ManagementEvent">
+    <wstop:MessagePattern Dialect="http://www.w3.org/TR/1999/REC-xpath-19991116">
+      //muws-p1-xs:ManagementEvent[count(muws-p2-xs:CreationNotification)=1]
+    </wstop:MessagePattern>
+
+    <wstop:Topic name="ManageableResourceCreation"
+                 messageTypes="muws-p1-xs:ManagementEvent">
+      <wstop:MessagePattern Dialect="http://www.w3.org/TR/1999/REC-xpath-19991116">
+        //muws-p1-xs:ManagementEvent[count(muws-p2-xs:CreationNotification)=1]
+      </wstop:MessagePattern>
+    </wstop:Topic>
+
+  </wstop:Topic>
+
+  <wstop:Topic name="ManageabilityEndpointDestruction"
+               messageTypes="muws-p1-xs:ManagementEvent">
+    <wstop:MessagePattern Dialect="http://www.w3.org/TR/1999/REC-xpath-19991116">
+      //muws-p1-xs:ManagementEvent[count(muws-p2-xs:DestructionNotification)=1]
+    </wstop:MessagePattern>
+
+    <wstop:Topic name="ManageableResourceDestruction"
+                 messageTypes="muws-p1-xs:ManagementEvent">
+      <wstop:MessagePattern Dialect="http://www.w3.org/TR/1999/REC-xpath-19991116">
+        //muws-p1-xs:ManagementEvent[count(muws-p2-xs:DestructionNotification)=1]
+      </wstop:MessagePattern>
+    </wstop:Topic>
+
+  </wstop:Topic>
+
+</wstop:TopicNamespace>

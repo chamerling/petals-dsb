@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<wsdl:definitions targetNamespace="http://act.org/" 
+  xmlns:tns="http://act.org/" 
+  xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" 
+  xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" 
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+  xmlns="http://schemas.xmlsoap.org/wsdl/"> 
+  
+<wsdl:message name="echoStringRequest"> 
+  <wsdl:part name="param0" type="xsd:string"/>
+</wsdl:message> 
+<wsdl:message name="echoStringResponse"> 
+  <wsdl:part name="echoStringReturn" type="xsd:string"/> 
+</wsdl:message> 
+
+<wsdl:portType name="Echo"> 
+  <wsdl:operation name="echoString" parameterOrder="param0"> 
+    <wsdl:input name="echoStringRequest" message="tns:echoStringRequest"/> 
+    <wsdl:output name="echoStringResponse" message="tns:echoStringResponse"/> 
+  </wsdl:operation> 
+  <wsdl:operation name="echoVoid" parameterOrder="param0"> 
+    <wsdl:input name="echoStringRequest2" message="tns:echoStringRequest"/> 
+  </wsdl:operation> 
+</wsdl:portType> 
+
+<wsdl:binding name="EchoSOAPBinding" type="tns:Echo"> 
+  <wsdlsoap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/> 
+  <wsdl:operation name="echoString"> 
+    <wsdlsoap:operation soapAction=""/> 
+    <wsdl:input name="echoStringRequest"> 
+      <wsdlsoap:body use="encoded" 
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" 
+        namespace="http://act.org/"/> 
+    </wsdl:input> 
+    <wsdl:output name="echoStringResponse"> 
+      <wsdlsoap:body use="encoded" 
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" 
+        namespace="http://act.org/"/> 
+      </wsdl:output> 
+    </wsdl:operation> 
+  <wsdl:operation name="echoVoid"> 
+  <wsdlsoap:operation soapAction=""/> 
+    <wsdl:input name="echoStringRequest2"> 
+      <wsdlsoap:body use="encoded" 
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" 
+        namespace="http://act.org/"/> 
+    </wsdl:input> 
+  </wsdl:operation> 
+  </wsdl:binding> 
+
+<wsdl:service name="EchoService"> 
+  <wsdl:port name="Echo" binding="tns:EchoSOAPBinding">
+    <wsdlsoap:address location="http://localhost:8080/ACTSoap/Echo"/> </wsdl:port> 
+</wsdl:service>
+ 
+</wsdl:definitions>

@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+<userInput>
+
+	<!-- Panel used to select the JAVA_HOME petals will be launched with -->
+	<panel order="0" id="panel.java.home">
+		<field type="title" txt="Java(TM) installation" />
+		<field type="staticText" align="left"
+			txt="Petals needs Java to run. Specify a JDK or a JRE path." />
+		<field type="space" />
+		<field type="space" />
+		<field type="dir" variable="petals.java.home">
+			<spec id="JDK/JRE path" size="25" set="${ENV[JAVA_HOME]}" />
+			<validator class="com.izforge.izpack.util.NotEmptyValidator"
+				txt="JDK/JRE path cannot be empty" />
+		</field>
+	</panel>
+
+	<!-- Server.properties configuration -->
+	<panel order="1" id="panel.server.config">
+		<field type="title" txt="Local Node Configuration" />
+		<field type="text" variable="installer.server.name">
+			<description align="left" />
+			<spec txt="Server name : " size="15" set="server-0" />
+		</field>
+		<field type="radio" variable="slave_server">
+			<description align="left" txt="Local node mode : "/>
+			<spec>
+				<choice txt="Master" value="master" set="true" />
+				<choice txt="Slave" value="slave" />
+				<!-- <choice txt="Peer" value="peer" /> -->
+			</spec>
+		</field>
+
+		<field type="space" />
+		<field type="space" />
+
+		<field type="text" variable="installer.topology.update">
+			<description align="left" />
+			<spec txt="Topology update period (s) : " size="15" set="10" />
+		</field>
+		<field type="text" variable="installer.registry.update">
+			<description align="left" />
+			<spec txt="Registry update period (s) : " size="15" set="60" />
+		</field>
+		<field type="space" />
+		<field type="space" />
+		<createForPack name="Petals Advanced Configuration" />
+	</panel>
+
+	<!--  Master configuration, the current installed node is a slave -->
+	<panel order="2" id="panel.server.masterconfiguration">
+		<field type="title" txt="Master Node Configuration" />
+		<field type="staticText" align="left"
+			txt="You just have selected the slave mode for the local node, it means that you have to give the master node configuration details in order to be able to connect to it." />
+		<field type="space" />
+
+		<field type="text" variable="installer.master.name">
+			<description align="left" />
+			<spec txt="Server name : " size="15" set="master-0" />
+		</field>
+		<field type="text" variable="installer.master.host">
+			<description align="left" />
+			<spec txt="IP address : " size="15" set="localhost" />
+		</field>
+		<field type="staticText" align="left" txt="Management informations" />
+		<field type="text" variable="installer.master.user">
+			<description align="left" />
+			<spec txt="Login : " size="15" set="petals" />
+		</field>
+		<field type="text" variable="installer.master.password">
+			<description align="left" />
+			<spec txt="Password : " size="15" set="petals" />
+		</field>
+		<field type="space" />
+		<field type="staticText" align="left" txt="Port configuration" />
+		<field type="text" variable="installer.master.rmi">
+			<description align="left" />
+			<spec txt="JMX : " size="15" set="7700" />
+		</field>
+		<field type="text" variable="installer.master.transport">
+			<description align="left" />
+			<spec txt="Transport : " size="15" set="7800" />
+		</field>
+		<field type="text" variable="installer.master.registry">
+			<description align="left" />
+			<spec txt="Registry : " size="15" set="7900" />
+		</field>
+		<field type="text" variable="installer.master.ws">
+			<description align="left" />
+			<spec txt="Web services : " size="15" set="7600" />
+		</field>
+		<createForPack name="Petals Advanced Configuration" />
+	</panel>
+
+	<!-- Topology.xml configuration -->
+	<panel order="3" id="panel.topology.config">
+		<field type="title" txt="Local Node Configuration" />
+		<field type="staticText" align="left"
+			txt="Please fill the local node information" />
+		<field type="space" />
+
+		<field type="text" variable="installer.server.host">
+			<description align="left" />
+			<spec txt="IP address : " size="15" set="localhost" />
+		</field>
+		<field type="staticText" align="left" txt="Management informations" />
+		<field type="text" variable="installer.server.user">
+			<description align="left" />
+			<spec txt="Login : " size="15" set="petals" />
+		</field>
+		<field type="text" variable="installer.server.password">
+			<description align="left" />
+			<spec txt="Password : " size="15" set="petals" />
+		</field>
+		<field type="space" />
+		<field type="staticText" align="left" txt="Port configuration" />
+		<field type="text" variable="installer.server.rmi">
+			<description align="left" />
+			<spec txt="JMX : " size="15" set="7700" />
+		</field>
+		<field type="text" variable="installer.server.transport">
+			<description align="left" />
+			<spec txt="Transport : " size="15" set="7800" />
+		</field>
+		<field type="text" variable="installer.server.registry">
+			<description align="left" />
+			<spec txt="Registry : " size="15" set="7900" />
+		</field>
+		<field type="text" variable="installer.server.ws">
+			<description align="left" />
+			<spec txt="Web services : " size="15" set="7600" />
+		</field>
+		<createForPack name="Petals Advanced Configuration" />
+	</panel>
+
+	<!-- This has to be modified if more component are needed -->
+	<panel order="4" id="panel.component.config">
+		<field type="title" txt="Components Configuration" />
+		<field type="staticText" align="left"
+			txt="Select the components which will be installed by Petals ESB at startup" />
+		<field type="space" />
+		<field type="space" />
+		
+		<field type="check" variable="installer.component.soap">
+			<description align="left" />
+			<spec txt="SOAP Component" true="petals-bc-soap" false="" set="false" />
+		</field>
+		<field type="check" variable="installer.component.restproxy">
+			<description align="left" />
+			<spec txt="REST Proxy Component" true="petals-bc-restproxy"
+				false="" set="false" />
+		</field>
+		<field type="check" variable="installer.component.soapproxy">
+			<description align="left" />
+			<spec txt="SOAP Proxy Component" true="petals-bc-soap-proxy" false="" set="false" />
+		</field>
+		<field type="check" variable="installer.component.sca">
+			<description align="left" />
+			<spec txt="SCA Component" true="petals-se-sca" false="" set="false" />
+		</field>
+		<createForPack name="Petals Advanced Configuration" />
+	</panel>
+</userInput>
+

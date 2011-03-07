@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<!-- 
+	* This library is free software; you can redistribute it and/or
+	* modify it under the terms of the GNU Lesser General Public
+	* License as published by the Free Software Foundation; either
+	* version 2 of the License, or (at your option) any later version.
+	*
+	* This library is distributed in the hope that it will be useful,
+	* but WITHOUT ANY WARRANTY; without even the implied warranty of
+	* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+	* Lesser General Public License for more details.
+	*
+	* You should have received a copy of the GNU Lesser General Public
+	* License along with this library; if not, write to the Free Software
+	* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.objectweb.fractal.julia</groupId>
+		<artifactId>parent</artifactId>
+		<version>2.5.3-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>julia-runtime</artifactId>
+	<name>Julia Runtime</name>
+	<packaging>jar</packaging>
+	<description>Julia runtime.</description>
+
+	<scm>
+		<connection>${scm.connection}/julia/julia-runtime</connection>
+		<developerConnection>
+			${scm.developerConnection}/julia/julia-runtime
+		</developerConnection>
+		<url>${scm.url}/julia/julia-runtime</url>
+	</scm>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+
+				<configuration>
+					<archive>
+						<manifestFile>
+							${basedir}/src/main/resources/META-INF/MANIFEST.MF
+						</manifestFile>
+					</archive>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<windowtitle>Julia API Documentation</windowtitle>
+					<doctitle>Julia API Documentation</doctitle>
+					<overview>
+						${basedir}/src/main/javadoc/overview.html
+					</overview>
+					<docfilessubdirs>true</docfilessubdirs>
+					<excludedocfilessubdir>.svn</excludedocfilessubdir>
+					<links>
+						<link href="${monolog.url}" offline="true"
+							packagelistLoc="${basedir}/src/main/javadoc/jdoc/monolog-list" />
+						<link href="${fractal.url}" offline="true"
+							packagelistLoc="${basedir}/src/main/javadoc/jdoc/fractal-list" />
+						<link href="${asm.url}" offline="true"
+							packagelistLoc="${basedir}/src/main/javadoc/jdoc/asm-list" />
+						<link href="${jdk.url}" offline="true"
+							packagelistLoc="${basedir}/src/main/javadoc/jdoc/jdk-list" />
+					</links>
+				</configuration>
+			</plugin>
+		</plugins>
+
+	</reporting>
+
+</project>

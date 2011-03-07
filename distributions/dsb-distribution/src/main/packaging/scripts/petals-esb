@@ -1,0 +1,284 @@
+#!/bin/sh
+#
+#                    PEtALS ESB admnistration script
+#
+#
+#
+# DESCRIPTION
+# 
+# The main function of this script is to start, suspend or stop the PEtALS
+# ESB. These operations are all performed in a "robust" manner in order to
+# hide some unexpected behaviors of the ESB when starting or stopping.
+#
+#
+# NOTE
+#
+# This script should be simplified as soon as the problems with
+# components lifecycle management are fixed
+#
+#
+# VARIABLES
+#
+#	JAVA_HOME		the Java home directory (mandatory)
+#	PETALS_HOME		the PEtALS home directory (mandatory)
+#	PETALS_OPTS		options to be passed to the PEtALS JVM in server mode
+#
+#############################################################################
+NAME="petals-esb"
+
+. setenv.sh
+
+# ProActive DEFS
+PAPOLICY="$PETALS_HOME/conf/proactive.java.policy"
+PALOG4J="$PETALS_HOME/conf/log4j.properties"
+PADEFS="-Djava.security.manager -Djava.security.policy=$PAPOLICY -Dproactive.communication.protocol=rmi -Dproactive.useIPaddress=true \
+        -Dproactive.rmi.port=6699 -Dos=unix \
+        -Dlog4j.configuration=file:$PALOG4J"
+
+# Command line for PEtALS
+PETALS_EXEC="$JAVA_HOME/bin/java ${PETALS_OPTS:-"-Xmx512m"} $PADEFS -jar $PETALS_HOME/bin/server.jar -server"
+
+
+
+
+# Print the usage message
+#############################################################################
+print_usage() {
+		cat - <<EOF >&2
+Usage: $NAME {start|console|suspend|stop|status}
+
+    start       Start $NAME in server mode
+    console     Start $NAME in console mode
+    suspend     Stop $NAME without undeploying services
+    stop        Undeploy all services and stop $NAME
+    status      Print $NAME status
+
+EOF
+}
+
+
+# Exit with an error message
+#
+# Arguments
+#	$*	the error message
+#############################################################################
+die() {
+	[ -z "$*" ] || echo "$NAME: ERROR: $*" >&2
+	exit 1
+}
+
+
+# Exit and indicate success
+#############################################################################
+success() {
+	echo "OK"
+	exit 0
+}
+
+
+# Exit and indicates failure
+#############################################################################
+failure() {
+	echo "FAILED"
+	exit 1
+}
+
+
+# Exit and indicates success after an abnormal behavior
+#############################################################################
+passed() {
+	echo "PASSED"
+	exit 3
+}
+
+
+# Start the PEtALS JVM as a daemon process, output redirected to
+# petals-out.log
+#############################################################################
+petals_daemon() {
+	mkdir -p $PETALS_HOME/logs
+	nohup $PETALS_EXEC $* > $PETALS_HOME/logs/petals-out.log 2>&1 &
+}
+
+
+
+
+# Print PID of PEtALS processes on STDOUT
+#############################################################################
+petals_pid() {
+	ps -eo "%p|%c|%a" \
+		| sed -ne 's:^ *\([0-9]*\)|java *|.*server\.jar.*$:\1:p'
+}
+
+
+
+# Print the current PEtALS status on STDOUT with the following meanings:
+#	running   petals is running AND the lock file exists
+#	stopped	  petals process not found AND the lock file does not exist
+#	unknown	  the lock file exists while the java process terminated OR
+#             the java process still exist while the lock file is not found
+#
+# Arguments
+#	$1	the expected status (optional), status is not printed when provided
+#
+# Return
+#	0 if the current status and the expected status are the same
+#	1 otherwise
+#############################################################################
+petals_status() {
+	lock="$PETALS_HOME/locked"
+	pid="`petals_pid`"
+	status="unknown"
+
+	if [ -f "$lock" -a -d "/proc/$pid" -a ! -z "$pid" ]; then
+		status="running"
+	elif [ ! -f "$lock" -a -z "$pid" ]; then
+		status="stopped"
+	fi
+
+	[ -z "$1" ] && echo "$status"
+	test "$status" = "$1"
+}
+
+
+
+# Blocks execution until the given condition become true or the given timeout
+# expires. The condition is polled every second.
+#
+# Arguments
+#	$1	the condition expression
+#	$2	the timeout in seconds
+#############################################################################
+petals_wait_for() {
+	status="${1?}"
+	timeout="${2:-"30"}"
+
+	for tick in `yes | sed "${timeout}q"`; do
+		petals_status "$1" && return 0
+		sleep 1
+		echo -n "."
+	done 
+
+	return 1
+}
+
+
+# Start PEtALS with the given options
+#
+# Arguments
+#	$1	Description
+#	$2	Expected status (running, stopped)
+#	$3	Timeout in seconds
+#	$4	Options for the JVM
+#
+#############################################################################
+petals_action() {
+	echo -n "$1 $NAME: "
+	petals_status "$2" && return 0
+	petals_daemon "$4"
+	petals_wait_for "$2" $3
+}
+
+
+# Kill every PEtALS processes with the given signal
+#
+# Arguments
+#	$1	the signal name or number (see kill -l)
+#
+#############################################################################
+petals_kill() {
+	sig="${1:-"TERM"}"
+	petals_pid | xargs -r kill -$sig 2>&1 > /dev/null
+	return 0
+}
+
+
+# Force petals to be suspended
+#############################################################################
+petals_force_suspend() {
+	petals_kill TERM
+	if ! petals_wait_for "stopped" 30; then
+		petals_kill KILL
+		if petals_wait_for "stopped" 30; then
+			rm -rf $PETALS_HOME/locked $PETALS_HOME/work/*
+		fi
+	fi
+	petals_status "stopped"
+}
+
+
+# Force petals to be stopped
+#############################################################################
+petals_force_stop() {
+	if petals_force_suspend; then
+		rm -f $PETALS_HOME/repository/system-state.xml
+		rm -rf $PETALS_HOME/install/*
+		rm -rf $PETALS_HOME/installed/*
+		rm -rf $PETALS_HOME/repository/components/*
+		rm -rf $PETALS_HOME/repository/service-assemblies/*
+		rm -rf $PETALS_HOME/repository/shared-libraries/*
+	fi
+	petals_status "stopped"
+}
+
+	
+
+#############################################################################
+trap "die 'caught an interruption signal'" INT QUIT KILL TERM HUP
+
+[ -d "$JAVA_HOME" ] || die "$NAME: JAVA_HOME: environment variable not set or directory not found"
+[ -d "$PETALS_HOME" ] || die "$NAME: PETALS_HOME: environment variable not set or directory not found"
+
+if [ $# -ne 1 ] ; then
+	print_usage
+	exit 2
+fi
+
+case "$1" in
+start)
+	if petals_action "Starting" "running" 600 "start"; then
+		success
+	else
+		failure
+	fi
+	;;
+console)
+	$PETALS_EXEC -console start
+	;;	
+suspend)
+	if petals_action "Suspending" "stopped" 30 "stop"; then
+		success
+	elif petals_force_suspend; then
+		passed
+	else
+		failure
+	fi
+	;;
+stop)
+	if petals_action "Stopping" "stopped" 30 "shutdown"; then
+		success
+	elif petals_force_stop; then
+		passed
+	else
+		failure
+	fi
+	;;
+status)
+	case "`petals_status`" in
+	running)
+		echo "$NAME is RUNNING (pid `petals_pid`)"
+		;;
+	stopped)
+		echo "$NAME is STOPPED"
+		;;
+	*)
+		echo "$NAME status is UNKNOWN"
+	esac
+	;;
+*)
+	die "$1: unknown command"
+esac
+
+
+exit 0
+

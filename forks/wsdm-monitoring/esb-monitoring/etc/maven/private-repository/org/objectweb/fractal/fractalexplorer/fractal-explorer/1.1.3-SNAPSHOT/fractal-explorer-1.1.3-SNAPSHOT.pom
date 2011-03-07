@@ -1,0 +1,193 @@
+<?xml version="1.0"?>
+<!--
+	* This library is free software; you can redistribute it and/or
+	* modify it under the terms of the GNU Lesser General Public
+	* License as published by the Free Software Foundation; either
+	* version 2 of the License, or (at your option) any later version.
+	*
+	* This library is distributed in the hope that it will be useful,
+	* but WITHOUT ANY WARRANTY; without even the implied warranty of
+	* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+	* Lesser General Public License for more details.
+	*
+	* You should have received a copy of the GNU Lesser General Public
+	* License along with this library; if not, write to the Free Software
+	* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.objectweb.fractal.fractalexplorer</groupId>
+		<artifactId>parent</artifactId>
+		<version>1.1.3-SNAPSHOT</version>
+	</parent>
+
+	<groupId>org.objectweb.fractal.fractalexplorer</groupId>
+	<artifactId>fractal-explorer</artifactId>
+	<version>1.1.3-SNAPSHOT</version>
+	<name>The Fractal Explorer project</name>
+
+	<description>
+		Fractal Explorer is graphical console for reconfiguring and
+		managing Fractal applications at runtime.
+	</description>
+
+	<developers>
+		<developer>
+			<id>moroy</id>
+			<name>Jerome Moroy</name>
+			<email>jerome.moroy@lifl.fr</email>
+			<organization>LIFL</organization>
+			<organizationUrl>http://www.lifl.fr</organizationUrl>
+			<roles>
+				<role>Architect</role>
+				<role>Developer</role>
+			</roles>
+		</developer>
+		<developer>
+			<id>merle</id>
+			<name>Philippe Merle</name>
+			<email>philippe.merle@lifl.fr</email>
+			<organization>INRIA Futurs / LIFL</organization>
+			<organizationUrl>http://www.lifl.fr</organizationUrl>
+			<roles>
+				<role>Project Manager</role>
+				<role>Architect</role>
+				<role>Developer</role>
+			</roles>
+		</developer>
+		<developer>
+			<id>rouvoy</id>
+			<name>Romain Rouvoy</name>
+			<email>romain.rouvoy@lifl.fr</email>
+			<organization>INRIA Futurs / LIFL</organization>
+			<organizationUrl>http://www.lifl.fr</organizationUrl>
+			<roles>
+				<role>Architect</role>
+				<role>Developer</role>
+			</roles>
+		</developer>
+	</developers>
+	<contributors>
+		<contributor>
+			<name>Vivien Quema</name>
+			<organization>INRIA</organization>
+			<organizationUrl>http://www.inrialpes.fr</organizationUrl>
+		</contributor>
+		<contributor>
+			<name>Matthieu Leclercq</name>
+			<organization>INRIA</organization>
+			<organizationUrl>http://www.inrialpes.fr</organizationUrl>
+		</contributor>
+		<contributor>
+			<name>Alessio Pace</name>
+			<email>alessio.pace@gmail.com</email>
+		</contributor>
+	</contributors>
+
+	<scm>
+		<connection>
+			${scm.connection}/fractalexplorer/fractal-explorer
+		</connection>
+		<developerConnection>
+			${scm.developerConnection}/fractalexplorer/fractal-explorer
+		</developerConnection>
+		<url>${scm.url}/fractalexplorer/fractal-explorer</url>
+	</scm>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>org.objectweb.fractal.fractaladl</groupId>
+			<artifactId>fractal-adl</artifactId>
+			<version>2.1.7</version>
+		</dependency>
+
+		<!-- The Fractal ADL Dumper -->
+		<dependency>
+			<groupId>org.objectweb.fractal.fractaladl.dumper</groupId>
+			<artifactId>dumper</artifactId>
+			<version>0.1</version>
+		</dependency>
+
+		<!-- ===================================== -->
+		<!-- external libraries -->
+	<!--  	<dependency>
+			<groupId>org.objectweb.util.explorer</groupId>
+			<artifactId>explorer</artifactId>
+			<version>1.0</version>
+		</dependency> -->
+		<dependency>
+			<groupId>org.objectweb.util.explorer.plugins</groupId>
+			<artifactId>explorer-reflector-plugin</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.objectweb.util.misc</groupId>
+			<artifactId>ow-trace</artifactId>
+			<version>1.0</version>
+		</dependency>
+
+		<!-- jgraph for fractal explorer, the only version working properly-->
+		<dependency>
+			<groupId>jgraph</groupId>
+			<artifactId>jgraph</artifactId>
+			<version>fractal</version>
+		</dependency>
+		<!-- =================================== -->
+
+		<dependency>
+			<groupId>org.objectweb.fractal.fractalrmi</groupId>
+			<artifactId>fractal-rmi</artifactId>
+			<version>0.3.6-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
+
+       <repositories>
+               <repository>
+                       <id>jgraph-private</id>
+                       <name>JGraph Private Repository</name>
+                  		<url>http://maven.objectweb.org/maven2/org/objectweb/fractal/fractalexplorer</url>
+                       <releases>
+                               <enabled>true</enabled>
+                       </releases>
+                       <snapshots>
+                               <enabled>false</enabled>
+                       </snapshots>
+               </repository>
+       </repositories>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<windowtitle>
+						Fractal Explorer Documentation
+					</windowtitle>
+					<doctitle>Fractal Explorer Documentation</doctitle>
+					<!--
+						<overview>
+						${basedir}/src/main/javadoc/overview.html
+						</overview>
+					-->
+					<docfilessubdirs>true</docfilessubdirs>
+					<excludedocfilessubdir>.svn</excludedocfilessubdir>
+					<links>
+						<link href="${jdk.url}" offline="true"
+							packagelistLoc="${basedir}/src/main/javadoc/jdoc/jdk-list" />
+						<link href="${fractal.url}" offline="true"
+							packagelistLoc="${basedir}/src/main/javadoc/jdoc/fractal-list" />
+						<link href="${monolog.url}" offline="true"
+							packagelistLoc="${basedir}/src/main/javadoc/jdoc/monolog-list" />
+					</links>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
+</project>

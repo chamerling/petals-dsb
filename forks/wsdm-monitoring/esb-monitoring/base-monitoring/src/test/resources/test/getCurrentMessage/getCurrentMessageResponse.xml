@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:b="http://docs.oasis-open.org/wsn/b-2">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <b:GetCurrentMessageResponse>
+         <!--You may enter ANY elements at this point-->
+      </b:GetCurrentMessageResponse>
+   </soapenv:Body>
+</soapenv:Envelope>

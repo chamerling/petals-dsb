@@ -1,0 +1,16 @@
+<!DOCTYPE definition PUBLIC "-//objectweb.org//DTD Fractal ADL 2.0//EN"
+    "classpath://org/objectweb/fractal/adl/xml/standard.dtd">
+
+<definition name="FederationType">
+
+	<interface name="federationengine" role="server" signature="org.petalslink.dsb.kernel.federation.FederationEngine" />
+	<interface name="federationservice" role="server" signature="org.ow2.petals.federation.api.client.FederationService" />
+	<interface name="federationendpointsearchengine" role="server" signature="org.petalslink.dsb.kernel.messaging.EndpointSearchEngine" />
+	<interface name="federationconfiguration" role="server" signature="org.petalslink.dsb.kernel.federation.FederationConfigurationService" />
+
+	<interface name="localendpointsearchengine" role="client" signature="org.petalslink.dsb.kernel.messaging.EndpointSearchEngine" />
+	<interface name="receiver" role="client" signature="org.petalslink.dsb.transport.api.Receiver" />
+	<interface name="dsbconfiguration" role="client" signature="org.petalslink.dsb.kernel.DSBConfigurationService" />
+	<interface name="configuration" role="client" signature="org.ow2.petals.kernel.configuration.ConfigurationService" />
+
+</definition>

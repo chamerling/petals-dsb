@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<!-- 
+	* This library is free software; you can redistribute it and/or
+	* modify it under the terms of the GNU Lesser General Public
+	* License as published by the Free Software Foundation; either
+	* version 2 of the License, or (at your option) any later version.
+	*
+	* This library is distributed in the hope that it will be useful,
+	* but WITHOUT ANY WARRANTY; without even the implied warranty of
+	* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+	* Lesser General Public License for more details.
+	*
+	* You should have received a copy of the GNU Lesser General Public
+	* License along with this library; if not, write to the Free Software
+	* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.objectweb.fractal</groupId>
+		<artifactId>parent</artifactId>
+		<version>2.0</version>
+	</parent>
+	<groupId>org.objectweb.fractal.julia</groupId>
+	<artifactId>parent</artifactId>
+	<name>Julia: parent project</name>
+	<description>
+		The default java implementation for Fractal
+	</description>
+	<packaging>pom</packaging>
+	<version>2.5.3-SNAPSHOT</version>
+
+	<!-- Julia website -->
+	<url>http://fractal.objectweb.org/julia/index.html</url>
+
+	<scm>
+		<connection>${scm.connection}/julia</connection>
+		<developerConnection>
+			${scm.developerConnection}/julia
+		</developerConnection>
+		<url>${scm.url}/julia</url>
+	</scm>
+
+	<!-- =========================================== -->
+	<!--  dependencies used by all sub-modules -->
+	<dependencies>
+		<dependency>
+			<groupId>org.objectweb.monolog</groupId>
+			<artifactId>monolog</artifactId>
+			<version>1.8</version>
+		</dependency>
+		<dependency>
+			<groupId>org.objectweb.fractal</groupId>
+			<artifactId>fractal-api</artifactId>
+			<version>2.0.2</version>
+		</dependency>
+	</dependencies>
+
+
+	<modules>
+		<module>julia-asm</module>
+		<module>julia-runtime</module>
+
+		<module>julia-mixins</module>
+		<module>julia-examples</module>
+
+
+
+		<module>koch-mc</module>
+		<module>koch-runtime</module>
+		<module>koch-mixins</module>
+		<module>koch-examples</module>
+
+		<!-- 
+			<module>julia-tests</module>
+			<module>julia-integrationtests-conf</module>
+			<module>julia-integrationtests-perf</module>
+			<module>koch-integrationtests-conf</module>
+		-->
+
+		<!-- XXX commented because the execution gets blocked -->
+		<!-- <module>koch-integrationtests-perf</module> -->
+
+		<!-- XXX commented because Maven can't guarantee that julia-runtime is built before julia-runtime-j2me -->
+		<!-- <module>julia-runtime-j2me</module> -->
+	</modules>
+</project>

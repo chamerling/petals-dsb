@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE definition PUBLIC "-//objectweb.org//DTD Fractal ADL 2.0//EN" "classpath://org/objectweb/fractal/adl/xml/standard.dtd">
+
+<definition name="Petals">
+  <component definition="org.ow2.petals.kernel.configuration.ConfigurationServiceImpl" name="ConfigurationServiceImpl"/>
+  <component definition="Communication" name="Communication"/>
+  <component definition="System" name="System"/>
+  <component definition="JBI-Management" name="JBI-Management"/>
+  <component definition="org.ow2.petals.kernel.admin.PetalsAdminServiceImpl" name="PetalsAdminServiceImpl"/>
+  <component definition="JBI-Messaging" name="JBI-Messaging"/>
+  <component definition="Transporter" name="Transporter"/>
+  <component definition="Container" name="Container"/>
+  <component definition="org.ow2.petals.jbi.management.autoload.AutoLoaderServiceImpl" name="AutoLoaderServiceImpl"/>
+  <component definition="Tools" name="Tools"/>
+
+  <binding client="Communication.configuration" server="ConfigurationServiceImpl.service"/>
+
+  <binding client="System.configuration" server="ConfigurationServiceImpl.service"/>
+
+  <binding client="JBI-Management.configuration" server="ConfigurationServiceImpl.service"/>
+  <binding client="JBI-Management.systemstate" server="System.systemState"/>
+  <binding client="JBI-Management.classloader" server="System.classloader"/>
+  <binding client="JBI-Management.repository" server="System.repository"/>
+  <binding client="JBI-Management.jmx" server="Communication.jmx"/>
+  <binding client="JBI-Management.endpoint" server="JBI-Messaging.endpoint"/>
+  <binding client="JBI-Management.router" server="JBI-Messaging.router"/>
+  <binding client="JBI-Management.container" server="Container.containerService"/>
+
+  <binding client="PetalsAdminServiceImpl.configuration" server="ConfigurationServiceImpl.service"/>
+  <binding client="PetalsAdminServiceImpl.deployment" server="JBI-Management.deploymentService"/>
+  <binding client="PetalsAdminServiceImpl.installation" server="JBI-Management.installationService"/>
+
+  <binding client="JBI-Messaging.configuration" server="ConfigurationServiceImpl.service"/>
+  <binding client="JBI-Messaging.jndi" server="Communication.jndi"/>
+  <binding client="JBI-Messaging.jmx" server="Communication.jmx"/>
+  <binding client="JBI-Messaging.admin" server="JBI-Management.adminService"/>
+  <binding client="JBI-Messaging.transporter" server="Transporter.service"/>
+
+  <binding client="Transporter.transportlistener" server="JBI-Messaging.transportlistener"/>
+
+  <binding client="Container.configuration" server="ConfigurationServiceImpl.service"/>
+  <binding client="Container.admin" server="JBI-Management.adminService"/>
+  <binding client="Container.transactionManager" server="JBI-Management.transactionManager"/>
+  <binding client="Container.classloader" server="System.classloader"/>
+  <binding client="Container.router" server="JBI-Messaging.router"/>
+  <binding client="Container.repository" server="System.repository"/>
+  <binding client="Container.endpoint" server="JBI-Messaging.endpoint"/>
+  <binding client="Container.jndi" server="Communication.jndi"/>
+  <binding client="Container.systemstate" server="System.systemState"/>
+  
+  <binding client="AutoLoaderServiceImpl.configuration" server="ConfigurationServiceImpl.service"/>
+  <binding client="AutoLoaderServiceImpl.deployment" server="JBI-Management.deploymentService"/>
+  <binding client="AutoLoaderServiceImpl.installation" server="JBI-Management.installationService"/>
+  <binding client="AutoLoaderServiceImpl.jmx" server="Communication.jmx"/>
+  <binding client="AutoLoaderServiceImpl.systemstate" server="System.systemState"/>
+  <binding client="AutoLoaderServiceImpl.repository" server="System.repository"/>
+  <binding client="AutoLoaderServiceImpl.admin" server="JBI-Management.adminService"/>
+  
+  <!-- Tools -->
+  <binding client="Tools.configuration" server="ConfigurationServiceImpl.service"/>
+  <binding client="Tools.artifactrepository" server="System.artifactrepository"/>
+  <binding client="Tools.endpoint" server="JBI-Messaging.endpoint"/>
+  <binding client="Tools.adminService" server="JBI-Management.adminService"/>
+  <binding client="Tools.petalsAdminService" server="PetalsAdminServiceImpl.service"/>
+  <binding client="Tools.atomicDeploymentService" server="JBI-Management.atomicDeploymentService"/>
+  <binding client="Tools.componentInstallationService" server="JBI-Management.componentInstallationService"/>
+
+  <controller desc="composite"/>  
+</definition>

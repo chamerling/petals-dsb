@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions name="TestServiceService" targetNamespace="http://wsapi.petals.dsb.soa4all.eu/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:tns="http://wsapi.petals.dsb.soa4all.eu/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<wsdl:types>
+		<xs:schema attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://wsapi.petals.dsb.soa4all.eu/" xmlns:tns="http://wsapi.petals.dsb.soa4all.eu/"
+			xmlns:xs="http://www.w3.org/2001/XMLSchema">
+			<xs:element name="test" type="tns:test" />
+			<xs:element name="testResponse" type="tns:testResponse" />
+			<xs:complexType name="test">
+				<xs:sequence />
+			</xs:complexType>
+			<xs:complexType name="testResponse">
+				<xs:sequence />
+			</xs:complexType>
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="test">
+		<wsdl:part element="tns:test" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="testResponse">
+		<wsdl:part element="tns:testResponse" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:portType name="TestService">
+		<wsdl:operation name="test">
+			<wsdl:input message="tns:test" name="test">
+			</wsdl:input>
+			<wsdl:output message="tns:testResponse" name="testResponse">
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="TestServiceServiceSoapBinding" type="tns:TestService">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="test">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="test">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="testResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="TestServiceService">
+		<wsdl:port binding="tns:TestServiceServiceSoapBinding" name="TestServicePort">
+			<soap:address location="http://localhost:7600/petals/ws/TestService" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,3 @@
+- GMS : Gestion de groupe avec Listeners lors de join/leave
+- Exposer tout les composants Fractal en WebService : eu.soa4all.dsb.petals.kernel.tools.remote
+- Ajout d'un dispatcher dans la couche de transport pour invoquer des composants Fractal locaux?

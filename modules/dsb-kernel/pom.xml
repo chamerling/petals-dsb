@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>dsb-parent</artifactId>
+		<groupId>org.petalslink.dsb</groupId>
+		<version>1-SNAPSHOT</version>
+	</parent>
+	
+	<groupId>org.petalslink.dsb</groupId>
+	<artifactId>dsb-kernel</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	<name>dsb-kernel</name>
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ow2.petals</groupId>
+			<artifactId>petals-kernel</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>xml-apis</groupId>
+					<artifactId>xml-apis</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>dsb-api</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>dsb-annotations</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+
+		<!-- The federation stuff -->
+
+		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>dsb-federation-core</artifactId>
+			<version>1.0-SNAPSHOT</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.cxf</groupId>
+					<artifactId>cxf-bundle-minimal</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>dsb-federation-xmpp</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+
+		 <!--<dependency>
+            <groupId>eu.soa4all.dsb.petals.transport</groupId>
+            <artifactId>soa4all-petals-federationtransporter</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>-->
+
+		<!-- DONT KNOW WHY THE BAD VERSION ARE PROVIDED BY THE KERNEL DEP... -->
+		<dependency>
+			<groupId>org.objectweb.monolog</groupId>
+			<artifactId>monolog</artifactId>
+			<version>2.1.10</version>
+		</dependency>
+		<dependency>
+			<groupId>org.objectweb.monolog</groupId>
+			<artifactId>monolog-api</artifactId>
+			<version>2.1.10</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ow2.petals</groupId>
+			<artifactId>petals-monitoring-wsapi</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>dsb-kernel-wsapi</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>dsb-webappapi</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>petals-jbi2ws</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>petals-ws2jbi</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>petals-jbi2rest</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>petals-rest2jbi</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>dsb-transport-api</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>dsb-transport-cxf</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>dsb-transport-xmpp</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>dsb-transport</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>dsb-api</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+
+		<!-- 		<dependency>
+			<groupId>org.ow2.petals</groupId>
+			<artifactId>petals-wsproxifier</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+-->
+		<!--
+			<dependency> <groupId>com.ebmwebsourcing.commons</groupId>
+			<artifactId>commons-wsframework-api</artifactId>
+			<version>1.0-SNAPSHOT</version> </dependency>
+		-->
+		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>dsb-petals-oldies</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+		<!--  For monitoring -->
+		<!--
+
+			<artifactId>report.client.petals.module</artifactId>
+			<groupId>org.ow2.petals.monitoring</groupId>
+			<version>1.0-SNAPSHOT</version> </dependency>
+		-->
+
+		<!-- WSDM -->
+		<!-- soap sender -->
+		<dependency>
+			<artifactId>external.sender.soap</artifactId>
+			<groupId>org.ow2.petals.esb</groupId>
+			<version>0.9.1-SNAPSHOT</version>
+		</dependency>
+
+		<!-- report -->
+		<dependency>
+			<groupId>org.ow2.petals.esb.monitoring</groupId>
+			<artifactId>raw-report</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ow2.petals.esb.monitoring</groupId>
+			<artifactId>base-monitoring-wsclient</artifactId>
+			<version>1.0-SNAPSHOT</version>
+			<exclusions>
+				<!-- imports an incompatible ASM version!!! -->
+				<exclusion>
+					<groupId>org.apache.cxf</groupId>
+					<artifactId>cxf-rt-frontend-jaxws</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- /WSDM -->
+
+		<dependency>
+			<groupId>org.objectweb.fractal.julia</groupId>
+			<artifactId>julia-runtime</artifactId>
+			<version>2.5.2</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.objectweb.fractal.julia</groupId>
+			<artifactId>julia-asm</artifactId>
+			<version>2.5.2</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.objectweb.fractal.julia</groupId>
+			<artifactId>julia-mixins</artifactId>
+			<version>2.5.2</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.objectweb.fractal.fractaladl</groupId>
+			<artifactId>fractal-adl</artifactId>
+			<version>2.3</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.objectweb.monolog</groupId>
+					<artifactId>monolog-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.objectweb.fractal.fraclet.annotation</groupId>
+			<artifactId>fractal-spoonlet</artifactId>
+			<version>2.0.2</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.objectweb.monolog</groupId>
+					<artifactId>monolog</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.objectweb.fractal.fractaljmx</groupId>
+			<artifactId>fractal-jmx</artifactId>
+			<version>0.3.0</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.objectweb.fractal.julia</groupId>
+					<artifactId>julia-asm</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.objectweb.fractal.julia</groupId>
+					<artifactId>julia-runtime</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.objectweb.fractal.julia</groupId>
+					<artifactId>julia-mixins</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>mx4j</groupId>
+			<artifactId>mx4j</artifactId>
+			<version>3.0.1</version>
+		</dependency>
+
+		<!-- Do not know why... -->
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-bindings-corba</artifactId>
+			<version>2.2.2</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifestEntries>
+							<Implementation-Title>org.petalink.dsb</Implementation-Title>
+							<Implementation-Version>${project.version}
+							</Implementation-Version>
+							<Implementation-Vendor>PetalsLinkLabs</Implementation-Vendor>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+			<!-- SPOON FOR FRACLET PLUGIN -->
+			<plugin>
+				<groupId>net.sf.alchim</groupId>
+				<artifactId>spoon-maven-plugin</artifactId>
+				<version>0.7.1</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>recompile</goal>
+							<goal>test-recompile</goal>
+						</goals>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>log4j</groupId>
+						<artifactId>log4j</artifactId>
+						<version>1.2.9</version>
+					</dependency>
+					<dependency>
+						<groupId>org.objectweb.monolog</groupId>
+						<artifactId>monolog</artifactId>
+						<version>1.8</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+		</plugins>
+	</build>
+
+	<repositories>
+		<repository>
+			<id>ebmws-private.rd</id>
+			<name>EBM WS RD repository</name>
+			<url>http://maven.ebmwebsourcing.com/rd/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+</project>

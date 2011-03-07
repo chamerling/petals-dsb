@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spoon>
+    <spoonlet groupId="org.objectweb.fractal.fraclet.java"
+        artifactId="fractal-spoonlet" version="3.2" />
+    <spoonlet groupId="org.objectweb.fractal.fraclet.java"
+        artifactId="fractaladl-spoonlet" version="3.2" />
+</spoon>

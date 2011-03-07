@@ -1,0 +1,190 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<artifactId>dsb-parent</artifactId>
+		<groupId>org.petalslink.dsb</groupId>
+		<version>1-SNAPSHOT</version>
+	</parent>
+
+	<groupId>org.ow2.petals.esb.sandox</groupId>
+	<artifactId>petals-installer</artifactId>
+	<packaging>jar</packaging>
+	<version>1.0-SNAPSHOT</version>
+	<name>petals-installer</name>
+	<description>A Petals ESB installer based on izpack. The installer will : 1/ Get the Petals ESB and add components defined in dependencies in the artifacts/component folder.</description>
+
+	<properties>
+		<staging.dir>${project.build.directory}/installResources</staging.dir>
+		<petals.version>3.0.3</petals.version>
+		<petals.artifact>petals-platform</petals.artifact>
+		<petals.group>org.ow2.petals</petals.group>
+		<app.name>Petals ESB Installer</app.name>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.codehaus.izpack</groupId>
+			<artifactId>izpack-standalone-compiler</artifactId>
+			<version>4.3.1</version>
+			<optional>true</optional>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<defaultGoal>package</defaultGoal>
+		<finalName>PetalsInstaller</finalName>
+
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>unpack</id>
+						<phase>package</phase>
+						<goals>
+							<goal>unpack</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>${petals.group}</groupId>
+									<artifactId>${petals.artifact}</artifactId>
+									<version>${petals.version}</version>
+									<type>zip</type>
+									<!-- <classifier>full</classifier>-->
+									<overWrite>true</overWrite>
+									<outputDirectory>${staging.dir}/petals</outputDirectory>
+									<destFileName>*</destFileName>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>org.petalslink.dsb</groupId>
+									<artifactId>petals-bc-restproxy</artifactId>
+									<version>1.0-SNAPSHOT</version>
+									<type>zip</type>
+									<!-- <classifier>zip</classifier>-->
+									<overWrite>false</overWrite>
+									<outputDirectory>${staging.dir}/petals/${petals.artifact}-${petals.version}/artifacts/components/</outputDirectory>
+									<destFileName>petals-bc-restproxy.zip</destFileName>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.petalslink.dsb</groupId>
+									<artifactId>petals-bc-soap-proxy</artifactId>
+									<version>1.0-SNAPSHOT</version>
+									<type>zip</type>
+									<!-- <classifier>zip</classifier>-->
+									<overWrite>false</overWrite>
+									<outputDirectory>${staging.dir}/petals/${petals.artifact}-${petals.version}/artifacts/components/</outputDirectory>
+									<destFileName>petals-bc-soapproxy.zip</destFileName>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.ow2.petals</groupId>
+									<artifactId>petals-bc-soap</artifactId>
+									<version>4.1-SNAPSHOT</version>
+									<type>zip</type>
+									<!-- <classifier>zip</classifier>-->
+									<overWrite>false</overWrite>
+									<outputDirectory>${staging.dir}/petals/${petals.artifact}-${petals.version}/artifacts/components/</outputDirectory>
+									<destFileName>petals-bc-soap.zip</destFileName>
+								</artifactItem>
+							</artifactItems>
+							<!--
+								<outputDirectory>${project.build.directory}/wars</outputDirectory> <overWriteReleases>false</overWriteReleases>
+								<overWriteSnapshots>true</overWriteSnapshots>
+							-->
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>create-staging-area</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<tasks>
+								<copy todir="${staging.dir}">
+									<fileset dir="${basedir}/src/izpack" />
+								</copy>
+							</tasks>
+						</configuration>
+					</execution>
+
+					<execution>
+						<id>rename</id>
+						<phase>package</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<tasks>
+								<mkdir dir="${staging.dir}/PETALS" />
+								<move todir="${staging.dir}/PETALS">
+									<fileset dir="${staging.dir}/petals/${petals.artifact}-${petals.version}" />
+								</move>
+							</tasks>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.izpack</groupId>
+				<artifactId>izpack-maven-plugin</artifactId>
+				<version>1.0-alpha-5</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.codehaus.izpack</groupId>
+						<artifactId>izpack-standalone-compiler</artifactId>
+						<version>4.3.1</version>
+					</dependency>
+				</dependencies>
+				<configuration>
+					<izpackBasedir>${staging.dir}</izpackBasedir>
+					<customPanelDirectory>${staging.dir}</customPanelDirectory>
+					<!-- 'Web' or 'Standard' -->
+					<kind>Standard</kind>
+				</configuration>
+				<executions>
+					<execution>
+						<id>standard-installer</id>
+						<phase>package</phase>
+						<goals>
+							<goal>izpack</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<version>2.7</version>
+				<configuration>
+					<addGroupIdToProjectName>true</addGroupIdToProjectName>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

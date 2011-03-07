@@ -1,0 +1,111 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>esb-parent</artifactId>
+		<groupId>org.ow2.esb</groupId>
+		<version>0.9.1-SNAPSHOT</version>
+	</parent>
+
+	<name>Report Client PEtALS module</name>
+	<artifactId>report.client.petals.module</artifactId>
+	<groupId>org.ow2.petals.monitoring</groupId>
+	<version>1.0-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<properties>
+		<topDirectoryLocation>..</topDirectoryLocation>
+	</properties>
+
+	<dependencies>
+
+		<!-- petals kernel dependencies -->
+		<dependency>
+			<groupId>org.ow2.petals</groupId>
+			<artifactId>petals-kernel</artifactId>
+			<version>3.0-SNAPSHOT</version>
+		</dependency>
+
+		<!-- soap sender -->
+		<dependency>
+			<artifactId>external.sender.soap</artifactId>
+			<groupId>org.ow2.petals.esb</groupId>
+			<version>0.9.1-SNAPSHOT</version>
+		</dependency>
+
+		<!-- report -->
+		<dependency>
+			<groupId>org.ow2.petals.esb.monitoring</groupId>
+			<artifactId>raw-report</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ow2.petals.esb.monitoring</groupId>
+			<artifactId>base-monitoring-wsclient</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.ebmwebsourcing.wsstar</groupId>
+			<artifactId>ws-notification-definition</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+
+		<!-- test dependency -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+
+
+	</dependencies>
+	<build>
+		<plugins>
+			<!-- SPOON FOR FRACLET PLUGIN -->
+			<plugin>
+				<groupId>net.sf.alchim</groupId>
+				<artifactId>spoon-maven-plugin</artifactId>
+				<version>0.7.1</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>recompile</goal>
+							<!-- 	<goal>test-recompile</goal>   -->
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+
+			<!-- Copy fractal adl for test -->
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>process-test-resources</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<tasks>
+								<echo message="Copy fractal adl in test" />
+								<copy todir="src/test/resources" overwrite="yes"
+									includeEmptyDirs="no">
+									<fileset dir="./target/classes/">
+										<exclude name="**/*.class" />
+										<exclude name="**/*.cfg" />
+										<exclude name="**/*.xsd" />
+										<exclude name="**/*.xjb" />
+									</fileset>
+								</copy>
+							</tasks>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>

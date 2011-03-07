@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<topology xmlns="http://petals.ow2.org/topology">
+	<domain name="PEtALS" mode="dynamic">
+		<description>The static domain configuration</description>
+		<sub-domain name="subdomain1" mode="master-slave">
+			<description>description of the subdomain</description>
+			<container type="master" name="0">
+				<description>description of the container 0</description>
+				<host>localhost</host>
+				<!-- <host>94.23.221.97</host> -->
+				<user>chamerling.ebmws</user>
+				<password>password</password>
+				<jmx-service>
+					<!-- can be just local and not exposed to outside -->
+					<rmi-port>7700</rmi-port>
+				</jmx-service>
+				<transport-service>
+					<!-- Not used in SOAP mode, the SOAP mode used the webservice port -->
+					<tcp-port>7800</tcp-port>
+				</transport-service>
+				<registry-service>
+					<!-- Can use the webservice port too! -->
+					<port>7900</port>
+				</registry-service>
+				<webservice-service>
+					<port>7600</port>
+					<prefix>petals/ws</prefix>
+				</webservice-service>
+			</container>
+			
+			<container type="slave" name="1">
+				<description>description of the container 1</description>
+				<host>localhost</host>
+				<!-- <host>94.23.221.97</host> -->
+				<user>chamerling.petalslink</user>
+				<password>password</password>
+				<jmx-service>
+					<rmi-port>7701</rmi-port>
+				</jmx-service>
+				<transport-service>
+					<tcp-port>7801</tcp-port>
+				</transport-service>
+				<registry-service>
+					<port>7901</port>
+				</registry-service>
+				<webservice-service>
+					<port>7601</port>
+					<prefix>petals/ws</prefix>
+				</webservice-service>
+			</container>
+		</sub-domain>
+	</domain>
+</topology>

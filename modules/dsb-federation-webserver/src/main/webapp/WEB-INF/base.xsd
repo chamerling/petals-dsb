@@ -1,0 +1,3234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="xmlmap://org.ow2.opensuit.xml.base/v1.0" targetNamespace="xmlmap://org.ow2.opensuit.xml.base/v1.0">
+  <xs:complexType name="__import">
+    <xs:annotation>
+      <xs:documentation><![CDATA[Path to the XML file to import.<br>The path must be relative to the origin XML (may not start with a '/').]]></xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="File" type="xs:string" use="required"/>
+  </xs:complexType>
+  <xs:simpleType name="binding.Expression">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This simple type allows to declare expressions that interact with the presentation layer:<ul><li>get values,<li>set values (when submitting a form for instance),<li>call methods (to react to application events).</ul>The underlying engine is fully compatible with Java Unified Expression Language (see http://java.sun.com/products/jsp/reference/techart/unifiedEL.html),except that expressions are <strong>compiled</strong>, and <strong>strongly-typed</strong> (no weak-type conversion).]]></xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="enums.IntegerFieldType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[IntegerFieldType details (TODO).]]></xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="InputField">
+        <xs:annotation>
+          <xs:documentation><![CDATA[InputField details (TODO).]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="PercentageBar">
+        <xs:annotation>
+          <xs:documentation><![CDATA[PercentageBar details (TODO).]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="enums.SingleChoiceType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This enumeration allows to set the type of display for a Form SingleChoiceField.]]></xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="List">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Choices are displayed in a list (with single selection).]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="RadioButtons">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Choices are displayed as separate selectable radio buttons.]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="ComboBox">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The SingleChoiceField is rendered ad a combobox, each choice being a combo box item.]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="enums.Scope">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This enumeration allows to set the lifecycle scope associated to application objects (such as a Bean).]]></xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="PageContext">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Associates the lifecycle to the page context.]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Request">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Associates the lifecycle to the Request.An object with an Request scope is destroyed as soon as the request terminates.]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Session">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Associates the lifecycle to the Session.An object with a Session scope is destroyed when the user session terminates (logout or timeout).]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Application">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Associates the lifecycle to the Application.An object with an Application scope is never destroyed, and is shared accross all user sessions.]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="enums.ZipCountry">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This enumeration allows to set specified zip code for ZipCode validator.]]></xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="USA">
+        <xs:annotation>
+          <xs:documentation><![CDATA[USA: US postal code]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="JAP">
+        <xs:annotation>
+          <xs:documentation><![CDATA[JAP: Japanese postal code]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="DEU">
+        <xs:annotation>
+          <xs:documentation><![CDATA[DEU: Dutch postal code]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="ARG">
+        <xs:annotation>
+          <xs:documentation><![CDATA[ARG: Argentinean postal code]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="SWE">
+        <xs:annotation>
+          <xs:documentation><![CDATA[SWE: Swedish postal code]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="FRA">
+        <xs:annotation>
+          <xs:documentation><![CDATA[FRA: French postal code]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="CAN">
+        <xs:annotation>
+          <xs:documentation><![CDATA[CAN: Canadian postal code]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="UK">
+        <xs:annotation>
+          <xs:documentation><![CDATA[UK: United Kingdom postal code]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="AUS">
+        <xs:annotation>
+          <xs:documentation><![CDATA[AUS: Australian postal code]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="html.table.filter.ContainsPolicy">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This enumeration allows to set the policy for a text filter.]]></xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="ALL">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Policy: all words.]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="ANY">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Policy: any word.]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="enums.Alignment">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This enumeration allows to set an horizontal alignment (left, center or right).]]></xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Left">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Left alignment.]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Center">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Center alignment.]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Right">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Right alignment.]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="enums.ScriptAccess">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This enumeration allows to set the behavior of script access manner for flash player component.]]></xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="ALWAYS">
+        <xs:annotation>
+          <xs:documentation><![CDATA[ALWAYS: set the script access behavior to 'always' for allowscriptaccess]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="NEVER">
+        <xs:annotation>
+          <xs:documentation><![CDATA[NEVER: set the script access behavior to 'never' for allowscriptaccess]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="SAMEDOMAIN">
+        <xs:annotation>
+          <xs:documentation><![CDATA[SAMEDOMAIN: set the script access behavior to 'samedomain' for allowscriptaccess]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="enums.ScaleMode">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This enumeration allows to set the display type for flash player component.]]></xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="SHOWALL">
+        <xs:annotation>
+          <xs:documentation><![CDATA[SHOWALL: set the display type to 'showall' for scalemode]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="NOBORDER">
+        <xs:annotation>
+          <xs:documentation><![CDATA[NOBORDER: set the display type to 'noborder' for scalemode]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="EXACTFIT">
+        <xs:annotation>
+          <xs:documentation><![CDATA[EXACTFIT: set the display type to 'exactfit' for scalemode]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="enums.MultiChoiceType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This enumeration allows to set the type of display for a Form MultiChoiceField.]]></xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="List">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Choices are displayed in a list (with multiple selection).]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="CheckBoxes">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Choices are displayed as separate selectable checkboxes.]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="enums.DateType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This enumeration allows to set the type of display for a Date.]]></xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="DateOnly">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Displays the date only (with format according to the user locale).]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="TimeOnly">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Displays the time only (with format according to the user locale).]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="DateAndTime">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Displays the date and the time (with format according to the user locale).]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="enums.Quality">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This enumeration allows to set video quality for flash player component.]]></xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="LOW">
+        <xs:annotation>
+          <xs:documentation><![CDATA[LOW: display video with low quality.]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="MEDIUM">
+        <xs:annotation>
+          <xs:documentation><![CDATA[MEDIUM: display video with medium quality ]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="HIGH">
+        <xs:annotation>
+          <xs:documentation><![CDATA[HIGH: display video with high quality ]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="AUTOLOW">
+        <xs:annotation>
+          <xs:documentation><![CDATA[AUTOLOW: display video with autolow quality ]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="AUTOHIGH">
+        <xs:annotation>
+          <xs:documentation><![CDATA[AUTOHIGH: display video with autohigh quality ]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="BEST">
+        <xs:annotation>
+          <xs:documentation><![CDATA[BEST: display video with best quality ]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="enums.TableStyle">
+    <xs:annotation>
+      <xs:documentation><![CDATA[Available table rendering styles.]]></xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Table">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Table style.]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Paragraphs">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Paragraphs style.]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="enums.AskBoxButtons">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This enumeration allows to set the AskBox buttons style.]]></xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="OkCancel">
+        <xs:annotation>
+          <xs:documentation><![CDATA[To display an AsbBox with Ok and Cancel styled buttons.]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="YesNo">
+        <xs:annotation>
+          <xs:documentation><![CDATA[To display an AsbBox with Yes and No styled buttons.]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="enums.Severity">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This enumeration allows to set a severity (such as in a MessageBox).]]></xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Info">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Information severity.]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Warning">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Warning severity.]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Error">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Error severity.]]></xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element abstract="true" name="page.ctx.IPageContextDef">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This interface represents the execution context associated to a page.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element abstract="true" name="html.menu.IMenuItem">
+    <xs:annotation>
+      <xs:documentation><![CDATA[IMenuItem details (TODO).]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element abstract="true" name="binding.IDataSource">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This is an interface for components able to provide beans.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element abstract="true" name="html.table.IColumnsProvider">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This interface represents a component that is able to render a Table column.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element abstract="true" name="html.item.IItemsProvider">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This interface represents a type of component in charge of returning a list of displayable items (for rendering a combo-box for instance).<br/>A displayable item is made of:<ul><li>an (internal) <b>value</b>,</li><li>a (displayable) <b>text</b>,</li><li>an (optional) <b>icon</b>.</li></ul>]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element abstract="true" name="html.IView">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This interface represents a graphical component that is able to render itself as HTML.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="Import_html.IView" substitutionGroup="html.IView" type="__import"/>
+  <xs:element abstract="true" name="html.form.field.IAutocomplete">
+    <xs:annotation>
+      <xs:documentation><![CDATA[Interface for auto-completion components.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element abstract="true" name="html.IFrame">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This interface represents a component that renders a full HTML page, and that is able to embbed a contextual content (a page).]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="Import_html.IFrame" substitutionGroup="html.IFrame" type="__import"/>
+  <xs:element abstract="true" name="html.table.ISorter">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This interface represents a component that is able to sort table rows.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element abstract="true" name="html.table.IFilter">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This interface represents a component that is able to filter table rows.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element abstract="true" name="html.table.filter.IFilterFunction">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This interface represents a component that is able to filter values.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element abstract="true" name="html.table.export.ITableExportFormat">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This interface represents a component that is able to export table data into a specific format.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element abstract="true" name="html.form.IFormItem">
+    <xs:annotation>
+      <xs:documentation><![CDATA[Interface that represents items that can be rendered by a form.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element abstract="true" name="action.IAction">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This component interface allows to declare how the application reacts to an event (OnClick, OnError, ...).<br/>An Action <b>may</b> trigger application code, and in any cases it <b>must</b> cause a navigation to occur (to a defined view point).]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element abstract="true" name="html.tab.ITabsProvider">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This interface represents a component that provides tabs for a TabPage.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element abstract="true" name="validation.IValidator">
+    <xs:annotation>
+      <xs:documentation><![CDATA[IValidator details (TODO).]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element abstract="true" name="locale.ILocaleSelector">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This interface represents a component that knows how to determine the user locale.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element abstract="true" name="page.IPage">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This interface represents a page of the application.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="Import_page.IPage" substitutionGroup="page.IPage" type="__import"/>
+  <xs:element abstract="true" name="html.tree.ITreeItemsProvider">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This interface represents a type of component in charge of providing tree items.<br/>A tree item is made of:<ul><li>a (displayable) <b>text</b>,</li><li>an (optional) <b>icon</b>.</li></ul>]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element abstract="true" name="param.IUrlParameter">
+    <xs:annotation>
+      <xs:documentation><![CDATA[IUrlParameter details (TODO).]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element abstract="true" name="html.tree.IInlineItem">
+    <xs:annotation>
+      <xs:documentation><![CDATA[Interface that represents a tree item (leaf or node) declared statically.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_page.ctx.Definition">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="0" name="Authorization" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Evaluates whether the user is authorized to access this context. Default: true.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="InputParameters">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Url parameters required in this context. Any page invoked without all its input parameters is rejected.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" ref="param.UrlParameterDef"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="LocalBeans">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Defines local beans used in this page context.Beans declared here are accessible only from pages withing this context.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" ref="binding.IDataSource"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="OnLoad">
+        <xs:annotation>
+          <xs:documentation><![CDATA[An optional callback triggered when this context is loaded (i.e. when the user enters it).]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" ref="binding.Do"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="OnQuit">
+        <xs:annotation>
+          <xs:documentation><![CDATA[An optional callback triggered when this context is closed (i.e. when the user leaves it).]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" ref="binding.Do"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="Extends" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The page this context extends.<br>The path is relative to the WEB-INF directory and has to start with a '/' (ex: /pages/MyPage).]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="page.ctx.Definition" substitutionGroup="page.ctx.IPageContextDef" type="_page.ctx.Definition">
+    <xs:annotation>
+      <xs:documentation><![CDATA[Page context definition.<br/>Defines the execution context associated to one or several pages.<br/>Such a context is defined by:<ul><li>parent context (optional): any page context this one extends,<li>authorization rule (optional): a rule that is checked whenever a user is trying to access this context,<li>input parameters (optional): url parameters required to load the context,<li>local beans (optional): beans used locally in this page,<li>on load actions (optional): set of actions to trigger when this context is loaded (generaly beans initilization),<li>on quit actions (optional): set of actions to trigger when this context is leaved.</ul>Within this context, the url consistency is maintained (required input parameters are checked when entering this context, and are always reentered while staying in this context), ensuring that any url may be bookmarked, exchanged and restored.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.HTML">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" name="Code" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The html code.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="HeadingIncrement" type="xs:int" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[Defines the increment in heading (&lt;Hn&gt;) to apply after having rendered this.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="Encode" type="xs:boolean" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[Defines whether the content should be html encoded. Default: no..]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="html.HTML" substitutionGroup="html.IView" type="_html.HTML">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This component allows to insert html code directly in the page rendering.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.menu.SubMenu">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="0" name="IterateOn" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Vector of item objects (any).<br>Allows to render several sub-menus.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="Title" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The submenu title.<br>Supported contextual beans: $submenu (if expression 'IterateOn' is set).]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="Tooltip" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Tooltip text.<br>Supported contextual beans: $submenu (if expression 'IterateOn' is set).]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="Icon" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The submenu's icon.<br>The path returned by this expression is relative to the war root directory (ex: 'resources/images/icon.png').<br>Supported contextual beans: $submenu (if expression 'IterateOn' is set).]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="OnClick">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Action to trigger when the submenu is clicked.<br>Supported contextual beans: $submenu (if expression 'IterateOn' is set).]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="1" minOccurs="0" ref="action.IAction"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="Disabled" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Determines whether the submenu is enabled.<br>Supported contextual beans: $submenu (if expression 'IterateOn' is set).<br>Default: true]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="Visible" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Determines whether the sub menu is visible.<br>Supported contextual beans: $submenu (if expression 'IterateOn' is set).<br>Default: true]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="ShowSubMenu" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Determines whether this submenu show its children items.<br>Supported contextual beans: $submenu (if expression 'IterateOn' is set).<br>Default: true]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="Items">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The submenu items.<br>Supported contextual beans: $submenu (if expression 'IterateOn' is set).]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="1" ref="html.menu.IMenuItem"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="Target" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The target window. If specified, clicking this item will open a new window.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="IteratorVar" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The name of the iterator contextual bean.<br>This bean is available at render-time only.<br>Default: $submenu.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="html.menu.SubMenu" substitutionGroup="html.menu.IMenuItem" type="_html.menu.SubMenu">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This component retrieves sub-menus dynamically.<br>It first retrieves a vector data (through the Iterable binding), and then retrieves sub-menu info (text, action, tooltip, items, ...) by iterating on the items.<br>Sub-menu elements are accessible as a contextual bean (default: '$submenu').]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_action.Inform">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="0" name="AddParameters">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Additional parameters to pass to the action when it is invoked.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" ref="param.IUrlParameter"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="Title" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The page displayed title.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="Message" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The displayed message.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="OnOk">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The action to trigger when the user clicks the acknowledgment button.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="1" minOccurs="1" ref="action.IAction"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="ID" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The action ID (for url callbacking).]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="FrameName" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The name of the frame this page displays in. May be null (the default one will be used).]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="Severity" type="enums.Severity" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The message severity. Default: Info.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="action.Inform" substitutionGroup="action.IAction" type="_action.Inform">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This action displays a message, and a button.<br/>After having read the message, the user should click the button to continue.<br/>This action is typically used to implement an acknowledgment page.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.form.field.ChoiceTreeField">
+    <xs:complexContent>
+      <xs:extension base="_html.form.field.BaseVectorValueField">
+        <xs:sequence>
+          <xs:element maxOccurs="1" minOccurs="1" name="RootItems" type="binding.Expression">
+            <xs:annotation>
+              <xs:documentation><![CDATA[Expression that returns a vector of tree item objects representing the tree root node(s).]]></xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element maxOccurs="1" minOccurs="1" name="Text" type="binding.Expression">
+            <xs:annotation>
+              <xs:documentation><![CDATA[The item displayed text.<br>Supported contextual beans: $item.]]></xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element maxOccurs="1" minOccurs="1" name="IsNode" type="binding.Expression">
+            <xs:annotation>
+              <xs:documentation><![CDATA[Expression that determines whether an item is a node or a leaf.<br>Expected return type: boolean.<br>Supported contextual beans: $item.]]></xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element maxOccurs="1" minOccurs="1" name="ItemId" type="binding.Expression">
+            <xs:annotation>
+              <xs:documentation><![CDATA[Expression that returns an item id.<br>Note: the id is only required for leaf items (not nodes).<br>Return type must be compatible with the Bind element type..<br>Supported contextual beans: $item.]]></xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element maxOccurs="1" minOccurs="1" name="Children" type="binding.Expression">
+            <xs:annotation>
+              <xs:documentation><![CDATA[Expression that returns a vector of objects representing children items.<br>Note: children items are only requested for node items (not leaves).<br>The parent node object is accessible with the $item contextual bean.<br>The item type must be compatible with the RootItems.]]></xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element maxOccurs="1" minOccurs="1" name="ExpandLevel" type="binding.Expression">
+            <xs:annotation>
+              <xs:documentation><![CDATA[Expression that returns the maximum depth until nodes are expanded.<br>Expected type: int, Integer.<br>Default: infinite (all expanded).]]></xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+        <xs:attribute name="IteratorVar" type="xs:string" use="optional">
+          <xs:annotation>
+            <xs:documentation><![CDATA[The name of the iterator contextual bean.<br>This bean is available at render-time only.<br>Default: $item.]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="html.form.field.ChoiceTreeField" substitutionGroup="html.form.IFormItem" type="_html.form.field.ChoiceTreeField">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This field represent a checkable tree owning two main purposes.<br/>First purpose is to allow the user, to select one or several children nodes, <br/>in the tree. When this one is unfold.<br/>Second purpose is to allow the user, to select all children nodes of a parent <br/>node when this one is checked]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType mixed="true" name="_binding.Do">
+    <xs:sequence>
+      <xs:any maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="binding.Do" type="_binding.Do">
+    <xs:annotation>
+      <xs:documentation><![CDATA[Defines an expression to perform when some application event occurs.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_validation.CustomValidator">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" name="Validate" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The method that performs validation.<br>This method has to throw a ValidationError to complain about validation issue(s).]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="ValueBeanName" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The name of the value contextual bean.<br>This bean contains the value that is being validated.<br>Default: $value.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="validation.CustomValidator" substitutionGroup="validation.IValidator" type="_validation.CustomValidator">
+    <xs:annotation>
+      <xs:documentation><![CDATA[Validator component that calls a method from the code to perform validation.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.item.InlineItems">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="1" ref="html.item.Item">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The displayable items.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="html.item.InlineItems" substitutionGroup="html.item.IItemsProvider" type="_html.item.InlineItems">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This component allows to define a list of static items.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_action.Download">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="0" name="AddParameters">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Additional parameters to pass to the action handler when it is invoked.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" ref="param.IUrlParameter"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="FileName" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Defines the filename (with extension).]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="OnDownload" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Expression that handles the download.<br>Processes the request and returns the HttpResponse (accessible through the contextual $response bean).<br>Supported contextual beans: $response]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="action.Download" substitutionGroup="action.IAction" type="_action.Download">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This action triggers a file download.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.form.field.IntegerField">
+    <xs:complexContent>
+      <xs:extension base="_html.form.field.BaseSingleValueField">
+        <xs:attribute name="Type" type="enums.IntegerFieldType" use="optional">
+          <xs:annotation>
+            <xs:documentation><![CDATA[Type details (TODO).]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="html.form.field.IntegerField" substitutionGroup="html.form.IFormItem" type="_html.form.field.IntegerField">
+    <xs:annotation>
+      <xs:documentation><![CDATA[An integer editor form field.<br/>Supported value types are: any number type or class.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.item.Item">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" name="Value" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The item value.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="Text" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The item text.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="Disabled" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Determines whether this item is disabled.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="html.item.Item" type="_html.item.Item">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This component defines a static item.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_param.ViewPointParam">
+    <xs:attribute name="Name" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The name of the navigation parameter that will contain the viewpoint.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="param.ViewPointParam" substitutionGroup="param.IUrlParameter" type="_param.ViewPointParam">
+    <xs:annotation>
+      <xs:documentation><![CDATA[Passes the current viewpoint (page and arguments) as a navigation parameter.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.form.field.MultiChoiceField">
+    <xs:complexContent>
+      <xs:extension base="_html.form.field.BaseVectorValueField">
+        <xs:sequence>
+          <xs:element maxOccurs="1" minOccurs="1" name="Items">
+            <xs:annotation>
+              <xs:documentation><![CDATA[The component that defines all choice items.]]></xs:documentation>
+            </xs:annotation>
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element maxOccurs="1" minOccurs="1" ref="html.item.IItemsProvider"/>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element maxOccurs="1" minOccurs="0" name="OnChange" type="binding.Expression">
+            <xs:annotation>
+              <xs:documentation><![CDATA[Callback to trigger when the selection changes (causes the form to reload).<br/>Should be used to implement dynamic form fields.]]></xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+        <xs:attribute name="Type" type="enums.MultiChoiceType" use="optional">
+          <xs:annotation>
+            <xs:documentation><![CDATA[The field display style. Default: CheckBoxes.]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="ListSize" type="xs:int" use="optional">
+          <xs:annotation>
+            <xs:documentation><![CDATA[Defines the height of the list (for display style List only). Default: 8;]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="html.form.field.MultiChoiceField" substitutionGroup="html.form.IFormItem" type="_html.form.field.MultiChoiceField">
+    <xs:annotation>
+      <xs:documentation><![CDATA[A form editor that allows to choose several values among a finite list.<br/>This can be rendered either as a list of checkboxes (default) or a multi-selection list.<br/>Supported value types are: <code>int[]</code>, <code>java.lang.Integer[]</code>, <code>enum[]</code> or <code>java.lang.String[]</code>]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_validation.ZipCode">
+    <xs:attribute name="ZipCountryCode" type="enums.ZipCountry" use="required">
+      <xs:annotation>
+        <xs:documentation><![CDATA[Define the country for which the postal address will be verified. Default value: FRA]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="validation.ZipCode" substitutionGroup="validation.IValidator" type="_validation.ZipCode">
+    <xs:annotation>
+      <xs:documentation><![CDATA[Validator that checks that the input is recognized as an specified country zip code.<br/><br/> Use ZipContry enumeration for 'ZipContryCode' attribute:<br/><br/>Available enumeration values:<ul><li>USA: US postal code</li><li>JAP: Japanese postal code</li><li>DEU: Dutch postal code</li><li>ARG: Argentinean postal code</li><li>SWE: Swedish postal code</li><li>FRA: French postal code</li><li>CAN: Canadian postal code</li><li>UK: United Kingdom postal code</li><li>AUS: Australian postal code</li></ul>]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.form.field.SingleChoiceField">
+    <xs:complexContent>
+      <xs:extension base="_html.form.field.BaseSingleValueField">
+        <xs:sequence>
+          <xs:element maxOccurs="1" minOccurs="1" name="Items">
+            <xs:annotation>
+              <xs:documentation><![CDATA[The component that defines all choice items.]]></xs:documentation>
+            </xs:annotation>
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element maxOccurs="1" minOccurs="1" ref="html.item.IItemsProvider"/>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element maxOccurs="1" minOccurs="0" name="OnChange" type="binding.Expression">
+            <xs:annotation>
+              <xs:documentation><![CDATA[Callback to trigger when the selection changes (causes the form to reload).<br/>Should be used to implement dynamic form fields.]]></xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+        <xs:attribute name="Type" type="enums.SingleChoiceType" use="optional">
+          <xs:annotation>
+            <xs:documentation><![CDATA[The field display style. Default: ComboBox.]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="ListSize" type="xs:int" use="optional">
+          <xs:annotation>
+            <xs:documentation><![CDATA[Defines the height of the list (for display style List only). Default: 8;]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="html.form.field.SingleChoiceField" substitutionGroup="html.form.IFormItem" type="_html.form.field.SingleChoiceField">
+    <xs:annotation>
+      <xs:documentation><![CDATA[A form editor that allows to choose a single values among a finite list.<br/>This can be rendered either as a combo-box (default), a list of radio-buttons or a single-selection list.<br/>Supported value types are: <code>int</code>, <code>java.lang.Integer</code>, <code>enum</code> or <code>java.lang.String</code>.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_binding.JavaBeans">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="1" ref="binding.Bean">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Java beans declarations.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="binding.JavaBeans" substitutionGroup="binding.IDataSource" type="_binding.JavaBeans">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This allows to declare standard Java beans with their scope.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.form.field.MessageField">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" name="Label" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The displayed field label.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="Tip" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[A tip (information) associated to the field.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="Value" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The read-only value.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="Visible" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Determines whether this field is visible. Default: true.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="FieldButtons">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Buttons displayed right next to the form field.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" ref="html.menu.IMenuItem"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="html.form.field.MessageField" substitutionGroup="html.form.IFormItem" type="_html.form.field.MessageField">
+    <xs:annotation>
+      <xs:documentation><![CDATA[A form field that is read-only.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.form.field.DynAutocomplete">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" name="CompletedValues" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Expression that returns a list of completed values (according to the input value.<br>Supported contextual beans: $value]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="ValueBeanName" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The name of the value contextual bean.<br>This bean contains the text entered by the user.<br>It may be used in the 'CompletedValues' expression.<br>Default: $value.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="html.form.field.DynAutocomplete" substitutionGroup="html.form.field.IAutocomplete" type="_html.form.field.DynAutocomplete">
+    <xs:annotation>
+      <xs:documentation><![CDATA[Auto-completion component that retrieves completed values dynamically.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.form.field.TableField">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" ref="html.table.Table">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The table component.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="Name" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The field name. Must be unique in the Form.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="html.form.field.TableField" substitutionGroup="html.form.IFormItem" type="_html.form.field.TableField">
+    <xs:annotation>
+      <xs:documentation><![CDATA[A non-editable form field that displays a table.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.LanguageBar">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" name="Locale" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The binding to set the locale when the user selects one.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="FlagIcon" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Defines a path to the flag icon.<br>The path returned by this expression is relative to the war root directory (ex: 'resources/images/icon.png').<br>Supported contextual beans: $locale]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="CssClass" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The CSS Class to apply.<br>Default: 'osuit-LanguageBar'.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="LocaleBeanName" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The name of the locale contextual bean.<br>This bean is available at render-time only, and may be used to compute the flag icon.<br>Default: $locale.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="html.LanguageBar" substitutionGroup="html.IView" type="_html.LanguageBar">
+    <xs:annotation>
+      <xs:documentation><![CDATA[A component that allows switching language by a simple click.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType abstract="true" name="_msg.MessageProvider">
+    <xs:attribute name="Name" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The provider name. Must be unique in the Application.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element abstract="true" name="msg.MessageProvider" type="_msg.MessageProvider">
+    <xs:annotation>
+      <xs:documentation><![CDATA[A MessageProvider is a component able to provide localized messages from a key and a given locale.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.table.filter.Custom">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="0" name="Compile" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Expression that compiles the filter value (text) into an intermediate object.<br>Supported contextual beans: $filter (the input filter text)]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="Eval" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Expression that evaluates the filter.<br>Supported contextual beans: <ul><li>$filter: the filter value (text),<li>$cfilter: the compiled filter (if Compile expression set),<li>$text: the text value to test,</ul>]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="FilterBeanName" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The name of the filter value contextual bean.<br>Default: $filter.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="CompiledFilterBeanName" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The name of the compiled filter value contextual bean.<br>Default: $cfilter.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="TextBeanName" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The name of the text contextual bean.<br>Default: $text.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="html.table.filter.Custom" substitutionGroup="html.table.filter.IFilterFunction" type="_html.table.filter.Custom">
+    <xs:annotation>
+      <xs:documentation><![CDATA[A custom filter function.<br>Allows you to define a custom test to filter values (ex: filtering int values with expressions such as '>1 & <99')]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.include.View">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" ref="html.IView">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The associated View.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="ID" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The child ID. Must be unique.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="html.include.View" type="_html.include.View">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This component allows to declare a child View component with an ID.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.tree.DynamicItems">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" name="RootItems" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Expression that returns a vector of tree item objects representing the tree root node(s).]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="Children" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Expression that returns a vector of tree item objects representing children nodes.<br>The parent node object is accessible with the $item contextual bean.<br>The item type must be compatible with the RootItems.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="Text" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The tree item text.<br>Supported contextual beans: $item.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="Tooltip" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The tree item tooltip.<br>Supported contextual beans: $item.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="OnClick">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Action to trigger when the tree item is clicked.<br>Supported contextual beans: $item.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="1" minOccurs="0" ref="action.IAction"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="IsNode" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Expression that determines whether a tree item is a node or a leaf.<br>Expected return type: boolean.<br>Supported contextual beans: $item.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="Icon" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The tree item icon.<br>The path returned by this expression is relative to the war root directory (ex: 'resources/images/icon.png').<br>Supported contextual beans: $item.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="IteratorVar" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The name of the iterator contextual bean.<br>This bean is available at render-time only.<br>Default: $item.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="html.tree.DynamicItems" substitutionGroup="html.tree.ITreeItemsProvider" type="_html.tree.DynamicItems">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This component provides tree items dynamically (from code).]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.tree.InlineItems">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" ref="html.tree.IInlineItem">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Tree items.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="html.tree.InlineItems" substitutionGroup="html.tree.ITreeItemsProvider" type="_html.tree.InlineItems">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This component provides statically declared tree items (from XML).]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.table.export.ExportTableData">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" name="Format">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Export format.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="1" minOccurs="1" ref="html.table.export.ITableExportFormat"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="html.table.export.ExportTableData" substitutionGroup="action.IAction" type="_html.table.export.ExportTableData">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This action may only be used in a Table toolbar. Triggering this action exports table data.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.form.ViewEditFormModeParam">
+    <xs:attribute name="FormID" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The ID of the ViewEditForm.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="EditMode" type="xs:boolean" use="required">
+      <xs:annotation>
+        <xs:documentation><![CDATA[Determines whether the form has to display edit mode or view mode.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="html.form.ViewEditFormModeParam" substitutionGroup="param.IUrlParameter" type="_html.form.ViewEditFormModeParam">
+    <xs:annotation>
+      <xs:documentation><![CDATA[A component that adds url parameters to enter the specified form in edit mode or view mode.See ViewEditForm component.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.include.Action">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" ref="action.IAction">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The associated Action.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="ID" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The child ID. Must be unique.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="html.include.Action" type="_html.include.Action">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This component allows to declare a child View component with an ID.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.table.SelectionBindings">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" name="RowID" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Binding that retrieves the row ID (use of contextual row bean).]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="SelectedIDs" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Binding that gets/sets the selected rows (vector data with type compatible with the RowID binding).]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="html.table.SelectionBindings" type="_html.table.SelectionBindings">
+    <xs:annotation>
+      <xs:documentation><![CDATA[SelectionBindings details (TODO).]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_locale.FromCode">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" name="Locale" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Defines the binding to retrieve the locale. Expected type is java.utils.Locale.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="locale.FromCode" substitutionGroup="locale.ILocaleSelector" type="_locale.FromCode">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This component defines how to retrieve the end user's locale from code (bean).]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_action.HyperLink">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" name="Url" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The hyperlink url.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="action.HyperLink" substitutionGroup="action.IAction" type="_action.HyperLink">
+    <xs:annotation>
+      <xs:documentation><![CDATA[A simple hyperlink.<br/>This action simply navigates to the given url.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.Include">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="0" name="Views">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Possible children view components.<br>May be accessed from JSPs using Inlude.getCaller(request).getView(id)]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" ref="html.include.View"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="Actions">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Possible children action components.<br>May be accessed from JSPs using Inlude.getCaller(request).getAction(id)]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" ref="html.include.Action"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="HeadingIncrement" type="xs:int" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[Defines the increment in heading (&lt;Hn&gt;) to apply after having rendered this.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="Path" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The Url path that is invoked.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="html.Include" substitutionGroup="html.IView" type="_html.Include">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This component allows to include an external rendering component during the rendering processing.<br/><p>This component can be used to invoke and include rendering from JSPs or servlets.<br/>The inclusion is carried out using the J2EE request dispatcher.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.table.ComboFilter">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" name="Items">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Definition of selectable items.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="1" minOccurs="1" ref="html.item.IItemsProvider"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="Tooltip" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The filter tooltip text.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="html.table.ComboFilter" substitutionGroup="html.table.IFilter" type="_html.table.ComboFilter">
+    <xs:annotation>
+      <xs:documentation><![CDATA[A filter base on a drop-down list. Filters in the table view all rowswhose column has the selected value.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_validation.IPAddress"/>
+  <xs:element name="validation.IPAddress" substitutionGroup="validation.IValidator" type="_validation.IPAddress">
+    <xs:annotation>
+      <xs:documentation><![CDATA[Validator that checks that the input is recognized as a well formed ip address.<br/><br/>Valid examples:<ul><li>192.168.1.1</li><li>195.167.1.119</li><li>255.255.255.255</li></ul><br/><br/>Unvalid examples:<ul><li>010.0.0.0</li><li>195.167.01.119</li><li>256.20.55.23</li></ul>]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_locale.Fixed">
+    <xs:attribute name="Language" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The locale language code to use.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="Country" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The locale country code to use.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="locale.Fixed" substitutionGroup="locale.ILocaleSelector" type="_locale.Fixed">
+    <xs:annotation>
+      <xs:documentation><![CDATA[Fixed locale policy. <br/>Declares a fixed locale to be used for every user of the application.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.form.field.CheckBox">
+    <xs:complexContent>
+      <xs:extension base="_html.form.field.BaseSingleValueField">
+        <xs:sequence>
+          <xs:element maxOccurs="1" minOccurs="0" name="OnChange" type="binding.Expression">
+            <xs:annotation>
+              <xs:documentation><![CDATA[Callback to trigger when the selection changes (causes the form to reload).<br/>Should be used to implement dynamic form fields.]]></xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+        <xs:attribute name="TrueIsChecked" type="xs:boolean" use="optional">
+          <xs:annotation>
+            <xs:documentation><![CDATA[Determines whether the checkbox is checked on <code>true</code> value. Default: true.]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="html.form.field.CheckBox" substitutionGroup="html.form.IFormItem" type="_html.form.field.CheckBox">
+    <xs:annotation>
+      <xs:documentation><![CDATA[A checkbox form field.<br/>Supported value types are: boolean or Boolean.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.table.filter.Contains">
+    <xs:attribute name="IgnoreCase" type="xs:boolean" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[Sets whether the filter is case unsensitive. Default: <code>true</code>.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="Policy" type="html.table.filter.ContainsPolicy" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[Sets the filter policy if more than one word is entered. Default: <code>ALL</code>.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="html.table.filter.Contains" substitutionGroup="html.table.filter.IFilterFunction" type="_html.table.filter.Contains">
+    <xs:annotation>
+      <xs:documentation><![CDATA[A filter function that filters values containing the entered value.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.tab.ShowTabParam">
+    <xs:attribute name="TabPageID" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The ID of the targeted TabPage.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="TabID" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The Id of the tab to select. Must exist in the targeted TabPage.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="html.tab.ShowTabParam" substitutionGroup="param.IUrlParameter" type="_html.tab.ShowTabParam">
+    <xs:annotation>
+      <xs:documentation><![CDATA[A component that adds url parameters to select a given tab from a TabPage in the targetted page.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.table.DateColumn">
+    <xs:complexContent>
+      <xs:extension base="_html.table.BaseColumn">
+        <xs:sequence>
+          <xs:element maxOccurs="1" minOccurs="1" name="Date" type="binding.Expression">
+            <xs:annotation>
+              <xs:documentation><![CDATA[Retrieves the date to display.<br>Supported types are: java.util.Date or java.util.CalendarSupported contextual beans: $row]]></xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+        <xs:attribute name="Type" type="enums.DateType" use="optional">
+          <xs:annotation>
+            <xs:documentation><![CDATA[The type of display.]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="html.table.DateColumn" substitutionGroup="html.table.IColumnsProvider" type="_html.table.DateColumn">
+    <xs:annotation>
+      <xs:documentation><![CDATA[A table column that displays a date.<br>Formatting is done according to the declared 'Type' and the user's locale.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_error.DefaultErrorHandler">
+    <xs:complexContent>
+      <xs:extension base="_error.ErrorHandler"/>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="error.DefaultErrorHandler" substitutionGroup="error.ErrorHandler" type="_error.DefaultErrorHandler">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This is a default error handler that displays error, stacks in a generic maner.<br/>It provides a richer behavior if the error is a <code>org.ow2.opensuit.xml.base.error.IError</code> (ex: <code>org.ow2.opensuit.xml.base.error.LocalizedError</code> or <code>org.ow2.opensuit.xml.base.error.NonLocalizedError</code>).]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.form.field.TextField">
+    <xs:complexContent>
+      <xs:extension base="_html.form.field.BaseSingleValueField">
+        <xs:sequence>
+          <xs:element maxOccurs="1" minOccurs="0" name="IsPassword" type="binding.Expression">
+            <xs:annotation>
+              <xs:documentation><![CDATA[Defines whether this field is of password type (displays stars instead of clear text). Default: false.]]></xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element maxOccurs="1" minOccurs="0" name="Autocomplete">
+            <xs:annotation>
+              <xs:documentation><![CDATA[Associates an auto-completion component to this text field.]]></xs:documentation>
+            </xs:annotation>
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element maxOccurs="1" minOccurs="0" ref="html.form.field.IAutocomplete"/>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+        <xs:attribute name="Rows" type="xs:int" use="optional">
+          <xs:annotation>
+            <xs:documentation><![CDATA[Number of text rows. Default: 1.]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="Cols" type="xs:int" use="optional">
+          <xs:annotation>
+            <xs:documentation><![CDATA[Number of text columns (in chars). Default: 20.]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="html.form.field.TextField" substitutionGroup="html.form.IFormItem" type="_html.form.field.TextField">
+    <xs:annotation>
+      <xs:documentation><![CDATA[A textual form input field.<br/>Supported value type is: <code>java.lang.String</code>]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_action.Case">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" ref="action.IAction">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Defines the action to trigger when this case is selected.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="Name" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The forward name. Must be unique.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="action.Case" type="_action.Case">
+    <xs:annotation>
+      <xs:documentation><![CDATA[An action Case.<br>This is used by both DoAndForward and SwitchAction components, to define action cases. ]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_RuleDefinition">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" name="Expression" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The expression defining this rule.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="Name" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The rule name. Must be unique.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="RuleDefinition" type="_RuleDefinition">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This component can be used to declare a general boolean expression (rule) at the applicationlevel that may be used anywhere in the application.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.form.ViewEditForm">
+    <xs:complexContent>
+      <xs:extension base="_html.form.BaseForm">
+        <xs:sequence>
+          <xs:element maxOccurs="1" minOccurs="0" name="SubmitButtonLabel" type="binding.Expression">
+            <xs:annotation>
+              <xs:documentation><![CDATA[SubmitButtonLabel details (TODO).]]></xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element maxOccurs="1" minOccurs="0" name="Editable" type="binding.Expression">
+            <xs:annotation>
+              <xs:documentation><![CDATA[Determines whether this form is editable. Default: yes.]]></xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element maxOccurs="1" minOccurs="0" name="AddButtons">
+            <xs:annotation>
+              <xs:documentation><![CDATA[Additional buttons to display (in view mode only).]]></xs:documentation>
+            </xs:annotation>
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element maxOccurs="unbounded" minOccurs="0" ref="html.menu.IMenuItem"/>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element maxOccurs="1" minOccurs="0" name="OnReload">
+            <xs:annotation>
+              <xs:documentation><![CDATA[Action to trigger when the reload button is clicked (in view mode only).<br/> If not set, the reload button is not displayed.]]></xs:documentation>
+            </xs:annotation>
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element maxOccurs="unbounded" minOccurs="0" ref="binding.Do"/>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element maxOccurs="1" minOccurs="0" name="OnValidate" type="binding.Expression">
+            <xs:annotation>
+              <xs:documentation><![CDATA[Callback to trigger right before invoking the submit action.<br/>The callbacked method may throw a org.ow2.opensuit.core.validation.ValidationErrors with all validation error messages.]]></xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element maxOccurs="1" minOccurs="1" name="OnSubmit">
+            <xs:annotation>
+              <xs:documentation><![CDATA[Action to trigger when the submit button is pressed.]]></xs:documentation>
+            </xs:annotation>
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element maxOccurs="1" minOccurs="1" ref="action.IAction"/>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element maxOccurs="1" minOccurs="1" name="OnResetChange">
+            <xs:annotation>
+              <xs:documentation><![CDATA[Action to trigger when the form needs to reset changes (when the reset button is clicked or when the user leaves the edition mode after having sumbitted but not confirmed the submission).]]></xs:documentation>
+            </xs:annotation>
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element maxOccurs="unbounded" minOccurs="1" ref="binding.Do"/>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+        <xs:attribute name="ShowResetButton" type="xs:boolean" use="optional">
+          <xs:annotation>
+            <xs:documentation><![CDATA[Determines whether the reset button is displayed (in edition mode only). Default: yes.]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="html.form.ViewEditForm" substitutionGroup="html.IView" type="_html.form.ViewEditForm">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This component declares a form that has two display modes: <b>view</b> and <b>edit</b>.<br/> In view mode, the form shows data (read only).<br/> In edit mode, the form allows to change values and submit changes.<br/> Displayed buttons depend on the mode: <ul><li>in view mode: Edit, Reload (if OnReload action is set), and customisable additionnal buttons (see AddButtons),</li> <li>in edit mode: Submit, Reset (if ShowResetButton is true), Cancel.</li></ul> The Edit button (if enabled by the Editable condition), switches the form to the edit mode, and the Cancel button (in edition mode) rollbacks the form to the view mode.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.table.TextFilter">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" name="Function">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The filter function to use.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="1" minOccurs="1" ref="html.table.filter.IFilterFunction"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="Tooltip" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The filter tooltip text.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="html.table.TextFilter" substitutionGroup="html.table.IFilter" type="_html.table.TextFilter">
+    <xs:annotation>
+      <xs:documentation><![CDATA[A textual input filter. Filters all rows whose column value contains the entered text.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_Application">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="0" name="CustomExpressionFunctions">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The list of custom expression functions providers.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" ref="ExpressionFunctionsProvider"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="SupportedLocales">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The list of supported locales with their configuration.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="1" ref="locale.LocaleConfig"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="LocaleSelector">
+        <xs:annotation>
+          <xs:documentation><![CDATA[This is the component that knows how to retrieve the locale used by a user.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="1" minOccurs="1" ref="locale.ILocaleSelector"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="MessagesProviders">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Declares the components that provide localized messages.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="1" ref="msg.MessageProvider"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="ErrorHandler">
+        <xs:annotation>
+          <xs:documentation><![CDATA[This is the component in charge of displaying uncaught exceptions to the user.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="1" minOccurs="0" ref="error.ErrorHandler"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="GlobalBeans">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Defines global application beans used by the presentation layer.<br>Beans declared here are accessible from any page of the application.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" ref="binding.IDataSource"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="Rules">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Declares general rules reused across the application.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" ref="RuleDefinition"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="Frames">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Declares graphical frames used by the application.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="1" ref="html.IFrame"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="HomePage" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The page displayed by default by the application.<br>The path is relative to the WEB-INF directory and has to start with a '/' (ex: /pages/Welcome).]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="Application" type="_Application">
+    <xs:annotation>
+      <xs:documentation><![CDATA[The application.<br/>This is the topmost component for modeling a web application.<br/>This component manages all application-level concerns:<ul><li><b>rules</b>: that is declaring and factorizing application rules (for authorization purpose for instance),</li> <li><b>message providers</b>: that is declaring where to get localized messages from,</li> <li><b>locale policy</b>: that is how to determine the user locale,</li> <li><b>beans</b>: that is how to get and set data from the business layer, and how to invoke buisiness logic (control),</li> <li><b>error handling</b>: that is how to display errors to the user in a way he will fully understand and solve the issue,</li> </ul>]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_ExpressionFunctionsProvider">
+    <xs:attribute name="Prefix" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The functions prefix.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="Class" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The bean class. Should have a public default constructor if you expect the presentation layer to instantiate it.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="ExpressionFunctionsProvider" type="_ExpressionFunctionsProvider">
+    <xs:annotation>
+      <xs:documentation><![CDATA[Defines an object that provides expression functions.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType abstract="true" name="_html.form.BaseForm">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" name="Items">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Form items (fields, sections, ...).]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="1" ref="html.form.IFormItem"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="ID" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The form ID. Must be unique in the page]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="CssClass" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The CSS class to apply. Default: 'osuit-Form'.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element abstract="true" name="html.form.BaseForm" substitutionGroup="html.IView" type="_html.form.BaseForm">
+    <xs:annotation>
+      <xs:documentation><![CDATA[The base form component. Each form extends this component.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_locale.FromClient"/>
+  <xs:element name="locale.FromClient" substitutionGroup="locale.ILocaleSelector" type="_locale.FromClient">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This LocalePolicy component retrieves the locale from the client browser.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType abstract="true" name="_html.form.field.BaseSingleValueField">
+    <xs:complexContent>
+      <xs:extension base="_html.form.field.BaseEditableField">
+        <xs:sequence>
+          <xs:element maxOccurs="1" minOccurs="1" name="Bind" type="binding.Expression">
+            <xs:annotation>
+              <xs:documentation><![CDATA[The expression to get (and possibly set) the associated value.]]></xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element maxOccurs="1" minOccurs="0" name="Validators">
+            <xs:annotation>
+              <xs:documentation><![CDATA[Validators associated to this field.]]></xs:documentation>
+            </xs:annotation>
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element maxOccurs="unbounded" minOccurs="0" ref="validation.IValidator"/>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element abstract="true" name="html.form.field.BaseSingleValueField" substitutionGroup="html.form.IFormItem" type="_html.form.field.BaseSingleValueField">
+    <xs:annotation>
+      <xs:documentation><![CDATA[The base class for single valued form fields.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_page.MessageBox">
+    <xs:complexContent>
+      <xs:extension base="_page.BasePage">
+        <xs:sequence>
+          <xs:element maxOccurs="1" minOccurs="1" name="Message" type="binding.Expression">
+            <xs:annotation>
+              <xs:documentation><![CDATA[The displayed message.]]></xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element maxOccurs="1" minOccurs="1" name="OnOk">
+            <xs:annotation>
+              <xs:documentation><![CDATA[The action to trigger when the user clicks the acknowledgement button.]]></xs:documentation>
+            </xs:annotation>
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element maxOccurs="1" minOccurs="1" ref="action.IAction"/>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+        <xs:attribute name="Severity" type="enums.Severity" use="optional">
+          <xs:annotation>
+            <xs:documentation><![CDATA[The message severity. Default: Info.]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="page.MessageBox" substitutionGroup="page.IPage" type="_page.MessageBox">
+    <xs:annotation>
+      <xs:documentation><![CDATA[A MessageBox page.<br/>Such a page displays a message, and an acknowledgement button.<br/>The acknowledgement button shall bring the user to another page.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_action.Ask">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="0" name="AddParameters">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Additional parameters to pass to the action when it is invoked.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" ref="param.IUrlParameter"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="Title" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The page displayed title.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="Message" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The displayed message.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="OnYes">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The action to trigger when the user presses Yes (or Ok).]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="1" minOccurs="1" ref="action.IAction"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="OnNo">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The action to trigger when the user presses No (or Cancel).]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="1" minOccurs="1" ref="action.IAction"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="ID" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The action ID (for url callbacking).]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="FrameName" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The name of the frame this page displays in. May be null (the default one will be used).]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="Buttons" type="enums.AskBoxButtons" use="required">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The buttons style to apply.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="action.Ask" substitutionGroup="action.IAction" type="_action.Ask">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This action asks a question to the user, that chooses either Yes or No (or Ok/Cancel).<br/>Such a page displays a message (actually a question), a Yes and a No button.<br/>The application should react to the user's response.<br/>This action is typically used to implement user confirmation.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType abstract="true" name="_html.form.field.BaseVectorValueField">
+    <xs:complexContent>
+      <xs:extension base="_html.form.field.BaseEditableField">
+        <xs:sequence>
+          <xs:element maxOccurs="1" minOccurs="1" name="Bind" type="binding.Expression">
+            <xs:annotation>
+              <xs:documentation><![CDATA[The binding to get and set the associated values.]]></xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element abstract="true" name="html.form.field.BaseVectorValueField" substitutionGroup="html.form.IFormItem" type="_html.form.field.BaseVectorValueField">
+    <xs:annotation>
+      <xs:documentation><![CDATA[The base class for vector valued form fields.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.form.field.DateField">
+    <xs:complexContent>
+      <xs:extension base="_html.form.field.BaseSingleValueField">
+        <xs:attribute name="Type" type="enums.DateType" use="optional">
+          <xs:annotation>
+            <xs:documentation><![CDATA[The date display style. Default: DateOnly.]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="html.form.field.DateField" substitutionGroup="html.form.IFormItem" type="_html.form.field.DateField">
+    <xs:annotation>
+      <xs:documentation><![CDATA[A date form field.<br/>Supported value types are: java.util.Date or java.util.Calendar]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_binding.Bean">
+    <xs:attribute name="Name" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The bean name.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="LifeScope" type="enums.Scope" use="required">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The life scope of the bean.<br/>Defines when the bean should be instantiated and destroyed.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="Class" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The bean class. Should have a public default constructor if you expect the presentation layer to instantiate it.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="binding.Bean" type="_binding.Bean">
+    <xs:annotation>
+      <xs:documentation><![CDATA[A Java bean declaration.<br/>This is a class with public default constructor and public getter and setter methods.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.tab.Tab">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="0" name="IterateOn" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Vector of item objects (any).<br>Allows to render several tabs.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="ID" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The tab ID.<br>Supported contextual beans: $tab (if expression 'IterateOn' is set).]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="Title" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The tab title.<br>Supported contextual beans: $tab (if expression 'IterateOn' is set).]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="Icon" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The tab icon.<br>The path returned by this expression is relative to the war root directory (ex: 'resources/images/icon.png').<br>Supported contextual beans: $tab (if expression 'IterateOn' is set).]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="Visible" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The tab visibility.<br>Supported contextual beans: $tab (if expression 'IterateOn' is set).]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="OnPreRender">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Callback that is triggered before rendering the current tab content.<br>Supported contextual beans: $tab (if expression 'IterateOn' is set).]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" ref="binding.Do"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element maxOccurs="unbounded" minOccurs="1" ref="html.IView">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The tab content.<br>Supported contextual beans: $tab (if expression 'IterateOn' is set).]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="CssClass" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The CSS class to apply. Default: 'osuit-TabItem'.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="IteratorVar" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The name of the iterator contextual bean.<br>This bean is available at render-time only.<br>Default: $tab.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="html.tab.Tab" substitutionGroup="html.tab.ITabsProvider" type="_html.tab.Tab">
+    <xs:annotation>
+      <xs:documentation><![CDATA[Component that defines dynamic tab items for a TabPage component.<br/>It retrieves tab items from the Items binding, then iterates on each item to render tabs.<br/>The current rendering tab may be accessed as a contextual bean (default '$tab').]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.tree.Leaf">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" name="Text" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Leaf text.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="Tooltip" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Leaf tooltip.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="Icon" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Leaf icon.<br>The path returned by this expression is relative to the war root directory (ex: 'resources/images/icon.png').<br>Supported contextual beans: $item.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="OnClick">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Action to trigger when the tree item is clicked.<br>Supported contextual beans: $item.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="1" minOccurs="0" ref="action.IAction"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="Visible" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Leaf visibility.<br>Expected return type: boolean.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="html.tree.Leaf" substitutionGroup="html.tree.IInlineItem" type="_html.tree.Leaf">
+    <xs:annotation>
+      <xs:documentation><![CDATA[Declares a tree leaf.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_action.ShowPage">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="0" name="Parameters">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Parameters to pass to the page when it is invoked.Note that if the target page belongs to the same context than the origin page, mandatory parameters are automatically reinjected into the url.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" ref="param.IUrlParameter"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="Page" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The target page.<br>The path is relative to the WEB-INF directory and has to start with a '/' (ex: /pages/MyPage).]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="action.ShowPage" substitutionGroup="action.IAction" type="_action.ShowPage">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This action component causes the client's browser to navigate to the defined Page.<br/>This page could be either in the same context than the origin page, or in an other context.<br>In the second case, all required url parameters have to be valuated to enter the target page.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_action.DoAndForward">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="0" name="AddParameters">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Additional parameters to pass to the action handler when it is invoked.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" ref="param.IUrlParameter"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="Do" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Defines the action handler.<br>This component is in charge of: <ol><li>doing something,</li><li>then return the name of the forward to follow (possibly depending on how the action turned out).</li></ol>]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="Forwards">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The list of forwards than can be followed by the action handler. At least one is expected.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="1" ref="action.Case"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="OnContinueAfterError">
+        <xs:annotation>
+          <xs:documentation><![CDATA[If the DoAndForward produces an error, it will be displayed by the open SUIT error handler.<br>This allows to override the action to process after the user clicks the "continue" button.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="1" minOccurs="0" ref="action.IAction"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="ID" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The action ID (for url callbacking).]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="action.DoAndForward" substitutionGroup="action.IAction" type="_action.DoAndForward">
+    <xs:annotation>
+      <xs:documentation><![CDATA[Defines a code action handler with associated forwards.<br>This component is in charge of reacting to a user or GUI event, then navigating to one of the declared forwards.<br>Note that evaluating the forward name is done only when then user triggers the action. This is useful only if information to decide which forward to follow is only available when the user triggers this action. This component is typically used to react to <strong>form submissions</strong>.<br>If information to decide the action is known at render time, then use the <code>SwitchAction</code> instead.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.table.filter.Equals">
+    <xs:attribute name="IgnoreCase" type="xs:boolean" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[Sets whether the filter is case unsensitive. Default: <code>true</code>.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="html.table.filter.Equals" substitutionGroup="html.table.filter.IFilterFunction" type="_html.table.filter.Equals">
+    <xs:annotation>
+      <xs:documentation><![CDATA[A filter function that filters values exactly equal to the entered value.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.PageContainer">
+    <xs:attribute name="RenderTitle" type="xs:boolean" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[Determines whether this component renders the page title (as an H2 element) before rendering the page.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="html.PageContainer" substitutionGroup="html.IView" type="_html.PageContainer">
+    <xs:annotation>
+      <xs:documentation><![CDATA[The PageContainer component may only be used as a descendant of the Frame component.<br/>It is aimed at rendering the current page during the rendering phase.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_action.RestoreViewPoint">
+    <xs:attribute name="ParamName" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The parameter name containing the viewpoint to restore.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="action.RestoreViewPoint" substitutionGroup="action.IAction" type="_action.RestoreViewPoint">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This action restores a viewpoint that has been passed as a navigation parameter (see component param.ViewPointParam).]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.form.Section">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" name="Title" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The displayed section title.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="Visible" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Visible details (TODO).]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="unbounded" minOccurs="1" ref="html.form.IFormItem">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Children section items.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="html.form.Section" substitutionGroup="html.form.IFormItem" type="_html.form.Section">
+    <xs:annotation>
+      <xs:documentation><![CDATA[A form item that presents a structured sub-section of the form.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.form.ViewForm">
+    <xs:complexContent>
+      <xs:extension base="_html.form.BaseForm">
+        <xs:sequence>
+          <xs:element maxOccurs="1" minOccurs="0" name="OnReload">
+            <xs:annotation>
+              <xs:documentation><![CDATA[Action to trigger when the reload button is clicked.<br/> If not set, the reload button is not displayed.]]></xs:documentation>
+            </xs:annotation>
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element maxOccurs="unbounded" minOccurs="0" ref="binding.Do"/>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element maxOccurs="1" minOccurs="0" name="AddButtons">
+            <xs:annotation>
+              <xs:documentation><![CDATA[Additional buttons to display.]]></xs:documentation>
+            </xs:annotation>
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element maxOccurs="unbounded" minOccurs="0" ref="html.menu.IMenuItem"/>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="html.form.ViewForm" substitutionGroup="html.IView" type="_html.form.ViewForm">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This component declares a view only form.<br/> It is only aimed at presenting non-editable (and navigable) data.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.menu.Separator"/>
+  <xs:element name="html.menu.Separator" substitutionGroup="html.menu.IMenuItem" type="_html.menu.Separator">
+    <xs:annotation>
+      <xs:documentation><![CDATA[A menu separator.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_locale.LocaleConfig">
+    <xs:attribute name="Language" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation><![CDATA[Language code (ex: 'en', 'fr', ...)]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="Country" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[Country code (ex: 'us', 'uk', ...)]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="CharSet" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[Character encoding to use with this language.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="DateOutputFormat" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The date output format (see java.text.SimpleDateFormat).]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="DateInputFormat" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The date input format (see java.text.SimpleDateFormat).]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="TimeOutputFormat" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The time output format (see java.text.SimpleDateFormat).]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="TimeInputFormat" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The time input format (see java.text.SimpleDateFormat).]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="DateTimeOutputFormat" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The date and time output format (see java.text.SimpleDateFormat).]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="DateTimeInputFormat" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The date and time input format (see java.text.SimpleDateFormat).]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="locale.LocaleConfig" type="_locale.LocaleConfig">
+    <xs:annotation>
+      <xs:documentation><![CDATA[Component that defines locale specific settings.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_msg.ResourceBundle">
+    <xs:complexContent>
+      <xs:extension base="_msg.MessageProvider">
+        <xs:attribute name="BaseName" type="xs:string" use="required">
+          <xs:annotation>
+            <xs:documentation><![CDATA[The ResourceBundle base name (see <code>java.util.ResourceBundle</code>).]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="msg.ResourceBundle" substitutionGroup="msg.MessageProvider" type="_msg.ResourceBundle">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This component is a MessageProvider based on a standard Java ResourceBundle (properties file).]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.tab.TabPage">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="1" ref="html.tab.ITabsProvider">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Children tabs.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="ID" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The component ID. Must be unique in its Page.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="CssClass" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The CSS class to apply. Default: 'osuit-TabPage'.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="html.tab.TabPage" substitutionGroup="html.IView" type="_html.tab.TabPage">
+    <xs:annotation>
+      <xs:documentation><![CDATA[A graphical component that displays children in selectable tabs.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.CssStyleSheet">
+    <xs:attribute name="File" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation><![CDATA[Path to the stylesheet file.<br>The path is relative to the war root directory (ex: 'resources/css/style.css').]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="html.CssStyleSheet" type="_html.CssStyleSheet">
+    <xs:annotation>
+      <xs:documentation><![CDATA[Includes a link to a stylesheet file (css).]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.tree.Node">
+    <xs:complexContent>
+      <xs:extension base="_html.tree.Leaf">
+        <xs:sequence>
+          <xs:element maxOccurs="1" minOccurs="1" name="Children">
+            <xs:annotation>
+              <xs:documentation><![CDATA[The node children items.]]></xs:documentation>
+            </xs:annotation>
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element maxOccurs="1" minOccurs="1" ref="html.tree.ITreeItemsProvider"/>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="html.tree.Node" substitutionGroup="html.tree.IInlineItem" type="_html.tree.Node">
+    <xs:annotation>
+      <xs:documentation><![CDATA[Declares a tree node.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.Frame">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" name="StyleSheets">
+        <xs:annotation>
+          <xs:documentation><![CDATA[List of stylesheet files to use when rendering pages using this frame.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="1" ref="html.CssStyleSheet"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element maxOccurs="unbounded" minOccurs="1" ref="html.IView">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The children HTML view components for this Frame. Must have a PageContainer component in its descendents.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="Name" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The Frame name. Must be unique in the Application.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="html.Frame" substitutionGroup="html.IFrame" type="_html.Frame">
+    <xs:annotation>
+      <xs:documentation><![CDATA[Declares an Application Frame.<br/><p>Each page of the Application is displayed in a Frame. A Frame is the part of the GUI that doesn't change much from page to page. It is generally composed of a banner, some menus (left and/or right), and a footer. <br/>It must embed a PageContainer component, that is in charge of rendering the current executing page (see PageContainer).<br/> The Application must have at least one Frame, but it may have several (for instance, a specific frame without any menu to display messages and uncatched errors, and another one to access the application administration functionnalities).]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_param.UrlParameterDef">
+    <xs:attribute name="Name" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The parameter name. At any time in the page context, the parameter value can be retrieved using HttpServletRequest.getParameter(name).]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="Optional" type="xs:boolean" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[Defines whether this parameter is optional. Default: false.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="param.UrlParameterDef" type="_param.UrlParameterDef">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This component defines an input parameter in a page context.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_validation.RegExp">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="0" name="ErrorMessage" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The error message to display if the value does not match the expression.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="Pattern" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The regular expression pattern.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="validation.RegExp" substitutionGroup="validation.IValidator" type="_validation.RegExp">
+    <xs:annotation>
+      <xs:documentation><![CDATA[Checks the associated value (String) matches the specified regular expression.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_page.ctx.Shared">
+    <xs:attribute name="Page" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The page to share context with.<br>The path is relative to the WEB-INF directory and has to start with a '/' (ex: /pages/MyPage).]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="page.ctx.Shared" substitutionGroup="page.ctx.IPageContextDef" type="_page.ctx.Shared">
+    <xs:annotation>
+      <xs:documentation><![CDATA[Page context reference.<br/>This component allows to declare that some pagePath shares the same execution context than another one.<br>Beans and url parameters defined in the referenced context may be accessed freely.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.layout.Div">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="0" name="Visible" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Visible.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="unbounded" minOccurs="1" ref="html.IView">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Children view components.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="ID" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The DIV id attribute.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="CssClass" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The DIV class attribute.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="html.layout.Div" substitutionGroup="html.IView" type="_html.layout.Div">
+    <xs:annotation>
+      <xs:documentation><![CDATA[Renders an html DIV component.<br>This is mainly used to implement layout and/or conditional visibility.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType abstract="true" name="_html.form.field.BaseEditableField">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" name="Label" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The displayed field label.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="Tip" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[A tip (information) associated to the field.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="Visible" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Determines whether this field is visible.<br>Default: true.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="Editable" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Determines whether this field is editable.<br>Default: true.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="FieldButtons">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Buttons displayed right next to the form field.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" ref="html.menu.IMenuItem"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element abstract="true" name="html.form.field.BaseEditableField" substitutionGroup="html.form.IFormItem" type="_html.form.field.BaseEditableField">
+    <xs:annotation>
+      <xs:documentation><![CDATA[The base class for editable form fields.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_page.Composite">
+    <xs:complexContent>
+      <xs:extension base="_page.BasePage">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" minOccurs="1" ref="html.IView">
+            <xs:annotation>
+              <xs:documentation><![CDATA[The page view components.]]></xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="page.Composite" substitutionGroup="page.IPage" type="_page.Composite">
+    <xs:annotation>
+      <xs:documentation><![CDATA[A page made of composite view components.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.table.NativeSorter">
+    <xs:attribute name="IgnoreCase" type="xs:boolean" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[Sets whether the sort is case unsensisitive (for String objects only). Default: <code>true</code>.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="html.table.NativeSorter" substitutionGroup="html.table.ISorter" type="_html.table.NativeSorter">
+    <xs:annotation>
+      <xs:documentation><![CDATA[Component that performs rows sort based on the Comparable interface.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType abstract="true" name="_page.BasePage">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" name="Context">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The page context definition.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="1" minOccurs="1" ref="page.ctx.IPageContextDef"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="OnPreRender">
+        <xs:annotation>
+          <xs:documentation><![CDATA[An action that is triggered right before the page is rendered.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" ref="binding.Do"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="Title" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The page displayed title.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="RefreshDelay" type="xs:int" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[A non-null value triggers the automatic page reload (in seconds).]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="FrameName" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The name of the frame this page displays in.<br>If undefined, the default frame will be used.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element abstract="true" name="page.BasePage" substitutionGroup="page.IPage" type="_page.BasePage">
+    <xs:annotation>
+      <xs:documentation><![CDATA[The base page component.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_action.ReloadThisPage">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="0" name="Parameters">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Overridden parameters to pass to the page when it is invoked. Note that context parameters are automatically kept. There is no need to push them here.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" ref="param.IUrlParameter"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="action.ReloadThisPage" substitutionGroup="action.IAction" type="_action.ReloadThisPage">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This action component causes the client's browser to reload the page (and to discard all popup actions such as Ask and Inform).]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_validation.Mandatory"/>
+  <xs:element name="validation.Mandatory" substitutionGroup="validation.IValidator" type="_validation.Mandatory">
+    <xs:annotation>
+      <xs:documentation><![CDATA[Validator that requires the associated field is valuated.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_page.AskBox">
+    <xs:complexContent>
+      <xs:extension base="_page.BasePage">
+        <xs:sequence>
+          <xs:element maxOccurs="1" minOccurs="1" name="Message" type="binding.Expression">
+            <xs:annotation>
+              <xs:documentation><![CDATA[The displayed message.]]></xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element maxOccurs="1" minOccurs="1" name="OnYes">
+            <xs:annotation>
+              <xs:documentation><![CDATA[The action to trigger when the user presses Yes (or Ok).]]></xs:documentation>
+            </xs:annotation>
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element maxOccurs="1" minOccurs="1" ref="action.IAction"/>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element maxOccurs="1" minOccurs="1" name="OnNo">
+            <xs:annotation>
+              <xs:documentation><![CDATA[The action to trigger when the user presses No (or Cancel).]]></xs:documentation>
+            </xs:annotation>
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element maxOccurs="1" minOccurs="1" ref="action.IAction"/>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+        <xs:attribute name="Buttons" type="enums.AskBoxButtons" use="required">
+          <xs:annotation>
+            <xs:documentation><![CDATA[The buttons style to apply.]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="page.AskBox" substitutionGroup="page.IPage" type="_page.AskBox">
+    <xs:annotation>
+      <xs:documentation><![CDATA[An AskBox page.<br/>Such a page displays a message (actually a question), a Yes and a No button.<br/>The application should react to the user response.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_action.SwitchAction">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" name="Switch" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Defines a binding that evaluates the switch condition.This component evaluates the condition, then return the name of the corresponding case to follow (or null to disable the action).]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="Cases">
+        <xs:annotation>
+          <xs:documentation><![CDATA[All possible cases.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="1" ref="action.Case"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="action.SwitchAction" substitutionGroup="action.IAction" type="_action.SwitchAction">
+    <xs:annotation>
+      <xs:documentation><![CDATA[Allows to select <strong>at rendering time</strong> an action among several.<br>Instead of the <code>DoAndForward</code> component, this choice is made when the page is rendered.<br>Note that if the Switch condition evaluates to an unknown case, no action will be rendered (no hyperlink).]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.item.DynamicItems">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" name="IterateOn" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Gives a vector of items representing the items to render.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="Value" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Computes the current item internal value.<br>Supported types are String or numbers (any type).<br>Supported contextual beans: $item]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="Text" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Computes the current item displayable text.<br>Supported contextual beans: $item]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="Disabled" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Determines whether the current item is disabled.<br>Supported contextual beans: $item]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="IteratorVar" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The name of the item contextual bean.<br>This bean is available at render-time only.<br>Default: $item.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="html.item.DynamicItems" substitutionGroup="html.item.IItemsProvider" type="_html.item.DynamicItems">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This component retrieves displayable items dynamically.<br>It first retrieves a vector data (through the 'IterateOn' expression), and then retrieves individual items information by iterating on each item.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.menu.Menu">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="0" name="Title" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The displayed menu title.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="Icon" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Defines the menu icon.<br>The path returned by this expression is relative to the war root directory (ex: 'resources/images/icon.png').]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="Visible" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Determines whether this menu is displayed. Default: yes.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="Items">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Defines the menu items.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="1" ref="html.menu.IMenuItem"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="CssClass" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The CSS class to apply. Default: 'osuit-Menu'.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="html.menu.Menu" substitutionGroup="html.IView" type="_html.menu.Menu">
+    <xs:annotation>
+      <xs:documentation><![CDATA[A graphical component that displays a menu, with buttons, separators and submenus.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType abstract="true" name="_html.table.BaseColumn">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="0" name="IterateOn" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Vector of column objects (any).<br>When set, it allows to render several table columns (by iterating on the returned vector).]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="Title" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The column title.<br>Supported contextual beans: $item (if expression 'IterateOn' is set).]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="Sort">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Defines a sorting component associated to this column.<br>Supported contextual beans: $item (if expression 'IterateOn' is set).]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="1" minOccurs="0" ref="html.table.ISorter"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="Tooltip" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The cell tooltip text.<br>Supported contextual beans: $row]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="Filter">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Defines a filter component associated to this column.<br>Supported contextual beans: $item (if expression 'IterateOn' is set).]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="1" minOccurs="0" ref="html.table.IFilter"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="Visible" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Determines whether the column is visible.<br>Supported contextual beans: $item (if expression 'IterateOn' is set).]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="CssClass" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[Sets the column CSS class.<br>This class will be set on the header cell (th) as well as on table cells (td).<br>Default: None.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="Alignment" type="enums.Alignment" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[Sets the text alignment in the cell.<br>Default: Left.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="IteratorVar" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The name of the iterator contextual bean.<br>This bean is available at render-time only.<br>Default: $column]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element abstract="true" name="html.table.BaseColumn" substitutionGroup="html.table.IColumnsProvider" type="_html.table.BaseColumn">
+    <xs:annotation>
+      <xs:documentation><![CDATA[Base class for table columns provider.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.table.export.CSV">
+    <xs:attribute name="FileName" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[Filename. By default, uses the Table ID.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="FileExtension" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[File extension. By default 'csv'.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="MimeType" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[Separator to use. Default: 'text/cvs'.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="Separator" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[Separator to use. Default: ','.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="html.table.export.CSV" substitutionGroup="html.table.export.ITableExportFormat" type="_html.table.export.CSV">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This component is able to export table data to CSV format (Comma Separated Values).]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.form.InfoText">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" name="Text" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The text to display.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="html.form.InfoText" substitutionGroup="html.form.IFormItem" type="_html.form.InfoText">
+    <xs:annotation>
+      <xs:documentation><![CDATA[A form item that displays text (information).]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.tree.Tree">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" name="Content">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The component able to feed the tree with content (that is tree items).]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="1" minOccurs="1" ref="html.tree.ITreeItemsProvider"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="ID" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The component ID. Must be unique in its page.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="CssClass" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The CSS class to apply to the topmost tree container (DIV).<br>Default: 'osuit-Tree'.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="StateScope" type="enums.Scope" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[StateScope details (TODO).]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="html.tree.Tree" substitutionGroup="html.IView" type="_html.tree.Tree">
+    <xs:annotation>
+      <xs:documentation><![CDATA[A graphical component that displays data in a hierarchical (tree) format.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.form.field.FileField">
+    <xs:complexContent>
+      <xs:extension base="_html.form.field.BaseEditableField">
+        <xs:sequence>
+          <xs:element maxOccurs="1" minOccurs="0" name="FileName" type="binding.Expression">
+            <xs:annotation>
+              <xs:documentation><![CDATA[Expression to get and/or set the filename (String).]]></xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element maxOccurs="1" minOccurs="0" name="OnClick">
+            <xs:annotation>
+              <xs:documentation><![CDATA[Used in view mode, to turn the filename into an hyperlink.]]></xs:documentation>
+            </xs:annotation>
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element maxOccurs="1" minOccurs="0" ref="action.IAction"/>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element maxOccurs="1" minOccurs="0" name="OnUpload" type="binding.Expression">
+            <xs:annotation>
+              <xs:documentation><![CDATA[Expression that processes the file upload (in edition mode).<br>The file data (information and stream) can be retrieve through file contextual bean, of type org.ow2.opensuit.core.impl.multiparts.IFileUploadPart.<br>Supported contextual beans: $file]]></xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+        <xs:attribute name="Cols" type="xs:int" use="optional">
+          <xs:annotation>
+            <xs:documentation><![CDATA[Used in edit mode (upload). Number of text columns (in chars). Default: 20.]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="Mandatory" type="xs:boolean" use="optional">
+          <xs:annotation>
+            <xs:documentation><![CDATA[Used in edit mode (upload). Defines whether this field is mandatory. Default: true.]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="FileBeanName" type="xs:string" use="optional">
+          <xs:annotation>
+            <xs:documentation><![CDATA[The name of the file upload contextual bean.<br>This bean may be used in the 'OnUpload' expression to retrieve the input file information and process the upload action.<br>It implements the interface org.ow2.opensuit.core.impl.multiparts.IFileUploadPart.<br>Default: $file.]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="html.form.field.FileField" substitutionGroup="html.form.IFormItem" type="_html.form.field.FileField">
+    <xs:annotation>
+      <xs:documentation><![CDATA[A file field.<br/>In view mode, this field displays a filename, possibily clickable.<br/>.In edit mode, it is an upload field.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_validation.MinMax">
+    <xs:attribute name="Min" type="xs:long" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The minimum value (or length).]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="Max" type="xs:long" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The maximum value (or length).]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="validation.MinMax" substitutionGroup="validation.IValidator" type="_validation.MinMax">
+    <xs:annotation>
+      <xs:documentation><![CDATA[For an integer value, checks it is greater than the Min and/or lower than the Max.<br/>For a String value, checks its length is greater than the Min and/or lower than the Max.<br/>]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.table.TextColumn">
+    <xs:complexContent>
+      <xs:extension base="_html.table.BaseColumn">
+        <xs:sequence>
+          <xs:element maxOccurs="1" minOccurs="0" name="CellValue" type="binding.Expression">
+            <xs:annotation>
+              <xs:documentation><![CDATA[This expression provides a raw Object representing the table cell.<br>When defined, it is used by Sorter and Filter components preferably than the textual value.<br>As a matter of fact, the returned value should implement Comparable<br>Supported contextual beans: $row]]></xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element maxOccurs="1" minOccurs="0" name="Text" type="binding.Expression">
+            <xs:annotation>
+              <xs:documentation><![CDATA[The text to display in the cell.<br>Supported contextual beans: $row]]></xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element maxOccurs="1" minOccurs="0" name="Icon" type="binding.Expression">
+            <xs:annotation>
+              <xs:documentation><![CDATA[Defines the cell icon.<br>The path returned by this expression is relative to the war root directory (ex: 'resources/images/icon.png').<br>Supported contextual beans: $row]]></xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element maxOccurs="1" minOccurs="0" name="OnClick">
+            <xs:annotation>
+              <xs:documentation><![CDATA[Action to trigger when the cell is clicked.<br>When defined, the cell text is rendered as an hyperlink.<br>Supported contextual beans: $row]]></xs:documentation>
+            </xs:annotation>
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element maxOccurs="1" minOccurs="0" ref="action.IAction"/>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+        <xs:attribute name="Target" type="xs:string" use="optional">
+          <xs:annotation>
+            <xs:documentation><![CDATA[The target window.<br>If specified, clicking the cell hyperlink will open a new window.<br>Applies only if OnClick action is specified.]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="html.table.TextColumn" substitutionGroup="html.table.IColumnsProvider" type="_html.table.TextColumn">
+    <xs:annotation>
+      <xs:documentation><![CDATA[A table column that displays text.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_param.DynParam">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" name="Value" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Url parameter value.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="Name" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation><![CDATA[Url parameter name.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="param.DynParam" substitutionGroup="param.IUrlParameter" type="_param.DynParam">
+    <xs:annotation>
+      <xs:documentation><![CDATA[Defines a dynamic url parameter.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType abstract="true" name="_error.ErrorHandler">
+    <xs:attribute name="FrameName" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[Defines the name of the Application Frame this page displays in.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element abstract="true" name="error.ErrorHandler" type="_error.ErrorHandler">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This abstract component allows to declare how to display uncatched errors to the user.<br/>This component should know how to best display details, explainations and advises to the user to let him understand what went wrong, and what to do to solve it.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.form.EditForm">
+    <xs:complexContent>
+      <xs:extension base="_html.form.BaseForm">
+        <xs:sequence>
+          <xs:element maxOccurs="1" minOccurs="0" name="SubmitButtonLabel" type="binding.Expression">
+            <xs:annotation>
+              <xs:documentation><![CDATA[The displayed submit button title. Default: 'Submit' (localized).]]></xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element maxOccurs="1" minOccurs="0" name="OnValidate" type="binding.Expression">
+            <xs:annotation>
+              <xs:documentation><![CDATA[Callback to trigger right before invoking the submit action.<br/>The callbacked method may throw a org.ow2.opensuit.core.validation.ValidationErrors with all validation error messages.]]></xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element maxOccurs="1" minOccurs="0" name="OnSubmit">
+            <xs:annotation>
+              <xs:documentation><![CDATA[The action to trigger when the form is submitted.]]></xs:documentation>
+            </xs:annotation>
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element maxOccurs="1" minOccurs="0" ref="action.IAction"/>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element maxOccurs="1" minOccurs="0" name="OnResetChange">
+            <xs:annotation>
+              <xs:documentation><![CDATA[The action to trigger when the reset button is clicked.<br/> If not set, the reset button is not displayed.The associated action should reset all form values to their initial value.]]></xs:documentation>
+            </xs:annotation>
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element maxOccurs="unbounded" minOccurs="0" ref="binding.Do"/>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element maxOccurs="1" minOccurs="0" name="OnCancel">
+            <xs:annotation>
+              <xs:documentation><![CDATA[The action to trigger when the cancel button is clicked.<br/> If not set, the cancel button is not displayed. This action is expected to navigate (generally leave the current interactive process).]]></xs:documentation>
+            </xs:annotation>
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element maxOccurs="1" minOccurs="0" ref="action.IAction"/>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="html.form.EditForm" substitutionGroup="html.IView" type="_html.form.EditForm">
+    <xs:annotation>
+      <xs:documentation><![CDATA[This component declares an editable only form.<br/> Such a form is always in edition mode, shows a submit button and possibly a reset button.<br/> It is typically used to implement input search criterias page or new entity creation.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.table.Table">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="0" name="Title" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Defines the displayed Table title.<br>Default: none.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="ResultsPerPage" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Declares the binding to get the number of results to display per page.<br/>If not set, the table displays all rows in the same page.Otherwise, the table truncates data into pages, and shows links to help navigation (previous, next, page accessors, ...).]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="RowsData" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Expression that returns a vector of objects repesenting the table rows.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="BottomRow" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Expression that returns an object represneting the table bottom row.<br>The bottom row is always visible (whatever the pagination).<br>It is used for example to implement total sum(s) in a spreadsheet.<br>The expression type must be compatible with 'RowsData' elementary type.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="Selection">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Setups rows selection.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="1" minOccurs="0" ref="html.table.SelectionBindings"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="DetailsView">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Allows to design a detailled view (HTML components) for each row.<br>When defined, the Table component displays a collapse/expand button in front of each row.<br><b>Warning</b>: Use this feature with extreme care. For now, only the ViewForm component may be used to design the details view.]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" ref="html.IView"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="Toolbar">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Defines toolbar buttons displayed by the table.<br>Those buttons may perform multiple actions on table rows (based on selection for instance).]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" ref="html.menu.IMenuItem"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="Columns">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The list of Columns displayed by the Table.<br>Supported contextual beans: $row]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="1" ref="html.table.IColumnsProvider"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="ID" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The component ID. Must be unique in its page.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="CssClass" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The CSS class to apply.<br>Default: 'osuit-Table'.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="SortAndPaginateLocaly" type="xs:boolean" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[Determines whether the Table component should handle pagination, sorting and filtering.<br/>Default: false.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="RowBeanName" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The name of the row contextual bean.<br>This bean is available at render-time only, and represents the current row that is being rendered.<br>Default: $row.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="Style" type="enums.TableStyle" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[Defines the table rendering style (either table or paragraphs).<br>Default: table.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="html.table.Table" substitutionGroup="html.IView" type="_html.table.Table">
+    <xs:annotation>
+      <xs:documentation><![CDATA[A graphical component that displays data in a tabular format.<br/><p>It has the following features:<ul><li>supports <b>pagination</b>: a table may or not be paginated (in that case, displays a set of navigation links to help the user navigate accross the table),</li><li>supports <b>sorting</b>: sorting components may be associated to columns,</li><li>supports <b>filtering</b>: filter components may be associated to columns,</li></ul>Note: in a paginated table, if the total count of elements is not returned by the application, the table adapts its rendering and behavior to handle this situation.<p>For large amounts of data, it is highly recommended to use pagination. Otherwise, the table rendering might overwhelm server resources, and also the client browser if the resulting page is very large.<br/>Moreover, the Table components provides a simple support for sorting, filtering and paginating raw vector data localy (see attribute SortAndPaginateLocaly). This can be very handy for adding table features with no implementation cost, but it also has limits.<br/>Once again for displaying large amounts of data, it is recommended that you implement yourself those operations (that can perfectly be implemented on the data base side), not to overweight server resources.<p>Right before rendering itself, the table component gets vector data from the application with the GetData binding, each element of this vector representing a row in the table.<br/>During this invocation, the table makes available its rendering context (class org.ow2.opensuit.xml.base.html.table.RenderingContextBean), that may be accessed by application code and by table child components.<br/>This context is a request Bean with name '$context', and has the following attributes:<ul><li><b>int page</b>: the currently displayed page number (zero-based),</li><li><b>int rowsPerPage</b>: number of rows displayed per page (0 meaning 'unbound').</li><li><b>int firstIndex</b>: the first expected object index (<code>= page x rowsPerPage</code>),</li><li><b>int sortedColumn</b>: the currently sorted column (1 based). A value of 0 means there is not sort. A negative value means the column is sorted descendingly, a positive value means it is sorted ascendingly.</li><li><b>String[] columnFilters</b>: the filters to apply to columns (not implemented yet).</li><li><b>rowsCount</b>: the total count of rows (expected to be set by the application).</li></ul><p>Then during the rendering of its rows, the table keeps available the object representing the current row as a request attribute with name '$row'.<br/>Its attributes may be accessed as any standard Bean.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_html.menu.Button">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="0" name="IterateOn" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Vector of item objects (any).<br>When set, it allows to render several multiple buttons (by iterating on the returned vector).]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="Title" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The button title.<br>Supported contextual beans: $item (if expression 'IterateOn' is set).]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="Tooltip" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The button tooltip text.<br>Supported contextual beans: $item (if expression 'IterateOn' is set).]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="Icon" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The button's icon.<br>The path returned by this expression is relative to the war root directory (ex: 'resources/images/icon.png').<br>Supported contextual beans: $item (if expression 'IterateOn' is set).]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="OnClick">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Action to trigger when the button is clicked.<br>Supported contextual beans: $item (if expression 'IterateOn' is set).]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="1" minOccurs="1" ref="action.IAction"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="Disabled" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Determines whether the button is enabled.<br>Supported contextual beans: $item (if expression 'IterateOn' is set).<br>Default: true.]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="Visible" type="binding.Expression">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Determines whether this button is displayed.<br>Supported contextual beans: $item (if expression 'IterateOn' is set).<br>Default: true]]></xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="CssClass" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The CSS class to apply. Default: 'osuit-Button'.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="Target" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The target window. If specified, clicking this button will open a new window.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="IteratorVar" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation><![CDATA[The name of the iterator contextual bean.<br>This bean is available at render-time only.<br>Default: $item.]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="html.menu.Button" substitutionGroup="html.menu.IMenuItem" type="_html.menu.Button">
+    <xs:annotation>
+      <xs:documentation><![CDATA[Allows to define one or several buttons in a menu.<br>If the IterateOn expression is set, then several buttons will be rendered (by iterating on the returned collection).]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="_validation.Email"/>
+  <xs:element name="validation.Email" substitutionGroup="validation.IValidator" type="_validation.Email">
+    <xs:annotation>
+      <xs:documentation><![CDATA[Validator that checks that the input is recognized as an email.]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+</xs:schema>
