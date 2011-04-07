@@ -81,7 +81,7 @@
 			  <repository>
 			      <id>petalslink-public.release</id>
 			      <name>PetalsLink Public Repository</name>
-			      <url>http://maven2.petalslink.com/public</url>
+			      <url>http://maven.petalslink.com/public</url>
 			      <releases>
 			        <enabled>true</enabled>
 			      </releases>
@@ -92,7 +92,7 @@
 			    <repository>
 			      <id>petalslink-public.snapshot</id>
 			      <name>PetalsLink Snapshot Public Repository</name>
-			      <url>http://maven2.petalslink.com/public-snapshot</url>
+			      <url>http://maven.petalslink.com/public-snapshot</url>
 			      <snapshots>
 			        <enabled>true</enabled>
 			      </snapshots>
@@ -102,7 +102,7 @@
 			    </repository>
 			    <repository>
 			      <id>petalslink-public.others</id>
-				<url>http://maven2.petalslink.com/others</url>
+				<url>http://maven.petalslink.com/others</url>
 				<releases>
 					<enabled>true</enabled>
 				</releases>
