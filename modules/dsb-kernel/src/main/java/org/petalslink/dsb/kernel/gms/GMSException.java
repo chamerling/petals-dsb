@@ -1,6 +1,6 @@
 package org.petalslink.dsb.kernel.gms;
 
-import org.petalslink.dsb.kernel.DSBException;
+import org.petalslink.dsb.api.DSBException;
 
 /**
  * 

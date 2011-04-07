@@ -42,7 +42,7 @@ import org.ow2.petals.commons.stream.InputStreamForker;
 import org.ow2.petals.commons.stream.ReaderInputStream;
 import org.ow2.petals.commons.threadlocal.DocumentBuilders;
 import org.ow2.petals.commons.threadlocal.Transformers;
-import org.petalslink.dsb.kernel.DSBException;
+import org.petalslink.dsb.api.DSBException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 

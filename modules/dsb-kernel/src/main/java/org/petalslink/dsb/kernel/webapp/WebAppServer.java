@@ -18,7 +18,7 @@
  */
 package org.petalslink.dsb.kernel.webapp;
 
-import org.petalslink.dsb.kernel.DSBException;
+import org.petalslink.dsb.api.DSBException;
 
 /**
  * @author chamerling - eBM WebSourcing

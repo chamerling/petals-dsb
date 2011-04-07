@@ -36,8 +36,8 @@ import org.ow2.petals.kernel.configuration.ConfigurationService;
 import org.ow2.petals.util.LoggingUtil;
 import org.petalslink.dsb.annotations.LifeCycleListener;
 import org.petalslink.dsb.annotations.Phase;
+import org.petalslink.dsb.api.DSBException;
 import org.petalslink.dsb.kernel.DSBConfigurationService;
-import org.petalslink.dsb.kernel.DSBException;
 import org.petalslink.dsb.webapp.api.DSBManagement;
 
 

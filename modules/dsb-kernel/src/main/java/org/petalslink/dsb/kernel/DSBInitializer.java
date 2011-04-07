@@ -33,6 +33,7 @@ import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
 import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.kernel.api.server.PetalsStateListener;
 import org.ow2.petals.util.LoggingUtil;
+import org.petalslink.dsb.api.DSBException;
 import org.petalslink.dsb.kernel.federation.FederationEngine;
 import org.petalslink.dsb.kernel.listener.LifeCycleManager;
 import org.petalslink.dsb.kernel.management.binder.EmbeddedServiceBinder;

@@ -87,12 +87,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.ow2.petals</groupId>
-			<artifactId>petals-monitoring-wsapi</artifactId>
-			<version>0.1-SNAPSHOT</version>
-		</dependency>
-
-		<dependency>
 			<groupId>org.petalslink.dsb</groupId>
 			<artifactId>dsb-kernel-wsapi</artifactId>
 			<version>${project.version}</version>
@@ -169,6 +163,7 @@
 			<artifactId>commons-wsframework-api</artifactId>
 			<version>1.0-SNAPSHOT</version> </dependency>
 		-->
+		<!-- TODO : REMOVE -->
 		<dependency>
 			<groupId>org.petalslink.dsb</groupId>
 			<artifactId>dsb-petals-oldies</artifactId>
@@ -181,35 +176,6 @@
 			<groupId>org.ow2.petals.monitoring</groupId>
 			<version>1.0-SNAPSHOT</version> </dependency>
 		-->
-
-		<!-- WSDM -->
-		<!-- soap sender -->
-		<dependency>
-			<artifactId>external.sender.soap</artifactId>
-			<groupId>org.ow2.petals.esb</groupId>
-			<version>0.9.1-SNAPSHOT</version>
-		</dependency>
-
-		<!-- report -->
-		<dependency>
-			<groupId>org.ow2.petals.esb.monitoring</groupId>
-			<artifactId>raw-report</artifactId>
-			<version>1.0-SNAPSHOT</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.ow2.petals.esb.monitoring</groupId>
-			<artifactId>base-monitoring-wsclient</artifactId>
-			<version>1.0-SNAPSHOT</version>
-			<exclusions>
-				<!-- imports an incompatible ASM version!!! -->
-				<exclusion>
-					<groupId>org.apache.cxf</groupId>
-					<artifactId>cxf-rt-frontend-jaxws</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<!-- /WSDM -->
 
 		<dependency>
 			<groupId>org.objectweb.fractal.julia</groupId>

@@ -3,6 +3,8 @@
  */
 package org.petalslink.dsb.kernel;
 
+import org.petalslink.dsb.api.DSBException;
+
 /**
  * @author chamerling
  *
