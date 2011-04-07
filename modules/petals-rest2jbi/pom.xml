@@ -5,14 +5,19 @@
 	<parent>
 		<artifactId>dsb-parent</artifactId>
 		<groupId>org.petalslink.dsb</groupId>
-		<version>1-SNAPSHOT</version>
+		<version>1.0-SNAPSHOT</version>
+		<relativePath>../dsb-parent/pom.xml</relativePath>
 	</parent>
 	
 	<groupId>org.petalslink.dsb</groupId>
 	<artifactId>petals-rest2jbi</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0-SNAPSHOT</version>
 	<name>petals-rest2jbi</name>
+	
+	<scm>
+      <connection>scm:svn:https://svn.petalslink.com/svnroot/trunk/research/commons/dsb/modules/petals-rest2jbi</connection>
+      <developerConnection>${project.scm.connection}</developerConnection>
+  	</scm>
 	
 	<dependencies>
 		<dependency>
@@ -24,12 +29,12 @@
 		<dependency>
 			<groupId>org.petalslink.dsb</groupId>
 			<artifactId>petals-jbi-generator-api</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.petalslink.dsb</groupId>
 			<artifactId>petals-generator-restcommons</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-logging</groupId>

@@ -5,14 +5,19 @@
 	<parent>
 		<artifactId>dsb-parent</artifactId>
 		<groupId>org.petalslink.dsb</groupId>
-		<version>1-SNAPSHOT</version>
+		<version>1.0-SNAPSHOT</version>
+		<relativePath>../dsb-parent/pom.xml</relativePath>
 	</parent>
 	
 	<groupId>org.petalslink.dsb</groupId>
 	<artifactId>dsb-federation-xmppwebserver</artifactId>
-	<version>1.0-SNAPSHOT</version>
 	<name>dsb-federation-xmppwebserver</name>
 	<packaging>war</packaging>
+	
+	<scm>
+      <connection>scm:svn:https://svn.petalslink.com/svnroot/trunk/research/commons/dsb/modules/dsb-federation-xmppwebserver</connection>
+      <developerConnection>${project.scm.connection}</developerConnection>
+  	</scm>
 
 	<description>A XMPP jabber bot as webapplication for Petals DSB federation</description>
 	<dependencies>
@@ -25,12 +30,12 @@
 		<dependency>
 			<groupId>org.petalslink.dsb</groupId>
 			<artifactId>dsb-federation-xmpp</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.petalslink.dsb</groupId>
 			<artifactId>dsb-federation-core</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>

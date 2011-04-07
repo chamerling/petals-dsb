@@ -4,14 +4,20 @@
 	<parent>
 		<artifactId>dsb-parent</artifactId>
 		<groupId>org.petalslink.dsb</groupId>
-		<version>1-SNAPSHOT</version>
+		<version>1.0-SNAPSHOT</version>
+		<relativePath>../dsb-parent/pom.xml</relativePath>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.petalslink.dsb</groupId>
 	<artifactId>petals-jbi-generator-api</artifactId>
 	<name>petals-jbi-generator-api</name>
-	<version>1.0-SNAPSHOT</version>
+	
+	<scm>
+      <connection>scm:svn:https://svn.petalslink.com/svnroot/trunk/research/commons/dsb/modules/petals-jbi-generator-api</connection>
+      <developerConnection>${project.scm.connection}</developerConnection>
+  	</scm>
+
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>

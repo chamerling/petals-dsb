@@ -15,7 +15,7 @@
 	<artifactId>dsb-parent</artifactId>
 	<groupId>org.petalslink.dsb</groupId>
 	<packaging>pom</packaging>
-	<version>1-SNAPSHOT</version>
+	<version>1.0-SNAPSHOT</version>
 
 	<distributionManagement>
 	 <repository>
@@ -34,11 +34,10 @@
 	    </snapshotRepository>
 	</distributionManagement>
 
-	<scm>
-		<connection>scm:svn:https://svn.petalslink.com/svnroot/trunk/research/commons/dsb/modules/dsb-parent</connection>
-		<developerConnection>scm:svn:https://svn.petalslink.com/svnroot/trunk/research/commons/dsb/modules/dsb-parent</developerConnection>
-		<url>https://svn.petalslink.com/svnroot/trunk/research/commons/dsb/modules/dsb-parent</url>
-	</scm>
+  	<scm>
+      <connection>scm:svn:https://svn.petalslink.com/svnroot/trunk/research/commons/dsb/modules/dsb-parent</connection>
+      <developerConnection>${project.scm.connection}</developerConnection>
+  	</scm>
 		
 	<licenses>
 		<license>
@@ -51,7 +50,7 @@
 		<developer>
 			<name>Christophe Hamerling</name>
 			<id>chamerling</id>
-			<email>christophe.hamerling@ebmwebsourcing.com</email>
+			<email>christophe.hamerling@petalslink.com</email>
 			<url>http://chamerling.org</url>
 			<organization>EBM WebSourcing</organization>
 			<organizationUrl>

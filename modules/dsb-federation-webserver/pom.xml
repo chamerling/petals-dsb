@@ -5,14 +5,19 @@
 	<parent>
 		<artifactId>dsb-parent</artifactId>
 		<groupId>org.petalslink.dsb</groupId>
-		<version>1-SNAPSHOT</version>
+		<version>1.0-SNAPSHOT</version>
+		<relativePath>../dsb-parent/pom.xml</relativePath>
 	</parent>
 	
 	<groupId>org.petalslink.dsb</groupId>
 	<artifactId>dsb-federation-webserver</artifactId>
-	<version>1.0-SNAPSHOT</version>
 	<name>dsb-federation-webserver</name>
 	<packaging>war</packaging>
+	
+	<scm>
+      <connection>scm:svn:https://svn.petalslink.com/svnroot/trunk/research/commons/dsb/modules/dsb-federation-webserver</connection>
+      <developerConnection>${project.scm.connection}</developerConnection>
+  	</scm>
 
 	<properties>
 		<spring.version>3.0.2.RELEASE</spring.version>
@@ -28,7 +33,7 @@
 		<dependency>
 			<groupId>org.petalslink.dsb</groupId>
 			<artifactId>dsb-federation-core</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>

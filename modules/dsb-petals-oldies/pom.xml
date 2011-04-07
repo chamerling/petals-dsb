@@ -6,14 +6,20 @@
 	<parent>
 		<artifactId>dsb-parent</artifactId>
 		<groupId>org.petalslink.dsb</groupId>
-		<version>1-SNAPSHOT</version>
+		<version>1.0-SNAPSHOT</version>
+		<relativePath>../dsb-parent/pom.xml</relativePath>
 	</parent>
+	
 	<groupId>org.petalslink.dsb</groupId>
 	<artifactId>dsb-petals-oldies</artifactId>
-	<version>1.0-SNAPSHOT</version>
 	<name>dsb-petals-oldies</name>
 	
 	<description>Some classes needed for monitoring which are not in the Petals ESB kernel version used...</description>
+	
+	<scm>
+      <connection>scm:svn:https://svn.petalslink.com/svnroot/trunk/research/commons/dsb/modules/dsb-petals-oldies</connection>
+      <developerConnection>${project.scm.connection}</developerConnection>
+  	</scm>
 	
 	<dependencies>
 		<dependency>

@@ -4,13 +4,13 @@
 	<parent>
 		<artifactId>dsb-parent</artifactId>
 		<groupId>org.petalslink.dsb</groupId>
-		<version>1-SNAPSHOT</version>
+		<version>1.0-SNAPSHOT</version>
+		<relativePath>../dsb-parent/pom.xml</relativePath>
 	</parent>
 
 	<name>Petals DSB Binding Component :: SOAP Proxy</name>
 	<artifactId>petals-bc-soap-proxy</artifactId>
 	<groupId>org.petalslink.dsb</groupId>
-	<version>1.0-SNAPSHOT</version>
 	<packaging>jbi-component</packaging>
 	<description> The PEtALS SOAP JBI binding component based on Axis2 and
 		Jetty. </description>
@@ -30,12 +30,11 @@
 		</developer>
 	</developers>
 
-	<!-- Source code management -->
-	<scm>
-		<connection>scm:svn:svn://svn.forge.objectweb.org/svnroot/petals/trunk/petals-components/petals-bc-soap</connection>
-		<developerConnection>scm:svn:svn+ssh://svn.forge.objectweb.org/svnroot/petals/trunk/petals-components/petals-bc-soap</developerConnection>
-		<url>http://svn.forge.objectweb.org/cgi-bin/viewcvs.cgi/petals/trunk/petals-components/petals-bc-soap</url>
-	</scm>
+  	<scm>
+      <connection>scm:svn:https://svn.petalslink.com/svnroot/trunk/research/commons/dsb/modules/petals-bc-soapproxy</connection>
+      <developerConnection>${project.scm.connection}</developerConnection>
+  	</scm>
+
 	<properties>
 		<axis2.version>1.4.1</axis2.version>
 		<topDirectoryLocation>../..</topDirectoryLocation>

@@ -4,23 +4,28 @@
 	<parent>
 		<artifactId>dsb-parent</artifactId>
 		<groupId>org.petalslink.dsb</groupId>
-		<version>1-SNAPSHOT</version>
+		<version>1.0-SNAPSHOT</version>
+		<relativePath>../../modules/dsb-parent/pom.xml</relativePath>
 	</parent>
 
 	<groupId>org.petalslink.dsb</groupId>
 	<artifactId>dsb-installer</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0-SNAPSHOT</version>
 	<name>dsb-installer</name>
 	<description>A Petals DSB installer based on izpack. The installer will : 1/ Get the Petals DSB and add components defined in dependencies in the artifacts/component folder.</description>
 
 	<properties>
 		<staging.dir>${project.build.directory}/installResources</staging.dir>
-		<petals.version>1.0-SNAPSHOT</petals.version>
+		<petals.version>${project.version}</petals.version>
 		<petals.artifact>dsb-distribution</petals.artifact>
 		<petals.group>org.petalslink.dsb</petals.group>
 		<app.name>DSB Installer</app.name>
 	</properties>
+	
+	<scm>
+      <connection>scm:svn:https://svn.petalslink.com/svnroot/trunk/research/commons/dsb/distributions/dsb-installer</connection>
+      <developerConnection>${project.scm.connection}</developerConnection>
+  	</scm>
 
 	<dependencies>
 		<dependency>
@@ -88,7 +93,7 @@
 								<artifactItem>
 									<groupId>org.petalslink.dsb</groupId>
 									<artifactId>petals-bc-rest</artifactId>
-									<version>1.0-SNAPSHOT</version>
+									<version>${project.version}</version>
 									<type>zip</type>
 									<!-- <classifier>zip</classifier>-->
 									<overWrite>false</overWrite>
@@ -98,7 +103,7 @@
 								<artifactItem>
 									<groupId>org.petalslink.dsb</groupId>
 									<artifactId>petals-bc-soap-proxy</artifactId>
-									<version>1.0-SNAPSHOT</version>
+									<version>${project.version}</version>
 									<type>zip</type>
 									<!-- <classifier>zip</classifier>-->
 									<overWrite>false</overWrite>
@@ -108,7 +113,7 @@
 								<artifactItem>
 									<groupId>org.petalslink.dsb</groupId>
 									<artifactId>petals-bc-soap</artifactId>
-									<version>4.0.1</version>
+									<version>${project.version}</version>
 									<type>zip</type>
 									<!-- <classifier>zip</classifier>-->
 									<overWrite>false</overWrite>

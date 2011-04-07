@@ -4,16 +4,21 @@
 	<parent>
 		<artifactId>dsb-parent</artifactId>
 		<groupId>org.petalslink.dsb</groupId>
-		<version>1-SNAPSHOT</version>
+		<version>1.0-SNAPSHOT</version>
+		<relativePath>../dsb-parent/pom.xml</relativePath>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.petalslink.dsb</groupId>
 	<artifactId>petals-ws2jbi</artifactId>
 	<name>petals-ws2jbi</name>
-	<version>1.0-SNAPSHOT</version>
 	<description>Generate a Service Assembly to expose a Web Service as JBI
 		Service</description>
+		
+	<scm>
+	      <connection>scm:svn:https://svn.petalslink.com/svnroot/trunk/research/commons/dsb/modules/petals-ws2jbi</connection>
+	      <developerConnection>${project.scm.connection}</developerConnection>
+  	</scm>
 		
 	<dependencies>
 		<dependency>
@@ -25,7 +30,7 @@
 		<dependency>
 			<groupId>org.petalslink.dsb</groupId>
 			<artifactId>petals-jbi-generator-api</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<artifactId>easywsdl-wsdl</artifactId>
@@ -34,7 +39,7 @@
 		<dependency>
 			<groupId>org.petalslink.dsb</groupId>
 			<artifactId>petals-generator-wscommons</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-logging</groupId>

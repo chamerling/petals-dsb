@@ -4,17 +4,22 @@
 	<parent>
 		<artifactId>dsb-parent</artifactId>
 		<groupId>org.petalslink.dsb</groupId>
-		<version>1-SNAPSHOT</version>
+		<version>1.0-SNAPSHOT</version>
+		<relativePath>../dsb-parent/pom.xml</relativePath>
 	</parent>
 	
 	<groupId>org.petalslink.dsb</groupId>
 	<artifactId>dsb-launcher</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0-SNAPSHOT</version>
 	<name>dsb-launcher</name>
 
 	<description>This launcher extends the default Petals ESB kernel one and allows developers to specify the main server class and the JARs of the kernel in a configuration file 'launcher.cfg' under the Petals 'conf' directory.
 	A sample is available in src/test/resources folder.</description>
+	
+	<scm>
+      <connection>scm:svn:https://svn.petalslink.com/svnroot/trunk/research/commons/dsb/modules/dsb-launcher</connection>
+      <developerConnection>${project.scm.connection}</developerConnection>
+  	</scm>
 	
 	<dependencies>
 		<dependency>

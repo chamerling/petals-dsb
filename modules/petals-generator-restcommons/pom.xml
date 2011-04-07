@@ -5,14 +5,20 @@
 	<parent>
 		<artifactId>dsb-parent</artifactId>
 		<groupId>org.petalslink.dsb</groupId>
-		<version>1-SNAPSHOT</version>
+		<version>1.0-SNAPSHOT</version>
+		<relativePath>../dsb-parent/pom.xml</relativePath>
 	</parent>
 
 	<groupId>org.petalslink.dsb</groupId>
 	<artifactId>petals-generator-restcommons</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0-SNAPSHOT</version>
 	<name>petals-generator-restcommons</name>
+	
+	<scm>
+      <connection>scm:svn:https://svn.petalslink.com/svnroot/trunk/research/commons/dsb/modules/petals-generator-restcommons</connection>
+      <developerConnection>${project.scm.connection}</developerConnection>
+  	</scm>
+
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -23,7 +29,7 @@
 		<dependency>
 			<groupId>org.petalslink.dsb</groupId>
 			<artifactId>petals-generator-commons</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 	<build>

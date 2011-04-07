@@ -5,12 +5,12 @@
 	<parent>
 		<artifactId>dsb-parent</artifactId>
 		<groupId>org.petalslink.dsb</groupId>
-		<version>1-SNAPSHOT</version>
+		<version>1.0-SNAPSHOT</version>
+		<relativePath>../dsb-parent/pom.xml</relativePath>
 	</parent>
 
 	<groupId>org.petalslink.dsb</groupId>
 	<artifactId>dsb-transport-xmpp</artifactId>
-	<version>1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>dsb-transport-xmpp</name>
@@ -18,6 +18,11 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
+	
+	<scm>
+      <connection>scm:svn:https://svn.petalslink.com/svnroot/trunk/research/commons/dsb/modules/dsb-transport-xmpp</connection>
+      <developerConnection>${project.scm.connection}</developerConnection>
+  	</scm>
 
 	<dependencies>
 		<dependency>
@@ -29,18 +34,18 @@
 		<dependency>
 			<groupId>org.petalslink.dsb</groupId>
 			<artifactId>dsb-transport</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.petalslink.dsb</groupId>
 			<artifactId>dsb-api</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<!--  FIXME : Just for serialization... -->
 		<dependency>
 			<groupId>org.petalslink.dsb</groupId>
 			<artifactId>dsb-transport-cxf</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.ow2.petals</groupId>

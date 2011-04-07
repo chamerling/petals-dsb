@@ -4,16 +4,22 @@
 	<parent>
 		<artifactId>dsb-parent</artifactId>
 		<groupId>org.petalslink.dsb</groupId>
-		<version>1-SNAPSHOT</version>
+		<version>1.0-SNAPSHOT</version>
+		<relativePath>../dsb-parent/pom.xml</relativePath>
 	</parent>
+	
 	<groupId>org.petalslink.dsb</groupId>
 	<artifactId>petals-bc-rest</artifactId>
-	<version>1.0-SNAPSHOT</version>
 	<name>Petals Binding Component :: REST Proxy</name>
 
 	<packaging>jbi-component</packaging>
 
 	<description>A simple component which proxify REST service calls.</description>
+	
+	<scm>
+      <connection>scm:svn:https://svn.petalslink.com/svnroot/trunk/research/commons/dsb/modules/petals-bc-restproxy</connection>
+      <developerConnection>${project.scm.connection}</developerConnection>
+  	</scm>
 
 	<developers>
 		<developer>
@@ -30,12 +36,6 @@
 		</developer>
 	</developers>
 
-	<scm>
-		<connection>scm:svn:svn://svn.forge.objectweb.org/svnroot/petals/trunk/petals-components/petals-components-sandbox/petals-bc-restproxy</connection>
-		<developerConnection>scm:svn:svn+ssh://chamerling@svn.forge.objectweb.org/svnroot/petals/trunk/petals-components/petals-components-sandbox/petals-bc-restproxy</developerConnection>
-		<url>http://svn.forge.objectweb.org/cgi-bin/viewcvs.cgi/petals/trunk/petals-components/petals-components-sandbox/petals-bc-restproxy</url>
-	</scm>
-
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -46,7 +46,7 @@
 		<dependency>
 			<groupId>org.petalslink.dsb</groupId>
 			<artifactId>petals-cdk</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>

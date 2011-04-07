@@ -4,13 +4,13 @@
 	<parent>
 		<artifactId>dsb-parent</artifactId>
 		<groupId>org.petalslink.dsb</groupId>
-		<version>1-SNAPSHOT</version>
+		<version>1.0-SNAPSHOT</version>
+		<relativePath>../dsb-parent/pom.xml</relativePath>
 	</parent>
 
 	<groupId>org.ow2.petals.esb.sandox</groupId>
 	<artifactId>petals-installer</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0-SNAPSHOT</version>
 	<name>petals-installer</name>
 	<description>A Petals ESB installer based on izpack. The installer will : 1/ Get the Petals ESB and add components defined in dependencies in the artifacts/component folder.</description>
 
@@ -21,6 +21,11 @@
 		<petals.group>org.ow2.petals</petals.group>
 		<app.name>Petals ESB Installer</app.name>
 	</properties>
+	
+	<scm>
+      <connection>scm:svn:https://svn.petalslink.com/svnroot/trunk/research/commons/dsb/modules/petals-installer</connection>
+      <developerConnection>${project.scm.connection}</developerConnection>
+  	</scm>
 
 	<dependencies>
 		<dependency>
@@ -79,7 +84,7 @@
 								<artifactItem>
 									<groupId>org.petalslink.dsb</groupId>
 									<artifactId>petals-bc-restproxy</artifactId>
-									<version>1.0-SNAPSHOT</version>
+									<version>${project.version}</version>
 									<type>zip</type>
 									<!-- <classifier>zip</classifier>-->
 									<overWrite>false</overWrite>
@@ -89,7 +94,7 @@
 								<artifactItem>
 									<groupId>org.petalslink.dsb</groupId>
 									<artifactId>petals-bc-soap-proxy</artifactId>
-									<version>1.0-SNAPSHOT</version>
+									<version>${project.version}</version>
 									<type>zip</type>
 									<!-- <classifier>zip</classifier>-->
 									<overWrite>false</overWrite>
@@ -99,7 +104,7 @@
 								<artifactItem>
 									<groupId>org.ow2.petals</groupId>
 									<artifactId>petals-bc-soap</artifactId>
-									<version>4.1-SNAPSHOT</version>
+									<version>${project.version}</version>
 									<type>zip</type>
 									<!-- <classifier>zip</classifier>-->
 									<overWrite>false</overWrite>

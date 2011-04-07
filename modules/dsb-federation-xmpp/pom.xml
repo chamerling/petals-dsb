@@ -5,15 +5,20 @@
 	<parent>
 		<artifactId>dsb-parent</artifactId>
 		<groupId>org.petalslink.dsb</groupId>
-		<version>1-SNAPSHOT</version>
+		<version>1.0-SNAPSHOT</version>
+		<relativePath>../dsb-parent/pom.xml</relativePath>
 	</parent>
 	
 	<groupId>org.petalslink.dsb</groupId>
 	<artifactId>dsb-federation-xmpp</artifactId>
-	<version>1.0-SNAPSHOT</version>
 	<name>dsb-federation-xmpp</name>
 	
 	<description>Client and server federation XMPP implementation</description>
+	
+	<scm>
+      <connection>scm:svn:https://svn.petalslink.com/svnroot/trunk/research/commons/dsb/modules/dsb-federation-xmpp</connection>
+      <developerConnection>${project.scm.connection}</developerConnection>
+  	</scm>
 	
 	<dependencies>
 		<dependency>
@@ -26,7 +31,7 @@
 		<dependency>
 			<groupId>org.petalslink.dsb</groupId>
 			<artifactId>dsb-federation-core</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

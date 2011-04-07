@@ -4,14 +4,19 @@
 	<parent>
 		<artifactId>dsb-parent</artifactId>
 		<groupId>org.petalslink.dsb</groupId>
-		<version>1-SNAPSHOT</version>
+		<version>1.0-SNAPSHOT</version>
+		<relativePath>../dsb-parent/pom.xml</relativePath>
 	</parent>
 	<groupId>org.petalslink.dsb</groupId>
 	<artifactId>dsb-federation-core</artifactId>
-	<version>1.0-SNAPSHOT</version>
 	<name>dsb-federation-core</name>
 
 	<description>This is the core implementation of the federation server. It embeds a default implementation for communication between federation client and server based on Apache CXF (SOAP/HTTP with JAXWS)</description>
+	
+	<scm>
+      <connection>scm:svn:https://svn.petalslink.com/svnroot/trunk/research/commons/dsb/modules/dsb-federation-core</connection>
+      <developerConnection>${project.scm.connection}</developerConnection>
+  	</scm>
 
 	<properties>
 		<cxf-version>2.2.2</cxf-version>
@@ -28,7 +33,7 @@
 		<dependency>
 			<groupId>org.petalslink.dsb</groupId>
 			<artifactId>dsb-federation-api</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
