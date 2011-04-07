@@ -55,6 +55,7 @@
    		<module>modules/dsb-transport</module>
    		<module>modules/dsb-transport-cxf</module>
    		<module>modules/dsb-transport-xmpp</module>
+   		<module>modules/dsb-monitoring</module>
 
    		<!--<module>modules/dsb-transport-extensions</module>-->
 		<module>modules/dsb-launcher</module>
