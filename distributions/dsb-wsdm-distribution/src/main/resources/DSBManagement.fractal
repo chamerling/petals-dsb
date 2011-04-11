@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE definition PUBLIC "-//objectweb.org//DTD Fractal ADL 2.0//EN" "classpath://org/objectweb/fractal/adl/xml/standard.dtd">
+
+<definition extends="DSBManagementType" name="DSBManagement">
+
+	<!--  *** INSTANCIATE *** -->
+	<component definition="org.petalslink.dsb.kernel.DSBConfigurationServiceImpl" name="DSBConfiguration" />
+	<component definition="org.petalslink.dsb.kernel.management.DSBManagementImpl" name="DSBManagement"/>
+	<component definition="org.petalslink.dsb.kernel.webapp.JettyWebAppServerImpl" name="WebAppServerImpl"/>
+	
+	<component definition="org.petalslink.dsb.kernel.management.binder.BinderCheckerImpl" name="BinderCheckerImpl"/>
+	<component definition="org.petalslink.dsb.kernel.management.binder.NewServiceExposerImpl" name="NewServiceExposer"/>
+	
+	<!--  The registries -->
+	<component definition="org.petalslink.dsb.kernel.management.binder.ServiceExposerRegistryImpl" name="ServiceExposerRegistry" />
+	<component definition="org.petalslink.dsb.kernel.management.binder.ServiceBinderRegistryImpl" name="ServiceBinderRegistry" />
+	<component definition="org.petalslink.dsb.kernel.management.binder.ServiceRegistryImpl" name="ServiceRegistry" />
+
+	<!-- The binders -->
+	<component definition="org.petalslink.dsb.kernel.management.binder.SOAPServiceBinderImpl" name="SOAPServiceBinder" />
+	<component definition="org.petalslink.dsb.kernel.management.binder.RESTServiceBinderImpl" name="RESTServiceBinder" />
+
+	<!-- The exposers -->
+	<component definition="org.petalslink.dsb.kernel.management.binder.SOAPServiceExposerImpl" name="SOAPServiceExposer" />
+	<component definition="org.petalslink.dsb.kernel.management.binder.RESTServiceExposerImpl" name="RESTServiceExposer" />
+
+	<component definition="org.petalslink.dsb.kernel.management.component.EmbeddedComponentServiceImpl" name="EmbeddedComponentService" />
+
+	<component definition="org.petalslink.dsb.kernel.management.cron.ServicePollerImpl" name="ServicePoller" />
+
+	<!-- The embedded service binders -->
+	<component definition="org.petalslink.dsb.kernel.management.binder.EmbeddedServiceBinderImpl" name="EmbeddedServiceBinder" />
+	<component definition="org.petalslink.dsb.kernel.management.cron.EmbeddedServiceBinderCronImpl" name="EmbeddedServiceBinderCron" />
+
+	<!-- Get information from JBI components -->
+	<component definition="org.petalslink.dsb.kernel.management.component.JNDIComponentInformationServiceImpl" name="ComponentInformationService" />
+
+	<!-- *** EXPOSE *** -->
+	<!-- Expose to other components -->
+	<binding client="this.exposer-registry" server="ServiceExposerRegistry.service" />
+	<binding client="this.binder-registry" server="ServiceBinderRegistry.service" />
+	<binding client="this.service-registry" server="ServiceRegistry.service" />
+	<binding client="this.component-information" server="ComponentInformationService.service" />
+	<binding client="this.dsbconfiguration" server="DSBConfiguration.service" />
+	
+	<binding client="this.new-service-exposer" server="NewServiceExposer.service"/>
+	<binding client="this.service-poller" server="ServicePoller.service"/>
+	
+
+	<!--  *** LINKS *** -->
+
+	<binding client="DSBConfiguration.configuration" server="this.configuration" />
+	
+	<binding client="BinderCheckerImpl.jbiartefacts" server="this.ws-jbiart" />
+	<binding client="BinderCheckerImpl.dsbconfiguration" server="DSBConfiguration.service" />
+
+	<!-- Link binders -->
+	<binding client="SOAPServiceBinder.atomic-deployment" server="this.atomic-deployment" />
+	<binding client="SOAPServiceBinder.configuration" server="this.configuration" />
+	<binding client="SOAPServiceBinder.service-registry" server="ServiceRegistry.service" />
+	<binding client="SOAPServiceBinder.binder-checker" server="BinderCheckerImpl.service" />
+
+	<binding client="RESTServiceBinder.atomic-deployment" server="this.atomic-deployment" />
+	<binding client="RESTServiceBinder.configuration" server="this.configuration" />
+	<binding client="RESTServiceBinder.service-registry" server="ServiceRegistry.service" />
+	<binding client="RESTServiceBinder.binder-checker" server="BinderCheckerImpl.service" />
+
+	<!-- Link exposers -->
+	<binding client="SOAPServiceExposer.atomic-deployment" server="this.atomic-deployment" />
+	<binding client="SOAPServiceExposer.configuration" server="this.configuration" />
+	<binding client="SOAPServiceExposer.binder-checker" server="BinderCheckerImpl.service" />
+
+	<binding client="RESTServiceExposer.atomic-deployment" server="this.atomic-deployment" />
+	<binding client="RESTServiceExposer.configuration" server="this.configuration" />
+	<binding client="RESTServiceExposer.binder-checker" server="BinderCheckerImpl.service" />
+
+	<binding client="EmbeddedComponentService.dsb-configuration" server="DSBConfiguration.service" />
+	<binding client="EmbeddedComponentService.installation" server="this.installation" />
+	<binding client="EmbeddedComponentService.artifact-repository" server="this.artifact-repository" />
+	<binding client="EmbeddedComponentService.adminService" server="this.adminService" />
+
+	<binding client="EmbeddedServiceBinder.dsb-configuration" server="DSBConfiguration.service" />
+	<binding client="EmbeddedServiceBinder.binder-registry" server="ServiceBinderRegistry.service" />
+	
+	<binding client="EmbeddedServiceBinderCron.embeddedservicebinder" server="EmbeddedServiceBinder.service" />
+	
+	<binding client="NewServiceExposer.registry" server="this.registry" />
+	<binding client="NewServiceExposer.exposer-registry" server="ServiceExposerRegistry.service" />
+	<binding client="NewServiceExposer.adminService" server="this.adminService" />
+
+	<binding client="ServicePoller.dsb-configuration" server="DSBConfiguration.service" />
+	<binding client="ServicePoller.new-service-exposer" server="NewServiceExposer.service" />
+	
+	<binding client="ComponentInformationService.jndi" server="this.jndi" />
+
+	<!--  LInk to DSB Management which will be shared with Web application -->
+	<binding client="DSBManagement.information" server="this.ws-information" />
+	<binding client="DSBManagement.serviceinfo" server="this.ws-serviceinfo" />
+	<binding client="DSBManagement.dsbinformation" server="this.ws-dsbinformation" />
+	<binding client="WebAppServerImpl.dsbmanagement" server="DSBManagement.service" />
+	<binding client="WebAppServerImpl.configuration" server="this.configuration" />
+	<binding client="WebAppServerImpl.dsbconfiguration" server="DSBConfiguration.service" />
+	
+	<!-- *** REGISTRIES *** -->
+
+	<!-- Exposers -->
+	<binding client="ServiceExposerRegistry.service-exposer-soap" server="SOAPServiceExposer.service" />
+	<binding client="ServiceExposerRegistry.service-exposer-rest" server="RESTServiceExposer.service" />
+
+	<!-- Binders -->
+	<binding client="ServiceBinderRegistry.service-binder-soap" server="SOAPServiceBinder.service" />
+	<binding client="ServiceBinderRegistry.service-binder-rest" server="RESTServiceBinder.service" />
+
+</definition>

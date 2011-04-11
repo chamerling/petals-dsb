@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!--
+
+		PETALS - PETALS Services Platform. Copyright (C) 2005 Fossil E-Commerce, http://www.fossilec.com This library is free software; you can redistribute it and/or modify it under the terms of the GNU
+		Lesser General Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option) any later version. This library is distributed in the hope that it
+		will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details. You
+		should have received a copy of the GNU Lesser General Public License along with this library; if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+		USA
+	-->
+
+<!DOCTYPE definition PUBLIC "-//objectweb.org//DTD Fractal ADL 2.0//EN"
+    "classpath://org/objectweb/fractal/adl/xml/standard.dtd">
+
+<definition name="Federation" extends="FederationType">
+	<component name="FederationEngine" definition="org.petalslink.dsb.kernel.federation.FederationEngineImpl" />
+	<component name="FederationService" definition="org.petalslink.dsb.kernel.federation.FederationServiceImpl" />
+	<component name="FederationSearchEngine" definition="org.petalslink.dsb.kernel.federation.FederationEndpointSearchEngine" />
+	<component name="FederationFilterService" definition="org.petalslink.dsb.kernel.federation.FederationFilterServiceImpl" />
+	<component name="FederationClientRegistry" definition="org.petalslink.dsb.kernel.federation.FederationClientRegistryImpl" />
+	<component name="FederationFilterStore" definition="org.petalslink.dsb.kernel.federation.FileFederationFilterStoreImpl" />
+	<component name="FederationConfiguration" definition="org.petalslink.dsb.kernel.federation.FileFederationConfigurationServiceImpl" />
+	
+	<!-- The client instances -->
+	<component name="XMPPFederationClientImpl" definition="org.petalslink.dsb.kernel.federation.XMPPFederationClientImpl" />
+	<component name="FDSBFederationClientImpl" definition="org.petalslink.dsb.kernel.federation.FDSBFederationClientImpl" />
+	
+	<binding client="XMPPFederationClientImpl.configuration" server="this.configuration" />
+	<binding client="XMPPFederationClientImpl.federationservice" server="FederationService.service" />
+	<binding client="XMPPFederationClientImpl.federationconfiguration" server="FederationConfiguration.service" />
+	
+	<binding client="FDSBFederationClientImpl.configuration" server="this.configuration" />
+	<binding client="FDSBFederationClientImpl.federationservice" server="FederationService.service" />
+	<binding client="FDSBFederationClientImpl.dsbconfiguration" server="this.dsbconfiguration" />
+	
+	
+	
+	<!-- Add more clients here... -->
+
+	<!-- ITF links -->
+	<binding client="this.federationengine" server="FederationEngine.service" />
+	<binding client="this.federationservice" server="FederationService.service" />
+	<binding client="this.federationendpointsearchengine" server="FederationSearchEngine.service" />
+	<binding client="this.federationconfiguration" server="FederationConfiguration.service" />
+
+	<!-- Internal links -->
+	<!-- <binding client="FederationEngine.federationservice" server="FederationService.service" />-->
+	<binding client="FederationEngine.federationconfiguration" server="FederationConfiguration.service" />
+	<binding client="FederationEngine.federationclientregistry" server="FederationClientRegistry.service" />
+	<!-- <binding client="FederationEngine.configuration" server="this.configuration" />-->
+	
+	<binding client="FederationConfiguration.configuration" server="this.configuration" />
+
+	<binding client="FederationService.endpointsearchengine" server="this.localendpointsearchengine" />
+	<binding client="FederationService.receiver" server="this.receiver" />
+	<binding client="FederationService.federationfilter" server="FederationFilterService.service" />
+
+	<binding client="FederationSearchEngine.federationengine" server="FederationEngine.service" />
+
+	<binding client="FederationClientRegistry.federationclient-xmpp" server="XMPPFederationClientImpl.service" />
+	<binding client="FederationClientRegistry.federationclient-fdsb" server="FDSBFederationClientImpl.service" />
+	
+	<binding client="FederationFilterService.filterstore" server="FederationFilterStore.service"/>
+	<binding client="FederationFilterStore.configuration" server="this.configuration" />
+
+</definition>

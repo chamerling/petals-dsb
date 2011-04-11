@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE definition PUBLIC "-//objectweb.org//DTD Fractal ADL 2.0//EN" "classpath://org/objectweb/fractal/adl/xml/standard.dtd">
+
+<definition extends="CommunicationType" name="Communication">
+
+  <!-- <component definition="org.ow2.petals.communication.network.NetworkServiceImpl" name="NetworkServiceImpl"/>-->
+  <!-- <component definition="org.ow2.petals.communication.jndi.agent.PlatformJNDIAgentServiceImpl" name="JNDIAgentServiceImpl"/>-->
+  <component definition="org.ow2.petals.communication.jndi.agent.StandaloneJNDIAgentServiceImpl" name="JNDIAgentServiceImpl"/>
+  <component definition="org.ow2.petals.communication.jndi.client.JNDIServiceImpl" name="JNDIServiceImpl"/>
+  <component definition="org.ow2.petals.communication.topology.TopologyServiceImpl" name="TopologyServiceImpl"/>
+  
+  <!-- SOA4All : Use web services instead of JMX! -->
+  <component definition="org.petalslink.dsb.kernel.communication.WebServiceRemoteCheckerClientImpl" name="RemoteCheckerClientImpl"/>
+
+  <component definition="AgentJMX" name="agent-jmx"/>
+  <component definition="org.ow2.petals.communication.jmx.PlatformJMXServiceImpl" name="JMXServiceImpl"/>
+  <component definition="org.ow2.petals.communication.jmx.rmi.RMIConnector" name="RMIConnectorImpl"/>
+
+  <!-- Bind internal components to expose them to the outside -->
+  <binding client="this.jndi" server="JNDIServiceImpl.service"/>
+  <binding client="this.topology" server="TopologyServiceImpl.service"/>
+  <binding client="this.jmx" server="JMXServiceImpl.service"/>
+  <binding client="this.remotechecker" server="RemoteCheckerClientImpl.service"/>
+  
+  <!-- Internal bindings -->
+  
+  <!-- Modified for SOA4All
+  <binding client="RemoteCheckerClientImpl.jmx" server="JMXServiceImpl.service"/>
+  -->
+  <binding client="RemoteCheckerClientImpl.topology" server="TopologyServiceImpl.service"/>
+  
+  <binding client="JNDIAgentServiceImpl.configuration" server="this.configuration"/>
+  
+  <binding client="JNDIServiceImpl.configuration" server="this.configuration"/>
+  <binding client="JNDIServiceImpl.jndiAgent" server="JNDIAgentServiceImpl.service"/>
+  
+  <binding client="TopologyServiceImpl.configuration" server="this.configuration"/>
+  <binding client="TopologyServiceImpl.remote" server="RemoteCheckerClientImpl.service"/>
+
+  <binding client="RMIConnectorImpl.configuration" server="this.configuration"/>
+  <binding client="RMIConnectorImpl.adminAtt" server="agent-jmx.attribute-controller"/>
+  
+  <binding client="JMXServiceImpl.configuration" server="this.configuration"/>
+  <binding client="JMXServiceImpl.adminAtt" server="agent-jmx.attribute-controller"/>
+  <binding client="JMXServiceImpl.topology" server="TopologyServiceImpl.service"/>
+ 
+</definition>

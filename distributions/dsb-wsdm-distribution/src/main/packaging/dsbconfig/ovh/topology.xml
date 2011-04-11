@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:topology xmlns:tns="http://petals.ow2.org/topology"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://petals.ow2.org/topology petalsTopology.xsd">
+	<tns:domain mode="static" name="PEtALS">
+		<tns:description>The static domain configuration</tns:description>
+		<!--
+			defaut configuration to use MySql as centralize petals registry
+			<tns:jndi>
+			<tns:factory>org.ow2.petals.registry.database.RegistryInitialContextFactory</tns:factory>
+			<tns:provider-url>jdbc:mysql://localhost:3306/mysql</tns:provider-url>
+			<tns:security-principal>root</tns:security-principal>
+			<tns:security-credentials>mysql</tns:security-credentials>
+			<tns:pool-size>5</tns:pool-size> <tns:batch-size>10</tns:batch-size>
+			</tns:jndi>
+		-->
+		<tns:sub-domain name="subdomain1">
+			<tns:description>description of the subdomain</tns:description>
+			<tns:container name="SOA4ALL-EBM-00">
+				<tns:description>description of the EBMWS container 0
+				</tns:description>
+				<tns:host>soa4all.ebmwebsourcing.com</tns:host>
+				<tns:user>petals</tns:user>
+				<tns:password>petals</tns:password>
+				<tns:webservice-service>
+					<tns:port>7600</tns:port>
+					<tns:prefix>petals/ws</tns:prefix>
+				</tns:webservice-service>
+				<tns:jmx-service>
+					<tns:rmi-port>7700</tns:rmi-port>
+				</tns:jmx-service>
+				<tns:transport-service>
+					<tns:tcp-port>7800</tns:tcp-port>
+				</tns:transport-service>
+				<tns:registry-service>
+					<tns:port>7900</tns:port>
+				</tns:registry-service>
+			</tns:container>
+
+			<tns:container name="SOA4ALL-INRIA-00">
+				<tns:description>description of the INRIA container 0
+				</tns:description>
+				<tns:host>trinidad.inria.fr</tns:host>
+				<tns:user>petals</tns:user>
+				<tns:password>petals</tns:password>
+				<tns:webservice-service>
+					<tns:port>7600</tns:port>
+					<tns:prefix>petals/ws</tns:prefix>
+				</tns:webservice-service>
+				<tns:jmx-service>
+					<tns:rmi-port>7700</tns:rmi-port>
+				</tns:jmx-service>
+				<tns:transport-service>
+					<tns:tcp-port>7800</tns:tcp-port>
+				</tns:transport-service>
+				<tns:registry-service>
+					<tns:port>7900</tns:port>
+					<!-- service is under services/RegistryService -->
+				</tns:registry-service>
+			</tns:container>
+
+			<tns:container name="SOA4ALL-OVH-00">
+				<tns:description>description of the container 1</tns:description>
+				<tns:host>ns306320.ovh.net</tns:host>
+				<tns:user>petals</tns:user>
+				<tns:password>petals</tns:password>
+				<tns:webservice-service>
+					<tns:port>7600</tns:port>
+					<tns:prefix>petals/ws</tns:prefix>
+				</tns:webservice-service>
+				<tns:jmx-service>
+					<tns:rmi-port>7700</tns:rmi-port>
+				</tns:jmx-service>
+				<tns:transport-service>
+					<tns:tcp-port>7800</tns:tcp-port>
+				</tns:transport-service>
+				<tns:registry-service>
+					<tns:port>7900</tns:port>
+					<!-- service is under services/RegistryService -->
+				</tns:registry-service>
+			</tns:container>
+
+			<tns:container name="SOA4ALL-UIBK-00">
+				<tns:description>description of the container 1</tns:description>
+				<tns:host>soa4all-runtime.sti2.at</tns:host>
+				<tns:user>petals</tns:user>
+				<tns:password>petals</tns:password>
+				<tns:webservice-service>
+					<tns:port>7600</tns:port>
+					<tns:prefix>petals/ws</tns:prefix>
+				</tns:webservice-service>
+				<tns:jmx-service>
+					<tns:rmi-port>7700</tns:rmi-port>
+				</tns:jmx-service>
+				<tns:transport-service>
+					<tns:tcp-port>7800</tns:tcp-port>
+				</tns:transport-service>
+				<tns:registry-service>
+					<tns:port>7900</tns:port>
+					<!-- service is under services/RegistryService -->
+				</tns:registry-service>
+			</tns:container>
+
+		</tns:sub-domain>
+	</tns:domain>
+</tns:topology>

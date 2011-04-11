@@ -1,0 +1,37 @@
+<!DOCTYPE definition PUBLIC "-//objectweb.org//DTD Fractal ADL 2.0//EN"
+    "classpath://org/objectweb/fractal/adl/xml/standard.dtd">
+
+<definition name="ToolsType">
+
+  <!-- provides -->
+  <interface signature="org.ow2.petals.tools.ws.WebServiceManager" role="server" name="ws"/>
+
+  <!-- client -->
+  <interface signature="org.ow2.petals.kernel.configuration.ConfigurationService" role="client" name="configuration"/>
+  <interface signature="org.ow2.petals.system.repository.artifact.ArtifactRepositoryService" role="client" name="artifactrepository"/>
+  <interface signature="org.ow2.petals.jbi.messaging.registry.EndpointRegistry" role="client" name="endpoint"/>
+  <interface signature="org.petalslink.dsb.kernel.monitor.router.MonitoringStorageService" role="client" name="storage"/>
+  <interface signature="org.ow2.petals.jbi.management.admin.AdminService" role="client" name="adminService"/>
+  <interface signature="org.ow2.petals.kernel.admin.PetalsAdminInterface" role="client" name="petalsAdminService"/>
+  <interface signature="org.ow2.petals.communication.topology.TopologyService" role="client" name="topology"/>
+  <interface signature="org.ow2.petals.jbi.management.installation.ComponentInstallationService" role="client" name="componentInstallationService"/>
+  <interface signature="org.ow2.petals.jbi.management.deployment.AtomicDeploymentService" role="client" name="atomicDeploymentService"/>
+  <interface signature="org.ow2.petals.communication.jndi.client.JNDIService" role="client" name="jndi"/>
+  
+  <interface signature="org.ow2.petals.jbi.management.deployment.DeploymentServiceMBean" role="client" name="deployment"/>
+  <interface signature="org.petalslink.dsb.kernel.management.binder.ServiceExposerRegistry" role="client" name="exposer-registry"/>
+  <interface signature="org.petalslink.dsb.kernel.management.binder.ServiceBinderRegistry" role="client" name="binder-registry"/>
+  <interface signature="org.petalslink.dsb.kernel.management.binder.ServiceRegistry" role="client" name="service-registry"/>
+  <interface signature="org.petalslink.dsb.kernel.management.component.ComponentInformationService" role="client" name="component-information"/>
+  <interface signature="org.petalslink.dsb.kernel.management.binder.NewServiceExposer" role="client" name="new-service-exposer"/>
+  <interface signature="org.petalslink.dsb.kernel.management.cron.ServicePoller" role="client" name="service-poller"/>
+  <!--<interface name="federationengine" role="client" signature="org.petalslink.dsb.kernel.federation.FederationEngine" />-->
+
+
+  <!-- Provide some services -->
+  <interface signature="org.ow2.petals.kernel.ws.api.InformationService" role="server" name="ws-information"/>
+  <interface signature="org.ow2.petals.kernel.ws.api.JBIArtefactsService" role="server" name="ws-jbiart"/>
+  <interface signature="org.petalslink.dsb.ws.api.ServiceInformation" role="server" name="ws-serviceinfo"/>
+  <interface signature="org.petalslink.dsb.ws.api.DSBInformationService" role="server" name="ws-dsbinformation"/>
+  
+</definition>
