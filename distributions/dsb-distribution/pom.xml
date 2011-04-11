@@ -55,6 +55,7 @@
 			<!-- <scope>runtime</scope> -->
 		</dependency>
 		
+		<!-- Raw monitoring -->
 		<dependency>
 			<groupId>org.petalslink.dsb</groupId>
 			<artifactId>dsb-monitoring</artifactId>

@@ -33,7 +33,7 @@
 	<name>Petals DSB Distributions Builder</name>
 	<artifactId>petals-distributions-builder</artifactId>
 	<groupId>org.petalslink.dsb</groupId>
-	<version>SNAPSHOT</version>
+	<version>1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<modules>
