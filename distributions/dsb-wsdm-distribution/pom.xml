@@ -61,6 +61,13 @@
 			<version>${project.version}</version>
 			<!-- <scope>runtime</scope> -->
 		</dependency>
+		
+		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>dsb-wsdm</artifactId>
+			<version>${project.version}</version>
+			<!-- <scope>runtime</scope> -->
+		</dependency>
 
 		<dependency>
 			<groupId>org.petalslink.dsb</groupId>
