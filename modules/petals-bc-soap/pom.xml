@@ -230,7 +230,7 @@
 		<repository>
 			<!-- This is to bypass the httpcore nio bad dependency on Apache which has moved and so the redirect does not work...-->
 			<id>ebmws-others.release</id>
-			<url>http://maven2.petalslink.org/others</url>
+			<url>http://maven.petalslink.com/others</url>
 			<releases>
 				<enabled>true</enabled>
 			</releases>
