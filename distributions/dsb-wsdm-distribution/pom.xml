@@ -10,7 +10,7 @@
 	</parent>
 	
 	<groupId>org.petalslink.dsb</groupId>
-	<artifactId>dsb-distribution</artifactId>
+	<artifactId>dsb-wsdm-distribution</artifactId>
 	<name>dsb-distribution</name>
 	
 	<scm>
