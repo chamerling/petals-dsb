@@ -22,14 +22,14 @@
 	      <uniqueVersion>false</uniqueVersion>
 	      <id>petalslink-public.release</id>
 	      <name>PetalsLink Maven 2 Releases Public Repository</name>
-	      <url>http://maven2.petalslink.com/public</url>
+	      <url>http://maven.petalslink.com/public</url>
 	      <layout>default</layout>
 	    </repository>
 	    <snapshotRepository>
 	      <uniqueVersion>true</uniqueVersion>
 	      <id>petalslink-public.snapshot</id>
 	      <name>PetalsLink Maven 2 Snapshots Public Repository</name>
-	      <url>http://maven2.petalslink.com/public-snapshot</url>
+	      <url>http://maven.petalslink.com/public-snapshot</url>
 	      <layout>default</layout>
 	    </snapshotRepository>
 	</distributionManagement>
@@ -52,9 +52,9 @@
 			<id>chamerling</id>
 			<email>christophe.hamerling@petalslink.com</email>
 			<url>http://chamerling.org</url>
-			<organization>EBM WebSourcing</organization>
+			<organization>PetalsLink</organization>
 			<organizationUrl>
-				http://www.ebmwebsourcing.com
+				http://www.petalslink.com
 			</organizationUrl>
 			<roles>
 				<role>Developer</role>
