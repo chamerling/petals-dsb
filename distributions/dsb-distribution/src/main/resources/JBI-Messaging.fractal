@@ -38,13 +38,6 @@
 
 	<component definition="org.petalslink.dsb.kernel.messaging.FractalEndpointSearchEngineImpl" name="EndpointSearchEngineImpl" />
 
-	<!-- WSDM -->
-	<!-- TODO : Move in a dedicated monitoring component... -->
-	<component definition="org.petalslink.dsb.kernel.monitor.wsdm.FileConfigurationServiceImpl" name="MonitoringConfigurationServiceImpl" />
-	<component definition="org.petalslink.dsb.kernel.monitor.wsdm.registry.MonitoringNotifierImpl" name="MonitoringNotifierImpl" />
-	<component definition="org.petalslink.dsb.kernel.monitor.wsdm.timstamp.TimeStampModule" name="TimeStampModule" />
-	<component definition="org.petalslink.dsb.kernel.monitor.wsdm.report.ReportModule" name="ReportModule" />
-
 	<binding client="UpdateRemoteTansportModule.dsbconfiguration" server="this.dsbconfiguration" />
 	
 	<!-- <binding client="FederationEndpointResolverModule.dsbconfiguration" server="this.dsbconfiguration" />
@@ -53,9 +46,6 @@
 	<binding client="FederationEndpointUpdaterModule.dsbconfiguration" server="this.dsbconfiguration" />
 	<binding client="FederationEndpointUpdaterModule.topology" server="this.topology" />
 -->
-	<binding client="MonitoringConfigurationServiceImpl.configuration" server="this.configuration" />
-	<binding client="MonitoringNotifierImpl.monitoringconfiguration" server="MonitoringConfigurationServiceImpl.service" />
-	<binding client="ReportModule.monitoringconfiguration" server="MonitoringConfigurationServiceImpl.service" />
 
 	<!-- Expose -->
 	<binding client="this.router" server="MonitoringModuleImpl.service" />
@@ -70,12 +60,6 @@
 	<!-- registry -->
 	<binding client="EndpointRegistryImpl.configuration" server="this.configuration" />
 	<binding client="EndpointRegistryImpl.topology" server="this.topology" />
-
-	<!-- SOA4ALL : Modules for WSDM monnitoring -->
-	<binding client="RouterServiceImpl.sendermodule-8" server="TimeStampModule.timestampSender" />
-	<binding client="RouterServiceImpl.sendermodule-7" server="ReportModule.reportSender" />
-	<binding client="RouterServiceImpl.receivermodule-2" server="TimeStampModule.timestampReceiver" />
-	<binding client="RouterServiceImpl.receivermodule-1" server="ReportModule.reportReceiver" />
 
 	<binding client="EndpointSearchEngineImpl.topology" server="this.topology" />
 	<binding client="EndpointSearchEngineImpl.configuration" server="this.configuration" />
@@ -114,8 +98,5 @@
 
 	<binding client="TransportResolverModule.configuration" server="this.configuration" />
 	<binding client="ExchangeCheckerClientImpl.jmx" server="this.jmx" />
-
-	<!-- WSDM listener -->
-	<binding client="EndpointRegistryImpl.listener-wsdmnotif" server="MonitoringNotifierImpl.service" />
 
 </definition>
