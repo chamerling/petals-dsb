@@ -56,7 +56,6 @@
    		<module>modules/dsb-transport-cxf</module>
    		<module>modules/dsb-transport-xmpp</module>
    		<module>modules/dsb-monitoring</module>
-   		<module>modules/dsb-wsdm</module>
 
    		<!--<module>modules/dsb-transport-extensions</module>-->
 		<module>modules/dsb-launcher</module>
@@ -91,6 +90,14 @@
 				<module>distributions/dsb-distribution</module>
 				<!--<module>distributions/fdsb-distribution</module>-->
 				<module>distributions/dsb-installer</module>
+			</modules>
+		</profile>
+		<profile>
+			<!-- This profile may contain modules which depends on other profiles...-->
+			<id>sandbox</id>
+			<modules>
+				<module>sandbox/dsb-wsdm</module>
+				<module>sandbox/dsb-wsdm-distribution</module>
 			</modules>
 		</profile>
 	</profiles>

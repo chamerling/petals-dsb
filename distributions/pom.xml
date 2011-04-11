@@ -38,7 +38,6 @@
 
 	<modules>
 		<module>dsb-distribution</module>
-		<module>dsb-wsdm-distribution</module>
 		<module>dsb-installer</module>
   </modules>
 
