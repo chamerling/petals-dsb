@@ -84,7 +84,7 @@
 <repository>
                 <id>ebmws-private.3rdparty</id>
                 <name>eBMWebsourcing 3rd Party Repository</name>
-                <url>http://maven.ebmwebsourcing.com/3rdparty</url>
+                <url>http://maven.petalslink.com/3rdparty</url>
                 <releases>
                     <enabled>true</enabled>
                 </releases>
@@ -95,7 +95,7 @@
   <repository>
                 <id>ebmws-public.release</id>
                 <name>eBMWebsourcing Public Releases Repository</name>
-                <url>http://maven.ebmwebsourcing.com/public</url>
+                <url>http://maven.petalslink.com/public</url>
                 <releases>
                     <enabled>true</enabled>
                 </releases>
@@ -106,7 +106,7 @@
             <repository>
                 <id>ebmws-public.snapshot</id>
                 <name>eBMWebsourcing Public Snapshot Repository</name>
-                <url>http://maven.ebmwebsourcing.com/public-snapshot</url>
+                <url>http://maven.petalslink.com/public-snapshot</url>
                 <releases>
                     <enabled>false</enabled>
                 </releases>

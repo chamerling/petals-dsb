@@ -16,7 +16,7 @@
 		<module>parent</module>
 		<module>esb-kernel</module>
 		<module>esb-monitoring</module>
-		<module>petals4monitoring</module>
+		<!--<module>petals4monitoring</module>-->
 	</modules>
   
 </project>
