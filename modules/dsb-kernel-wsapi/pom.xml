@@ -12,6 +12,8 @@
 	<artifactId>dsb-kernel-wsapi</artifactId>
 	<name>dsb-kernel-wsapi</name>
 	
+	<description>The Distributed Service Bus Kernel WS API</description>
+	
 	<scm>
       <connection>scm:svn:https://svn.petalslink.com/svnroot/trunk/research/commons/dsb/modules/dsb-kernel-wsapi</connection>
       <developerConnection>${project.scm.connection}</developerConnection>
@@ -28,8 +30,6 @@
 		<dependency>
 			<groupId>org.ow2.petals</groupId>
 			<artifactId>petals-kernel-wsapi</artifactId>
-			<version>1.0</version>
-			<!-- <scope>provided</scope>-->
 		</dependency>
 
 	</dependencies>
