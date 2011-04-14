@@ -16,6 +16,25 @@
 	<groupId>org.petalslink.dsb</groupId>
 	<packaging>pom</packaging>
 	<version>1.0-SNAPSHOT</version>
+	
+	<organization>
+    	<name>PetalsLink Labs</name>
+    	<url>http://research.petalslink.org</url>
+  	</organization>
+
+  	<inceptionYear>2010</inceptionYear>
+	<url>http://labs.petalslink.org/commons/dsb/</url>
+	<description>Distributed Service Bus</description>
+	
+	<mailingLists>
+    	<mailingList>
+      		<name>PETALS Distributed Service Bus Mailing List</name>
+      		<subscribe>petalsdsb-subscribe@lists.petalslink.org</subscribe>
+			<post>petalsdsb@lists.petalslink.org</post>
+     		<unsubscribe>petalsdsb-unsubscribe@lists.petalslink.org</unsubscribe>
+      		<archive>http://lists.petalslink.org/pipermail/petalsdsb/</archive>
+    	</mailingList>
+    </mailingLists>
 
 	<distributionManagement>
 	 <repository>
@@ -32,12 +51,27 @@
 	      <url>http://maven.petalslink.com/public-snapshot</url>
 	      <layout>default</layout>
 	    </snapshotRepository>
+		<site>
+			<id>labs.site.deployments</id>
+			<name>Labs Site deployments</name>
+			<url>scp://labs.petalslink.org:/home/www/labs/commons/dsb/sites/${project.version}/</url>
+		</site>
 	</distributionManagement>
-
+	
+	<ciManagement>
+    	<system>Jenkins</system>
+    	<url>http://hudson-master.petalslink.com/</url>
+	</ciManagement>
+	
   	<scm>
       <connection>scm:svn:https://svn.petalslink.com/svnroot/trunk/research/commons/dsb/modules/dsb-parent</connection>
       <developerConnection>${project.scm.connection}</developerConnection>
+	  <url>http://svn.petalslink.com/svnroot/trunk/research/commons/dsb/modules/dsb-parent</url>
   	</scm>
+
+  	<issueManagement>
+    	<url>http://jira.petalslink.com/browse/COMMONS</url>
+  	</issueManagement>
 		
 	<licenses>
 		<license>
@@ -72,6 +106,7 @@
 		<mprojectinfo.version>2.0-beta-3</mprojectinfo.version>
 		<umlgraph.version>4.6</umlgraph.version>
 		<petalsesb.kernel.version>3.0.4</petalsesb.kernel.version>
+		<petalsesb.kernel-wsapi.version>1.0</petalsesb.kernel-wsapi.version>
 		<petalsesb.launcher.version>1.3.1</petalsesb.launcher.version>
 		<petalsesb.jbi.version>1.0.1</petalsesb.jbi.version>
 		<topDirectoryLocation>..</topDirectoryLocation>
@@ -161,6 +196,11 @@
 				<artifactId>petals-jbi</artifactId>
 				<version>${petalsesb.jbi.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>org.ow2.petals</groupId>
+				<artifactId>petals-kernel-wsapi</artifactId>
+				<version>${petalsesb.kernel-wsapi.version}</version>
+			</dependency>
 
 			<dependency>
 				<groupId>junit</groupId>
@@ -204,24 +244,46 @@
 	</dependencyManagement>
 
 	<build>
-    		<extensions>
-      			<!-- Enabling the use of FTP -->
-      			<!--<extension>
-        			<groupId>org.apache.maven.wagon</groupId>
-         			<artifactId>wagon-ftp</artifactId>
-     	    			<version>1.0-beta-6</version>
-      			</extension>
+   		<extensions>
+     			<!-- Enabling the use of FTP -->
+     			<!--<extension>
+       			<groupId>org.apache.maven.wagon</groupId>
+        			<artifactId>wagon-ftp</artifactId>
+    	    			<version>1.0-beta-6</version>
+     			</extension>
 -->
-    		</extensions>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-eclipse-plugin</artifactId>
-						<version>2.7</version>
-						<configuration>
-							<addGroupIdToProjectName>true</addGroupIdToProjectName>
-						</configuration>
-					</plugin>
-				</plugins>
+			<!-- Maven 3 does not come with the wagon SSH, so add it as extension -->
+			<extension> 
+      			<groupId>org.apache.maven.wagon</groupId> 
+      			<artifactId>wagon-ssh</artifactId> 
+      			<version>1.0-beta-7</version> 
+    		</extension>
+   		</extensions>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<version>2.7</version>
+				<configuration>
+					<addGroupIdToProjectName>true</addGroupIdToProjectName>
+				</configuration>
+			</plugin>
+		</plugins>
   	</build>
+	<reporting>
+	    <plugins>
+	      <plugin>
+	        <groupId>org.apache.maven.plugins</groupId>
+	        <artifactId>maven-javadoc-plugin</artifactId>
+	        <version>2.7</version>
+	        <configuration>
+	          <links>
+	            <link>http://www.petalslink.com</link>
+	            <link>http://research.petalslink.com</link>
+	            <link>http://ow2.org</link>
+	          </links>
+	        </configuration>
+	      </plugin>
+	    </plugins>
+	  </reporting>
 </project>
