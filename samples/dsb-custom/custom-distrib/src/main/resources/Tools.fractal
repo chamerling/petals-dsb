@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE definition PUBLIC "-//objectweb.org//DTD Fractal ADL 2.0//EN" "classpath://org/objectweb/fractal/adl/xml/standard.dtd">
+
+<definition extends="ToolsType" name="Tools">
+
+  <!-- Defines the internal components -->
+  <!-- Replaced by SOA4All implementation -->
+  <!-- <component definition="org.ow2.petals.tools.ws.WebServiceManagerImpl" name="WebServiceManagerImpl"/>-->
+  <component definition="org.petalslink.dsb.kernel.tools.ws.WebServiceManagerImpl" name="WebServiceManagerImpl"/>
+  <component definition="org.petalslink.dsb.kernel.tools.ws.CXFWebServiceExposerImpl" name="WebServiceExposerImpl"/>
+  <component definition="org.petalslink.dsb.kernel.tools.ws.WebServiceRegistryImpl" name="WebServiceRegistryImpl"/>
+  
+  <!-- Web services -->
+  <component definition="org.ow2.petals.ws.ArtifactRepositoryServiceImpl" name="ArtifactRepositoryWebServiceImpl"/>
+  <component definition="org.ow2.petals.ws.EndpointServiceImpl" name="EndpointWebServiceImpl"/>
+  <component definition="org.ow2.petals.ws.TopologyServiceImpl" name="TopologyWebServiceImpl"/>
+  <component definition="org.ow2.petals.ws.InformationServiceImpl" name="InformationWebServiceImpl"/>
+  <component definition="org.ow2.petals.ws.RuntimeServiceImpl" name="RuntimeWebServiceImpl"/>
+  <component definition="org.ow2.petals.ws.JBIArtefactsServiceImpl" name="JBIArtefactsWebServiceImpl"/>
+  <component definition="org.ow2.petals.ws.DeploymentServiceImpl" name="DeploymentWebServiceImpl"/>
+  <component definition="org.ow2.petals.ws.InstallationServiceImpl" name="InstallationWebServiceImpl"/>
+  <component definition="org.ow2.petals.ws.ServiceAssemblyStateServiceImpl" name="ServiceAssemblyStateWebServiceImpl"/>
+  
+  <!-- DSB specific services -->
+  <component definition="org.petalslink.dsb.kernel.ws.HelloServiceImpl" name="HelloWebServiceImpl"/>
+  <component definition="org.petalslink.dsb.kernel.monitor.ws.DistributedMonitoringServiceImpl" name="MonitoringServiceImpl"/>
+  <component definition="org.petalslink.dsb.kernel.ws.ServiceBinderImpl" name="ServiceBinderImpl"/>
+  <component definition="org.petalslink.dsb.kernel.ws.JNDIBrowserServiceImpl" name="JNDIBrowserServiceImpl"/>
+  <component definition="org.petalslink.dsb.kernel.ws.ServiceInformationImpl" name="ServiceInformationImpl"/>
+  <component definition="org.petalslink.dsb.kernel.ws.DSBInformationServiceImpl" name="DSBInformationServiceImpl"/>
+  <component definition="org.petalslink.dsb.kernel.ws.ExposerServiceImpl" name="ExposerServiceImpl"/>
+  <component definition="org.petalslink.dsb.kernel.ws.NewServicePollerServiceImpl" name="NewServicePollerServiceImpl"/>
+  <component definition="org.petalslink.dsb.kernel.ws.RemoteCheckerServiceImpl" name="RemoteCheckerServiceImpl"/>
+  <!--<component definition="org.petalslink.dsb.kernel.ws.FederationServiceImpl" name="FederationServiceImpl"/>-->
+  <component definition="org.petalslink.dsb.kernel.ws.TestServiceImpl" name="TestServiceImpl"/>
+  <component definition="org.petalslink.dsb.kernel.ws.ProxyInformationServiceImpl" name="ProxyInformationServiceImpl"/>
+  <component definition="org.petalslink.dsb.kernel.ws.PlatformServiceInformationServiceImpl" name="PlatformServiceInformationServiceImpl"/>
+  <component definition="org.petalslink.dsb.kernel.ws.RESTServiceExposerServiceImpl" name="RESTServiceExposerImpl"/>
+  <component definition="org.petalslink.dsb.kernel.ws.SOAPServiceExposerServiceImpl" name="SOAPServiceExposerImpl"/>
+
+  <component definition="org.petalslink.dsb.kernel.ws.RESTServiceBinderServiceImpl" name="RESTServiceBinderImpl"/>
+  <component definition="org.petalslink.dsb.kernel.ws.SOAPServiceBinderServiceImpl" name="SOAPServiceBinderImpl"/>
+  
+  <!-- /Web services -->
+  
+  <!-- Connect to provider -->
+  <binding client="this.ws" server="WebServiceManagerImpl.service"/>
+  
+  <binding client="this.ws-information" server="InformationWebServiceImpl.webservice"/>
+  <binding client="this.ws-jbiart" server="JBIArtefactsWebServiceImpl.webservice"/>
+  <binding client="this.ws-serviceinfo" server="ServiceInformationImpl.webservice"/>
+  <binding client="this.ws-dsbinformation" server="DSBInformationServiceImpl.webservice"/>
+  
+  <!-- Connect to consume -->
+  <binding client="ArtifactRepositoryWebServiceImpl.artifactrepository" server="this.artifactrepository"/>
+  <binding client="ArtifactRepositoryWebServiceImpl.configuration" server="this.configuration"/>
+  <binding client="EndpointWebServiceImpl.endpoint" server="this.endpoint"/>
+  <binding client="TopologyWebServiceImpl.topology" server="this.topology"/>
+  <binding client="InformationWebServiceImpl.adminService" server="this.adminService"/>
+  <binding client="RuntimeWebServiceImpl.petalsAdminService" server="this.petalsAdminService"/>
+  <binding client="JBIArtefactsWebServiceImpl.adminService" server="this.adminService"/>
+  <binding client="DeploymentWebServiceImpl.artifactrepository" server="this.artifactrepository"/>
+  <binding client="DeploymentWebServiceImpl.deployment" server="this.atomicDeploymentService"/>
+  <binding client="InstallationWebServiceImpl.artifactrepository" server="this.artifactrepository"/>
+  <binding client="InstallationWebServiceImpl.componentInstallation" server="this.componentInstallationService"/>
+  <binding client="ServiceAssemblyStateWebServiceImpl.adminService" server="this.adminService"/>
+  
+  <!-- SOA4All -->
+  <binding client="MonitoringServiceImpl.storageService" server="this.storage"/>
+  <binding client="MonitoringServiceImpl.topologyService" server="this.topology"/>
+  <binding client="MonitoringServiceImpl.registryService" server="this.endpoint"/>
+  
+  <!-- DEPRECATED : use SOAPServiceBinderImpl and RESTServiceBinderImpl define below -->
+  <binding client="ServiceBinderImpl.soapservice-binder" server="SOAPServiceBinderImpl.webservice"/>
+  <binding client="ServiceBinderImpl.restservice-binder" server="RESTServiceBinderImpl.webservice"/>
+  <!-- END OF DEPRECATED -->
+  
+  <binding client="JNDIBrowserServiceImpl.jndi" server="this.jndi"/>
+  <binding client="ServiceInformationImpl.component-information" server="this.component-information"/>
+  <binding client="ServiceInformationImpl.configuration" server="this.configuration"/>
+  
+  <binding client="DSBInformationServiceImpl.wsmanager" server="WebServiceManagerImpl.service"/>
+  
+  <binding client="ExposerServiceImpl.new-service-exposer" server="this.new-service-exposer"/>
+  <binding client="NewServicePollerServiceImpl.service-poller" server="this.service-poller"/>
+  
+  <!--<binding client="FederationServiceImpl.federationengine" server="this.federationengine"/>-->
+  
+  <binding client="ProxyInformationServiceImpl.configuration" server="this.configuration"/>
+  <binding client="ProxyInformationServiceImpl.component-information" server="this.component-information"/>
+  
+  <binding client="PlatformServiceInformationServiceImpl.configuration" server="this.configuration"/>
+  <binding client="PlatformServiceInformationServiceImpl.component-information" server="this.component-information"/>
+  <binding client="PlatformServiceInformationServiceImpl.endpointregistry" server="this.endpoint"/>
+  
+  <binding client="SOAPServiceExposerImpl.exposer-registry" server="this.exposer-registry"/>
+  <binding client="RESTServiceExposerImpl.exposer-registry" server="this.exposer-registry"/>
+
+  <binding client="SOAPServiceBinderImpl.binder-registry" server="this.binder-registry"/>
+  <binding client="SOAPServiceBinderImpl.service-registry" server="this.service-registry"/>
+  
+  <binding client="RESTServiceBinderImpl.binder-registry" server="this.binder-registry"/>
+  <binding client="RESTServiceBinderImpl.service-registry" server="this.service-registry"/>
+  
+  <!-- Web service manager -->  
+  <!-- Update for new manager -->
+  <binding client="WebServiceManagerImpl.wsexposer" server="WebServiceExposerImpl.service"/>
+  <binding client="WebServiceManagerImpl.wsregistry" server="WebServiceRegistryImpl.service"/>
+  <binding client="WebServiceExposerImpl.configuration" server="this.configuration"/>
+  
+  <!-- Give the list of all components to be exposed as web services, the manager will expose them at startup -->
+  <!--  TODO : This should be done automatically by configuration or introspection... -->
+  <!-- DONE! -->
+  <!-- 
+  <binding client="WebServiceManagerImpl.webservice-artifactrepository" server="ArtifactRepositoryWebServiceImpl.service"/>
+  <binding client="WebServiceManagerImpl.webservice-endpoint" server="EndpointWebServiceImpl.service"/>
+  <binding client="WebServiceManagerImpl.webservice-topology" server="TopologyWebServiceImpl.service"/>
+  <binding client="WebServiceManagerImpl.webservice-information" server="InformationWebServiceImpl.service"/>
+  <binding client="WebServiceManagerImpl.webservice-runtime" server="RuntimeWebServiceImpl.service"/>
+  <binding client="WebServiceManagerImpl.webservice-jbiartefacts" server="JBIArtefactsWebServiceImpl.service"/>
+  <binding client="WebServiceManagerImpl.webservice-installation" server="InstallationWebServiceImpl.service"/>
+  <binding client="WebServiceManagerImpl.webservice-deployment" server="DeploymentWebServiceImpl.service"/>
+  <binding client="WebServiceManagerImpl.webservice-sastateservice" server="ServiceAssemblyStateWebServiceImpl.service"/>  
+  -->
+  
+  <!-- SOA4All -->
+  <!-- 
+  <binding client="WebServiceManagerImpl.webservice-hello" server="HelloWebServiceImpl.service"/>
+  <binding client="WebServiceManagerImpl.webservice-monitoring" server="MonitoringServiceImpl.service"/>
+  <binding client="WebServiceManagerImpl.webservice-binder" server="ServiceBinderImpl.service"/>
+  <binding client="WebServiceManagerImpl.webservice-jndibrowser" server="JNDIBrowserServiceImpl.service"/>
+  <binding client="WebServiceManagerImpl.webservice-serviceinformation" server="ServiceInformationImpl.service"/>
+  <binding client="WebServiceManagerImpl.webservice-dsbinformation" server="DSBInformationServiceImpl.service"/>
+  <binding client="WebServiceManagerImpl.webservice-exposer" server="ExposerServiceImpl.service"/>
+  <binding client="WebServiceManagerImpl.webservice-servicepoller" server="NewServicePollerServiceImpl.service"/>
+  <binding client="WebServiceManagerImpl.webservice-remotechecker" server="RemoteCheckerServiceImpl.service"/>
+  -->
+  
+  <controller desc="composite"/>
+</definition>

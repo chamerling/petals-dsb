@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!--
+
+		PETALS - PETALS Services Platform. Copyright (C) 2005 Fossil E-Commerce, http://www.fossilec.com This library is free software; you can redistribute it and/or modify it under the terms of the GNU
+		Lesser General Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option) any later version. This library is distributed in the hope that it
+		will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details. You
+		should have received a copy of the GNU Lesser General Public License along with this library; if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+		USA
+	-->
+
+<!DOCTYPE definition PUBLIC "-//objectweb.org//DTD Fractal ADL 2.0//EN"
+    "classpath://org/objectweb/fractal/adl/xml/standard.dtd">
+
+<definition name="Transporter" extends="TransporterType">
+
+	<!-- components -->
+	<component name="LocalTransporter" definition="org.ow2.petals.transport.local.LocalTransporterImpl" />
+	<component name="TcpTransporter" definition="org.ow2.petals.transport.platform.nio.NioTransporterImpl" />
+	<component name="NioTransportProtocol" definition="NioTransportProtocol" />
+
+	<component name="SoapTransporter" definition="org.petalslink.dsb.transport.TransporterImpl" />
+	<component name="SoapClientFactory" definition="org.petalslink.dsb.transport.cxf.CXFClientFactory" />
+	<component name="SoapServer" definition="org.petalslink.dsb.transport.cxf.CXFServerImpl" />
+
+	<!-- XMPP transport -->
+	<component name="XMPPTransporter" definition="org.petalslink.dsb.transport.TransporterImpl" />
+	<component name="XMPPClientFactory" definition="org.petalslink.dsb.transport.xmpp.XMPPClientFactory" />
+	<component name="XMPPServer" definition="org.petalslink.dsb.transport.xmpp.XMPPServerImpl" />
+	
+	
+	<!-- FDSB transport -->
+	<!-- fed is not in this distribution -->
+	<!--
+	<component name="FDSBTransporter" definition="org.petalslink.dsb.transport.TransporterImpl" />
+	<component name="FDSBClientFactory" definition="org.petalslink.dsb.kernel.transport.fdsb.FDSBClientFactory" />
+	<component name="FDSBServer" definition="org.petalslink.dsb.kernel.transport.fdsb.FDSBServerImpl" />
+	-->
+	
+	<!--  Federation Transporter new generation -->
+	<!--
+	<component name="BetaFederationTransporter" definition="org.petalslink.dsb.transport.TransporterImpl" />
+	<component name="BetaFederationClientFactory" definition="org.petalslink.dsb.kernel.transport.federation.FederationClientFactory" />
+	-->
+
+	<!-- Federation Transporter -->
+	<!-- 
+	<component name="FederationTransporter" definition="org.petalslink.dsb.kernel.federation.transporter.FederationTransporter" />
+	-->
+
+	<!-- bindings -->
+	<binding client="this.transporter-local" server="LocalTransporter.service" />
+	<binding client="this.transporter-tcp" server="TcpTransporter.service" />
+	<binding client="this.transporter-soap" server="SoapTransporter.service" />
+	<binding client="this.transporter-xmpp" server="XMPPTransporter.service" />
+	<!--<binding client="this.transporter-fdsb" server="FDSBTransporter.service" />-->
+
+	<binding client="this.transportserver-soap" server="SoapServer.service" />
+	<binding client="this.transportserver-xmpp" server="XMPPServer.service" />
+	<!--<binding client="this.transportserver-fdsb" server="FDSBServer.service" />-->
+	
+
+	<!-- <binding client="this.transporter-federation2" server="BetaFederationTransporter.service" /> -->
+	<!-- <binding client="this.transporter-federation" server="FederationTransporter.service" />-->
+	<!--<binding client="this.federation-receiver" server="BetaFederationTransporter.receiver" />-->
+	
+	<!--<binding client="this.federation-receiver" server="FDSBTransporter.receiver" />-->
+
+	<binding client="LocalTransporter.transportlistener" server="this.transportlistener" />
+	<binding client="TcpTransporter.transportlistener" server="this.transportlistener" />
+	<binding client="TcpTransporter.configuration" server="this.configuration" />
+	<binding client="TcpTransporter.clientsPool" server="NioTransportProtocol.sender" />
+	<binding client="NioTransportProtocol.configuration" server="this.configuration" />
+	<binding client="NioTransportProtocol.topology" server="this.topology" />
+	<binding client="NioTransportProtocol.receiver" server="TcpTransporter.receiver" />
+
+	<!-- SOAP Transport configuration -->
+	<binding client="SoapClientFactory.configuration" server="this.configuration" />
+	<binding client="SoapTransporter.configuration" server="this.configuration" />
+	<binding client="SoapTransporter.transportlistener" server="this.transportlistener" />
+	<binding client="SoapTransporter.clientfactory" server="SoapClientFactory.service" />
+	<binding client="SoapServer.receiver" server="SoapTransporter.receiver" />
+	<binding client="SoapServer.configuration" server="this.configuration" />
+
+	<!-- XMPP transport configuration -->
+	<binding client="XMPPClientFactory.configuration" server="this.configuration" />
+	<binding client="XMPPTransporter.configuration" server="this.configuration" />
+	<binding client="XMPPTransporter.transportlistener" server="this.transportlistener" />
+	<binding client="XMPPTransporter.clientfactory" server="XMPPClientFactory.service" />
+	<binding client="XMPPServer.receiver" server="XMPPTransporter.receiver" />
+	<binding client="XMPPServer.configuration" server="this.configuration" />
+	
+	
+	<!-- FDSB transport configuration -->
+	<!--
+	<binding client="FDSBClientFactory.configuration" server="this.configuration" />
+	<binding client="FDSBTransporter.configuration" server="this.configuration" />
+	<binding client="FDSBTransporter.transportlistener" server="this.transportlistener" />
+	<binding client="FDSBTransporter.clientfactory" server="FDSBClientFactory.service" />
+	<binding client="FDSBServer.receiver" server="FDSBTransporter.receiver" />
+	<binding client="FDSBServer.configuration" server="this.configuration" />
+	<binding client="FDSBServer.dsbconfiguration" server="this.dsbconfiguration" />
+	-->
+	
+	<!-- Beta federation -->
+	<!--
+	<binding client="BetaFederationClientFactory.federationengine" server="this.federationengine" />
+	<binding client="BetaFederationTransporter.transportlistener" server="this.transportlistener" />
+	<binding client="BetaFederationTransporter.configuration" server="this.configuration" />
+	<binding client="BetaFederationTransporter.clientfactory" server="BetaFederationClientFactory.service" />
+	-->
+	
+	<!-- Old federation -->
+	<!--
+		<binding client="FederationTransporter.transportlistener" server="this.transportlistener" /> <binding client="FederationTransporter.configuration" server="this.configuration" /> <binding
+		client="FederationTransporter.dsbconfiguration" server="this.dsbconfiguration" />
+	-->
+</definition>

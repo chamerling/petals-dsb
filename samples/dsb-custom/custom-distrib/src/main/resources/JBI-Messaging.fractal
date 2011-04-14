@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!--
+
+		PETALS - PETALS Services Platform. Copyright (C) 2005 Fossil E-Commerce, http://www.fossilec.com This library is free software; you can redistribute it and/or modify it under the terms of the GNU
+		Lesser General Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option) any later version. This library is distributed in the hope that it
+		will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details. You
+		should have received a copy of the GNU Lesser General Public License along with this library; if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+		USA
+	-->
+<!DOCTYPE definition PUBLIC "-//ow2.objectweb//DTD Fractal ADL 2.0//EN" "classpath://org/objectweb/fractal/adl/xml/standard.dtd">
+
+<definition extends="JBI-MessagingType" name="JBI-Messaging">
+	<!-- SOA4All based registry, same package not in the same project to bypass fractal problem -->
+	<component definition="org.petalslink.dsb.kernel.registry.FractalEndpointRegistryImpl" name="EndpointRegistryImpl" />
+	<component definition="org.petalslink.dsb.kernel.monitor.router.MonitoringModuleImpl" name="MonitoringModuleImpl" />
+	<!--<component definition="org.petalslink.dsb.kernel.monitor.router.RouterMonitorImpl" name="RouterMonitorImpl"/>-->
+	<component definition="org.ow2.petals.jbi.messaging.routing.RouterServiceImpl" name="RouterServiceImpl" />
+	<component definition="org.ow2.petals.jbi.messaging.routing.module.TransportResolverModule" name="TransportResolverModule" />
+	<!-- <component definition="org.ow2.petals.jbi.messaging.routing.module.EndpointResolverModule" name="EndpointResolverModule"/>-->
+	<component definition="org.petalslink.dsb.kernel.messaging.router.modules.FractalEndpointResolverModule" name="EndpointResolverModule" />
+	<!--<component definition="org.ow2.petals.jbi.messaging.routing.module.AuthorizationModule" name="AuthorizationModule"/>-->
+	<component definition="org.ow2.petals.jbi.messaging.control.JMXExchangeCheckerClientImpl" name="ExchangeCheckerClientImpl" />
+	<component definition="org.petalslink.dsb.kernel.monitor.router.MonitoringStorageServiceImpl" name="MonitoringStorageServiceImpl" />
+
+	<component definition="org.petalslink.dsb.kernel.messaging.router.modules.LoggerModule" name="LoggerModule" />
+	
+	<!-- OLD FEDERATION STUFF -->
+	<!--
+		<component definition="org.petalslink.dsb.kernel.federation.router.FederationEndpointResolverModule" name="FederationEndpointResolverModule"/> <component
+		definition="org.petalslink.dsb.kernel.federation.router.FederationEndpointUpdaterModule" name="FederationEndpointUpdaterModule"/>
+	-->
+	<component definition="org.petalslink.dsb.kernel.messaging.router.modules.UpdateRemoteTansportModule" name="UpdateRemoteTansportModule" />
+
+<!--
+	<component definition="org.petalslink.dsb.kernel.federation.routing.FederationEndpointResolverModule" name="FederationEndpointResolverModule" />
+	<component definition="org.petalslink.dsb.kernel.federation.routing.FederationEndpointUpdaterModule" name="FederationEndpointUpdaterModule" />
+-->
+
+	<component definition="org.petalslink.dsb.kernel.messaging.FractalEndpointSearchEngineImpl" name="EndpointSearchEngineImpl" />
+
+	<binding client="UpdateRemoteTansportModule.dsbconfiguration" server="this.dsbconfiguration" />
+	
+	<!-- <binding client="FederationEndpointResolverModule.dsbconfiguration" server="this.dsbconfiguration" />
+	<binding client="FederationEndpointResolverModule.configuration" server="this.configuration" />
+	<binding client="FederationEndpointResolverModule.endpoint-search-engine" server="EndpointSearchEngineImpl.service" />
+	<binding client="FederationEndpointUpdaterModule.dsbconfiguration" server="this.dsbconfiguration" />
+	<binding client="FederationEndpointUpdaterModule.topology" server="this.topology" />
+-->
+
+	<!-- Expose -->
+	<binding client="this.router" server="MonitoringModuleImpl.service" />
+	<binding client="this.transportlistener" server="RouterServiceImpl.transportlistener" />
+	<binding client="this.endpoint" server="EndpointRegistryImpl.service" />
+	<binding client="this.exchangechecker" server="ExchangeCheckerClientImpl.service" />
+	<binding client="this.storage" server="MonitoringStorageServiceImpl.service" />
+	<binding client="this.endpointsearchengine" server="EndpointSearchEngineImpl.service" />
+	<binding client="MonitoringModuleImpl.router" server="RouterServiceImpl.service" />
+	<binding client="MonitoringModuleImpl.storageService" server="MonitoringStorageServiceImpl.service" />
+
+	<!-- registry -->
+	<binding client="EndpointRegistryImpl.configuration" server="this.configuration" />
+	<binding client="EndpointRegistryImpl.topology" server="this.topology" />
+
+	<binding client="EndpointSearchEngineImpl.topology" server="this.topology" />
+	<binding client="EndpointSearchEngineImpl.configuration" server="this.configuration" />
+	<binding client="EndpointSearchEngineImpl.endpoint" server="EndpointRegistryImpl.service" />
+
+	<!-- Fed -->
+	<!--
+	<binding client="FederationEndpointResolverModule.federationendpointsearchengine" server="this.federationendpointsearchengine" />
+	<binding client="FederationEndpointResolverModule.federationengine" server="this.federationengine" />
+	<binding client="FederationEndpointUpdaterModule.topology" server="this.topology" />
+	<binding client="FederationEndpointUpdaterModule.federationengine" server="this.federationengine" />
+	-->
+	<!-- <binding client="FederationEndpointUpdaterModule.topology" server="this.topology" />-->
+
+	<!-- router -->
+	<binding client="RouterServiceImpl.transporter-local" server="this.transporter-local" />
+	<binding client="RouterServiceImpl.transporter-tcp" server="this.transporter-tcp" />
+	<binding client="RouterServiceImpl.transporter-soap" server="this.transporter-soap" />
+	<binding client="RouterServiceImpl.transporter-xmpp" server="this.transporter-xmpp" />
+	<!--<binding client="RouterServiceImpl.transporter-fdsb" server="this.transporter-fdsb" />-->
+	<!-- <binding client="RouterServiceImpl.transporter-federation" server="this.transporter-federation" />-->
+	<!--<binding client="RouterServiceImpl.transporter-federation2" server="this.transporter-federation2" />-->
+
+	<!--the order of collection of bindings is alphabetically inversed -->
+	<binding client="RouterServiceImpl.sendermodule-6" server="EndpointResolverModule.service" />
+	<!--<binding client="RouterServiceImpl.sendermodule-5" server="FederationEndpointResolverModule.service" />-->
+	<binding client="RouterServiceImpl.sendermodule-4" server="TransportResolverModule.service" />
+	<binding client="RouterServiceImpl.sendermodule-3" server="UpdateRemoteTansportModule.service" />
+	<!--<binding client="RouterServiceImpl.sendermodule-2" server="FederationEndpointUpdaterModule.service" />-->
+	<binding client="RouterServiceImpl.sendermodule-1" server="LoggerModule.service" />
+
+
+	<binding client="EndpointResolverModule.configuration" server="this.configuration" />
+	<binding client="EndpointResolverModule.endpoint-search-engine" server="EndpointSearchEngineImpl.service" />
+	<binding client="EndpointResolverModule.checker" server="ExchangeCheckerClientImpl.service" />
+
+	<binding client="TransportResolverModule.configuration" server="this.configuration" />
+	<binding client="ExchangeCheckerClientImpl.jmx" server="this.jmx" />
+
+</definition>
