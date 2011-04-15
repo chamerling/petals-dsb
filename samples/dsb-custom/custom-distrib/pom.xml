@@ -6,7 +6,7 @@
 		<artifactId>dsb-parent</artifactId>
 		<groupId>org.petalslink.dsb</groupId>
 		<version>1.0-SNAPSHOT</version>
-		<relativePath>../../modules/dsb-parent/pom.xml</relativePath>
+		<relativePath>../../../modules/dsb-parent/pom.xml</relativePath>
 	</parent>
 
 	<groupId>org.petalslink.dsb.custom</groupId>
