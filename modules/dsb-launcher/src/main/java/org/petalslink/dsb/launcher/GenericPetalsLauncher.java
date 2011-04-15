@@ -21,6 +21,7 @@ package org.petalslink.dsb.launcher;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
@@ -81,7 +82,7 @@ public class GenericPetalsLauncher extends PlatformLauncher {
      */
     @Override
     protected String getDistributionName() {
-        return (props.get(NAME) != null ? props.get(NAME).toString() : "Petals ESB");
+        return (props.get(NAME) != null ? props.get(NAME).toString() : "Petals DSB");
     }
 
     protected File getJAR(String name) {
@@ -104,9 +105,17 @@ public class GenericPetalsLauncher extends PlatformLauncher {
             SecurityException, NoSuchMethodException, IllegalArgumentException,
             InstantiationException, IllegalAccessException, InvocationTargetException {
 
+        // get the extra jars from the launcher configuration file, this file
+        // must at least contain the main kernek JAR.
         List<URL> jars = this.getJarUrls(this.getJars());
         if (jars.size() == 0) {
-            throw new IOException("Failed to get the PEtALS bootstrap files");
+            throw new IOException("Failed to get the PEtALS DSB bootstrap files");
+        }
+
+        // let's add some JARs from the ext folder...
+        List<URL> exts = getExtraLibs();
+        if (exts != null && exts.size() > 0) {
+            jars.addAll(exts);
         }
 
         ClassLoader petalsKernelClassLoader = new URLClassLoader(
@@ -117,6 +126,39 @@ public class GenericPetalsLauncher extends PlatformLauncher {
         Thread.currentThread().setContextClassLoader(petalsKernelClassLoader);
 
         return newPetalsServer;
+    }
+
+    /**
+     * @return
+     */
+    protected List<URL> getExtraLibs() {
+        File libDirectory = new File(SystemUtil.getPetalsInstallDirectory(), "lib");
+        File extFolder = new File(libDirectory, "ext");
+        List<URL> exts = this.getJarUrls(extFolder);
+        return exts;
+    }
+
+    private List<java.net.URL> getJarUrls(File extFolder) {
+        List<URL> result = null;
+        if (extFolder != null && extFolder.isDirectory()) {
+            result = new ArrayList<URL>();
+            File[] jars = extFolder.listFiles(new FilenameFilter() {
+                public boolean accept(File dir, String name) {
+                    return name.matches("\\.jar");
+                }
+            });
+            if (jars != null) {
+                for (File jar : jars) {
+                    if (jar.exists() && !jar.isDirectory()) {
+                        try {
+                            result.add(jar.toURI().toURL());
+                        } catch (MalformedURLException e) {
+                        }
+                    }
+                }
+            }
+        }
+        return result;
     }
 
     /**
