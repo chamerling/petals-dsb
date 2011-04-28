@@ -99,6 +99,7 @@
 						</manifest>
 						<manifestEntries>
 							<Class-Path>
+								../fractal/
 								../conf/
 								../lib/dsb-launcher-${project.version}.jar
 							</Class-Path>

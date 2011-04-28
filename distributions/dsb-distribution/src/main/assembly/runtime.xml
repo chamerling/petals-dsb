@@ -62,6 +62,11 @@
 			<fileMode>644</fileMode>
 		</fileSet>
 		<fileSet>
+			<directory>src/main/packaging/fractal</directory>
+			<outputDirectory>/fractal</outputDirectory>
+			<fileMode>644</fileMode>
+		</fileSet>
+		<fileSet>
 			<directory>src/main/packaging/schema</directory>
 			<outputDirectory>/schema</outputDirectory>
 			<fileMode>644</fileMode>
