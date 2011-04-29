@@ -1,4 +1,4 @@
-package org.petalslink.dsb.kernel.gms;
+package org.petalslink.gms;
 
 import java.util.Set;
 
@@ -8,7 +8,7 @@ import java.util.Set;
  * @author chamerling
  *
  */
-public interface GMSManager {
+public interface GMSListenerManager {
     
     /**
      * Register a new listener which will be used to dispatch things on group
@@ -16,15 +16,13 @@ public interface GMSManager {
      * @param listener
      */
     void register(GMSListener listener);
-
-    /**
-     * Get the listeners which are aware of the given context
-     * 
-     * @param context
-     * @return
-     */
-    Set<GMSListener> getListeners(GMSContext context);
     
+    /**
+     * 
+     * @param listener
+     */
+    void unregister(GMSListener listener);
+
     /**
      * Get all the listeners
      * 

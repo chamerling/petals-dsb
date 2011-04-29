@@ -1,13 +1,11 @@
-package org.petalslink.dsb.kernel.gms;
-
-import org.petalslink.dsb.api.DSBException;
+package org.petalslink.gms;
 
 /**
  * 
  * @author chamerling - PetalsLink
- *
+ * 
  */
-public class GMSException extends DSBException {
+public class GMSException extends Exception {
 
     /**
      * 

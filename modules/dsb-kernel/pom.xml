@@ -67,6 +67,13 @@
 			<artifactId>dsb-federation-xmpp</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		
+		<!-- For GMS -->
+		<dependency>
+			<groupId>org.petalslink.gms</groupId>
+			<artifactId>gms-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
 		 <!--<dependency>
             <groupId>eu.soa4all.dsb.petals.transport</groupId>
