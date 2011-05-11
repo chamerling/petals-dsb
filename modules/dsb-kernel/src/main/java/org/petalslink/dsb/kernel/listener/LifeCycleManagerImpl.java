@@ -5,9 +5,11 @@ package org.petalslink.dsb.kernel.listener;
 
 import java.lang.reflect.Method;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
+import java.util.TreeMap;
 
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.NoSuchInterfaceException;
@@ -65,22 +67,22 @@ public class LifeCycleManagerImpl implements LifeCycleManager {
                         LifeCycleListener.class);
 
                 // order
-                Set<Bean> set = new TreeSet<Bean>(new Comparator<Bean>() {
-                    public int compare(Bean o1, Bean o2) {
-                        int result = 0;
-                        if (o1.priority > o2.priority) {
-                            result = -1;
-                        } else if (o1.priority == o2.priority) {
-                            result = 0;
-                        } else {
-                            result = 1;
-                        }
-                        return result;
-                    }
-                });
-                
-                this.getBeansForPhase(components, set, Phase.START);
-                this.invoke(set);
+                Map<Integer, Set<Bean>> map = new TreeMap<Integer, Set<Bean>>(
+                        new Comparator<Integer>() {
+                            public int compare(Integer o1, Integer o2) {
+                                int result = 0;
+                                if (o1.intValue() > o2.intValue()) {
+                                    result = -1;
+                                } else if (o1.intValue() == o2.intValue()) {
+                                    result = 0;
+                                } else {
+                                    result = 1;
+                                }
+                                return result;
+                            }
+                        });
+                this.getBeansForPhase(components, map, Phase.START);
+                this.invoke(map);
 
             }
         } catch (Exception e) {
@@ -88,22 +90,29 @@ public class LifeCycleManagerImpl implements LifeCycleManager {
         }
     }
 
-    private void invoke(Set<Bean> set) {
-        for (Bean bean : set) {
-            try {
-                if (this.log.isInfoEnabled()) {
-                    this.log.info("Invoking " + bean.m.getName() + " on "
-                            + bean.o.getClass().getName());
+    private void invoke(Map<Integer, Set<Bean>> map) {
+
+        for (Integer key : map.keySet()) {
+            if (log.isInfoEnabled()) {
+                this.log.info("Calling services for level : " + key);
+            }
+            Set<Bean> set = map.get(key);
+            for (Bean bean : set) {
+                try {
+                    if (this.log.isInfoEnabled()) {
+                        this.log.info("Invoking " + bean.m.getName() + " on "
+                                + bean.o.getClass().getName());
+                    }
+                    bean.m.invoke(bean.o, new Object[0]);
+                } catch (Exception e) {
+                    log.warning(e.getMessage());
                 }
-                bean.m.invoke(bean.o, new Object[0]);
-            } catch (Exception e) {
-                log.warning(e.getMessage());
             }
         }
     }
 
-    private void getBeansForPhase(List<Component> components, Set<Bean> set, Phase phase)
-            throws NoSuchInterfaceException {
+    private void getBeansForPhase(List<Component> components, Map<Integer, Set<Bean>> map,
+            Phase phase) throws NoSuchInterfaceException {
         for (Component c : components) {
             Object content = c.getFcInterface("/content");
             Method[] methods = content.getClass().getMethods();
@@ -114,7 +123,15 @@ public class LifeCycleManagerImpl implements LifeCycleManager {
                     bean.m = m;
                     bean.o = content;
                     bean.priority = m.getAnnotation(LifeCycleListener.class).priority();
-                    set.add(bean);
+                    if (map.get(bean.priority) == null) {
+                        map.put(new Integer(bean.priority), new HashSet<Bean>(/*
+                                                                               * Sort
+                                                                               * by
+                                                                               * name
+                                                                               * ?
+                                                                               */));
+                    }
+                    map.get(bean.priority).add(bean);
                 }
             }
         }
@@ -131,22 +148,23 @@ public class LifeCycleManagerImpl implements LifeCycleManager {
                 List<Component> components = FractalHelper.getAllComponentsWithAnnotation(cc,
                         LifeCycleListener.class);
 
-                // order
-                Set<Bean> set = new TreeSet<Bean>(new Comparator<Bean>() {
-                    public int compare(Bean o1, Bean o2) {
-                        int result = 0;
-                        if (o1.priority > o2.priority) {
-                            result = -1;
-                        } else if (o1.priority == o2.priority) {
-                            result = 0;
-                        } else {
-                            result = 1;
-                        }
-                        return result;
-                    }
-                });
-                this.getBeansForPhase(components, set, Phase.STOP);
-                this.invoke(set);
+                // TODO : Fix the order of the set with the Comparator
+                Map<Integer, Set<Bean>> map = new TreeMap<Integer, Set<Bean>>(
+                        new Comparator<Integer>() {
+                            public int compare(Integer o1, Integer o2) {
+                                int result = 0;
+                                if (o1.intValue() < o2.intValue()) {
+                                    result = -1;
+                                } else if (o1.intValue() == o2.intValue()) {
+                                    result = 0;
+                                } else {
+                                    result = 1;
+                                }
+                                return result;
+                            }
+                        });
+                this.getBeansForPhase(components, map, Phase.STOP);
+                this.invoke(map);
 
             }
         } catch (Exception e) {
