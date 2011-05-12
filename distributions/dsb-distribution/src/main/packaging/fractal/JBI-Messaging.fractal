@@ -22,6 +22,8 @@
 	<component definition="org.ow2.petals.jbi.messaging.control.JMXExchangeCheckerClientImpl" name="ExchangeCheckerClientImpl" />
 	<component definition="org.petalslink.dsb.kernel.monitor.router.MonitoringStorageServiceImpl" name="MonitoringStorageServiceImpl" />
 
+	<component definition="org.petalslink.dsb.kernel.service.CoreServiceRouterModule" name="CoreServiceRouterModule" />
+
 	<component definition="org.petalslink.dsb.kernel.messaging.router.modules.LoggerModule" name="LoggerModule" />
 	
 	<!-- OLD FEDERATION STUFF -->
@@ -73,6 +75,8 @@
 	<binding client="FederationEndpointUpdaterModule.federationengine" server="this.federationengine" />
 	-->
 	<!-- <binding client="FederationEndpointUpdaterModule.topology" server="this.topology" />-->
+	
+	<binding client="CoreServiceRouterModule.topology" server="this.topology"/>
 
 	<!-- router -->
 	<binding client="RouterServiceImpl.transporter-local" server="this.transporter-local" />
@@ -84,6 +88,7 @@
 	<!--<binding client="RouterServiceImpl.transporter-federation2" server="this.transporter-federation2" />-->
 
 	<!--the order of collection of bindings is alphabetically inversed -->
+	<binding client="RouterServiceImpl.sendermodule-7" server="CoreServiceRouterModule.service" />
 	<binding client="RouterServiceImpl.sendermodule-6" server="EndpointResolverModule.service" />
 	<!--<binding client="RouterServiceImpl.sendermodule-5" server="FederationEndpointResolverModule.service" />-->
 	<binding client="RouterServiceImpl.sendermodule-4" server="TransportResolverModule.service" />

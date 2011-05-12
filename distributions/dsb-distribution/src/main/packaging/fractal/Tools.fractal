@@ -41,6 +41,10 @@
   <component definition="org.petalslink.dsb.kernel.ws.RESTServiceBinderServiceImpl" name="RESTServiceBinderImpl"/>
   <component definition="org.petalslink.dsb.kernel.ws.SOAPServiceBinderServiceImpl" name="SOAPServiceBinderImpl"/>
   
+  <!-- TEST -->
+  <component definition="org.petalslink.dsb.kernel.io.client.ClientTestServiceImpl" name="ClientTestServiceImpl"/>
+  
+  
   <!-- /Web services -->
   
   <!-- Connect to provider -->

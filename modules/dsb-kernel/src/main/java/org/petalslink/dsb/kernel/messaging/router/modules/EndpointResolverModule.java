@@ -188,7 +188,7 @@ public class EndpointResolverModule implements SenderModule, PetalsService {
         }
 
         if ((endpoints.size() == 0)) {
-            // has not failed yet... we can still trust in the Federation
+            // has not failed yet... we can still trust in the Federation or in any other routing module...
 //            throw new RoutingException(
 //                    "Failed to find a destination for the MessageExchange with id: "
 //                            + exchange.getExchangeId());

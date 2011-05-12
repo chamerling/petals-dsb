@@ -19,6 +19,9 @@
   <component definition="JBI-Messaging" name="JBI-Messaging"/>
   <component definition="Transporter" name="Transporter"/>
   <!--<component definition="Federation" name="Federation"/>-->
+  <component definition="DSBCoreService" name="DSBCoreService"/>
+  
+  <component definition="org.petalslink.dsb.kernel.io.client.DSBClientFactoryImpl" name="DSBClientFactoryImpl"/>
 
   <binding client="Communication.configuration" server="ConfigurationServiceImpl.service"/>
 
@@ -123,5 +126,13 @@
   <binding client="DSBManagement.federationengine" server="Federation.federationengine"/>
   <binding client="JBI-Messaging.federationendpointsearchengine" server="Federation.federationendpointsearchengine"/>
   -->
+  
+  
+  <!-- Client -->
+  <binding client="DSBClientFactoryImpl.configuration" server="ConfigurationServiceImpl.service"/>
+  <binding client="DSBClientFactoryImpl.router" server="JBI-Messaging.router"/>
+  
+  <binding client="DSBCoreService.router" server="JBI-Messaging.router"/>
+  <binding client="DSBCoreService.configuration" server="ConfigurationServiceImpl.service"/>
   
 </definition>

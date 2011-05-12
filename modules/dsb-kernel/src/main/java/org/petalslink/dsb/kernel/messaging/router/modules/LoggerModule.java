@@ -68,6 +68,12 @@ public class LoggerModule implements SenderModule {
             throws RoutingException {
         if (this.log.isDebugEnabled()) {
             Iterator<ServiceEndpoint> iter = electedEndpoints.keySet().iterator();
+            if (iter.hasNext()) {
+                this.log.debug("Endpoints found :");
+            } else {
+                this.log.debug("No endpoints found!");
+            }
+            
             while (iter.hasNext()) {
                 ServiceEndpoint serviceEndpoint = iter.next();
                 this.log.debug("*****************************");
@@ -83,7 +89,6 @@ public class LoggerModule implements SenderModule {
 
             }
         }
-
     }
 
 }
