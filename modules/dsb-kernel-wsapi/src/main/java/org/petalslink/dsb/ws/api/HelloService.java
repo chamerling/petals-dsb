@@ -23,10 +23,12 @@ import javax.jws.WebService;
 import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
 
 /**
+ * @deprecated just for some testing purposes.
+ * 
  * @author chamerling - eBM WebSourcing
- *
+ * 
  */
-@WebService
+@WebService(name = "HelloService", targetNamespace = "http://api.ws.dsb.petalslink.org/")
 public interface HelloService {
 
     String sayHello(String input) throws PEtALSWebServiceException;

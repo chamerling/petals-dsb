@@ -12,8 +12,11 @@ import javax.jws.WebService;
 import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
 
 /**
+ * This service is in charge of binding external Web services to the DSB. It is
+ * up to the DSB to manage the bindings.
+ * 
  * @author chamerling
- *
+ * 
  */
 @WebService
 public interface SOAPServiceBinder {

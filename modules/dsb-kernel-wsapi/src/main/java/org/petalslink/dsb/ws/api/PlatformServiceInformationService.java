@@ -24,9 +24,12 @@ import javax.jws.WebMethod;
 import javax.jws.WebService;
 
 import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
+import org.petalslink.dsb.ws.api.SOAPServiceBinder;
 
 /**
- * Get informations about platform services.
+ * Get informations about platform services. Platform services are services
+ * which are bound to the DSB using the Binder Services (
+ * {@link SOAPServiceBinder} for example.
  * 
  * @author chamerling - eBM WebSourcing
  * 

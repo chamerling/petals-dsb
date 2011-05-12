@@ -24,11 +24,12 @@ import javax.jws.WebResult;
 import javax.jws.WebService;
 
 import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
+import org.petalslink.dsb.ws.api.SOAPServiceBinder;
 
 /**
  * DEPRECATED : This service bind or proxify existing web services to the bus.
  * 
- * @deprecated
+ * @deprecated, use {@link SOAPServiceBinder}
  * 
  * @author chamerling - eBM WebSourcing
  * 

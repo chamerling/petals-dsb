@@ -22,6 +22,8 @@ import javax.jws.WebMethod;
 import javax.jws.WebService;
 
 /**
+ * @deprecated For testing purposes
+ * 
  * @author chamerling - eBM WebSourcing
  *
  */

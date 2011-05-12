@@ -22,8 +22,10 @@ import javax.jws.WebMethod;
 import javax.jws.WebService;
 
 /**
- * This web service is in charge of exposing the Petals services to the external
- * consumers. If no new service has been found, do nothing!
+ * This web service is in charge of exposing the DSB services to the external
+ * consumers. If no new service has been found, do nothing! All services which
+ * are available in the DSB will be exposed by using Binding Component which
+ * have been configured to expose services.
  * 
  * @author chamerling - eBM WebSourcing
  * 

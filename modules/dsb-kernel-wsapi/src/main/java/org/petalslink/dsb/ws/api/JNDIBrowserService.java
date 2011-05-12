@@ -25,6 +25,7 @@ import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
 
 /**
  * Access to the JNDI information of the local container.
+ * @deprecated : Not used.
  * 
  * @author chamerling - eBM WebSourcing
  * 

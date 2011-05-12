@@ -10,8 +10,11 @@ import javax.jws.WebParam;
 import javax.jws.WebService;
 
 import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
+import org.petalslink.dsb.ws.api.SOAPServiceBinder;
 
 /**
+ * Bind REST services to the Bus. See {@link SOAPServiceBinder} for more details.
+ * 
  * @author chamerling
  *
  */

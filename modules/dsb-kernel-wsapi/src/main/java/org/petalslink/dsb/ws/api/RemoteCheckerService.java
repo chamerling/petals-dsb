@@ -25,7 +25,8 @@ import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
 
 /**
  * This is just a ping service used by remote containers to check if the local
- * container is able to receive messages.
+ * container is able to receive messages. This is used by client and server to
+ * bypass basic JMX connection used in Petals ESB.
  * 
  * @author chamerling - eBM WebSourcing
  * 

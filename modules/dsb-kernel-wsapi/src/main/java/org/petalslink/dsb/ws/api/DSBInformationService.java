@@ -26,7 +26,8 @@ import javax.jws.WebService;
 import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
 
 /**
- * Get all the DSB informations. To be extended.
+ * Get all the DSB informations.
+ * TODO : To be extended.
  * 
  * @author chamerling - eBM WebSourcing
  * 
@@ -36,7 +37,7 @@ public interface DSBInformationService {
 
     /**
      * Get the list of available web services which are provided by the DSB
-     * itself (not by components)
+     * itself (not by components).
      * 
      * @return
      * @throws PEtALSWebServiceException

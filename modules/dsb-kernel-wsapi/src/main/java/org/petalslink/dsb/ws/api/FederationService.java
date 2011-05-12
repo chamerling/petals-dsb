@@ -27,7 +27,8 @@ import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
 import org.ow2.petals.kernel.ws.api.to.Endpoint;
 
 /**
- * Service to invoke some operations on the federation
+ * Service to invoke some operations on the federation.
+ * FIXME : To be extracted in a special module.
  * 
  * @author chamerling - eBM WebSourcing
  * 

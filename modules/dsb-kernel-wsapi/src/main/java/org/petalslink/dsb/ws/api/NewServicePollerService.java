@@ -21,23 +21,26 @@ package org.petalslink.dsb.ws.api;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 
+import org.petalslink.dsb.ws.api.ExposerService;
+
 /**
- * This service manage the lifecycle of the new service detection poller.
+ * This service manage the lifecycle of the new service detection poller. It
+ * means that the DSB polls for new services to be automatically exposed ({@link ExposerService})
  * 
  * @author chamerling - eBM WebSourcing
- *
+ * 
  */
 @WebService
 public interface NewServicePollerService {
     
     /**
-     * Pause the task
+     * Pause the polling task.
      */
     @WebMethod
     void pause();
     
     /**
-     * Resume the task
+     * Resume the polling task.
      */
     @WebMethod
     void resume();
