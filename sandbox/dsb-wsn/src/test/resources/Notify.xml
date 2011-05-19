@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsnt:Notify xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2"
+	xmlns:wsa="http://www.w3.org/2005/08/addressing"
+	targetnamespace="http://docs.oasis-open.org/wsn/b-2">
+	<wsnt:NotificationMessage>
+		<wsnt:SubscriptionReference>
+			<wsa:Address>http://petals.ow2.org/petals-se-EDA::SubscriptionManagerService@f6324db3-486e-46b0-a6aa-eecc76a92eb1</wsa:Address>			
+		</wsnt:SubscriptionReference>
+		<wsnt:Topic Dialect="http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete"
+		xmlns:tns2="http://petals.ow2.org/topicNamespace/MyOtherTopicNamespaceSample">tns2:rootTopic2/childTopic2/childChildTopic1</wsnt:Topic>
+		<wsnt:ProducerReference>
+			<wsa:Address>http://petals.ow2.org/petals-se-EDA::NotificationProducerService@NotificationProducerEndpoint</wsa:Address>			
+		</wsnt:ProducerReference>
+		<wsnt:Message >
+			<npex:NotifyContent xmlns:npex="http://petals.ow2.org/aNamespaceSample">This is the content - payload - of the notification</npex:NotifyContent>
+		</wsnt:Message>
+	</wsnt:NotificationMessage>
+</wsnt:Notify>
