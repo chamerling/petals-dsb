@@ -58,6 +58,9 @@
    		<module>modules/dsb-monitoring</module>
    		<module>modules/dsb-service-client</module>
 
+		<module>modules/dsb-kernel-bpelwsapi</module>
+   		<module>modules/dsb-kernel-bpelwsclient</module>
+
    		<!--<module>modules/dsb-transport-extensions</module>-->
 		<module>modules/dsb-launcher</module>
 		<!-- Petals ESB related things -->
