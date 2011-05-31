@@ -61,6 +61,10 @@
 		<module>modules/dsb-kernel-bpelwsapi</module>
    		<module>modules/dsb-kernel-bpelwsclient</module>
 
+   		<module>modules/dsb-servicepoller</module>
+   		<module>modules/petals-servicepoller</module>
+   		<module>modules/petals-servicepoller2jbi</module>
+
    		<!--<module>modules/dsb-transport-extensions</module>-->
 		<module>modules/dsb-launcher</module>
 		<!-- Petals ESB related things -->
