@@ -10,7 +10,7 @@ import org.w3c.dom.Document;
  * 
  */
 public class PollingContext {
-    
+
     /**
      * The real job...
      */
@@ -27,12 +27,19 @@ public class PollingContext {
     ServiceInformation toPoll;
 
     /**
+     * The transport to use to send the message to the service.
+     */
+    PollingTransport transport;
+
+    /**
      * The service to send the polling response to
      */
     ServiceInformation responseTo;
 
     /**
-     * The input message ie the message sent to the service to poll
+     * The input message ie the message sent to the service to poll. This
+     * message is static for now but the poller can be adapted to get a document
+     * from a repository.
      */
     Document inputMessage;
 
@@ -76,4 +83,11 @@ public class PollingContext {
         this.job = job;
     }
 
+    public PollingTransport getTransport() {
+        return transport;
+    }
+
+    public void setTransport(PollingTransport transport) {
+        this.transport = transport;
+    }
 }

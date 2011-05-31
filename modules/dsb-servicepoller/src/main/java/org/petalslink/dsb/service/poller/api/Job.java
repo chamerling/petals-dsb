@@ -9,6 +9,11 @@ package org.petalslink.dsb.service.poller.api;
  */
 public interface Job {
     
+    /**
+     * 
+     * @param context
+     * @throws PollerException
+     */
     void invoke(PollingContext context) throws PollerException;
 
 }

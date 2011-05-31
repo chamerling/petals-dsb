@@ -6,7 +6,7 @@ package org.petalslink.dsb.service.poller.api;
 import org.w3c.dom.Document;
 
 /**
- * Transport used to send message to services
+ * Transport used to send message to services.
  * 
  * @author chamerling
  * 
@@ -20,6 +20,6 @@ public interface PollingTransport {
      * @param service
      * @return
      */
-    Document send(Document inputMessage, ServiceInformation service);
+    Document send(Document inputMessage, ServiceInformation service) throws PollerException;
 
 }

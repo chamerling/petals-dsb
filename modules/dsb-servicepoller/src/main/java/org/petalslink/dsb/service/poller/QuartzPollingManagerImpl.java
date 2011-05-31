@@ -54,7 +54,6 @@ public class QuartzPollingManagerImpl implements PollingManager {
         try {
             scheduler = sf.getScheduler();
         } catch (SchedulerException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -66,7 +65,6 @@ public class QuartzPollingManagerImpl implements PollingManager {
         try {
             scheduler.start();
         } catch (SchedulerException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         started = true;
@@ -79,7 +77,6 @@ public class QuartzPollingManagerImpl implements PollingManager {
         try {
             this.scheduler.shutdown();
         } catch (SchedulerException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         started = false;

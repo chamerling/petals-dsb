@@ -11,12 +11,27 @@ import javax.xml.namespace.QName;
  */
 public class ServiceInformation {
 
-    QName operation;
+    public QName operation;
 
-    String endpoint;
+    public String endpoint;
 
-    QName service;
+    public QName service;
 
-    QName itf;
+    public QName itf;
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("ServiceInformation [operation=");
+        builder.append(operation);
+        builder.append(", endpoint=");
+        builder.append(endpoint);
+        builder.append(", service=");
+        builder.append(service);
+        builder.append(", itf=");
+        builder.append(itf);
+        builder.append("]");
+        return builder.toString();
+    }
 
 }

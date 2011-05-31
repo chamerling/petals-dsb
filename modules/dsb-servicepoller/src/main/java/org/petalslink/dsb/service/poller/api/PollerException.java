@@ -9,24 +9,25 @@ package org.petalslink.dsb.service.poller.api;
  */
 public class PollerException extends Exception {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -3196013347597760542L;
+
     public PollerException() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
     public PollerException(String message, Throwable cause) {
         super(message, cause);
-        // TODO Auto-generated constructor stub
     }
 
     public PollerException(String message) {
         super(message);
-        // TODO Auto-generated constructor stub
     }
 
     public PollerException(Throwable cause) {
         super(cause);
-        // TODO Auto-generated constructor stub
     }
 
 }
