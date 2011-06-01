@@ -10,7 +10,6 @@ import java.util.Map;
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.ow2.petals.tools.generator.commons.Constants;
 import org.ow2.petals.tools.generator.jbi.api.JBIGenerationException;
@@ -40,14 +39,13 @@ public class Main {
         
         Map<String, String> extensions = new HashMap<String, String>();
         extensions.put(Constants.COMPONENT_VERSION, "1.0");
-        Poller2Jbi generator = new Poller2Jbi("Enpoint",
-                QName.valueOf("{http://petals.ow2.org}Interface"),
-                QName.valueOf("{http://petals.ow2.org}Service"),
-                QName.valueOf("{http://petals.ow2.org}Operation"), document, "ToEnpoint",
+        Poller2Jbi generator = new Poller2Jbi("HelloServicePort",
+                QName.valueOf("{http://api.ws.dsb.petalslink.org/}HelloService"),
+                QName.valueOf("{http://api.ws.dsb.petalslink.org/}HelloServiceService"),
+                QName.valueOf("sayHello"), document, "ToEnpoint",
                 QName.valueOf("{http://petals.ow2.org}ToInterface"),
                 QName.valueOf("{http://petals.ow2.org}ToService"),
                 QName.valueOf("{http://petals.ow2.org}ToOperation"), "* * * * * ?", extensions);
-
         try {
             generator.generate();
         } catch (JBIGenerationException e) {

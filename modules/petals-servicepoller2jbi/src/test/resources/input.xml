@@ -1,4 +1,4 @@
 <?xml version="1.0"?>
-<input>
-	<arg>This is an input message</arg>
-</input>
+<api:sayHello xmlns:api="http://api.ws.dsb.petalslink.org/">
+	<arg0>DSB</arg0>
+</api:sayHello>

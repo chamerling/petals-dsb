@@ -1,5 +1,6 @@
 package org.petalslink.dsb.component.poller;
 
+import java.io.ByteArrayOutputStream;
 import java.util.logging.Level;
 
 import javax.jbi.JBIException;
@@ -7,6 +8,9 @@ import javax.jbi.messaging.MessageExchange;
 import javax.jbi.messaging.MessageExchangeFactory;
 import javax.jbi.messaging.MessagingException;
 import javax.jbi.messaging.NormalizedMessage;
+import javax.xml.transform.Source;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
 
 import org.ow2.petals.component.framework.PetalsBindingComponent;
 import org.ow2.petals.component.framework.api.Message.MEPConstants;
@@ -68,8 +72,18 @@ public class Component extends PetalsBindingComponent implements PollingTranspor
         if (this.getLogger().isLoggable(Level.FINE)) {
             this.getLogger().fine("Sending a message through the JBI channel...");
             this.getLogger().fine("Destination is " + service);
+            try {
+                Source source = new javax.xml.transform.dom.DOMSource(inputMessage);
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                TransformerFactory.newInstance().newTransformer()
+                        .transform(source, new StreamResult(outputStream));
+                this.getLogger().fine("Input message is : " + outputStream.toString());
+            } catch (Exception e) {
+                this.getLogger()
+                        .log(Level.FINE, "Error while creating DOM as String", e.getCause());
+            }
         }
-        
+
         Exchange exchange = null;
         try {
             exchange = this.createMessageExchange();
@@ -149,7 +163,7 @@ public class Component extends PetalsBindingComponent implements PollingTranspor
                         try {
                             result = exchange.getOutMessageContentAsDocument();
                         } catch (MessagingException e) {
-                           throw new PollerException(e.getMessage());
+                            throw new PollerException(e.getMessage());
                         }
                     }
                 } else if (exchange.getFault() != null) {
@@ -168,9 +182,27 @@ public class Component extends PetalsBindingComponent implements PollingTranspor
             }
             throw new PollerException(errorMsg);
         }
+
+        if (this.getLogger().isLoggable(Level.FINE)) {
+            if (result != null) {
+                try {
+                    Source source = new javax.xml.transform.dom.DOMSource(result);
+                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                    TransformerFactory.newInstance().newTransformer()
+                            .transform(source, new StreamResult(outputStream));
+                    this.getLogger().fine("Output message is : " + outputStream.toString());
+                } catch (Exception e) {
+                    this.getLogger().log(Level.FINE, "Error while creating DOM as String",
+                            e.getCause());
+                }
+            } else {
+                this.getLogger().fine("Output message is null");
+            }
+        }
+
         return result;
     }
-    
+
     public PollingManager getPollingManager() {
         return pollingManager;
     }
