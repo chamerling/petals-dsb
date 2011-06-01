@@ -20,6 +20,7 @@ import junit.framework.TestCase;
 import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
 import org.petalslink.dsb.servicepoller.api.ServicePoller;
+import org.petalslink.dsb.servicepoller.api.ServicePollerException;
 import org.petalslink.dsb.servicepoller.api.ServicePollerService;
 import org.petalslink.dsb.servicepoller.api.ServicePollerServiceImpl;
 import org.w3c.dom.Document;
@@ -70,8 +71,12 @@ public class ServicePollerClientTest extends TestCase {
         } catch (Exception e) {
             fail(e.getMessage());
         }
-        client.start("endpoint", QName.valueOf("service"), QName.valueOf("itf"),
-                QName.valueOf("operation"), document);
+        try {
+            client.start("endpoint", QName.valueOf("service"), QName.valueOf("itf"),
+                    QName.valueOf("operation"), document);
+        } catch (ServicePollerException e) {
+            fail();
+        }
         server.stop();
         assertEquals(1L, l.get());
         assertEquals(0, fail.get());

@@ -3,23 +3,14 @@
  */
 package org.petalslink.dsb.servicepoller.client;
 
-import java.io.ByteArrayOutputStream;
-
-import javax.activation.DataHandler;
 import javax.xml.namespace.QName;
-import javax.xml.transform.Source;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.TransformerFactoryConfigurationError;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
-import org.petalslink.dsb.servicepoller.api.ByteDataSource;
 import org.petalslink.dsb.servicepoller.api.DocumentHandler;
 import org.petalslink.dsb.servicepoller.api.ServicePoller;
+import org.petalslink.dsb.servicepoller.api.ServicePollerException;
 import org.petalslink.dsb.servicepoller.api.ServicePollerService;
+import org.petalslink.dsb.servicepoller.api.Utils;
 import org.w3c.dom.Document;
 
 /**
@@ -50,21 +41,8 @@ public class ServicePollerClient implements ServicePoller {
      * org.petalslink.dsb.servicepoller.api.DocumentHandler)
      */
     public void start(String endpointName, QName service, QName itf, QName operation,
-            Document inputMessage) {
-        Source source = new DOMSource(inputMessage);
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        try {
-            TransformerFactory.newInstance().newTransformer()
-                    .transform(source, new StreamResult(outputStream));
-        } catch (TransformerConfigurationException e) {
-            e.printStackTrace();
-        } catch (TransformerException e) {
-            e.printStackTrace();
-        } catch (TransformerFactoryConfigurationError e) {
-            e.printStackTrace();
-        }
-        DocumentHandler data = new DocumentHandler();
-        data.setDom(new DataHandler(new ByteDataSource(outputStream.toByteArray())));
+            Document inputMessage) throws ServicePollerException {
+        DocumentHandler data = Utils.toDataHandler(inputMessage);
         getWSClient().start(endpointName, service, itf, operation, data);
     }
 
@@ -76,7 +54,8 @@ public class ServicePollerClient implements ServicePoller {
      * javax.xml.namespace.QName, javax.xml.namespace.QName,
      * org.petalslink.dsb.servicepoller.api.DocumentHandler)
      */
-    public void stop(String endpointName, QName service, QName itf, QName operation) {
+    public void stop(String endpointName, QName service, QName itf, QName operation)
+            throws ServicePollerException {
         getWSClient().stop(endpointName, service, itf, operation);
     }
 
