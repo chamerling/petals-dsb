@@ -3,15 +3,11 @@
  */
 package org.petalslink.dsb.servicepoller.api;
 
-import java.io.IOException;
-
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
 
 /**
  * @author chamerling
@@ -38,26 +34,25 @@ public class ServicePollerServiceImpl implements ServicePollerService {
      * org.petalslink.dsb.servicepoller.api.DocumentHandler)
      */
     public void start(String endpointName, QName service, QName itf, QName operation,
-            DocumentHandler inputMessage) {
-        if (bean != null) {
-            // transform the input message as DOM
+            DocumentHandler inputMessage) throws ServicePollerException {
+        if (bean == null) {
+            throw new ServicePollerException("Can not find any inner poller service implementation");
+        }
+        // transform the input message as DOM
+        Document document = null;
+        if (inputMessage != null && inputMessage.getDom() != null) {
             try {
                 DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
                 DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-                Document document = dBuilder.parse(inputMessage.getDom().getInputStream());
+                document = dBuilder.parse(inputMessage.getDom().getInputStream());
                 document.getDocumentElement().normalize();
-                bean.start(endpointName, service, itf, operation, document);
-            } catch (ParserConfigurationException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (SAXException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+            } catch (Exception e) {
+                throw new ServicePollerException(
+                        "Can not transform input message into DOM document", e);
+
             }
         }
+        bean.start(endpointName, service, itf, operation, document);
     }
 
     /*
@@ -68,9 +63,12 @@ public class ServicePollerServiceImpl implements ServicePollerService {
      * .String, javax.xml.namespace.QName, javax.xml.namespace.QName,
      * javax.xml.namespace.QName)
      */
-    public void stop(String endpointName, QName service, QName itf, QName operation) {
-        if (bean != null) {
-            bean.stop(endpointName, service, itf, operation);
+    public void stop(String endpointName, QName service, QName itf, QName operation)
+            throws ServicePollerException {
+        if (bean == null) {
+            throw new ServicePollerException("Can not find any inner poller service implementation");
         }
+        
+        bean.stop(endpointName, service, itf, operation);
     }
 }

@@ -29,7 +29,8 @@ public interface ServicePoller {
      *            String for now)
      */
     @WebMethod
-    void start(String endpointName, QName service, QName itf, QName operation, Document inputMessage);
+    void start(String endpointName, QName service, QName itf, QName operation, Document inputMessage)
+            throws ServicePollerException;
 
     /**
      * Stop polling the given service if it exists...
@@ -40,6 +41,7 @@ public interface ServicePoller {
      * @param operation
      */
     @WebMethod
-    void stop(String endpointName, QName service, QName itf, QName operation);
+    void stop(String endpointName, QName service, QName itf, QName operation)
+            throws ServicePollerException;
 
 }

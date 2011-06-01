@@ -21,10 +21,13 @@ public interface ServicePollerService {
      * @param service
      * @param itf
      * @param operation
-     * @param inputMessage an optionall input message (a DOM document serialized in String for now)
+     * @param inputMessage
+     *            an optionall input message (a DOM document serialized in
+     *            String for now)
      */
     @WebMethod
-    void start(String endpointName, QName service, QName itf, QName operation, DocumentHandler inputMessage);
+    void start(String endpointName, QName service, QName itf, QName operation,
+            DocumentHandler inputMessage) throws ServicePollerException;
 
     /**
      * Stop polling the given service if it exists...
@@ -35,6 +38,7 @@ public interface ServicePollerService {
      * @param operation
      */
     @WebMethod
-    void stop(String endpointName, QName service, QName itf, QName operation);
+    void stop(String endpointName, QName service, QName itf, QName operation)
+            throws ServicePollerException;
 
 }
