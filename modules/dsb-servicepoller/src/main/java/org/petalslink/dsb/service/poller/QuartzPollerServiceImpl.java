@@ -73,7 +73,7 @@ public class QuartzPollerServiceImpl extends AbstractPollerServiceImpl {
 
     public void stop() throws PollerException {
         try {
-            boolean deleted = sched.deleteJob(this.job.getKey());
+            sched.deleteJob(this.job.getKey());
         } catch (SchedulerException e) {
             throw new PollerException(e.getMessage());
         }
