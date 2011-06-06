@@ -1,10 +1,7 @@
 package org.petalslink.dsb.service.poller;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 import junit.framework.TestCase;
 
-import org.petalslink.dsb.service.poller.api.Job;
 import org.petalslink.dsb.service.poller.api.PollerException;
 import org.petalslink.dsb.service.poller.api.PollerService;
 import org.petalslink.dsb.service.poller.api.PollingContext;
