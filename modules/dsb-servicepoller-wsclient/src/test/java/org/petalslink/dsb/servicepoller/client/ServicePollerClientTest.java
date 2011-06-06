@@ -21,8 +21,9 @@ import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
 import org.petalslink.dsb.servicepoller.api.ServicePoller;
 import org.petalslink.dsb.servicepoller.api.ServicePollerException;
+import org.petalslink.dsb.servicepoller.api.ServicePollerInformation;
 import org.petalslink.dsb.servicepoller.api.ServicePollerService;
-import org.petalslink.dsb.servicepoller.api.ServicePollerServiceImpl;
+import org.petalslink.dsb.servicepoller.api.ServicePollerServiceAdapter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -42,12 +43,12 @@ public class ServicePollerClientTest extends TestCase {
         final AtomicInteger ok = new AtomicInteger(0);
 
         ServicePoller beanServer = new ServicePoller() {
-            public void stop(String endpointName, QName service, QName itf, QName operation) {
+            public void stop(ServicePollerInformation toPoll, ServicePollerInformation replyTo) {
 
             }
 
-            public void start(String endpointName, QName service, QName itf, QName operation,
-                    Document inputMessage) {
+            public void start(ServicePollerInformation toPoll, Document inputMessage,
+                    String cronExpression, ServicePollerInformation replyTo) {
                 try {
                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                     TransformerFactory.newInstance().newTransformer()
@@ -78,7 +79,7 @@ public class ServicePollerClientTest extends TestCase {
                         if (list.item(i).getNodeType() == Node.ELEMENT_NODE
                                 && list.item(i).getNodeName().equals("arg")
                                 && list.item(i).getTextContent().equals("DSB")) {
-                            check ++;
+                            check++;
                         }
                     }
                 }
@@ -100,8 +101,12 @@ public class ServicePollerClientTest extends TestCase {
             fail(e.getMessage());
         }
         try {
-            client.start("endpoint", QName.valueOf("service"), QName.valueOf("itf"),
-                    QName.valueOf("operation"), document);
+            ServicePollerInformation info = new ServicePollerInformation();
+            info.setEndpointName("endpoint");
+            info.setInterfaceName(QName.valueOf("itf"));
+            info.setOperation(QName.valueOf("operation"));
+            info.setServiceName(QName.valueOf("service"));
+            client.start(info, document, null, null);
         } catch (ServicePollerException e) {
             fail();
         }
@@ -122,7 +127,7 @@ public class ServicePollerClientTest extends TestCase {
         JaxWsServerFactoryBean factory = new JaxWsServerFactoryBean();
         factory.setAddress(url);
         factory.setServiceClass(ServicePollerService.class);
-        factory.setServiceBean(new ServicePollerServiceImpl(bean));
+        factory.setServiceBean(new ServicePollerServiceAdapter(bean));
         return factory.create();
     }
 

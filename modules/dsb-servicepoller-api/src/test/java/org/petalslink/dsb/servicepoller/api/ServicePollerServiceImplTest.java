@@ -6,7 +6,6 @@ package org.petalslink.dsb.servicepoller.api;
 import java.io.File;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -22,22 +21,23 @@ public class ServicePollerServiceImplTest extends TestCase {
 
     public void testNullDocument() {
         final AtomicInteger i = new AtomicInteger(0);
-        ServicePollerServiceImpl service = new ServicePollerServiceImpl(new ServicePoller() {
+        ServicePollerServiceAdapter service = new ServicePollerServiceAdapter(new ServicePoller() {
 
-            public void stop(String endpointName, QName service, QName itf, QName operation)
+            public void stop(ServicePollerInformation toPoll, ServicePollerInformation replyTo)
                     throws ServicePollerException {
 
             }
 
-            public void start(String endpointName, QName service, QName itf, QName operation,
-                    Document inputMessage) throws ServicePollerException {
+            public void start(ServicePollerInformation toPoll, Document inputMessage,
+                    String cronExpression, ServicePollerInformation reployTo)
+                    throws ServicePollerException {
                 // null document should not fire any problem from the upper
                 // layer so I am here...
                 i.incrementAndGet();
             }
         });
         try {
-            service.start(null, null, null, null, null);
+            service.start(null, null, null, null);
         } catch (ServicePollerException e) {
             fail("No exception expected on null document input");
         }
@@ -48,15 +48,16 @@ public class ServicePollerServiceImplTest extends TestCase {
     public void testNotNullDocument() {
         final AtomicInteger i = new AtomicInteger(0);
         final AtomicInteger notNull = new AtomicInteger(0);
-        ServicePollerServiceImpl service = new ServicePollerServiceImpl(new ServicePoller() {
+        ServicePollerServiceAdapter service = new ServicePollerServiceAdapter(new ServicePoller() {
 
-            public void stop(String endpointName, QName service, QName itf, QName operation)
+            public void stop(ServicePollerInformation toPoll, ServicePollerInformation replyTo)
                     throws ServicePollerException {
 
             }
 
-            public void start(String endpointName, QName service, QName itf, QName operation,
-                    Document inputMessage) throws ServicePollerException {
+            public void start(ServicePollerInformation toPoll, Document inputMessage,
+                    String cronExpression, ServicePollerInformation replyTo)
+                    throws ServicePollerException {
                 // null document should not fire any problem from the upper
                 // layer so I am here...
                 i.incrementAndGet();
@@ -81,7 +82,7 @@ public class ServicePollerServiceImplTest extends TestCase {
 
         try {
             DocumentHandler dh = Utils.toDataHandler(document);
-            service.start(null, null, null, null, dh);
+            service.start(null, dh, null, null);
         } catch (ServicePollerException e) {
             fail("No exception expected on null document input");
         }

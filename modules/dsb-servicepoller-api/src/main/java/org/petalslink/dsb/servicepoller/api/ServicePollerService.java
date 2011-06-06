@@ -5,7 +5,6 @@ package org.petalslink.dsb.servicepoller.api;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
-import javax.xml.namespace.QName;
 
 /**
  * @author chamerling
@@ -26,8 +25,8 @@ public interface ServicePollerService {
      *            String for now)
      */
     @WebMethod
-    void start(String endpointName, QName service, QName itf, QName operation,
-            DocumentHandler inputMessage) throws ServicePollerException;
+    void start(ServicePollerInformation toPoll, DocumentHandler inputMessage,
+            String cronExpression, ServicePollerInformation replyTo) throws ServicePollerException;
 
     /**
      * Stop polling the given service if it exists...
@@ -38,7 +37,7 @@ public interface ServicePollerService {
      * @param operation
      */
     @WebMethod
-    void stop(String endpointName, QName service, QName itf, QName operation)
+    void stop(ServicePollerInformation toPoll, ServicePollerInformation replyTo)
             throws ServicePollerException;
 
 }

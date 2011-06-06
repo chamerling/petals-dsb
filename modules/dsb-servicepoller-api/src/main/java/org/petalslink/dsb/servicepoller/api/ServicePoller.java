@@ -3,9 +3,6 @@
  */
 package org.petalslink.dsb.servicepoller.api;
 
-import javax.jws.WebMethod;
-import javax.xml.namespace.QName;
-
 import org.w3c.dom.Document;
 
 /**
@@ -20,28 +17,27 @@ public interface ServicePoller {
     /**
      * Start polling the given service with the given information
      * 
-     * @param endpointName
-     * @param service
-     * @param itf
-     * @param operation
+     * @param toPoll
+     *            service to poll
      * @param inputMessage
-     *            an optionall input message (a DOM document serialized in
-     *            String for now)
+     *            input message to send to the {@link #toPoll()} service
+     * @param replyTo
+     *            send the response from the polled service to this one (if
+     *            any)...
+     * @throws ServicePollerException
      */
-    @WebMethod
-    void start(String endpointName, QName service, QName itf, QName operation, Document inputMessage)
-            throws ServicePollerException;
+    void start(ServicePollerInformation toPoll, Document inputMessage, String cronExpression,
+            ServicePollerInformation replyTo) throws ServicePollerException;
 
     /**
-     * Stop polling the given service if it exists...
+     * Stop polling the given service 
      * 
      * @param endpointName
      * @param service
      * @param itf
      * @param operation
      */
-    @WebMethod
-    void stop(String endpointName, QName service, QName itf, QName operation)
+    void stop(ServicePollerInformation toPoll, ServicePollerInformation replyTo)
             throws ServicePollerException;
 
 }

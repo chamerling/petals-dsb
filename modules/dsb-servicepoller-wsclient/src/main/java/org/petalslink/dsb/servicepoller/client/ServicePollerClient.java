@@ -3,12 +3,11 @@
  */
 package org.petalslink.dsb.servicepoller.client;
 
-import javax.xml.namespace.QName;
-
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.petalslink.dsb.servicepoller.api.DocumentHandler;
 import org.petalslink.dsb.servicepoller.api.ServicePoller;
 import org.petalslink.dsb.servicepoller.api.ServicePollerException;
+import org.petalslink.dsb.servicepoller.api.ServicePollerInformation;
 import org.petalslink.dsb.servicepoller.api.ServicePollerService;
 import org.petalslink.dsb.servicepoller.api.Utils;
 import org.w3c.dom.Document;
@@ -40,10 +39,10 @@ public class ServicePollerClient implements ServicePoller {
      * javax.xml.namespace.QName,
      * org.petalslink.dsb.servicepoller.api.DocumentHandler)
      */
-    public void start(String endpointName, QName service, QName itf, QName operation,
-            Document inputMessage) throws ServicePollerException {
+    public void start(ServicePollerInformation toPoll, Document inputMessage,
+            String cronExpression, ServicePollerInformation replyTo) throws ServicePollerException {
         DocumentHandler data = Utils.toDataHandler(inputMessage);
-        getWSClient().start(endpointName, service, itf, operation, data);
+        getWSClient().start(toPoll, data, cronExpression, replyTo);
     }
 
     /*
@@ -54,9 +53,9 @@ public class ServicePollerClient implements ServicePoller {
      * javax.xml.namespace.QName, javax.xml.namespace.QName,
      * org.petalslink.dsb.servicepoller.api.DocumentHandler)
      */
-    public void stop(String endpointName, QName service, QName itf, QName operation)
+    public void stop(ServicePollerInformation toPoll, ServicePollerInformation replyTo)
             throws ServicePollerException {
-        getWSClient().stop(endpointName, service, itf, operation);
+        getWSClient().stop(toPoll, replyTo);
     }
 
     private synchronized ServicePollerService getWSClient() {

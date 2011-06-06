@@ -26,7 +26,7 @@ public class Creator1 extends AbstractCreator {
     public static final String COMPONENT_NS = "servicepoller";
 
     public String getComponentName() {
-        return "petals-servicepoller";
+        return "petals-se-servicepoller";
     }
 
     public String getComponentVersion() {
