@@ -62,6 +62,9 @@
    		<module>modules/dsb-kernel-bpelwsclient</module>
 
    		<module>modules/dsb-servicepoller</module>
+   		<module>modules/dsb-servicepoller-api</module>
+   		<module>modules/dsb-servicepoller-wsclient</module>
+   		<module>modules/dsb-kernel-servicepoller</module>
    		<module>modules/petals-servicepoller</module>
    		<module>modules/petals-servicepoller2jbi</module>
 
