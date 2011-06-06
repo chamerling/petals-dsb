@@ -38,7 +38,6 @@ public class JBIFileHelper {
     }
 
     public static Jbi readDescriptor(File file) {
-        System.out.println(file.getAbsolutePath());
         Jbi result = null;
         try {
 
