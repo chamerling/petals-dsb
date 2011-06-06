@@ -9,7 +9,7 @@
 	</parent>
 
 	<name>Petals Component :: Poller</name>
-	<artifactId>petals-servicepoller</artifactId>
+	<artifactId>petals-se-servicepoller</artifactId>
 	<groupId>org.petalslink.dsb</groupId>
 
 	<packaging>jbi-component</packaging>
