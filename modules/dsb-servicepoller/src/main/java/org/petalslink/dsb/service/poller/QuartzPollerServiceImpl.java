@@ -52,7 +52,7 @@ public class QuartzPollerServiceImpl extends AbstractPollerServiceImpl {
             job = newJob(ServiceCallJob.class).withIdentity(jobId, "group1").build();
             JobDataMap map = job.getJobDataMap();
             map.put(ServiceCallJob.POLLINGCONTEXT, context);
-            trigger = newTrigger().withIdentity("trigger1", "group1")
+            trigger = newTrigger().withIdentity("trigger4job-" + jobId, "group1")
                     .withSchedule(cronSchedule(context.getCron())).build();
         } catch (ParseException e) {
             throw new PollerException(e.getMessage());
