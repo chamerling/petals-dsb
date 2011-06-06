@@ -24,6 +24,8 @@ import org.petalslink.dsb.servicepoller.api.ServicePollerException;
 import org.petalslink.dsb.servicepoller.api.ServicePollerService;
 import org.petalslink.dsb.servicepoller.api.ServicePollerServiceImpl;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * @author chamerling
@@ -35,8 +37,10 @@ public class ServicePollerClientTest extends TestCase {
      * 
      */
     public void testCallWithInputDocument() {
-        final AtomicLong l = new AtomicLong(0);
+        final AtomicLong received = new AtomicLong(0);
         final AtomicInteger fail = new AtomicInteger(0);
+        final AtomicInteger ok = new AtomicInteger(0);
+
         ServicePoller beanServer = new ServicePoller() {
             public void stop(String endpointName, QName service, QName itf, QName operation) {
 
@@ -49,12 +53,36 @@ public class ServicePollerClientTest extends TestCase {
                     TransformerFactory.newInstance().newTransformer()
                             .transform(new DOMSource(inputMessage), new StreamResult(outputStream));
                     System.out.println("Receive : " + outputStream.toString());
-                    l.incrementAndGet();
-                    // TODO : check received message
+                    received.incrementAndGet();
+
+                    if (payloadIsOk(inputMessage)) {
+                        ok.incrementAndGet();
+                    }
+
                 } catch (Exception e) {
                     e.printStackTrace();
                     fail.incrementAndGet();
                 }
+            }
+
+            private boolean payloadIsOk(Document inputMessage) {
+                int check = 0;
+                if (inputMessage != null) {
+                    if (inputMessage.getFirstChild() != null
+                            && inputMessage.getFirstChild().getNodeName().equals("in")) {
+                        check++;
+                    }
+                    NodeList list = inputMessage.getFirstChild().getChildNodes();
+                    int length = list.getLength();
+                    for (int i = 0; i < length; i++) {
+                        if (list.item(i).getNodeType() == Node.ELEMENT_NODE
+                                && list.item(i).getNodeName().equals("arg")
+                                && list.item(i).getTextContent().equals("DSB")) {
+                            check ++;
+                        }
+                    }
+                }
+                return check == 2;
             }
         };
 
@@ -78,8 +106,9 @@ public class ServicePollerClientTest extends TestCase {
             fail();
         }
         server.stop();
-        assertEquals(1L, l.get());
+        assertEquals(1L, received.get());
         assertEquals(0, fail.get());
+        assertEquals(1, ok.get());
     }
 
     /**
