@@ -21,7 +21,9 @@ package org.petalslink.dsb.kernel.management.binder;
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.objectweb.fractal.fraclet.annotation.annotations.FractalComponent;
@@ -42,6 +44,7 @@ import org.ow2.petals.tools.generator.jbi.ws2jbi.Constants;
 import org.ow2.petals.tools.generator.rest2jbi.REST2Jbi;
 import org.ow2.petals.util.LoggingUtil;
 import org.petalslink.dsb.kernel.util.JBIFileHelper;
+import org.petalslink.dsb.ws.api.ServiceEndpoint;
 
 
 /**
@@ -99,7 +102,8 @@ public class RESTServiceBinderImpl implements ServiceBinder {
     /**
      * {@inheritDoc}
      */
-    public boolean bind(Map<String, Object> serviceProperties) throws BinderException {
+    public List<ServiceEndpoint> bind(Map<String, Object> serviceProperties) throws BinderException {
+        List<ServiceEndpoint> result = null;
         if (!this.binderChecker.canBindOnProtocol(this.getProtocol())) {
             throw new BinderException("No component found to bind REST service");
         }
@@ -150,9 +154,9 @@ public class RESTServiceBinderImpl implements ServiceBinder {
             throw new BinderException("Can not get the JBI service assembly name");
         }
 
+        boolean success = false;
         try {
-
-            boolean success = this.deploymentService.deploy(sa.toURL());
+            success = this.deploymentService.deploy(sa.toURL());
             if (success) {
                 this.log.info("Service assembly '" + saName + "' has been deployed");
             } else {
@@ -165,7 +169,7 @@ public class RESTServiceBinderImpl implements ServiceBinder {
 
         // Start the service assembly
         try {
-            boolean success = this.deploymentService.start(saName);
+            success = this.deploymentService.start(saName);
             // FIXME : Need some update on the petals JMX side...
             if (success) {
                 this.log.info("Service assembly '" + saName + "' has been deployed");
@@ -186,11 +190,21 @@ public class RESTServiceBinderImpl implements ServiceBinder {
         this.serviceRegistry.addService(org.petalslink.dsb.kernel.Constants.REST_SERVICE_BINDER,
                 restURL, null);
 
-        // delete the generated file
+        // TODO : delete the generated file in all cases ie even if exception occured.
         if (sa != null) {
             sa.delete();
         }
-        return true;
+        
+        result = new ArrayList<ServiceEndpoint>();
+        List<org.ow2.petals.jbi.descriptor.original.generated.Provides> list = descriptor.getServices().getProvides();
+        for (org.ow2.petals.jbi.descriptor.original.generated.Provides provides : list) {
+            ServiceEndpoint se = new ServiceEndpoint();
+            se.setEndpoint(provides.getEndpointName());
+            se.setItf(provides.getInterfaceName());
+            se.setService(provides.getServiceName());
+            result.add(se);
+        }
+        return result;
     }
 
     /**

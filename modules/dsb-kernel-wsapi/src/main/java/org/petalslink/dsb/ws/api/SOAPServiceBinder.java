@@ -3,6 +3,7 @@
  */
 package org.petalslink.dsb.ws.api;
 
+import java.util.List;
 import java.util.Set;
 
 import javax.jws.WebMethod;
@@ -26,11 +27,11 @@ public interface SOAPServiceBinder {
      * 
      * @param wsdlURL
      *            the WSDL of the Web service to bind to the DSB
-     * @return
+     * @return the DSB services information. These services are created by the bind operation.
      * @throws PEtALSWebServiceException
      */
     @WebMethod
-    boolean bindWebService(@WebParam(name = "wsdlURL") String wsdlURL)
+    List<ServiceEndpoint> bindWebService(@WebParam(name = "wsdlURL") String wsdlURL)
             throws PEtALSWebServiceException;
 
     /**

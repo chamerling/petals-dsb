@@ -4,6 +4,7 @@
 package org.petalslink.dsb.kernel.ws;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -24,6 +25,7 @@ import org.petalslink.dsb.kernel.management.binder.BinderException;
 import org.petalslink.dsb.kernel.management.binder.ServiceBinderRegistry;
 import org.petalslink.dsb.kernel.management.binder.ServiceRegistry;
 import org.petalslink.dsb.ws.api.SOAPServiceBinder;
+import org.petalslink.dsb.ws.api.ServiceEndpoint;
 
 /**
  * @author chamerling
@@ -62,13 +64,13 @@ public class SOAPServiceBinderServiceImpl implements SOAPServiceBinder, KernelWe
     /* (non-Javadoc)
      * @see org.petalslink.dsb.ws.api.ServiceBinder#bindWebService(java.lang.String)
      */
-    public boolean bindWebService(String wsdlURL) throws PEtALSWebServiceException {
+    public List<ServiceEndpoint> bindWebService(String wsdlURL) throws PEtALSWebServiceException {
         if (this.serviceRegistry.getURLs(Constants.SOAP_SERVICE_BINDER).contains(wsdlURL)) {
             throw new PEtALSWebServiceException("This SOAP service '" + wsdlURL
                     + "' is already bound");
         }
 
-        boolean result = false;
+        List<ServiceEndpoint> result = null;
         org.petalslink.dsb.kernel.management.binder.ServiceBinder binder = this.serviceBinderRegistry
                 .getServiceBinder(Constants.SOAP_SERVICE_BINDER);
         if (binder != null) {

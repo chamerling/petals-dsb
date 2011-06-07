@@ -18,7 +18,10 @@
  */
 package org.petalslink.dsb.kernel.management.binder;
 
+import java.util.List;
 import java.util.Map;
+
+import org.petalslink.dsb.ws.api.ServiceEndpoint;
 
 /**
  * Bind an external service to the bus.
@@ -37,7 +40,7 @@ public interface ServiceBinder {
      *            with Fractal!!!
      * @throws BinderException
      */
-    boolean bind(Map<String, Object> serviceProperties) throws BinderException;
+    List<ServiceEndpoint> bind(Map<String, Object> serviceProperties) throws BinderException;
 
     String getProtocol();
 

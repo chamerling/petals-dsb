@@ -33,7 +33,7 @@ public interface RESTServiceBinder {
      * @throws PEtALSWebServiceException
      */
     @WebMethod
-    boolean bindRESTService(@WebParam(name = "restBaseURL") String restURL,
+    ServiceEndpoint bindRESTService(@WebParam(name = "restBaseURL") String restURL,
             @WebParam(name = "endpointName") String endpointName) throws PEtALSWebServiceException;
 
     /**

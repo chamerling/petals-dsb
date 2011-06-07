@@ -4,6 +4,7 @@
 package org.petalslink.dsb.kernel.ws;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -24,6 +25,7 @@ import org.petalslink.dsb.kernel.management.binder.BinderException;
 import org.petalslink.dsb.kernel.management.binder.ServiceBinderRegistry;
 import org.petalslink.dsb.kernel.management.binder.ServiceRegistry;
 import org.petalslink.dsb.ws.api.RESTServiceBinder;
+import org.petalslink.dsb.ws.api.ServiceEndpoint;
 
 /**
  * @author chamerling
@@ -66,7 +68,7 @@ public class RESTServiceBinderServiceImpl implements RESTServiceBinder, KernelWe
      * org.petalslink.dsb.ws.api.ServiceBinder#bindRESTService(java.lang.String,
      * java.lang.String)
      */
-    public boolean bindRESTService(String restURL, String endpointName)
+    public ServiceEndpoint bindRESTService(String restURL, String endpointName)
             throws PEtALSWebServiceException {
 
         if (this.serviceRegistry.getURLs(Constants.REST_SERVICE_BINDER).contains(restURL)) {
@@ -74,7 +76,7 @@ public class RESTServiceBinderServiceImpl implements RESTServiceBinder, KernelWe
                     + "' is already bound");
         }
 
-        boolean result = false;
+        ServiceEndpoint result = null;
         org.petalslink.dsb.kernel.management.binder.ServiceBinder binder = this.serviceBinderRegistry
                 .getServiceBinder(Constants.REST_SERVICE_BINDER);
         if (binder != null) {
@@ -82,7 +84,10 @@ public class RESTServiceBinderServiceImpl implements RESTServiceBinder, KernelWe
             props.put("restURL", restURL);
             props.put("ep", endpointName);
             try {
-                result = binder.bind(props);
+                List<ServiceEndpoint> eps = binder.bind(props);
+                if (eps != null) {
+                    result = eps.get(0);
+                }
             } catch (BinderException e) {
                 throw new PEtALSWebServiceException("Can not bind REST service", e);
             }

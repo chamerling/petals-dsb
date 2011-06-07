@@ -28,7 +28,6 @@ import org.ow2.petals.kernel.ws.api.Constants;
 
 /**
  * The DSB Service Endpoint minimal definition.
- * @deprecated use the dsb-api project definition
  * 
  * @author chamerling - eBM WebSourcing
  * 

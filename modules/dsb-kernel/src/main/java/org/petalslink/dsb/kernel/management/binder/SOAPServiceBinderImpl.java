@@ -21,7 +21,9 @@ package org.petalslink.dsb.kernel.management.binder;
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.objectweb.fractal.fraclet.annotation.annotations.FractalComponent;
@@ -41,6 +43,7 @@ import org.ow2.petals.tools.generator.jbi.ws2jbi.Constants;
 import org.ow2.petals.tools.generator.jbi.ws2jbi.WS2Jbi;
 import org.ow2.petals.util.LoggingUtil;
 import org.petalslink.dsb.kernel.util.JBIFileHelper;
+import org.petalslink.dsb.ws.api.ServiceEndpoint;
 
 
 /**
@@ -96,7 +99,8 @@ public class SOAPServiceBinderImpl implements ServiceBinder {
     /**
      * {@inheritDoc}
      */
-    public boolean bind(Map<String, Object> serviceProperties) throws BinderException {
+    public List<ServiceEndpoint> bind(Map<String, Object> serviceProperties) throws BinderException {
+        List<ServiceEndpoint> result = null;
         if (!this.binderChecker.canBindOnProtocol(this.getProtocol())) {
             throw new BinderException("No component found to bind SOAP service");
         }
@@ -183,11 +187,21 @@ public class SOAPServiceBinderImpl implements ServiceBinder {
         this.serviceRegistry.addService(org.petalslink.dsb.kernel.Constants.SOAP_SERVICE_BINDER,
                 wsdlURI, null);
 
-        // delete the generated file
+        // TODO : delete the generated file in all cases
         if (sa != null) {
             sa.delete();
         }
-        return true;
+        
+        result = new ArrayList<ServiceEndpoint>();
+        List<org.ow2.petals.jbi.descriptor.original.generated.Provides> list = descriptor.getServices().getProvides();
+        for (org.ow2.petals.jbi.descriptor.original.generated.Provides provides : list) {
+            ServiceEndpoint se = new ServiceEndpoint();
+            se.setEndpoint(provides.getEndpointName());
+            se.setItf(provides.getInterfaceName());
+            se.setService(provides.getServiceName());
+            result.add(se);
+        }
+        return result;
     }
 
     /**

@@ -18,8 +18,6 @@
  */
 package org.petalslink.dsb.kernel.ws;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 import org.objectweb.fractal.api.Component;
@@ -34,10 +32,6 @@ import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
 import org.ow2.petals.tools.ws.KernelWebService;
 import org.ow2.petals.util.LoggingUtil;
-import org.petalslink.dsb.kernel.Constants;
-import org.petalslink.dsb.kernel.management.binder.BinderException;
-import org.petalslink.dsb.kernel.management.binder.ServiceBinderRegistry;
-import org.petalslink.dsb.kernel.management.binder.ServiceRegistry;
 import org.petalslink.dsb.ws.api.RESTServiceBinder;
 import org.petalslink.dsb.ws.api.SOAPServiceBinder;
 import org.petalslink.dsb.ws.api.ServiceBinder;
@@ -82,8 +76,8 @@ public class ServiceBinderImpl implements ServiceBinder, KernelWebService {
      */
     public boolean bindWebService(String wsdlURL) throws PEtALSWebServiceException {
         this.log.warning("Deprecated, use SOAPServiceBinderServiceImpl instead");
-        
-        return this.soapServiceBinder.bindWebService(wsdlURL);
+        this.soapServiceBinder.bindWebService(wsdlURL);
+        return true;
     }
 
     /**
@@ -92,8 +86,8 @@ public class ServiceBinderImpl implements ServiceBinder, KernelWebService {
     public boolean bindRESTService(String restURL, String endpointName)
             throws PEtALSWebServiceException {
         this.log.warning("Deprecated, use RESTServiceBinderServiceImpl instead");
-
-        return this.restServiceBinder.bindRESTService(restURL, endpointName);
+        this.restServiceBinder.bindRESTService(restURL, endpointName);
+        return true;
     }
 
     /**
