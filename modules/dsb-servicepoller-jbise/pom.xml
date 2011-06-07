@@ -8,15 +8,15 @@
 		<relativePath>../dsb-parent/pom.xml</relativePath>
 	</parent>
 
-	<name>Petals Component :: Poller</name>
-	<artifactId>petals-se-servicepoller</artifactId>
+	<name>Petals JBI Component :: Poller</name>
+	<artifactId>dsb-servicepoller-jbise</artifactId>
 	<groupId>org.petalslink.dsb</groupId>
 
 	<packaging>jbi-component</packaging>
 
 	<!-- Source code management -->
 	<scm>
-		<connection>scm:svn:https://svn.petalslink.com/svnroot/trunk/research/commons/dsb/modules/petals-servicepoller</connection>
+		<connection>scm:svn:https://svn.petalslink.com/svnroot/trunk/research/commons/dsb/modules/dsb-servicepoller-jbise</connection>
 		<developerConnection>${project.scm.connection}</developerConnection>
 	</scm>
 

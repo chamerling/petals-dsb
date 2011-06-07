@@ -5,7 +5,7 @@
 	<jbi:component type="binding-component"
 		bootstrap-class-loader-delegation="parent-first">
 		<jbi:identification>
-			<jbi:name>petals-se-servicepoller</jbi:name>
+			<jbi:name>dsb-servicepoller-jbise</jbi:name>
 			<jbi:description>The Service Poller Binding Component</jbi:description>
 		</jbi:identification>
 		<jbi:component-class-name>org.petalslink.dsb.component.poller.Component</jbi:component-class-name>
