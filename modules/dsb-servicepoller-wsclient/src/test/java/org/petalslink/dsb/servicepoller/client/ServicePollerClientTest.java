@@ -17,8 +17,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import junit.framework.TestCase;
 
-import org.apache.cxf.endpoint.Server;
-import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
+import org.petalslink.dsb.cxf.JAXWSHelper;
 import org.petalslink.dsb.servicepoller.api.ServicePoller;
 import org.petalslink.dsb.servicepoller.api.ServicePollerException;
 import org.petalslink.dsb.servicepoller.api.ServicePollerInformation;
@@ -88,7 +87,8 @@ public class ServicePollerClientTest extends TestCase {
         };
 
         String url = "http://localhost:9787/services/";
-        Server server = createServer(url, beanServer);
+        org.petalslink.dsb.cxf.Server server = createServer(url, beanServer);
+        server.start();
         ServicePoller client = createClient(url);
         Document document = null;
         try {
@@ -123,12 +123,8 @@ public class ServicePollerClientTest extends TestCase {
         return new ServicePollerClient(url);
     }
 
-    private Server createServer(String url, ServicePoller bean) {
-        JaxWsServerFactoryBean factory = new JaxWsServerFactoryBean();
-        factory.setAddress(url + ServicePollerService.class.getSimpleName());
-        factory.setServiceClass(ServicePollerService.class);
-        factory.setServiceBean(new ServicePollerServiceAdapter(bean));
-        return factory.create();
+    private org.petalslink.dsb.cxf.Server createServer(String url, ServicePoller bean) {
+        return JAXWSHelper.getService(url, ServicePollerService.class, new ServicePollerServiceAdapter(bean));
     }
 
 }

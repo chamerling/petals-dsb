@@ -3,7 +3,7 @@
  */
 package org.petalslink.dsb.servicepoller.client;
 
-import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
+import org.petalslink.dsb.cxf.JAXWSHelper;
 import org.petalslink.dsb.servicepoller.api.DocumentHandler;
 import org.petalslink.dsb.servicepoller.api.ServicePoller;
 import org.petalslink.dsb.servicepoller.api.ServicePollerException;
@@ -27,10 +27,6 @@ public class ServicePollerClient implements ServicePoller {
      */
     public ServicePollerClient(String address) {
         this.address = address;
-        if (!this.address.endsWith("/")) {
-            this.address = this.address + "/";
-        }
-
     }
 
     /*
@@ -63,10 +59,7 @@ public class ServicePollerClient implements ServicePoller {
 
     private synchronized ServicePollerService getWSClient() {
         if (client == null) {
-            JaxWsProxyFactoryBean factory = new JaxWsProxyFactoryBean();
-            factory.setAddress(address + ServicePollerService.class.getSimpleName());
-            factory.setServiceClass(ServicePollerService.class);
-            client = (ServicePollerService) factory.create();
+            client = JAXWSHelper.getClient(address, ServicePollerService.class);
         }
         return this.client;
     }
