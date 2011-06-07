@@ -87,7 +87,7 @@ public class ServicePollerClientTest extends TestCase {
             }
         };
 
-        String url = "http://localhost:9787/services/Poller";
+        String url = "http://localhost:9787/services/";
         Server server = createServer(url, beanServer);
         ServicePoller client = createClient(url);
         Document document = null;
@@ -125,7 +125,7 @@ public class ServicePollerClientTest extends TestCase {
 
     private Server createServer(String url, ServicePoller bean) {
         JaxWsServerFactoryBean factory = new JaxWsServerFactoryBean();
-        factory.setAddress(url);
+        factory.setAddress(url + ServicePollerService.class.getSimpleName());
         factory.setServiceClass(ServicePollerService.class);
         factory.setServiceBean(new ServicePollerServiceAdapter(bean));
         return factory.create();

@@ -27,6 +27,9 @@ public class ServicePollerClient implements ServicePoller {
      */
     public ServicePollerClient(String address) {
         this.address = address;
+        if (!this.address.endsWith("/")) {
+            this.address = this.address + "/";
+        }
 
     }
 
@@ -61,7 +64,7 @@ public class ServicePollerClient implements ServicePoller {
     private synchronized ServicePollerService getWSClient() {
         if (client == null) {
             JaxWsProxyFactoryBean factory = new JaxWsProxyFactoryBean();
-            factory.setAddress(address);
+            factory.setAddress(address + ServicePollerService.class.getSimpleName());
             factory.setServiceClass(ServicePollerService.class);
             client = (ServicePollerService) factory.create();
         }
