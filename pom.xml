@@ -87,6 +87,10 @@
 		<module>modules/petals-rest2jbi</module>
 		<module>modules/petals-bus</module>
 		
+		<!-- Tools -->
+		<module>modules/dsb-cxfutils</module>
+   		
+		
 		<!-- Independant things, to be moved elsewhere -->
 		<module>modules/gms-core</module>
    		<module>modules/gms-prototype</module>
