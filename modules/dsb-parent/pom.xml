@@ -109,6 +109,7 @@
 		<petalsesb.kernel-wsapi.version>1.0</petalsesb.kernel-wsapi.version>
 		<petalsesb.launcher.version>1.3.1</petalsesb.launcher.version>
 		<petalsesb.jbi.version>1.0.1</petalsesb.jbi.version>
+		<cxf.version>2.2.2</cxf.version>
 		<topDirectoryLocation>..</topDirectoryLocation>
 	</properties>
 
@@ -239,6 +240,11 @@
 				<groupId>commons-logging</groupId>
 				<artifactId>commons-logging</artifactId>
 				<version>1.0.4</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.cxf</groupId>
+				<artifactId>cxf-bundle-minimal</artifactId>
+				<version>${cxf.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
