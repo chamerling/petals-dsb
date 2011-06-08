@@ -4,10 +4,14 @@
 package org.petalslink.dsb.kernel.servicepoller;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import org.objectweb.fractal.fraclet.annotation.annotations.FractalComponent;
 import org.objectweb.fractal.fraclet.annotation.annotations.Interface;
@@ -17,6 +21,8 @@ import org.objectweb.fractal.fraclet.annotation.annotations.Provides;
 import org.objectweb.fractal.fraclet.annotation.annotations.Requires;
 import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
 import org.objectweb.util.monolog.api.Logger;
+import org.ow2.petals.jbi.descriptor.JBIDescriptorException;
+import org.ow2.petals.jbi.descriptor.original.JBIDescriptorBuilder;
 import org.ow2.petals.jbi.descriptor.original.generated.Jbi;
 import org.ow2.petals.jbi.management.deployment.AtomicDeploymentService;
 import org.ow2.petals.tools.generator.commons.Constants;
@@ -51,13 +57,11 @@ public class ServicePollerManagerImpl implements ServicePoller {
         this.log = new LoggingUtil(logger);
         this.log.start();
         this.cache = new HashMap<ServicePollerManagerImpl.Key, List<String>>();
-        System.out.println("######!!!!!!!!!!!!!!!!!!!!!!!!!!");
     }
 
     @LifeCycle(on = LifeCycleType.STOP)
     protected void stop() {
         this.log.start();
-        System.out.println("######!!!!!!!!!!!!!!!!!!!!!!!!!!");
     }
 
     public void start(ServicePollerInformation toPoll, Document inputMessage,
@@ -89,8 +93,7 @@ public class ServicePollerManagerImpl implements ServicePoller {
             throw new ServicePollerException(e);
         }
 
-        Jbi descriptor = null;
-        //JBIFileHelper.readDescriptor(saToDeploy);
+        Jbi descriptor = readDescriptor(saToDeploy);
         if (descriptor == null) {
             throw new ServicePollerException("Can not get the JBI descriptor from generated SA...");
         }
@@ -143,20 +146,47 @@ public class ServicePollerManagerImpl implements ServicePoller {
         list.add(saName);
     }
 
+    /**
+     * @param saToDeploy
+     * @return
+     */
+    private Jbi readDescriptor(File saToDeploy) {
+        if (saToDeploy == null) {
+            return null;
+        }
+            
+        Jbi result = null;
+        try {
+            final ZipFile zipFile = new ZipFile(saToDeploy);
+            final ZipEntry jbiDescriptorZipEntry = zipFile.getEntry("META-INF/jbi.xml");
+            final InputStream jbiDescriptorInputStream = zipFile
+                    .getInputStream(jbiDescriptorZipEntry);
+
+            // Load the JBI descriptor
+            result = JBIDescriptorBuilder.buildJavaJBIDescriptor(jbiDescriptorInputStream);
+
+        } catch (JBIDescriptorException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
     public void stop(ServicePollerInformation toPoll, ServicePollerInformation replyTo)
             throws ServicePollerException {
         if (log.isDebugEnabled()) {
             this.log.debug("Got a stop request for toPoll service = " + toPoll);
             this.log.debug("ReployTo is set to : " + replyTo);
         }
-        
+
         Key key = new Key(toPoll, replyTo);
         if (cache.get(key) != null) {
             // which one???
-            List<String> list = this.cache.get(key);
+            //List<String> list = this.cache.get(key);
             // ...
         }
-
+        // TODO
     }
 
     class Key {
