@@ -8,7 +8,7 @@
   <!-- <component definition="org.ow2.petals.tools.ws.WebServiceManagerImpl" name="WebServiceManagerImpl"/>-->
   <component definition="org.petalslink.dsb.kernel.tools.ws.WebServiceManagerImpl" name="WebServiceManagerImpl"/>
   <component definition="org.petalslink.dsb.kernel.tools.ws.CXFWebServiceExposerImpl" name="WebServiceExposerImpl"/>
-  <component definition="org.petalslink.dsb.kernel.tools.ws.WebServiceRegistryImpl" name="WebServiceRegistryImpl"/>
+  <component definition="org.petalslink.dsb.kernel.tools.ws.GlobalWebServiceRegistryImpl" name="WebServiceRegistryImpl"/>
   
   <!-- Web services -->
   <component definition="org.ow2.petals.ws.ArtifactRepositoryServiceImpl" name="ArtifactRepositoryWebServiceImpl"/>
