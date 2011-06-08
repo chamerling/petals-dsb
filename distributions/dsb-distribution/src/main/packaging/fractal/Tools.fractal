@@ -40,6 +40,10 @@
 
   <component definition="org.petalslink.dsb.kernel.ws.RESTServiceBinderServiceImpl" name="RESTServiceBinderImpl"/>
   <component definition="org.petalslink.dsb.kernel.ws.SOAPServiceBinderServiceImpl" name="SOAPServiceBinderImpl"/>
+
+  <!-- DSB/JBI stuff -->
+  <component definition="org.petalslink.dsb.kernel.ws.jbi.ServiceUnitInformationServiceImpl" name="ServiceUnitInformationServiceImpl"/>
+  <component definition="org.petalslink.dsb.kernel.ws.jbi.ComponentInformationServiceImpl" name="ComponentInformationServiceImpl"/>
   
   <!-- TEST -->
   <component definition="org.petalslink.dsb.kernel.io.client.ClientTestServiceImpl" name="ClientTestServiceImpl"/>
@@ -105,6 +109,9 @@
   
   <binding client="RESTServiceBinderImpl.binder-registry" server="this.binder-registry"/>
   <binding client="RESTServiceBinderImpl.service-registry" server="this.service-registry"/>
+
+  <!-- DSB/JBI stuff -->
+  <binding client="ServiceUnitInformationServiceImpl.admin" server="this.adminService"/>
   
   <!-- Web service manager -->  
   <!-- Update for new manager -->

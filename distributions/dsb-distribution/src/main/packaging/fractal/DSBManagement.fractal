@@ -64,6 +64,7 @@
 	<binding client="RESTServiceBinder.configuration" server="this.configuration" />
 	<binding client="RESTServiceBinder.service-registry" server="ServiceRegistry.service" />
 	<binding client="RESTServiceBinder.binder-checker" server="BinderCheckerImpl.service" />
+	<binding client="SOAPServiceBinder.admin" server="this.adminService" />
 
 	<!-- Link exposers -->
 	<binding client="SOAPServiceExposer.atomic-deployment" server="this.atomic-deployment" />
