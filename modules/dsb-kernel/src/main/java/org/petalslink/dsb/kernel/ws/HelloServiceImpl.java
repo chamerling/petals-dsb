@@ -64,6 +64,7 @@ public class HelloServiceImpl implements HelloService, KernelWebService {
      * {@inheritDoc}
      */
     public String sayHello(String input) throws PEtALSWebServiceException {
+        System.out.println("Got input message : " + input);
         return "SOA4All DSB : " + input;
     }
 

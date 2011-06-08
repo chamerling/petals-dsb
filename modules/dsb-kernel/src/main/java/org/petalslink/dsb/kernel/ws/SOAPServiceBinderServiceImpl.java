@@ -49,7 +49,7 @@ public class SOAPServiceBinderServiceImpl implements SOAPServiceBinder, KernelWe
 
     @Requires(name = "service-registry", signature = ServiceRegistry.class)
     protected ServiceRegistry serviceRegistry;
-
+    
     @LifeCycle(on = LifeCycleType.START)
     protected void start() {
         this.log = new LoggingUtil(this.logger);
