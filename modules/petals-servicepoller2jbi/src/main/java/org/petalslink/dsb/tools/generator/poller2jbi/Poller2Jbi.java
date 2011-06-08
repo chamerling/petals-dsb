@@ -174,14 +174,22 @@ public class Poller2Jbi implements JBIGenerationEngine {
         options.put(Creator.WSDLFILE, null);
         options.put(Creator.OPERATION, this.operation.getLocalPart());
         // specific elements
-        options.put(org.petalslink.dsb.tools.generator.poller2jbi.Constants.RESPONSE_ENDPOINT,
-                responseEndpointName);
-        options.put(org.petalslink.dsb.tools.generator.poller2jbi.Constants.RESPONSE_INTERFACE,
-                responseInterfaceName.getLocalPart());
-        options.put(org.petalslink.dsb.tools.generator.poller2jbi.Constants.RESPONSE_SERVICE,
-                responseServiceName.getLocalPart());
-        options.put(org.petalslink.dsb.tools.generator.poller2jbi.Constants.RESPONSE_OPERATION,
-                responseOperation.getLocalPart());
+        if (responseEndpointName != null) {
+            options.put(org.petalslink.dsb.tools.generator.poller2jbi.Constants.RESPONSE_ENDPOINT,
+                    responseEndpointName);
+        }
+        if (responseInterfaceName != null) {
+            options.put(org.petalslink.dsb.tools.generator.poller2jbi.Constants.RESPONSE_INTERFACE,
+                    responseInterfaceName.getLocalPart());
+        }
+        if (responseServiceName != null) {
+            options.put(org.petalslink.dsb.tools.generator.poller2jbi.Constants.RESPONSE_SERVICE,
+                    responseServiceName.getLocalPart());
+        }
+        if (responseOperation != null) {
+            options.put(org.petalslink.dsb.tools.generator.poller2jbi.Constants.RESPONSE_OPERATION,
+                    responseOperation.getLocalPart());
+        }
         options.put(org.petalslink.dsb.tools.generator.poller2jbi.Constants.CRON_EXPRESSION,
                 cronExpression);
         options.put(org.petalslink.dsb.tools.generator.poller2jbi.Constants.INPUT_FILE,
