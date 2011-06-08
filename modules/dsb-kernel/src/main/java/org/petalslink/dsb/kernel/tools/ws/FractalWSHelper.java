@@ -77,8 +77,30 @@ public class FractalWSHelper {
                 // do nothing
             }
 
-            // The component is a component, add it to the result list
-            result.add(component);
+            // The component is a component, add it to the result list?
+            if (!isComposite(component)) {
+                try {
+                    System.out.println("NOT COMPOSITE : " + Fractal.getNameController(component).getFcName());
+                } catch (NoSuchInterfaceException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                result.add(component);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * @param component
+     * @return
+     */
+    private static boolean isComposite(Component component) {
+        boolean result = false;
+        try {
+            ContentController controller = Fractal.getContentController(component);
+            result = (controller.getFcSubComponents().length > 1);
+        } catch (NoSuchInterfaceException e) {
         }
         return result;
     }
@@ -94,18 +116,19 @@ public class FractalWSHelper {
         try {
             Component parents[] = null;
             SuperController superController = Fractal.getSuperController(component);
-
             parents = superController.getFcSuperComponents();
+            if (parents == null || parents.length == 0) {
+                return component;
+            }
             if (parents.length > 1) {
-               // ??? many parent ie shared component... what to do?
+                // ??? many parent ie shared component... what to do?
             }
             if (parents.length == 1) {
                 // goes up
                 parent = getRootComponent(parents[0]);
             }
         } catch (NoSuchInterfaceException e) {
-            // we are at the root level, stop going up
-            return parent;
+            parent = component;
         }
         return parent;
     }

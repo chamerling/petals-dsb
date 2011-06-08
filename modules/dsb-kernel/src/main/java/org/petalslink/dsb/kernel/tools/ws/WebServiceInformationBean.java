@@ -72,4 +72,22 @@ public class WebServiceInformationBean {
     String url;
 
     String name;
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("WebServiceInformationBean [clazz=");
+        builder.append(clazz);
+        builder.append(", componentName=");
+        builder.append(componentName);
+        builder.append(", url=");
+        builder.append(url);
+        builder.append(", name=");
+        builder.append(name);
+        builder.append("]");
+        return builder.toString();
+    }
 }
