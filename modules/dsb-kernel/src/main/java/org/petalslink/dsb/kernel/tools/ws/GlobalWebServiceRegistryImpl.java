@@ -64,8 +64,6 @@ public class GlobalWebServiceRegistryImpl implements WebServiceRegistry {
      */
     public synchronized void load() {
         Component root = FractalWSHelper.getRootComponent(this.component);
-        System.out.println("ROOT : " + root);
-        System.out.println(root.getFcInterfaces());
         try {
             Set<WebServiceInformationBean> beans = FractalWSHelper.getAllBeans(Fractal
                     .getContentController(root));

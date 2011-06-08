@@ -79,12 +79,6 @@ public class FractalWSHelper {
 
             // The component is a component, add it to the result list?
             if (!isComposite(component)) {
-                try {
-                    System.out.println("NOT COMPOSITE : " + Fractal.getNameController(component).getFcName());
-                } catch (NoSuchInterfaceException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
                 result.add(component);
             }
         }
