@@ -42,7 +42,7 @@
   <component definition="org.petalslink.dsb.kernel.ws.SOAPServiceBinderServiceImpl" name="SOAPServiceBinderImpl"/>
 
   <!-- DSB/JBI stuff -->
-  <component definition="org.petalslink.dsb.kernel.ws.jbi.ServiceUnitInformationServiceImpl" name="ServiceUnitInformationServiceImpl"/>
+  <component definition="org.petalslink.dsb.kernel.ws.jbi.ServiceArtefactsInformationServiceImpl" name="ServiceUnitInformationServiceImpl"/>
   <component definition="org.petalslink.dsb.kernel.ws.jbi.ComponentInformationServiceImpl" name="ComponentInformationServiceImpl"/>
   
   <!-- TEST -->
