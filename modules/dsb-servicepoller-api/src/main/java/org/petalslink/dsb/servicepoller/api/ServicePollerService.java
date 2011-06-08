@@ -4,6 +4,7 @@
 package org.petalslink.dsb.servicepoller.api;
 
 import javax.jws.WebMethod;
+import javax.jws.WebParam;
 import javax.jws.WebService;
 
 /**
@@ -25,8 +26,11 @@ public interface ServicePollerService {
      *            String for now)
      */
     @WebMethod
-    void start(ServicePollerInformation toPoll, DocumentHandler inputMessage,
-            String cronExpression, ServicePollerInformation replyTo) throws ServicePollerException;
+    void start(@WebParam(name = "toPoll") ServicePollerInformation toPoll,
+            @WebParam(name = "inputMessage") DocumentHandler inputMessage,
+            @WebParam(name = "cronExpression") String cronExpression,
+            @WebParam(name = "sendReplyTo") ServicePollerInformation replyTo)
+            throws ServicePollerException;
 
     /**
      * Stop polling the given service if it exists...
@@ -37,7 +41,8 @@ public interface ServicePollerService {
      * @param operation
      */
     @WebMethod
-    void stop(ServicePollerInformation toPoll, ServicePollerInformation replyTo)
+    void stop(@WebParam(name = "toPoll") ServicePollerInformation toPoll,
+            @WebParam(name = "sendReplyTo") ServicePollerInformation replyTo)
             throws ServicePollerException;
 
 }
