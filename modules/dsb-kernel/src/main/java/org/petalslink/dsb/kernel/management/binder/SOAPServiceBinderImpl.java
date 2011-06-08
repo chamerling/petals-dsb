@@ -34,7 +34,11 @@ import org.objectweb.fractal.fraclet.annotation.annotations.Provides;
 import org.objectweb.fractal.fraclet.annotation.annotations.Requires;
 import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
 import org.objectweb.util.monolog.api.Logger;
+import org.ow2.petals.container.lifecycle.ServiceAssemblyLifeCycle;
+import org.ow2.petals.container.lifecycle.ServiceUnitLifeCycle;
 import org.ow2.petals.jbi.descriptor.original.generated.Jbi;
+import org.ow2.petals.jbi.descriptor.original.generated.Services;
+import org.ow2.petals.jbi.management.admin.AdminService;
 import org.ow2.petals.jbi.management.deployment.AtomicDeploymentService;
 import org.ow2.petals.kernel.configuration.ConfigurationService;
 import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
@@ -44,7 +48,6 @@ import org.ow2.petals.tools.generator.jbi.ws2jbi.WS2Jbi;
 import org.ow2.petals.util.LoggingUtil;
 import org.petalslink.dsb.kernel.util.JBIFileHelper;
 import org.petalslink.dsb.ws.api.ServiceEndpoint;
-
 
 /**
  * Let's bind a web service!
@@ -76,6 +79,9 @@ public class SOAPServiceBinderImpl implements ServiceBinder {
 
     @Requires(name = "binder-checker", signature = BinderChecker.class)
     private BinderChecker binderChecker;
+
+    @Requires(name = "admin", signature = AdminService.class)
+    protected AdminService adminService;
 
     private File workPath;
 
@@ -169,7 +175,7 @@ public class SOAPServiceBinderImpl implements ServiceBinder {
             boolean success = this.deploymentService.start(saName);
             // FIXME : Need some update on the petals JMX side...
             if (success) {
-                this.log.info("Service assembly '" + saName + "' has been deployed");
+                this.log.info("Service assembly '" + saName + "' has been started");
             } else {
                 this.log.warning("Failed to start the Service Assembly '" + saName + "'");
                 throw new PEtALSWebServiceException("Start failure, the SA can not be started");
@@ -191,15 +197,38 @@ public class SOAPServiceBinderImpl implements ServiceBinder {
         if (sa != null) {
             sa.delete();
         }
-        
+
         result = new ArrayList<ServiceEndpoint>();
-        List<org.ow2.petals.jbi.descriptor.original.generated.Provides> list = descriptor.getServices().getProvides();
-        for (org.ow2.petals.jbi.descriptor.original.generated.Provides provides : list) {
-            ServiceEndpoint se = new ServiceEndpoint();
-            se.setEndpoint(provides.getEndpointName());
-            se.setItf(provides.getInterfaceName());
-            se.setService(provides.getServiceName());
-            result.add(se);
+        try {
+            ServiceAssemblyLifeCycle salc = adminService.getServiceAssemblyByName(saName);
+            List<ServiceUnitLifeCycle> sulcs = salc.getServiceUnitLifeCycles();
+            for (ServiceUnitLifeCycle su : sulcs) {
+                Jbi jbi = su.getServiceUnitDescriptor();
+                if (jbi != null) {
+                    Services services = jbi.getServices();
+                    if (services != null) {
+                        List<org.ow2.petals.jbi.descriptor.original.generated.Provides> provides = services
+                                .getProvides();
+                        if (provides != null) {
+                            for (org.ow2.petals.jbi.descriptor.original.generated.Provides provides2 : provides) {
+                                ServiceEndpoint se = new ServiceEndpoint();
+                                se.setEndpoint(provides2.getEndpointName());
+                                se.setItf(provides2.getInterfaceName());
+                                se.setService(provides2.getServiceName());
+                                result.add(se);
+                            }
+                        } else {
+                            log.debug("Can not find any provides");
+                        }
+                    } else {
+                        log.debug("Can not find any service");
+                    }
+                } else {
+                    log.debug("Can not find any JBI descriptor");
+                }
+            }
+        } catch (Exception e) {
+            log.warning("Can not retrieve information...", e);
         }
         return result;
     }
