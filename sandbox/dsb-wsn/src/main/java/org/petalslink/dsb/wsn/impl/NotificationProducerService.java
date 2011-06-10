@@ -291,7 +291,7 @@ public class NotificationProducerService implements INotificationProducer, INoti
      */
     public void notifyNewSituation(Notify payloadToUse) throws WsnbException {
         // look for existing subscritpion ...
-        System.out.println("Sending notification...");
+        System.out.println("Sending notification to consumers...");
 
         List<String> knownSubscriptions = this.subsMgrServ.getSubsMgrEngine()
                 .getStoredSubscriptionUuids();
@@ -314,6 +314,12 @@ public class NotificationProducerService implements INotificationProducer, INoti
                     .getSubsMgrEngine().getConsumerEdpRefOfSubscription(subscriptionId);
             System.out.println("ADRESS TO SEND NOTIFICATION TO " + endpoint.getAddress()
                     + " for subscription ID : " + subscriptionId);
+
+            // let's have a look if we can send the message to the subscriber
+            // based on the TOPIC he subscribed and on the current message
+            // one...
+            // TODO
+            System.out.println("FILTER TO DO BEFORE SENDING");
             this.notifSender.sendNotifyRequest(endpoint, payloadToUse);
         }
     }
