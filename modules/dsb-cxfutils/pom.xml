@@ -11,7 +11,6 @@
 
 	<groupId>org.petalslink.dsb</groupId>
 	<artifactId>dsb-cxfutils</artifactId>
-	<version>1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>dsb-cxfutils</name>
@@ -22,6 +21,11 @@
 			<artifactId>junit</artifactId>
 			<version>3.8.1</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>dsb-jaxwsutils</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.cxf</groupId>

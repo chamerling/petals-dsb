@@ -8,12 +8,13 @@ import javax.jws.WebService;
 import org.apache.cxf.jaxb.JAXBDataBinding;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
+import org.petalslink.dsb.jaxws.JAXWSHelper;
 
 /**
  * @author chamerling
  * 
  */
-public class JAXWSHelper {
+public class CXFHelper {
 
     /**
      * Get a client for the given class
@@ -28,7 +29,7 @@ public class JAXWSHelper {
         if (!address.endsWith("/")) {
             address = address + "/";
         }
-        address = address + getWebServiceName(clazz);
+        address = address + JAXWSHelper.getWebServiceName(clazz);
         JaxWsProxyFactoryBean factory = new JaxWsProxyFactoryBean();
         factory.setAddress(address);
         factory.setServiceClass(clazz);
@@ -40,8 +41,8 @@ public class JAXWSHelper {
         final JaxWsServerFactoryBean sf = new JaxWsServerFactoryBean();
         sf.setDataBinding(new JAXBDataBinding());
         sf.setServiceBean(bean);
-        Class<?> wsClass = getWebServiceClass(clazz);
-        String serviceName = getWebServiceName(wsClass);
+        Class<?> wsClass = JAXWSHelper.getWebServiceClass(clazz);
+        String serviceName = JAXWSHelper.getWebServiceName(wsClass);
         if (serviceName == null) {
             serviceName = clazz.getSimpleName();
         }
@@ -66,46 +67,4 @@ public class JAXWSHelper {
             }
         };
     }
-
-    public static final Class<?> getWebServiceClass(Class<?> cls) {
-        if (cls == null) {
-            return null;
-        }
-        if (null != cls.getAnnotation(WebService.class)) {
-            return cls;
-        }
-        for (Class<?> inf : cls.getInterfaces()) {
-            if (null != inf.getAnnotation(WebService.class)) {
-                return inf;
-            }
-        }
-        return getWebServiceClass(cls.getSuperclass());
-    }
-
-    public static final String getWebServiceName(Class<?> wsClass) {
-        String serviceName = null;
-        WebService anno = wsClass.getAnnotation(WebService.class);
-        if ((anno.serviceName() == null) || (anno.serviceName().trim().length() == 0)) {
-            serviceName = wsClass.getSimpleName();
-        } else {
-            serviceName = anno.serviceName();
-        }
-        return serviceName;
-    }
-
-    public static boolean hasWebServiceAnnotation(Class<?> cls) {
-        if (cls == null) {
-            return false;
-        }
-        if (null != cls.getAnnotation(WebService.class)) {
-            return true;
-        }
-        for (Class<?> inf : cls.getInterfaces()) {
-            if (null != inf.getAnnotation(WebService.class)) {
-                return true;
-            }
-        }
-        return hasWebServiceAnnotation(cls.getSuperclass());
-    }
-
 }
