@@ -15,7 +15,7 @@ import org.w3c.dom.Document;
 public interface ServicePoller {
 
     /**
-     * Start polling the given service with the given information
+     * Start polling the given service with the given information.
      * 
      * @param toPoll
      *            service to poll

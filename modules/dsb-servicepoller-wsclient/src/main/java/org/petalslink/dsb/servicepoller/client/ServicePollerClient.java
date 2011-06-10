@@ -3,7 +3,7 @@
  */
 package org.petalslink.dsb.servicepoller.client;
 
-import org.petalslink.dsb.cxf.JAXWSHelper;
+import org.petalslink.dsb.cxf.CXFHelper;
 import org.petalslink.dsb.servicepoller.api.DocumentHandler;
 import org.petalslink.dsb.servicepoller.api.ServicePoller;
 import org.petalslink.dsb.servicepoller.api.ServicePollerException;
@@ -59,7 +59,7 @@ public class ServicePollerClient implements ServicePoller {
 
     private synchronized ServicePollerService getWSClient() {
         if (client == null) {
-            client = JAXWSHelper.getClient(address, ServicePollerService.class);
+            client = CXFHelper.getClient(address, ServicePollerService.class);
         }
         return this.client;
     }

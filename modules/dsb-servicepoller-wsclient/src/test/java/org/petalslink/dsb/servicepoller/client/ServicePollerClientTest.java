@@ -17,7 +17,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import junit.framework.TestCase;
 
-import org.petalslink.dsb.cxf.JAXWSHelper;
+import org.petalslink.dsb.cxf.CXFHelper;
 import org.petalslink.dsb.servicepoller.api.ServicePoller;
 import org.petalslink.dsb.servicepoller.api.ServicePollerException;
 import org.petalslink.dsb.servicepoller.api.ServicePollerInformation;
@@ -124,7 +124,7 @@ public class ServicePollerClientTest extends TestCase {
     }
 
     private org.petalslink.dsb.cxf.Server createServer(String url, ServicePoller bean) {
-        return JAXWSHelper.getService(url, ServicePollerService.class, new ServicePollerServiceAdapter(bean));
+        return CXFHelper.getService(url, ServicePollerService.class, new ServicePollerServiceAdapter(bean));
     }
 
 }
