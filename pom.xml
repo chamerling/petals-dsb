@@ -89,6 +89,7 @@
 		
 		<!-- Tools -->
 		<module>modules/dsb-cxfutils</module>
+		<module>modules/dsb-jaxwsutils</module>
    		
 		
 		<!-- Independant things, to be moved elsewhere -->
