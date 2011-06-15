@@ -21,6 +21,8 @@
   <!--<component definition="Federation" name="Federation"/>-->
   <component definition="DSBCoreService" name="DSBCoreService"/>
   
+  <component definition="REST" name="REST"/>
+  
   <component definition="org.petalslink.dsb.kernel.io.client.DSBClientFactoryImpl" name="DSBClientFactoryImpl"/>
 
   <binding client="Communication.configuration" server="ConfigurationServiceImpl.service"/>
@@ -134,5 +136,9 @@
   
   <binding client="DSBCoreService.router" server="JBI-Messaging.router"/>
   <binding client="DSBCoreService.configuration" server="ConfigurationServiceImpl.service"/>
+  
+  <!-- REST -->
+  <binding client="REST.atomicDeploymentService" server="JBI-Management.atomicDeploymentService"/>
+  <binding client="REST.configuration" server="ConfigurationServiceImpl.service"/>
   
 </definition>

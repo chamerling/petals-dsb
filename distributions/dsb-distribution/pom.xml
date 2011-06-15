@@ -70,6 +70,13 @@
 			<type>war</type>
 		</dependency>
 
+	<!-- REST stuff -->
+	<dependency>
+		<groupId>org.petalslink.dsb</groupId>
+		<artifactId>dsb-kernel-restapi-impl</artifactId>
+		<version>${project.version}</version>
+	</dependency>
+
 		<!--
 			<dependency> <groupId>eu.soa4all.dsb.petals.webapp</groupId> <artifactId>soa4all-petals-webapp</artifactId> <version>1.0-SNAPSHOT</version> <scope>runtime</scope> <type>war</type> </dependency>
 		-->

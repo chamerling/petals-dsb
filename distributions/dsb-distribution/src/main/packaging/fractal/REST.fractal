@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE definition PUBLIC "-//objectweb.org//DTD Fractal ADL 2.0//EN" "classpath://org/objectweb/fractal/adl/xml/standard.dtd">
+
+<definition extends="RESTType" name="REST">
+
+  <component definition="org.petalslink.dsb.kernel.tools.rest.RESTServiceManagerImpl" name="RESTServiceManagerImpl"/>
+  <component definition="org.petalslink.dsb.kernel.tools.rest.CXFRESTServiceExposerImpl" name="RESTServiceExposerImpl"/>
+  <component definition="org.petalslink.dsb.kernel.tools.rest.GlobalRESTServiceRegistryImpl" name="RESTServiceRegistryImpl"/>
+ 
+  <!-- REST Services, they can be defined everywhere in the framework... -->
+  <component definition="org.petalslink.dsb.kernel.rest.impl.ServiceAssemblyServiceImpl" name="RESTServiceAssemblyServiceImpl"/>
+ 
+  <binding client="RESTServiceManagerImpl.restexposer" server="RESTServiceExposerImpl.service"/>
+  <binding client="RESTServiceManagerImpl.restregistry" server="RESTServiceRegistryImpl.service"/>
+  <binding client="RESTServiceExposerImpl.configuration" server="this.configuration"/>
+  
+  <binding client="RESTServiceAssemblyServiceImpl.atomic-deployment" server="this.atomicDeploymentService"/>
+
+</definition>
