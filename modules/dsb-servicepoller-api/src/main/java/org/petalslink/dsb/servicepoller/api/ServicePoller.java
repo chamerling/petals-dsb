@@ -26,18 +26,31 @@ public interface ServicePoller {
      *            any)...
      * @throws ServicePollerException
      */
-    void start(ServicePollerInformation toPoll, Document inputMessage, String cronExpression,
+    String start(ServicePollerInformation toPoll, Document inputMessage, String cronExpression,
             ServicePollerInformation replyTo) throws ServicePollerException;
 
     /**
-     * Stop polling the given service 
      * 
-     * @param endpointName
-     * @param service
-     * @param itf
-     * @param operation
+     * @param id
+     * @return
+     * @throws ServicePollerException
      */
-    void stop(ServicePollerInformation toPoll, ServicePollerInformation replyTo)
-            throws ServicePollerException;
+    boolean stop(String id) throws ServicePollerException;
+
+    /**
+     * 
+     * @param id
+     * @return
+     * @throws ServicePollerException
+     */
+    boolean pause(String id) throws ServicePollerException;
+
+    /**
+     * 
+     * @param id
+     * @return
+     * @throws ServicePollerException
+     */
+    boolean resume(String id) throws ServicePollerException;
 
 }

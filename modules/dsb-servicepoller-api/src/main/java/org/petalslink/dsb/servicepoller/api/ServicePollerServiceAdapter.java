@@ -32,7 +32,7 @@ public class ServicePollerServiceAdapter implements ServicePollerService {
      * javax.xml.namespace.QName,
      * org.petalslink.dsb.servicepoller.api.DocumentHandler)
      */
-    public void start(ServicePollerInformation toPoll, DocumentHandler inputMessage,
+    public String start(ServicePollerInformation toPoll, DocumentHandler inputMessage,
             String cronExpression, ServicePollerInformation replyTo) throws ServicePollerException {
         if (bean == null) {
             throw new ServicePollerException("Can not find any inner poller service implementation");
@@ -51,23 +51,36 @@ public class ServicePollerServiceAdapter implements ServicePollerService {
 
             }
         }
-        bean.start(toPoll, document, cronExpression, replyTo);
+        return bean.start(toPoll, document, cronExpression, replyTo);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.petalslink.dsb.servicepoller.api.ServicePollerService#stop(java.lang
-     * .String, javax.xml.namespace.QName, javax.xml.namespace.QName,
-     * javax.xml.namespace.QName)
+    /* (non-Javadoc)
+     * @see org.petalslink.dsb.servicepoller.api.ServicePollerService#stop(java.lang.String)
      */
-    public void stop(ServicePollerInformation toPoll, ServicePollerInformation replyTo)
-            throws ServicePollerException {
-        if (bean == null) {
-            throw new ServicePollerException("Can not find any inner poller service implementation");
+    public boolean stop(String id) throws ServicePollerException {
+        if (id == null) {
+            throw new ServicePollerException("ID can not be null");
         }
+        return bean.stop(id);
+    }
 
-        bean.stop(toPoll, replyTo);
+    /* (non-Javadoc)
+     * @see org.petalslink.dsb.servicepoller.api.ServicePollerService#pause(java.lang.String)
+     */
+    public boolean pause(String id) throws ServicePollerException {
+        if (id == null) {
+            throw new ServicePollerException("ID can not be null");
+        }
+        return bean.pause(id);
+    }
+
+    /* (non-Javadoc)
+     * @see org.petalslink.dsb.servicepoller.api.ServicePollerService#resume(java.lang.String)
+     */
+    public boolean resume(String id) throws ServicePollerException {
+        if (id == null) {
+            throw new ServicePollerException("ID can not be null");
+        }
+        return bean.resume(id);
     }
 }

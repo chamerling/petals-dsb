@@ -24,25 +24,40 @@ public interface ServicePollerService {
      * @param inputMessage
      *            an optionall input message (a DOM document serialized in
      *            String for now)
+     * @return an ID which have to be used in other operations...
      */
     @WebMethod
-    void start(@WebParam(name = "toPoll") ServicePollerInformation toPoll,
+    String start(@WebParam(name = "toPoll") ServicePollerInformation toPoll,
             @WebParam(name = "inputMessage") DocumentHandler inputMessage,
             @WebParam(name = "cronExpression") String cronExpression,
             @WebParam(name = "sendReplyTo") ServicePollerInformation replyTo)
             throws ServicePollerException;
 
     /**
-     * Stop polling the given service if it exists...
      * 
-     * @param endpointName
-     * @param service
-     * @param itf
-     * @param operation
+     * @param id
+     * @return
+     * @throws ServicePollerException
      */
     @WebMethod
-    void stop(@WebParam(name = "toPoll") ServicePollerInformation toPoll,
-            @WebParam(name = "sendReplyTo") ServicePollerInformation replyTo)
-            throws ServicePollerException;
+    boolean stop(String id) throws ServicePollerException;
+
+    /**
+     * 
+     * @param id
+     * @return
+     * @throws ServicePollerException
+     */
+    @WebMethod
+    boolean pause(String id) throws ServicePollerException;
+
+    /**
+     * 
+     * @param id
+     * @return
+     * @throws ServicePollerException
+     */
+    @WebMethod
+    boolean resume(String id) throws ServicePollerException;
 
 }

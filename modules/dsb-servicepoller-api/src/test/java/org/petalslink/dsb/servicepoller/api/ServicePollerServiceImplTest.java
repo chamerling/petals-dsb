@@ -4,6 +4,7 @@
 package org.petalslink.dsb.servicepoller.api;
 
 import java.io.File;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -28,12 +29,29 @@ public class ServicePollerServiceImplTest extends TestCase {
 
             }
 
-            public void start(ServicePollerInformation toPoll, Document inputMessage,
+            public String start(ServicePollerInformation toPoll, Document inputMessage,
                     String cronExpression, ServicePollerInformation reployTo)
                     throws ServicePollerException {
                 // null document should not fire any problem from the upper
                 // layer so I am here...
                 i.incrementAndGet();
+                
+                return UUID.randomUUID().toString();
+            }
+
+            public boolean stop(String id) throws ServicePollerException {
+                // TODO Auto-generated method stub
+                return false;
+            }
+
+            public boolean pause(String id) throws ServicePollerException {
+                // TODO Auto-generated method stub
+                return false;
+            }
+
+            public boolean resume(String id) throws ServicePollerException {
+                // TODO Auto-generated method stub
+                return false;
             }
         });
         try {
@@ -55,16 +73,29 @@ public class ServicePollerServiceImplTest extends TestCase {
 
             }
 
-            public void start(ServicePollerInformation toPoll, Document inputMessage,
+            public String start(ServicePollerInformation toPoll, Document inputMessage,
                     String cronExpression, ServicePollerInformation replyTo)
                     throws ServicePollerException {
                 // null document should not fire any problem from the upper
                 // layer so I am here...
                 i.incrementAndGet();
-                if (inputMessage != null)
+                if (inputMessage != null) {
                     notNull.incrementAndGet();
-
+                }
                 // TODO : compare content
+                return UUID.randomUUID().toString();
+            }
+
+            public boolean stop(String id) throws ServicePollerException {
+                return false;
+            }
+
+            public boolean pause(String id) throws ServicePollerException {
+                return false;
+            }
+
+            public boolean resume(String id) throws ServicePollerException {
+                return false;
             }
         });
 
