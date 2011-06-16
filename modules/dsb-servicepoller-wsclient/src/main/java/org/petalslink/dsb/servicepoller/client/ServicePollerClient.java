@@ -38,25 +38,35 @@ public class ServicePollerClient implements ServicePoller {
      * javax.xml.namespace.QName,
      * org.petalslink.dsb.servicepoller.api.DocumentHandler)
      */
-    public void start(ServicePollerInformation toPoll, Document inputMessage,
+    public String start(ServicePollerInformation toPoll, Document inputMessage,
             String cronExpression, ServicePollerInformation replyTo) throws ServicePollerException {
         DocumentHandler data = Utils.toDataHandler(inputMessage);
-        getWSClient().start(toPoll, data, cronExpression, replyTo);
+        return getWSClient().start(toPoll, data, cronExpression, replyTo);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.petalslink.dsb.servicepoller.api.ServicePoller#stop(java.lang.String,
-     * javax.xml.namespace.QName, javax.xml.namespace.QName,
-     * org.petalslink.dsb.servicepoller.api.DocumentHandler)
+    /* (non-Javadoc)
+     * @see org.petalslink.dsb.servicepoller.api.ServicePoller#stop(java.lang.String)
      */
-    public void stop(ServicePollerInformation toPoll, ServicePollerInformation replyTo)
-            throws ServicePollerException {
-        getWSClient().stop(toPoll, replyTo);
+    public boolean stop(String id) throws ServicePollerException {
+        return getWSClient().stop(id);
     }
 
+    /* (non-Javadoc)
+     * @see org.petalslink.dsb.servicepoller.api.ServicePoller#pause(java.lang.String)
+     */
+    public boolean pause(String id) throws ServicePollerException {
+        return getWSClient().pause(id);
+
+    }
+
+    /* (non-Javadoc)
+     * @see org.petalslink.dsb.servicepoller.api.ServicePoller#resume(java.lang.String)
+     */
+    public boolean resume(String id) throws ServicePollerException {
+        return getWSClient().resume(id);
+
+    }
+    
     private synchronized ServicePollerService getWSClient() {
         if (client == null) {
             client = CXFHelper.getClient(address, ServicePollerService.class);
