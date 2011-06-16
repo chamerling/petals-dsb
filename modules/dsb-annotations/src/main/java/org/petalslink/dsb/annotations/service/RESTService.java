@@ -13,8 +13,10 @@ import java.lang.annotation.Target;
  * components in the framework and so to expose them...
  * 
  * @author chamerling
+ * @deprecated use {@link CoreService} instead.
  * 
  */
+@Deprecated
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.TYPE })
 public @interface RESTService {
