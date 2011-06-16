@@ -14,7 +14,7 @@ import org.objectweb.fractal.api.NoSuchInterfaceException;
 import org.objectweb.fractal.api.control.ContentController;
 import org.objectweb.fractal.api.control.SuperController;
 import org.objectweb.fractal.util.Fractal;
-import org.petalslink.dsb.kernel.rest.api.RESTService;
+import org.petalslink.dsb.annotations.service.RESTService;
 
 /**
  * FIXME : TO be extracted since the same code is also available in the DSB
