@@ -86,6 +86,10 @@ public class JettyWebAppServerImpl implements WebAppServer {
      */
     @LifeCycleListener(phase = Phase.START)
     public void startServer() throws DSBException {
+        if (isStarted()) {
+            this.log.info("Server is already started...");
+            return;
+        }
 
         // get the webapps path
         File webappdir = new File(this.configurationService.getContainerConfiguration()
@@ -124,6 +128,13 @@ public class JettyWebAppServerImpl implements WebAppServer {
         }
         this.log.info("The DSB Web application is available at http://localhost:"
                 + this.dsbConfigurationService.getWebAppPort());
+    }
+
+    /**
+     * @return
+     */
+    private boolean isStarted() {
+        return (server != null && server.isStarted());
     }
 
     /**
