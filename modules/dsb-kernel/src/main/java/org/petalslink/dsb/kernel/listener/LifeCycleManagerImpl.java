@@ -105,7 +105,11 @@ public class LifeCycleManagerImpl implements LifeCycleManager {
                     }
                     bean.m.invoke(bean.o, new Object[0]);
                 } catch (Exception e) {
-                    log.warning(e.getMessage());
+                    if (log.isDebugEnabled()) {
+                        log.warning("Problem while calling method " + bean.m.getName(), e);
+                    } else {
+                        log.warning("Problem while calling method " + bean.m.getName() + " : " + e.getMessage());
+                    }
                 }
             }
         }
