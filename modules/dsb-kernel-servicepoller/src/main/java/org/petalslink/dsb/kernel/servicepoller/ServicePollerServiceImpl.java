@@ -61,27 +61,14 @@ public class ServicePollerServiceImpl implements ServicePollerService {
      * org.petalslink.dsb.servicepoller.api.DocumentHandler, java.lang.String,
      * org.petalslink.dsb.servicepoller.api.ServicePollerInformation)
      */
-    public void start(ServicePollerInformation toPoll, DocumentHandler inputMessage,
+    public String start(ServicePollerInformation toPoll, DocumentHandler inputMessage,
             String cronExpression, ServicePollerInformation replyTo) throws ServicePollerException {
         try {
             CronExpressionValidator.validateExpression(cronExpression);
         } catch (ParseException e) {
             throw new ServicePollerException(String.format("Invalid CronExpression %s", cronExpression), e);
         }
-        this.getAdapter().start(toPoll, inputMessage, cronExpression, replyTo);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.petalslink.dsb.servicepoller.api.ServicePollerService#stop(org.petalslink
-     * .dsb.servicepoller.api.ServicePollerInformation,
-     * org.petalslink.dsb.servicepoller.api.ServicePollerInformation)
-     */
-    public void stop(ServicePollerInformation toPoll, ServicePollerInformation replyTo)
-            throws ServicePollerException {
-        this.getAdapter().stop(toPoll, replyTo);
+        return this.getAdapter().start(toPoll, inputMessage, cronExpression, replyTo);
     }
 
     /**
@@ -92,6 +79,27 @@ public class ServicePollerServiceImpl implements ServicePollerService {
             adapter = new org.petalslink.dsb.servicepoller.api.ServicePollerServiceAdapter(manager);
         }
         return adapter;
+    }
+
+    /* (non-Javadoc)
+     * @see org.petalslink.dsb.servicepoller.api.ServicePollerService#stop(java.lang.String)
+     */
+    public boolean stop(String id) throws ServicePollerException {
+        return this.getAdapter().stop(id);
+    }
+
+    /* (non-Javadoc)
+     * @see org.petalslink.dsb.servicepoller.api.ServicePollerService#pause(java.lang.String)
+     */
+    public boolean pause(String id) throws ServicePollerException {
+        return this.getAdapter().pause(id);
+    }
+
+    /* (non-Javadoc)
+     * @see org.petalslink.dsb.servicepoller.api.ServicePollerService#resume(java.lang.String)
+     */
+    public boolean resume(String id) throws ServicePollerException {
+        return this.getAdapter().resume(id);
     }
 
 }

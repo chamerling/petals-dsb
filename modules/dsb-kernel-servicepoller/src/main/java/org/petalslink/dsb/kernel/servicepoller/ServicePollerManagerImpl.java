@@ -6,9 +6,7 @@ package org.petalslink.dsb.kernel.servicepoller;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -25,6 +23,7 @@ import org.ow2.petals.jbi.descriptor.JBIDescriptorException;
 import org.ow2.petals.jbi.descriptor.original.JBIDescriptorBuilder;
 import org.ow2.petals.jbi.descriptor.original.generated.Jbi;
 import org.ow2.petals.jbi.management.deployment.AtomicDeploymentService;
+import org.ow2.petals.kernel.api.server.PetalsException;
 import org.ow2.petals.tools.generator.commons.Constants;
 import org.ow2.petals.tools.generator.jbi.api.JBIGenerationException;
 import org.ow2.petals.util.LoggingUtil;
@@ -47,7 +46,7 @@ public class ServicePollerManagerImpl implements ServicePoller {
 
     private LoggingUtil log;
 
-    private Map<Key, List<String>> cache = new HashMap<Key, List<String>>();
+    private Map<String, PollerInformation> cache = new HashMap<String, PollerInformation>();
 
     @Requires(name = "atomic-deployment", signature = AtomicDeploymentService.class)
     private AtomicDeploymentService deploymentService;
@@ -56,7 +55,7 @@ public class ServicePollerManagerImpl implements ServicePoller {
     protected void start() {
         this.log = new LoggingUtil(logger);
         this.log.start();
-        this.cache = new HashMap<ServicePollerManagerImpl.Key, List<String>>();
+        this.cache = new HashMap<String, PollerInformation>();
     }
 
     @LifeCycle(on = LifeCycleType.STOP)
@@ -64,7 +63,7 @@ public class ServicePollerManagerImpl implements ServicePoller {
         this.log.start();
     }
 
-    public void start(ServicePollerInformation toPoll, Document inputMessage,
+    public String start(ServicePollerInformation toPoll, Document inputMessage,
             String cronExpression, ServicePollerInformation replyTo) throws ServicePollerException {
         if (log.isDebugEnabled()) {
             this.log.debug("Got a start request for toPoll service = " + toPoll);
@@ -136,14 +135,14 @@ public class ServicePollerManagerImpl implements ServicePoller {
         }
 
         // all done, cache it...
-        Key key = new Key(toPoll, replyTo);
-        List<String> list = null;
-        if (cache.get(key) == null) {
-            list = new ArrayList<String>();
-            cache.put(key, list);
-        }
-        list = cache.get(key);
-        list.add(saName);
+        PollerInformation info = new PollerInformation();
+        info.cronExpression = cronExpression;
+        info.inputMessage = inputMessage;
+        info.replyTo = replyTo;
+        info.toPoll = toPoll;
+        this.cache.put(saName, info);
+        
+        return saName;
     }
 
     /**
@@ -180,71 +179,63 @@ public class ServicePollerManagerImpl implements ServicePoller {
             this.log.debug("ReployTo is set to : " + replyTo);
         }
 
-        Key key = new Key(toPoll, replyTo);
-        if (cache.get(key) != null) {
-            // which one???
-            //List<String> list = this.cache.get(key);
-            // ...
-        }
-        // TODO
+        throw new ServicePollerException("This method is deprecated");
     }
 
-    class Key {
-        ServicePollerInformation to;
-
-        ServicePollerInformation reply;
-
-        public Key(ServicePollerInformation to, ServicePollerInformation reply) {
-            super();
-            this.to = to;
-            this.reply = reply;
+    /* (non-Javadoc)
+     * @see org.petalslink.dsb.servicepoller.api.ServicePoller#stop(java.lang.String)
+     */
+    public boolean stop(String id) throws ServicePollerException {
+        if (log.isDebugEnabled()) {
+            this.log.debug("Got a stop request for ID = " + id);
         }
-
-        @Override
-        public int hashCode() {
-            final int prime = 31;
-            int result = 1;
-            result = prime * result + getOuterType().hashCode();
-            result = prime * result + ((reply == null) ? 0 : reply.hashCode());
-            result = prime * result + ((to == null) ? 0 : to.hashCode());
-            return result;
+        boolean result = false;
+        try {
+            result = deploymentService.stop(id);
+            result = deploymentService.shutdown(id);
+            result = deploymentService.undeploy(id);
+        } catch (PetalsException e) {
+            throw new ServicePollerException("Can not stop poller " + id, e);
         }
+        return result;
+    }
 
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) {
-                return true;
-            }
-            if (obj == null) {
-                return false;
-            }
-            if (!(obj instanceof Key)) {
-                return false;
-            }
-            Key other = (Key) obj;
-            if (!getOuterType().equals(other.getOuterType())) {
-                return false;
-            }
-            if (reply == null) {
-                if (other.reply != null) {
-                    return false;
-                }
-            } else if (!reply.equals(other.reply)) {
-                return false;
-            }
-            if (to == null) {
-                if (other.to != null) {
-                    return false;
-                }
-            } else if (!to.equals(other.to)) {
-                return false;
-            }
-            return true;
+    /* (non-Javadoc)
+     * @see org.petalslink.dsb.servicepoller.api.ServicePoller#pause(java.lang.String)
+     */
+    public boolean pause(String id) throws ServicePollerException {
+        if (log.isDebugEnabled()) {
+            this.log.debug("Got a pause request for ID = " + id);
         }
+        boolean result = false;
+        try {
+            result = deploymentService.stop(id);
+        } catch (PetalsException e) {
+            throw new ServicePollerException("Can not pause poller " + id, e);
+        }
+        return result;
+    }
 
-        private ServicePollerManagerImpl getOuterType() {
-            return ServicePollerManagerImpl.this;
+    /* (non-Javadoc)
+     * @see org.petalslink.dsb.servicepoller.api.ServicePoller#resume(java.lang.String)
+     */
+    public boolean resume(String id) throws ServicePollerException {
+        if (log.isDebugEnabled()) {
+            this.log.debug("Got a resume request for ID = " + id);
         }
+        boolean result = false;
+        try {
+            result = deploymentService.start(id);
+        } catch (PetalsException e) {
+            throw new ServicePollerException("Can not resume poller " + id, e);
+        }
+        return result;
+    }
+    
+    
+    class PollerInformation {
+        ServicePollerInformation toPoll; Document inputMessage;
+        String cronExpression; ServicePollerInformation replyTo;
     }
 
 }
