@@ -5,6 +5,7 @@ package org.petalslink.dsb.servicepoller.client;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -46,7 +47,7 @@ public class ServicePollerClientTest extends TestCase {
 
             }
 
-            public void start(ServicePollerInformation toPoll, Document inputMessage,
+            public String start(ServicePollerInformation toPoll, Document inputMessage,
                     String cronExpression, ServicePollerInformation replyTo) {
                 try {
                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -63,6 +64,7 @@ public class ServicePollerClientTest extends TestCase {
                     e.printStackTrace();
                     fail.incrementAndGet();
                 }
+                return UUID.randomUUID().toString();
             }
 
             private boolean payloadIsOk(Document inputMessage) {
@@ -83,6 +85,21 @@ public class ServicePollerClientTest extends TestCase {
                     }
                 }
                 return check == 2;
+            }
+
+            public boolean stop(String id) throws ServicePollerException {
+                // TODO Auto-generated method stub
+                return false;
+            }
+
+            public boolean pause(String id) throws ServicePollerException {
+                // TODO Auto-generated method stub
+                return false;
+            }
+
+            public boolean resume(String id) throws ServicePollerException {
+                // TODO Auto-generated method stub
+                return false;
             }
         };
 
