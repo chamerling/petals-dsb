@@ -34,22 +34,5 @@
 			<artifactId>dsb-kernel-wsapi</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
-		<!-- To be removed -->
-		<dependency>
-			<groupId>org.ow2.petals</groupId>
-			<artifactId>petals-kernel-api</artifactId>
-			<version>2.0.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.ow2.petals.registry</groupId>
-			<artifactId>petals-registry-api</artifactId>
-			<version>1.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.ow2.petals</groupId>
-			<artifactId>petals-kernel</artifactId>
-			<scope>provided</scope>
-		</dependency>
 	</dependencies>
 </project>
