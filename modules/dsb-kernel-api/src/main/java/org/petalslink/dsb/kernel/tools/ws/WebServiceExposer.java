@@ -20,8 +20,6 @@ package org.petalslink.dsb.kernel.tools.ws;
 
 import java.util.Set;
 
-import org.ow2.petals.tools.ws.WebServiceException;
-
 /**
  * Expose services as web services
  * 
@@ -47,6 +45,12 @@ public interface WebServiceExposer {
     Set<WebServiceInformationBean> expose(Set<WebServiceInformationBean> set)
             throws WebServiceException;
 
+    /**
+     * Remove an exposed service
+     * 
+     * @param name
+     * @throws WebServiceException
+     */
     void remove(String name) throws WebServiceException;
 
 }

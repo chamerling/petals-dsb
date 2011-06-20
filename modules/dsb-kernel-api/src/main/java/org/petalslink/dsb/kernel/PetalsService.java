@@ -16,24 +16,17 @@
  * 
  * Initial developer(s): EBM WebSourcing
  */
-package org.petalslink.dsb.kernel.federation;
-
-import org.petalslink.dsb.federation.core.client.FederationClientWithCallback;
+package org.petalslink.dsb.kernel;
 
 /**
  * @author chamerling - eBM WebSourcing
- *
+ * 
  */
-public interface FederationClientRegistry {
+public interface PetalsService {
 
-    static final String PREFIX = "federationclient-";
+    void init() throws Exception;
 
-    /**
-     * There is a unique client per communication protocol...
-     * 
-     * @param protocolName
-     * @return
-     */
-    FederationClientWithCallback getFederationClient(String protocolName);
+    void setup() throws Exception;
 
+    void shutdown() throws Exception;
 }

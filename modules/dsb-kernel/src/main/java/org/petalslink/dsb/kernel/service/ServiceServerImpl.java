@@ -3,7 +3,6 @@
  */
 package org.petalslink.dsb.kernel.service;
 
-import org.apache.cxf.endpoint.Server;
 import org.objectweb.fractal.fraclet.annotation.annotations.FractalComponent;
 import org.objectweb.fractal.fraclet.annotation.annotations.Interface;
 import org.objectweb.fractal.fraclet.annotation.annotations.LifeCycle;

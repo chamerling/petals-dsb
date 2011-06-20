@@ -23,7 +23,6 @@ import java.util.List;
 import javax.xml.namespace.QName;
 
 import org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint;
-import org.ow2.petals.jbi.messaging.routing.RoutingException;
 
 /**
  * @author chamerling - eBM WebSourcing
@@ -38,7 +37,7 @@ public interface EndpointSearchEngine {
      * @throws RoutingException
      */
     ServiceEndpoint getTargetedEndpointFromGivenEndpoint(ServiceEndpoint givenEndpoint,
-            String linkType) throws RoutingException;
+            String linkType) throws SearchException;
 
     /**
      * @param givenServiceName
@@ -48,7 +47,7 @@ public interface EndpointSearchEngine {
      * @throws RoutingException
      */
     List<ServiceEndpoint> getTargetedEndpointFromGivenServiceName(QName givenServiceName,
-            String strategy, String linkType) throws RoutingException;
+            String strategy, String linkType) throws SearchException;
 
     /**
      * @param givenInterfaceName
@@ -58,7 +57,7 @@ public interface EndpointSearchEngine {
      * @throws RoutingException
      */
     List<ServiceEndpoint> getTargetedEndpointFromGivenInterfaceName(QName givenInterfaceName,
-            String strategy, String linkType) throws RoutingException;
+            String strategy, String linkType) throws SearchException;
 
     /**
      * Get all the endpoints

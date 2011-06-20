@@ -108,7 +108,7 @@ public class EndpointSearchEngineImpl implements EndpointSearchEngine, PetalsSer
         try {
             defaultStrategyParameters = tokenizeAndAnalyseStrategy(containerConfiguration
                     .getRouterStrategy());
-        } catch (final RoutingException e) {
+        } catch (final SearchException e) {
             defaultStrategyParameters = DEFAULT_STRATEGY_PARAMETERS;
         }
 
@@ -143,28 +143,28 @@ public class EndpointSearchEngineImpl implements EndpointSearchEngine, PetalsSer
      *             impossible to get the endpoint
      */
     public ServiceEndpoint getTargetedEndpointFromGivenEndpoint(
-            final ServiceEndpoint givenEndpoint, String linktype) throws RoutingException {
+            final ServiceEndpoint givenEndpoint, String linktype) throws SearchException {
         this.log.call();
 
         ServiceEndpoint targetedEndpoint = null;
 
         if (givenEndpoint.getType() == EndpointType.INTERNAL) {
             if (LinkType.SOFT.value().equals(linktype)) {
-                throw new RoutingException("The target endpoint '"
+                throw new SearchException("The target endpoint '"
                         + givenEndpoint.getEndpointName() + "' is not a SOFT link");
             } else {
                 targetedEndpoint = givenEndpoint;
             }
         } else if (givenEndpoint.getType() == EndpointType.LINKED) {
             if (LinkType.HARD.value().equals(linktype)) {
-                throw new RoutingException("The target endpoint '"
+                throw new SearchException("The target endpoint '"
                         + givenEndpoint.getEndpointName() + "' is not an HARD link");
             } else {
                 try {
                     targetedEndpoint = this.endpointRegistry.getEndpoint(givenEndpoint
                             .getServiceName(), givenEndpoint.getEndpointName());
                 } catch (RegistryException e) {
-                    throw new RoutingException(e);
+                    throw new SearchException(e);
                 }
             }
         } else if (givenEndpoint.getType() == EndpointType.EXTERNAL) {
@@ -184,7 +184,7 @@ public class EndpointSearchEngineImpl implements EndpointSearchEngine, PetalsSer
      *             Impossible to find the endpoint
      */
     private ServiceEndpoint findEndpointInRegistry(final ServiceEndpoint givenEndpoint)
-            throws RoutingException {
+            throws SearchException {
         this.log.call();
 
         ServiceEndpoint targetedEndpoint = null;
@@ -192,11 +192,11 @@ public class EndpointSearchEngineImpl implements EndpointSearchEngine, PetalsSer
             targetedEndpoint = this.endpointRegistry.getEndpoint(givenEndpoint.getServiceName(),
                     givenEndpoint.getEndpointName());
         } catch (RegistryException e) {
-            throw new RoutingException(e.getMessage());
+            throw new SearchException(e.getMessage());
         }
         // no endpoint found, we can not find a destination
         if (targetedEndpoint == null) {
-            throw new RoutingException("The target endpoint '" + givenEndpoint.getEndpointName()
+            throw new SearchException("The target endpoint '" + givenEndpoint.getEndpointName()
                     + "' does not match a registered endpoint");
         }
 
@@ -219,7 +219,7 @@ public class EndpointSearchEngineImpl implements EndpointSearchEngine, PetalsSer
      */
     public List<ServiceEndpoint> getTargetedEndpointFromGivenServiceName(
             final QName givenServiceName, final String strategy, final String linkType)
-            throws RoutingException {
+            throws SearchException {
         this.log.call();
 
         List<ServiceEndpoint> retrievedEndpoints = null;
@@ -228,7 +228,7 @@ public class EndpointSearchEngineImpl implements EndpointSearchEngine, PetalsSer
             retrievedEndpoints = this.getEnabledEndpoints(kindSearch.SERVICE_SEARCH,
                     givenServiceName, linkType);
         } catch (RegistryException e) {
-            throw new RoutingException(e);
+            throw new SearchException(e);
         }
 
         List<Object> strategyParameters = getAndAnalyseStrategy(strategy);
@@ -238,12 +238,16 @@ public class EndpointSearchEngineImpl implements EndpointSearchEngine, PetalsSer
             orderedEndpoints = new ArrayList<ServiceEndpoint>(1);
             orderedEndpoints.add(retrievedEndpoints.get(0));
         } else if (retrievedEndpoints.size() > 1) {
-            orderedEndpoints = this.endpointOrderer.orderEndpoints(retrievedEndpoints, null,
-                    strategyParameters, this.random);
+            try {
+                orderedEndpoints = this.endpointOrderer.orderEndpoints(retrievedEndpoints, null,
+                        strategyParameters, this.random);
+            } catch (RoutingException e) {
+                throw new SearchException(e);
+            }
         }
 
         if ((orderedEndpoints == null) || (orderedEndpoints.size() == 0)) {
-            throw new RoutingException("No endpoint found matching the target service '"
+            throw new SearchException("No endpoint found matching the target service '"
                     + givenServiceName + "'");
         }
 
@@ -266,7 +270,7 @@ public class EndpointSearchEngineImpl implements EndpointSearchEngine, PetalsSer
      */
     public List<ServiceEndpoint> getTargetedEndpointFromGivenInterfaceName(
             final QName givenInterfaceName, final String strategy, String linkType)
-            throws RoutingException {
+            throws SearchException {
         this.log.call();
 
         List<ServiceEndpoint> retrievedEndpoints = null;
@@ -275,7 +279,7 @@ public class EndpointSearchEngineImpl implements EndpointSearchEngine, PetalsSer
             retrievedEndpoints = this.getEnabledEndpoints(kindSearch.INTERFACE_SEARCH,
                     givenInterfaceName, linkType);
         } catch (RegistryException e) {
-            throw new RoutingException(e);
+            throw new SearchException(e);
         }
 
         List<Object> strategyParameters = getAndAnalyseStrategy(strategy);
@@ -285,8 +289,12 @@ public class EndpointSearchEngineImpl implements EndpointSearchEngine, PetalsSer
             orderedEndpoints = new ArrayList<ServiceEndpoint>(1);
             orderedEndpoints.add(retrievedEndpoints.get(0));
         } else if (retrievedEndpoints.size() > 1) {
-            orderedEndpoints = this.endpointOrderer.orderEndpoints(retrievedEndpoints, null,
-                    strategyParameters, this.random);
+            try {
+                orderedEndpoints = this.endpointOrderer.orderEndpoints(retrievedEndpoints, null,
+                        strategyParameters, this.random);
+            } catch (RoutingException e) {
+                throw new SearchException(e);
+            }
         }
 
         if ((orderedEndpoints == null) || (orderedEndpoints.size() == 0)) {
@@ -348,7 +356,7 @@ public class EndpointSearchEngineImpl implements EndpointSearchEngine, PetalsSer
      * @return the analyzed list of parameters
      */
     private static List<Object> getAndAnalyseStrategy(final String strategy)
-            throws RoutingException {
+            throws SearchException {
 
         final List<Object> result;
         if (strategy == null) {
@@ -361,7 +369,7 @@ public class EndpointSearchEngineImpl implements EndpointSearchEngine, PetalsSer
     }
 
     private static List<Object> tokenizeAndAnalyseStrategy(final String strategy)
-            throws RoutingException {
+            throws SearchException {
         final List<String> temp = new ArrayList<String>();
         final StringTokenizer st = new StringTokenizer(strategy, EndpointOrderer.STRATEGY_SEPARATOR);
         while (st.hasMoreTokens()) {
@@ -380,15 +388,19 @@ public class EndpointSearchEngineImpl implements EndpointSearchEngine, PetalsSer
      *             impossible to analyze the default routing strategy.
      */
     private static List<Object> analyseStrategy(final List<String> parameters)
-            throws RoutingException {
+            throws SearchException {
         List<Object> result = null;
         try {
             if ((parameters != null)
                     && (parameters.size() == EndpointOrderer.NUMBER_STRATEGY_PARAMETERS)) {
 
-                EndpointOrderer.verifStrategyParameters(parameters.get(0).toLowerCase(), Float
-                        .valueOf(parameters.get(1)), Float.valueOf(parameters.get(2)), Float
-                        .valueOf(parameters.get(3)));
+                try {
+                    EndpointOrderer.verifStrategyParameters(parameters.get(0).toLowerCase(), Float
+                            .valueOf(parameters.get(1)), Float.valueOf(parameters.get(2)), Float
+                            .valueOf(parameters.get(3)));
+                } catch (RoutingException e) {
+                    throw new SearchException(e);
+                }
 
                 result = new ArrayList<Object>();
                 result.add(parameters.get(0).toLowerCase());
@@ -396,11 +408,11 @@ public class EndpointSearchEngineImpl implements EndpointSearchEngine, PetalsSer
                 result.add(Float.valueOf(parameters.get(2)));
                 result.add(Float.valueOf(parameters.get(3)));
             } else {
-                throw new RoutingException("Invalid Parameters: "
+                throw new SearchException("Invalid Parameters: "
                         + "4 parameters are required to configure the routing strategy");
             }
         } catch (NumberFormatException e) {
-            throw new RoutingException("Impossible to convert the "
+            throw new SearchException("Impossible to convert the "
                     + "parameters to realize the routing strategy");
         }
         return result;

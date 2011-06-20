@@ -3,7 +3,6 @@
  */
 package org.petalslink.dsb.kernel.service;
 
-import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
 import org.petalslink.dsb.kernel.cxf.CXFBus;
@@ -39,6 +38,16 @@ public class CoreServiceManagerImpl implements CoreServiceManager {
                 + JaxwsHelper.getEndpointName(serviceClass).getLocalPart());
         sf.setServiceClass(serviceClass);
         sf.setServiceBean(implementation);
-        return sf.create();
+        final org.apache.cxf.endpoint.Server cxfServer = sf.create();
+        return new Server() {
+            
+            public void stop() {
+                cxfServer.stop();
+            }
+            
+            public void start() {
+                cxfServer.start();
+            }
+        };
     }
 }

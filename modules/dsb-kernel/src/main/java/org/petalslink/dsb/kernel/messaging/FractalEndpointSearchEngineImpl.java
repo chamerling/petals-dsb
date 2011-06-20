@@ -80,18 +80,18 @@ public class FractalEndpointSearchEngineImpl implements EndpointSearchEngine {
     }
 
     public ServiceEndpoint getTargetedEndpointFromGivenEndpoint(ServiceEndpoint givenEndpoint,
-            String linktype) throws RoutingException {
+            String linktype) throws SearchException {
         return this.delegate.getTargetedEndpointFromGivenEndpoint(givenEndpoint, linktype);
     }
 
     public List<ServiceEndpoint> getTargetedEndpointFromGivenInterfaceName(
-            QName givenInterfaceName, String strategy, String linkType) throws RoutingException {
+            QName givenInterfaceName, String strategy, String linkType) throws SearchException {
         return this.delegate.getTargetedEndpointFromGivenInterfaceName(givenInterfaceName,
                 strategy, linkType);
     }
 
     public List<ServiceEndpoint> getTargetedEndpointFromGivenServiceName(QName givenServiceName,
-            String strategy, String linkType) throws RoutingException {
+            String strategy, String linkType) throws SearchException {
         return this.delegate.getTargetedEndpointFromGivenServiceName(givenServiceName, strategy,
                 linkType);
     }

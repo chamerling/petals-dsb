@@ -16,39 +16,25 @@
  * 
  * Initial developer(s): EBM WebSourcing
  */
-package org.petalslink.dsb.kernel.federation;
+package org.petalslink.dsb.kernel.management.binder;
 
-import javax.jws.WebMethod;
-import javax.jws.WebService;
+import java.util.Set;
+
+import org.ow2.petals.kernel.api.service.ServiceEndpoint;
 
 /**
- * Filter some endpoints for the federation ie not all the ressources can be
- * shared to everybody!!! TODO
+ * Get information on bound services and more...
  * 
  * @author chamerling - eBM WebSourcing
+ * TODO : Change ServiceEndpoint to a DSB one
  * 
  */
-@WebService
-public interface FederationFilterService {
+public interface BinderManager {
 
-    /**
-     * Check if a given endpoint is available for the given federation name
-     * 
-     * @param federationName
-     * @param serviceEndpoint
-     * @return
-     */
-    @WebMethod
-    boolean isVisible(String federationName, String serviceEndpointName);
+    void addBind(String protocol, ServiceEndpoint endpoint);
 
-    /**
-     * Set the visibility for a given endpoint and for a given federation
-     * 
-     * @param visible
-     * @param federationName
-     * @param serviceEndpoint
-     */
-    @WebMethod
-    void setVisibility(boolean visible, String federationName, String serviceEndpointName);
+    Set<ServiceEndpoint> getBoundServices(String protocol);
+
+    void unbind(String protocol, ServiceEndpoint endpoint);
 
 }

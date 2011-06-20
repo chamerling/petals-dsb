@@ -16,38 +16,44 @@
  * 
  * Initial developer(s): EBM WebSourcing
  */
-package org.petalslink.dsb.kernel.federation;
+package org.petalslink.dsb.kernel.management.binder;
 
-import java.util.Map;
 import java.util.Set;
 
+import org.ow2.petals.registry.api.Endpoint;
+
 /**
- * A persistent store service to get/update endpoint visibility
+ * A registry used to manage services which have been bound.
  * 
  * @author chamerling - eBM WebSourcing
+ * TODO : Remove Endpoint and use a DSB one
  * 
  */
-public interface FederationFilterStore {
+public interface ServiceRegistry {
 
     /**
-     * Load the store and returns the result
+     * Add a service to the registry
      * 
+     * @param protocol
+     * @param url
+     * @param endpoint
+     */
+    void addService(String protocol, String url, Endpoint endpoint);
+
+    /**
+     * 
+     * @param protocol
+     * @param url
+     */
+    void removeService(String protocol, String url);
+
+    /**
+     * Get the list of services URL which have been registered for the given
+     * protocol
+     * 
+     * @param protocol
      * @return
      */
-    Map<String, Set<String>> load();
-
-    /**
-     * Get the values already loaded...
-     * 
-     * @return
-     */
-    Map<String, Set<String>> getValues();
-
-    /**
-     * Save the given values (persist depends on the implementation)
-     * 
-     * @param filters
-     */
-    void save(Map<String, Set<String>> filters);
+    Set<String> getURLs(String protocol);
 
 }

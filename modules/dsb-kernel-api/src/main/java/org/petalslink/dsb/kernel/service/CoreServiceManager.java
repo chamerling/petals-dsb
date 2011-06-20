@@ -3,8 +3,6 @@
  */
 package org.petalslink.dsb.kernel.service;
 
-import org.apache.cxf.endpoint.Server;
-
 /**
  * @author chamerling
  *

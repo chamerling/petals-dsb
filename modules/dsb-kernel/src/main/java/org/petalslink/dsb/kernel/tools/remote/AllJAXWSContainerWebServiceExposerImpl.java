@@ -12,8 +12,8 @@ import org.objectweb.fractal.fraclet.annotation.annotations.Requires;
 import org.objectweb.fractal.util.Fractal;
 import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.kernel.configuration.ContainerConfiguration;
-import org.ow2.petals.tools.ws.WebServiceException;
 import org.petalslink.dsb.kernel.tools.ws.FractalWSHelper;
+import org.petalslink.dsb.kernel.tools.ws.WebServiceException;
 import org.petalslink.dsb.kernel.tools.ws.WebServiceExposer;
 import org.petalslink.dsb.kernel.tools.ws.WebServiceInformationBean;
 

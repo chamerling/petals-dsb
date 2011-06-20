@@ -40,6 +40,7 @@ import org.ow2.petals.transport.util.TransportSendContext;
 import org.ow2.petals.util.LoggingUtil;
 import org.petalslink.dsb.kernel.PetalsService;
 import org.petalslink.dsb.kernel.messaging.EndpointSearchEngine;
+import org.petalslink.dsb.kernel.messaging.SearchException;
 
 
 /**
@@ -157,14 +158,23 @@ public class EndpointResolverModule implements SenderModule, PetalsService {
         if (givenEndpoint != null) {
             // Case 1 : The endpoint is explicit
 
-            ServiceEndpoint targetEndpoint = this.endpointSearchEngine
-                    .getTargetedEndpointFromGivenEndpoint(givenEndpoint, linkType);
+            ServiceEndpoint targetEndpoint = null;
+            try {
+                targetEndpoint = this.endpointSearchEngine
+                        .getTargetedEndpointFromGivenEndpoint(givenEndpoint, linkType);
+            } catch (SearchException e) {
+                throw new RoutingException(e);
+            }
             electedEndpoints.add(targetEndpoint);
 
         } else if (givenServiceName != null) {
             // Case 2 : The endpoint is implicit, the service name is set.
-            electedEndpoints = this.endpointSearchEngine.getTargetedEndpointFromGivenServiceName(
-                    givenServiceName, strategy, linkType);
+            try {
+                electedEndpoints = this.endpointSearchEngine.getTargetedEndpointFromGivenServiceName(
+                        givenServiceName, strategy, linkType);
+            } catch (SearchException e) {
+                throw new RoutingException(e);
+            }
 
         } else if (givenInterfaceName != null) {
             /*
@@ -172,8 +182,12 @@ public class EndpointResolverModule implements SenderModule, PetalsService {
              * the message exchange. Get all the endpoints which resolves the
              * given interface;
              */
-            electedEndpoints = this.endpointSearchEngine.getTargetedEndpointFromGivenInterfaceName(
-                    givenInterfaceName, strategy, linkType);
+            try {
+                electedEndpoints = this.endpointSearchEngine.getTargetedEndpointFromGivenInterfaceName(
+                        givenInterfaceName, strategy, linkType);
+            } catch (SearchException e) {
+                throw new RoutingException(e);
+            }
 
         }
 

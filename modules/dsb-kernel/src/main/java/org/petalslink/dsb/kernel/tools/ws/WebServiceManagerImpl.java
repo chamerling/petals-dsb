@@ -83,7 +83,12 @@ public class WebServiceManagerImpl implements WebServiceManager {
             // configuration
             // file
             Set<WebServiceInformationBean> subset = set;
-            Set<WebServiceInformationBean> exposed = this.webServiceExposer.expose(subset);
+            Set<WebServiceInformationBean> exposed = null;
+            try {
+                exposed = this.webServiceExposer.expose(subset);
+            } catch (org.petalslink.dsb.kernel.tools.ws.WebServiceException e) {
+                throw new WebServiceException(e);
+            }
             if (exposed != null) {
                 this.services.addAll(exposed);
             }
@@ -119,7 +124,11 @@ public class WebServiceManagerImpl implements WebServiceManager {
      * {@inheritDoc}
      */
     public void removeService(String name) throws WebServiceException {
-        this.webServiceExposer.remove(name);
+        try {
+            this.webServiceExposer.remove(name);
+        } catch (org.petalslink.dsb.kernel.tools.ws.WebServiceException e) {
+            throw new WebServiceException(e);
+        }
     }
 
 }
