@@ -4,13 +4,13 @@
 <definition name="DSBManagementType">
 
   <!-- provides -->
-  <interface signature="org.petalslink.dsb.kernel.management.binder.ServiceBinderRegistry" role="server" name="binder-registry"/>
-  <interface signature="org.petalslink.dsb.kernel.management.binder.ServiceExposerRegistry" role="server" name="exposer-registry"/>
-  <interface signature="org.petalslink.dsb.kernel.management.binder.ServiceRegistry" role="server" name="service-registry"/>
-  <interface signature="org.petalslink.dsb.kernel.management.component.ComponentInformationService" role="server" name="component-information"/>
-  <interface signature="org.petalslink.dsb.kernel.DSBConfigurationService" role="server" name="dsbconfiguration"/>
-  <interface signature="org.petalslink.dsb.kernel.management.binder.NewServiceExposer" role="server" name="new-service-exposer"/>
-  <interface signature="org.petalslink.dsb.kernel.management.cron.ServicePoller" role="server" name="service-poller"/>
+  <interface signature="org.petalslink.dsb.kernel.api.management.binder.ServiceBinderRegistry" role="server" name="binder-registry"/>
+  <interface signature="org.petalslink.dsb.kernel.api.management.binder.ServiceExposerRegistry" role="server" name="exposer-registry"/>
+  <interface signature="org.petalslink.dsb.kernel.api.management.binder.ServiceRegistry" role="server" name="service-registry"/>
+  <interface signature="org.petalslink.dsb.kernel.api.management.component.ComponentInformationService" role="server" name="component-information"/>
+  <interface signature="org.petalslink.dsb.kernel.api.DSBConfigurationService" role="server" name="dsbconfiguration"/>
+  <interface signature="org.petalslink.dsb.kernel.api.management.binder.NewServiceExposer" role="server" name="new-service-exposer"/>
+  <interface signature="org.petalslink.dsb.kernel.api.management.cron.ServicePoller" role="server" name="service-poller"/>
   
   <!-- client -->
   <interface signature="org.ow2.petals.kernel.configuration.ConfigurationService" role="client" name="configuration"/>
@@ -23,7 +23,7 @@
   <interface signature="org.ow2.petals.tools.ws.WebServiceManager" role="client" name="wsmanager"/>
   
   <!--<interface signature="org.petalslink.dsb.kernel.federation.FederationEngine" role="client" name="federationengine"/>-->
-  <interface signature="org.petalslink.dsb.kernel.ServiceFinder" role="client" name="service-finder"/>
+  <interface signature="org.petalslink.dsb.kernel.api.ServiceFinder" role="client" name="service-finder"/>
 
   <!-- All the management services goes here -->
   <interface signature="org.ow2.petals.kernel.ws.api.InformationService" role="client" name="ws-information"/>

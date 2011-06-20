@@ -8,11 +8,11 @@
   <interface signature="org.ow2.petals.jbi.messaging.registry.EndpointRegistry" role="server" name="endpoint"/>
   <interface signature="org.ow2.petals.jbi.messaging.control.ExchangeCheckerClient" role="server" name="exchangechecker"/>
   <interface signature="org.petalslink.dsb.kernel.monitor.router.MonitoringStorageService" role="server" name="storage"/>
-  <interface signature="org.petalslink.dsb.kernel.messaging.EndpointSearchEngine" role="server" name="endpointsearchengine"/>
+  <interface signature="org.petalslink.dsb.kernel.api.messaging.EndpointSearchEngine" role="server" name="endpointsearchengine"/>
 
   <!-- client -->
   <interface signature="org.ow2.petals.kernel.configuration.ConfigurationService" role="client" name="configuration"/>
-  <interface signature="org.petalslink.dsb.kernel.DSBConfigurationService" role="client" name="dsbconfiguration"/>
+  <interface signature="org.petalslink.dsb.kernel.api.DSBConfigurationService" role="client" name="dsbconfiguration"/>
   
   <interface signature="org.ow2.petals.communication.topology.TopologyService" role="client" name="topology"/>
   <interface signature="org.ow2.petals.communication.jndi.client.JNDIService" role="client" name="jndi"/>

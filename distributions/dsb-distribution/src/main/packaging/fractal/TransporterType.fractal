@@ -48,6 +48,6 @@
   <interface name="configuration" role="client" signature="org.ow2.petals.kernel.configuration.ConfigurationService"/>
   <interface name="topology" role="client" signature="org.ow2.petals.communication.topology.TopologyService"/>
   <interface name="transportlistener" role="client" signature="org.ow2.petals.transport.TransportListener"/>
-  <interface name="dsbconfiguration" role="client" signature="org.petalslink.dsb.kernel.DSBConfigurationService"/>
+  <interface name="dsbconfiguration" role="client" signature="org.petalslink.dsb.kernel.api.DSBConfigurationService"/>
 
 </definition>

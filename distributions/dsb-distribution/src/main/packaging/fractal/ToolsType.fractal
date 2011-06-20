@@ -19,12 +19,12 @@
   <interface signature="org.ow2.petals.communication.jndi.client.JNDIService" role="client" name="jndi"/>
   
   <interface signature="org.ow2.petals.jbi.management.deployment.DeploymentServiceMBean" role="client" name="deployment"/>
-  <interface signature="org.petalslink.dsb.kernel.management.binder.ServiceExposerRegistry" role="client" name="exposer-registry"/>
-  <interface signature="org.petalslink.dsb.kernel.management.binder.ServiceBinderRegistry" role="client" name="binder-registry"/>
-  <interface signature="org.petalslink.dsb.kernel.management.binder.ServiceRegistry" role="client" name="service-registry"/>
-  <interface signature="org.petalslink.dsb.kernel.management.component.ComponentInformationService" role="client" name="component-information"/>
-  <interface signature="org.petalslink.dsb.kernel.management.binder.NewServiceExposer" role="client" name="new-service-exposer"/>
-  <interface signature="org.petalslink.dsb.kernel.management.cron.ServicePoller" role="client" name="service-poller"/>
+  <interface signature="org.petalslink.dsb.kernel.api.management.binder.ServiceExposerRegistry" role="client" name="exposer-registry"/>
+  <interface signature="org.petalslink.dsb.kernel.api.management.binder.ServiceBinderRegistry" role="client" name="binder-registry"/>
+  <interface signature="org.petalslink.dsb.kernel.api.management.binder.ServiceRegistry" role="client" name="service-registry"/>
+  <interface signature="org.petalslink.dsb.kernel.api.management.component.ComponentInformationService" role="client" name="component-information"/>
+  <interface signature="org.petalslink.dsb.kernel.api.management.binder.NewServiceExposer" role="client" name="new-service-exposer"/>
+  <interface signature="org.petalslink.dsb.kernel.api.management.cron.ServicePoller" role="client" name="service-poller"/>
   <!--<interface name="federationengine" role="client" signature="org.petalslink.dsb.kernel.federation.FederationEngine" />-->
 
 
