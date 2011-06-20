@@ -38,36 +38,10 @@
 
 		<dependency>
 			<groupId>org.petalslink.dsb</groupId>
-			<artifactId>dsb-api</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.petalslink.dsb</groupId>
 			<artifactId>dsb-annotations</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
-		<!-- The federation stuff -->
-
-		<dependency>
-			<groupId>org.petalslink.dsb</groupId>
-			<artifactId>dsb-federation-core</artifactId>
-			<version>${project.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.apache.cxf</groupId>
-					<artifactId>cxf-bundle-minimal</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
-		<dependency>
-			<groupId>org.petalslink.dsb</groupId>
-			<artifactId>dsb-federation-xmpp</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		
 		<dependency>
 			<groupId>org.petalslink.dsb</groupId>
 			<artifactId>dsb-service-client</artifactId>

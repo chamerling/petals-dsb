@@ -16,7 +16,7 @@
  * 
  * Initial developer(s): EBM WebSourcing
  */
-package org.petalslink.dsb.kernel.transport.federation;
+package org.petalslink.dsb.kernel.federation.transport;
 
 import org.ow2.petals.jbi.messaging.exchange.MessageExchange;
 import org.ow2.petals.util.LoggingUtil;

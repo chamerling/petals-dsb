@@ -34,7 +34,6 @@ import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.kernel.api.server.PetalsStateListener;
 import org.ow2.petals.util.LoggingUtil;
 import org.petalslink.dsb.api.DSBException;
-import org.petalslink.dsb.kernel.federation.FederationEngine;
 import org.petalslink.dsb.kernel.listener.LifeCycleManager;
 import org.petalslink.dsb.kernel.management.binder.EmbeddedServiceBinder;
 import org.petalslink.dsb.kernel.management.component.EmbeddedComponentService;
@@ -80,8 +79,8 @@ public class DSBInitializer implements PetalsStateListener {
     @Requires(name = "webappserver", signature = WebAppServer.class, contingency = Contingency.OPTIONAL)
     private WebAppServer webAppServer;
 
-    @Requires(name = "federationengine", signature = FederationEngine.class, contingency = Contingency.OPTIONAL)
-    private FederationEngine federationEngine;
+    //@Requires(name = "federationengine", signature = FederationEngine.class, contingency = Contingency.OPTIONAL)
+    //private FederationEngine federationEngine;
 
     // @Requires(name = "transportserver", signature = Server.class)
     // private Server transportServer;
@@ -114,9 +113,9 @@ public class DSBInitializer implements PetalsStateListener {
         }
         // this.transportServer.startServer();
 
-        if (this.federationEngine != null) {
-            this.federationEngine.connectFederation();
-        }
+        //if (this.federationEngine != null) {
+        //    this.federationEngine.connectFederation();
+        //}
 
         this.log.info("Installing required components...");
         this.embeddedComponentService.install();

@@ -16,7 +16,7 @@
  * 
  * Initial developer(s): EBM WebSourcing
  */
-package org.petalslink.dsb.ws.api;
+package org.petalslink.dsb.kernel.federation.ws;
 
 import java.util.List;
 

@@ -16,7 +16,7 @@
  * 
  * Initial developer(s): EBM WebSourcing
  */
-package org.petalslink.dsb.kernel.ws;
+package org.petalslink.dsb.kernel.federation.ws;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +38,6 @@ import org.ow2.petals.util.LoggingUtil;
 import org.petalslink.dsb.api.EndpointQuery;
 import org.petalslink.dsb.federation.api.FederationException;
 import org.petalslink.dsb.kernel.federation.FederationEngine;
-import org.petalslink.dsb.ws.api.FederationService;
 
 
 /**
