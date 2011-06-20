@@ -90,9 +90,11 @@
 		<!-- Tools -->
 		<module>modules/dsb-cxfutils</module>
 		<module>modules/dsb-jaxwsutils</module>
+		<module>modules/dsb-fractalutils</module>
 		
 		<!-- REST -->
    			<module>modules/dsb-kernel-restapi</module>
+			<module>modules/dsb-kernel-restservice</module>
 			<module>modules/dsb-kernel-restapi-impl</module>
 		
 		<!-- Independant things, to be moved elsewhere -->
