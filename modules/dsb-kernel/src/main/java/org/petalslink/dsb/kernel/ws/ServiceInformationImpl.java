@@ -33,7 +33,7 @@ import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.kernel.configuration.ConfigurationService;
 import org.ow2.petals.tools.ws.KernelWebService;
 import org.ow2.petals.util.LoggingUtil;
-import org.petalslink.dsb.kernel.management.component.ComponentInformationService;
+import org.petalslink.dsb.kernel.api.management.component.ComponentInformationService;
 import org.petalslink.dsb.ws.api.ServiceInformation;
 
 

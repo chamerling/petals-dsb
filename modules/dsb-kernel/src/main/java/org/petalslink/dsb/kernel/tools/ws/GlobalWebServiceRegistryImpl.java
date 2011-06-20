@@ -19,6 +19,8 @@ import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
 import org.objectweb.fractal.util.Fractal;
 import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.util.LoggingUtil;
+import org.petalslink.dsb.kernel.api.tools.ws.WebServiceInformationBean;
+import org.petalslink.dsb.kernel.api.tools.ws.WebServiceRegistry;
 
 /**
  * This {@link WebServiceRegistry} implementation is able to get all the

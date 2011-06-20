@@ -34,7 +34,10 @@ import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.util.LoggingUtil;
 import org.petalslink.dsb.annotations.LifeCycleListener;
 import org.petalslink.dsb.annotations.Phase;
-import org.petalslink.dsb.kernel.DSBConfigurationService;
+import org.petalslink.dsb.kernel.api.DSBConfigurationService;
+import org.petalslink.dsb.kernel.api.management.binder.BinderException;
+import org.petalslink.dsb.kernel.api.management.binder.EmbeddedServiceBinder;
+import org.petalslink.dsb.kernel.api.management.binder.ServiceBinderRegistry;
 
 /**
  * @author chamerling - eBM WebSourcing
@@ -106,7 +109,7 @@ public class EmbeddedServiceBinderImpl implements EmbeddedServiceBinder {
                 if (this.log.isDebugEnabled()) {
                     this.log.debug("Getting service binder for '" + key + "'");
                 }
-                org.petalslink.dsb.kernel.management.binder.ServiceBinder binder = this.serviceBinderRegistry
+                org.petalslink.dsb.kernel.api.management.binder.ServiceBinder binder = this.serviceBinderRegistry
                         .getServiceBinder(key);
 
                 if (binder != null) {

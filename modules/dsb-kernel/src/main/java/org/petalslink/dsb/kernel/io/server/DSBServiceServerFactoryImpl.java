@@ -31,7 +31,7 @@ import org.ow2.petals.jbi.messaging.routing.RoutingException;
 import org.ow2.petals.kernel.api.service.Location;
 import org.ow2.petals.kernel.configuration.ConfigurationService;
 import org.ow2.petals.util.LoggingUtil;
-import org.petalslink.dsb.kernel.service.Constants;
+import org.petalslink.dsb.kernel.api.service.Constants;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentFragment;
 

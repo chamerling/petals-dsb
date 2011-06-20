@@ -36,7 +36,7 @@ import org.ow2.petals.jbi.messaging.routing.module.SenderModule;
 import org.ow2.petals.transport.Transporter;
 import org.ow2.petals.transport.util.TransportSendContext;
 import org.ow2.petals.util.LoggingUtil;
-import org.petalslink.dsb.kernel.DSBConfigurationService;
+import org.petalslink.dsb.kernel.api.DSBConfigurationService;
 
 
 /**

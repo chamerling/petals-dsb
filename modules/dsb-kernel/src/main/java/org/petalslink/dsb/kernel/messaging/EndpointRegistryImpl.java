@@ -19,6 +19,7 @@
 package org.petalslink.dsb.kernel.messaging;
 
 import org.ow2.petals.jbi.messaging.registry.AbstractEndpointRegistry;
+import org.petalslink.dsb.kernel.api.messaging.EndpointRegistry;
 
 /**
  * Add some registry operations which are SOA4All specific

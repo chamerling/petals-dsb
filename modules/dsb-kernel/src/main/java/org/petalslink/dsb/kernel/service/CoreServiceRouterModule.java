@@ -193,7 +193,7 @@ public class CoreServiceRouterModule implements SenderModule {
             return null;
         }
         Location result = new Location();
-        result.setComponentName(org.petalslink.dsb.kernel.service.Constants.KERNEL_SERVICE_COMPONENT);
+        result.setComponentName(org.petalslink.dsb.kernel.api.service.Constants.KERNEL_SERVICE_COMPONENT);
         result.setContainerName(host);
         result.setSubdomainName(config.getSubdomainName());
         return result;

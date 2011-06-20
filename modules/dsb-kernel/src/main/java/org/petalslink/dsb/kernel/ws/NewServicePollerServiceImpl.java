@@ -29,7 +29,7 @@ import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
 import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.tools.ws.KernelWebService;
 import org.ow2.petals.util.LoggingUtil;
-import org.petalslink.dsb.kernel.management.cron.ServicePoller;
+import org.petalslink.dsb.kernel.api.management.cron.ServicePoller;
 import org.petalslink.dsb.ws.api.NewServicePollerService;
 
 

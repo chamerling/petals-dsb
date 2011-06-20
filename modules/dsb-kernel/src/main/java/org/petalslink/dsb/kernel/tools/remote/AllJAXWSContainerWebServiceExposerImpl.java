@@ -12,11 +12,11 @@ import org.objectweb.fractal.fraclet.annotation.annotations.Requires;
 import org.objectweb.fractal.util.Fractal;
 import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.kernel.configuration.ContainerConfiguration;
+import org.petalslink.dsb.kernel.api.tools.remote.ContainerWebServiceExposer;
+import org.petalslink.dsb.kernel.api.tools.ws.WebServiceException;
+import org.petalslink.dsb.kernel.api.tools.ws.WebServiceExposer;
+import org.petalslink.dsb.kernel.api.tools.ws.WebServiceInformationBean;
 import org.petalslink.dsb.kernel.tools.ws.FractalWSHelper;
-import org.petalslink.dsb.kernel.tools.ws.WebServiceException;
-import org.petalslink.dsb.kernel.tools.ws.WebServiceExposer;
-import org.petalslink.dsb.kernel.tools.ws.WebServiceInformationBean;
-
 
 /**
  * Exposes all the components which are JAXWS annotated as Web services without
@@ -49,8 +49,7 @@ public class AllJAXWSContainerWebServiceExposerImpl implements ContainerWebServi
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.petalslink.dsb.kernel.tools.remote.ContainerWebServiceExposer#
+     * @see org.petalslink.dsb.kernel.tools.remote.ContainerWebServiceExposer#
      * expose()
      */
     public void expose() {

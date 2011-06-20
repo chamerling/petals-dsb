@@ -21,9 +21,9 @@ import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
 import org.ow2.petals.tools.ws.KernelWebService;
 import org.ow2.petals.util.LoggingUtil;
 import org.petalslink.dsb.kernel.Constants;
-import org.petalslink.dsb.kernel.management.binder.BinderException;
-import org.petalslink.dsb.kernel.management.binder.ServiceBinderRegistry;
-import org.petalslink.dsb.kernel.management.binder.ServiceRegistry;
+import org.petalslink.dsb.kernel.api.management.binder.BinderException;
+import org.petalslink.dsb.kernel.api.management.binder.ServiceBinderRegistry;
+import org.petalslink.dsb.kernel.api.management.binder.ServiceRegistry;
 import org.petalslink.dsb.ws.api.RESTServiceBinder;
 import org.petalslink.dsb.ws.api.ServiceEndpoint;
 
@@ -77,7 +77,7 @@ public class RESTServiceBinderServiceImpl implements RESTServiceBinder, KernelWe
         }
 
         ServiceEndpoint result = null;
-        org.petalslink.dsb.kernel.management.binder.ServiceBinder binder = this.serviceBinderRegistry
+        org.petalslink.dsb.kernel.api.management.binder.ServiceBinder binder = this.serviceBinderRegistry
                 .getServiceBinder(Constants.REST_SERVICE_BINDER);
         if (binder != null) {
             Map<String, Object> props = new HashMap<String, Object>();

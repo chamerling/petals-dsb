@@ -32,8 +32,8 @@ import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
 import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.tools.ws.KernelWebService;
 import org.ow2.petals.util.LoggingUtil;
-import org.petalslink.dsb.kernel.management.binder.NewServiceExposer;
-import org.petalslink.dsb.kernel.management.binder.ServiceExposer;
+import org.petalslink.dsb.kernel.api.management.binder.NewServiceExposer;
+import org.petalslink.dsb.kernel.api.management.binder.ServiceExposer;
 import org.petalslink.dsb.ws.api.ExposerService;
 
 
@@ -56,7 +56,7 @@ public class ExposerServiceImpl implements KernelWebService, ExposerService {
     @org.objectweb.fractal.fraclet.annotation.annotations.Service(name = "component")
     private Component component;
 
-    @Requires(name = "new-service-exposer", signature = ServiceExposer.class)
+    @Requires(name = "new-service-exposer", signature = NewServiceExposer.class)
     private NewServiceExposer exposer;
 
     private ExecutorService executorService;

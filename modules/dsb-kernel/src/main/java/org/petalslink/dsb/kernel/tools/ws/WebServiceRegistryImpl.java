@@ -36,6 +36,8 @@ import org.objectweb.fractal.util.Fractal;
 import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.tools.ws.WebServiceHelper;
 import org.ow2.petals.util.LoggingUtil;
+import org.petalslink.dsb.kernel.api.tools.ws.WebServiceInformationBean;
+import org.petalslink.dsb.kernel.api.tools.ws.WebServiceRegistry;
 
 /**
  * A registry with all the components which belong to the same composite as the

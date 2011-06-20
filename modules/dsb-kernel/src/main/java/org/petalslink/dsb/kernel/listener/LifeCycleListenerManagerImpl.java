@@ -36,6 +36,7 @@ import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
 import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.kernel.api.server.PetalsStateListener;
 import org.ow2.petals.util.LoggingUtil;
+import org.petalslink.dsb.kernel.api.listener.LifeCycleManager;
 
 /**
  * @author chamerling - eBM WebSourcing

@@ -23,8 +23,8 @@ import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
 import org.ow2.petals.tools.ws.KernelWebService;
 import org.ow2.petals.util.LoggingUtil;
 import org.petalslink.dsb.kernel.Constants;
-import org.petalslink.dsb.kernel.management.binder.BinderException;
-import org.petalslink.dsb.kernel.management.binder.ServiceExposerRegistry;
+import org.petalslink.dsb.kernel.api.management.binder.BinderException;
+import org.petalslink.dsb.kernel.api.management.binder.ServiceExposerRegistry;
 import org.petalslink.dsb.ws.api.RESTServiceExposer;
 import org.petalslink.dsb.ws.api.ServiceEndpoint;
 import org.w3c.dom.Document;
@@ -65,7 +65,7 @@ public class RESTServiceExposerServiceImpl implements RESTServiceExposer, Kernel
      */
     public boolean expose(final ServiceEndpoint serviceEndpoint) throws PEtALSWebServiceException {
         this.log.call();
-        org.petalslink.dsb.kernel.management.binder.ServiceExposer exposer = serviceExposerRegistry
+        org.petalslink.dsb.kernel.api.management.binder.ServiceExposer exposer = serviceExposerRegistry
                 .getServiceExposer(Constants.REST_SERVICE_EXPOSER);
         if (exposer == null) {
             throw new PEtALSWebServiceException(

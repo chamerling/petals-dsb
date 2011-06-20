@@ -36,11 +36,13 @@
 			</exclusions>
 		</dependency>
 		
+		<!-- 
 		<dependency>
 			<groupId>org.petalslink.dsb</groupId>
 			<artifactId>dsb-kernel-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		-->
 
 		<dependency>
 			<groupId>org.petalslink.dsb</groupId>

@@ -34,8 +34,9 @@ import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.util.LoggingUtil;
 import org.petalslink.dsb.annotations.LifeCycleListener;
 import org.petalslink.dsb.annotations.Phase;
-import org.petalslink.dsb.kernel.DSBConfigurationService;
-import org.petalslink.dsb.kernel.management.binder.NewServiceExposer;
+import org.petalslink.dsb.kernel.api.DSBConfigurationService;
+import org.petalslink.dsb.kernel.api.management.binder.NewServiceExposer;
+import org.petalslink.dsb.kernel.api.management.cron.ServicePoller;
 
 
 /**

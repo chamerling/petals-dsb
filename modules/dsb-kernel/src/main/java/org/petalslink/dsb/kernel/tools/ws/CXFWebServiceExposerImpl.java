@@ -38,6 +38,9 @@ import org.ow2.petals.kernel.configuration.ConfigurationService;
 import org.ow2.petals.kernel.configuration.ContainerConfiguration;
 import org.ow2.petals.tools.ws.WebServiceHelper;
 import org.ow2.petals.util.LoggingUtil;
+import org.petalslink.dsb.kernel.api.tools.ws.WebServiceException;
+import org.petalslink.dsb.kernel.api.tools.ws.WebServiceExposer;
+import org.petalslink.dsb.kernel.api.tools.ws.WebServiceInformationBean;
 
 /**
  * Expose the components as web services with CXF

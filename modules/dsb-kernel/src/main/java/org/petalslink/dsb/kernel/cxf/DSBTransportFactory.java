@@ -43,11 +43,11 @@ public class DSBTransportFactory extends AbstractTransportFactory implements Con
      * when a destination is a Petals one.
      */
     public static final String TRANSPORT_ID = "http://cxf.apache.org/transports/"
-            + org.petalslink.dsb.kernel.service.Constants.PREFIX;
+            + org.petalslink.dsb.kernel.api.service.Constants.PREFIX;
 
     public static final List<String> DEFAULT_NAMESPACES = Arrays.asList(TRANSPORT_ID,
             "http://cxf.apache.org/transports/"
-                    + org.petalslink.dsb.kernel.service.Constants.PREFIX + "/configuration");
+                    + org.petalslink.dsb.kernel.api.service.Constants.PREFIX + "/configuration");
 
     private Bus bus;
 
@@ -69,7 +69,7 @@ public class DSBTransportFactory extends AbstractTransportFactory implements Con
     }
 
     public Set<String> getUriPrefixes() {
-        return Collections.singleton(org.petalslink.dsb.kernel.service.Constants.PREFIX);
+        return Collections.singleton(org.petalslink.dsb.kernel.api.service.Constants.PREFIX);
     }
 
     public void setActivationNamespaces(Collection<String> ans) {

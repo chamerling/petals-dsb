@@ -12,6 +12,7 @@ import org.objectweb.fractal.api.control.ContentController;
 import org.objectweb.fractal.api.control.SuperController;
 import org.objectweb.fractal.util.Fractal;
 import org.ow2.petals.tools.ws.WebServiceHelper;
+import org.petalslink.dsb.kernel.api.tools.ws.WebServiceInformationBean;
 
 /**
  * @author chamerling - PetalsLink

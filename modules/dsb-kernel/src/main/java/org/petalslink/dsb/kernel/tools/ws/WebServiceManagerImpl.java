@@ -34,6 +34,9 @@ import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.tools.ws.WebServiceException;
 import org.ow2.petals.tools.ws.WebServiceManager;
 import org.ow2.petals.util.LoggingUtil;
+import org.petalslink.dsb.kernel.api.tools.ws.WebServiceExposer;
+import org.petalslink.dsb.kernel.api.tools.ws.WebServiceInformationBean;
+import org.petalslink.dsb.kernel.api.tools.ws.WebServiceRegistry;
 
 /**
  * The new web service manager implementation based on components introspection
@@ -86,7 +89,7 @@ public class WebServiceManagerImpl implements WebServiceManager {
             Set<WebServiceInformationBean> exposed = null;
             try {
                 exposed = this.webServiceExposer.expose(subset);
-            } catch (org.petalslink.dsb.kernel.tools.ws.WebServiceException e) {
+            } catch (org.petalslink.dsb.kernel.api.tools.ws.WebServiceException e) {
                 throw new WebServiceException(e);
             }
             if (exposed != null) {
@@ -126,7 +129,7 @@ public class WebServiceManagerImpl implements WebServiceManager {
     public void removeService(String name) throws WebServiceException {
         try {
             this.webServiceExposer.remove(name);
-        } catch (org.petalslink.dsb.kernel.tools.ws.WebServiceException e) {
+        } catch (org.petalslink.dsb.kernel.api.tools.ws.WebServiceException e) {
             throw new WebServiceException(e);
         }
     }

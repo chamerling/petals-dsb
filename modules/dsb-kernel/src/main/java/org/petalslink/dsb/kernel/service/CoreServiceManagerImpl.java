@@ -5,6 +5,8 @@ package org.petalslink.dsb.kernel.service;
 
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
+import org.petalslink.dsb.kernel.api.service.CoreServiceManager;
+import org.petalslink.dsb.kernel.api.service.Server;
 import org.petalslink.dsb.kernel.cxf.CXFBus;
 import org.petalslink.dsb.kernel.util.JaxwsHelper;
 
@@ -22,7 +24,7 @@ public class CoreServiceManagerImpl implements CoreServiceManager {
         CXFBus.getInstance();
         JaxWsProxyFactoryBean factory = new JaxWsProxyFactoryBean();
         // TODO, get the service name from the JAXWS annotated class
-        factory.setAddress(org.petalslink.dsb.kernel.service.Constants.PREFIX + "://" + host + "/"
+        factory.setAddress(org.petalslink.dsb.kernel.api.service.Constants.PREFIX + "://" + host + "/"
                 + JaxwsHelper.getEndpointName(clazz).getLocalPart());
         factory.setServiceClass(clazz);
         Object client = factory.create();
@@ -34,7 +36,7 @@ public class CoreServiceManagerImpl implements CoreServiceManager {
         CXFBus.getInstance();
 
         JaxWsServerFactoryBean sf = new JaxWsServerFactoryBean();
-        sf.setAddress(org.petalslink.dsb.kernel.service.Constants.PREFIX + "://" + container + "/"
+        sf.setAddress(org.petalslink.dsb.kernel.api.service.Constants.PREFIX + "://" + container + "/"
                 + JaxwsHelper.getEndpointName(serviceClass).getLocalPart());
         sf.setServiceClass(serviceClass);
         sf.setServiceBean(implementation);

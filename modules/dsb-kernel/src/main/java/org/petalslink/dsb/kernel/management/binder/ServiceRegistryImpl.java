@@ -32,6 +32,7 @@ import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
 import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.registry.api.Endpoint;
 import org.ow2.petals.util.LoggingUtil;
+import org.petalslink.dsb.kernel.api.management.binder.ServiceRegistry;
 
 /**
  * TODO : Should register entries somewhere in file...

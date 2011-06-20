@@ -26,6 +26,7 @@ import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.util.LoggingUtil;
 import org.petalslink.dsb.annotations.LifeCycleListener;
 import org.petalslink.dsb.annotations.Phase;
+import org.petalslink.dsb.kernel.api.listener.LifeCycleManager;
 import org.petalslink.dsb.kernel.util.FractalHelper;
 
 /**

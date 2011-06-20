@@ -37,7 +37,9 @@ import org.ow2.petals.kernel.api.service.ServiceEndpoint.EndpointType;
 import org.ow2.petals.kernel.configuration.ConfigurationService;
 import org.ow2.petals.kernel.configuration.ContainerConfiguration;
 import org.ow2.petals.util.LoggingUtil;
-import org.petalslink.dsb.kernel.PetalsService;
+import org.petalslink.dsb.kernel.api.PetalsService;
+import org.petalslink.dsb.kernel.api.messaging.EndpointSearchEngine;
+import org.petalslink.dsb.kernel.api.messaging.SearchException;
 
 
 /**

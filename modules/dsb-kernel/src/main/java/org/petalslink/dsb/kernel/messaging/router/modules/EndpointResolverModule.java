@@ -38,9 +38,9 @@ import org.ow2.petals.jbi.messaging.routing.module.endpoint.EndpointOrderer;
 import org.ow2.petals.kernel.configuration.ConfigurationService;
 import org.ow2.petals.transport.util.TransportSendContext;
 import org.ow2.petals.util.LoggingUtil;
-import org.petalslink.dsb.kernel.PetalsService;
-import org.petalslink.dsb.kernel.messaging.EndpointSearchEngine;
-import org.petalslink.dsb.kernel.messaging.SearchException;
+import org.petalslink.dsb.kernel.api.PetalsService;
+import org.petalslink.dsb.kernel.api.messaging.EndpointSearchEngine;
+import org.petalslink.dsb.kernel.api.messaging.SearchException;
 
 
 /**

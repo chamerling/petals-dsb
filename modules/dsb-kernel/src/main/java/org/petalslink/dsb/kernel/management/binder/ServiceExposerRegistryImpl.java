@@ -32,6 +32,8 @@ import org.objectweb.fractal.fraclet.annotation.annotations.type.Contingency;
 import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
 import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.util.LoggingUtil;
+import org.petalslink.dsb.kernel.api.management.binder.ServiceExposer;
+import org.petalslink.dsb.kernel.api.management.binder.ServiceExposerRegistry;
 
 /**
  * Registry of protocols binders. The registry is filled by fractal

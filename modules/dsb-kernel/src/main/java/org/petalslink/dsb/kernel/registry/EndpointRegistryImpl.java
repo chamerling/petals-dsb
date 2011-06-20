@@ -46,7 +46,7 @@ import org.ow2.petals.registry.api.exception.RegistryException;
 import org.ow2.petals.registry.client.RegistryClientFactory;
 import org.ow2.petals.registry.core.factory.RegistryFactory;
 import org.ow2.petals.util.LoggingUtil;
-import org.petalslink.dsb.kernel.PetalsService;
+import org.petalslink.dsb.kernel.api.PetalsService;
 
 import static org.ow2.petals.kernel.configuration.ConfigurationService.MASTER;
 import static org.ow2.petals.kernel.configuration.ConfigurationService.PEER;

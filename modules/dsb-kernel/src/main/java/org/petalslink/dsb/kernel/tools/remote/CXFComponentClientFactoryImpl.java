@@ -6,6 +6,8 @@ package org.petalslink.dsb.kernel.tools.remote;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.ow2.petals.communication.topology.TopologyService;
 import org.ow2.petals.tools.ws.WebServiceHelper;
+import org.petalslink.dsb.kernel.api.tools.remote.ComponentClientFactory;
+import org.petalslink.dsb.kernel.api.tools.remote.RemoteComponentException;
 
 /**
  * @author chamerling - PetalsLink

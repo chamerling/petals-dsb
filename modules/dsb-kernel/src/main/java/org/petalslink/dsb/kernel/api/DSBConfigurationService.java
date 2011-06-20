@@ -16,7 +16,7 @@
  * 
  * Initial developer(s): EBM WebSourcing
  */
-package org.petalslink.dsb.kernel;
+package org.petalslink.dsb.kernel.api;
 
 import java.util.List;
 import java.util.Map;

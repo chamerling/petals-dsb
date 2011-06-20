@@ -79,8 +79,8 @@ import org.ow2.petals.tools.ws.WebServiceException;
 import org.ow2.petals.tools.ws.WebServiceManager;
 import org.ow2.petals.transport.Transporter;
 import org.ow2.petals.util.JNDIUtil;
+import org.petalslink.dsb.kernel.api.listener.LifeCycleManager;
 import org.petalslink.dsb.kernel.listener.LifeCycleListenerManager;
-import org.petalslink.dsb.kernel.listener.LifeCycleManager;
 
 import static org.ow2.petals.kernel.server.FractalHelper.AUTOLOADER_COMPONENT;
 import static org.ow2.petals.kernel.server.FractalHelper.COMMUNICATION_COMPOSITE;

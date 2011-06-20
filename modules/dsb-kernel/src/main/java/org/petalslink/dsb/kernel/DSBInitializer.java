@@ -34,12 +34,12 @@ import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.kernel.api.server.PetalsStateListener;
 import org.ow2.petals.util.LoggingUtil;
 import org.petalslink.dsb.api.DSBException;
-import org.petalslink.dsb.kernel.listener.LifeCycleManager;
-import org.petalslink.dsb.kernel.management.binder.EmbeddedServiceBinder;
-import org.petalslink.dsb.kernel.management.component.EmbeddedComponentService;
-import org.petalslink.dsb.kernel.management.cron.EmbeddedServiceBinderCron;
-import org.petalslink.dsb.kernel.management.cron.ServicePoller;
-import org.petalslink.dsb.kernel.webapp.WebAppServer;
+import org.petalslink.dsb.kernel.api.listener.LifeCycleManager;
+import org.petalslink.dsb.kernel.api.management.binder.EmbeddedServiceBinder;
+import org.petalslink.dsb.kernel.api.management.component.EmbeddedComponentService;
+import org.petalslink.dsb.kernel.api.management.cron.EmbeddedServiceBinderCron;
+import org.petalslink.dsb.kernel.api.management.cron.ServicePoller;
+import org.petalslink.dsb.kernel.api.webapp.WebAppServer;
 import org.petalslink.dsb.transport.api.Server;
 
 /**

@@ -47,8 +47,8 @@ public class EndpointHelper {
     public String getWithoutPrefix(String string) {
         String result = null;
         if (string != null
-                && string.startsWith(org.petalslink.dsb.kernel.service.Constants.PREFIX + "://")) {
-            result = string.substring((org.petalslink.dsb.kernel.service.Constants.PREFIX + "://")
+                && string.startsWith(org.petalslink.dsb.kernel.api.service.Constants.PREFIX + "://")) {
+            result = string.substring((org.petalslink.dsb.kernel.api.service.Constants.PREFIX + "://")
                     .length());
         }
         return result;

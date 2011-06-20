@@ -38,7 +38,8 @@ import org.ow2.petals.system.repository.artifact.ArtifactRepositoryService;
 import org.ow2.petals.util.LoggingUtil;
 import org.petalslink.dsb.annotations.LifeCycleListener;
 import org.petalslink.dsb.annotations.Phase;
-import org.petalslink.dsb.kernel.DSBConfigurationService;
+import org.petalslink.dsb.kernel.api.DSBConfigurationService;
+import org.petalslink.dsb.kernel.api.management.component.EmbeddedComponentService;
 
 
 /**

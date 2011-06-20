@@ -18,6 +18,7 @@ import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.kernel.server.FractalHelper;
 import org.ow2.petals.util.LoggingUtil;
 import org.petalslink.dsb.api.DSBException;
+import org.petalslink.dsb.kernel.api.ServiceFinder;
 
 /**
  * A service used to find other services...

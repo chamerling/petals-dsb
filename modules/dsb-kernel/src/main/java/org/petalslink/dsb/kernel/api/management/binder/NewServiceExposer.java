@@ -16,17 +16,19 @@
  * 
  * Initial developer(s): EBM WebSourcing
  */
-package org.petalslink.dsb.kernel;
+package org.petalslink.dsb.kernel.api.management.binder;
 
 /**
+ * The service exposer is in charge of exposing endpoints to the outside
+ * 
  * @author chamerling - eBM WebSourcing
  * 
  */
-public interface PetalsService {
+public interface NewServiceExposer {
 
-    void init() throws Exception;
+    /**
+     * Expose new endpoints if any
+     */
+    void expose();
 
-    void setup() throws Exception;
-
-    void shutdown() throws Exception;
 }

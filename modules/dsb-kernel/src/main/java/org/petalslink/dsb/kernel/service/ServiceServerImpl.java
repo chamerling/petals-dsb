@@ -16,6 +16,9 @@ import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
 import org.ow2.petals.util.LoggingUtil;
 import org.petalslink.dsb.annotations.LifeCycleListener;
 import org.petalslink.dsb.annotations.Phase;
+import org.petalslink.dsb.kernel.api.service.CoreServiceManager;
+import org.petalslink.dsb.kernel.api.service.Server;
+import org.petalslink.dsb.kernel.api.service.ServiceServer;
 import org.petalslink.dsb.ws.api.HelloService;
 
 /**

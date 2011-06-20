@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.petalslink.dsb.kernel;
+package org.petalslink.dsb.kernel.api;
 
 import org.petalslink.dsb.api.DSBException;
 
