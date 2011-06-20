@@ -25,6 +25,8 @@ import javax.xml.namespace.QName;
 import org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint;
 
 /**
+ * TODO : The search engine must not be JBI dependant!
+ * 
  * @author chamerling - eBM WebSourcing
  * 
  */

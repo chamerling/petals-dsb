@@ -18,16 +18,16 @@
  */
 package org.petalslink.dsb.kernel.api.webapp;
 
-import org.petalslink.dsb.api.DSBException;
+import java.util.List;
+
+import org.petalslink.dsb.kernel.api.service.Server;
 
 /**
  * @author chamerling - eBM WebSourcing
  *
  */
-public interface WebAppServer {
+public interface WebAppServer extends Server {
 
-    void startServer() throws DSBException;
-
-    void stopServer();
+    List<String> getWebAppNames();
 
 }

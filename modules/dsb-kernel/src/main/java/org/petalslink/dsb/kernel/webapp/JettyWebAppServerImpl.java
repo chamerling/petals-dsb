@@ -20,6 +20,8 @@ package org.petalslink.dsb.kernel.webapp;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.webapp.WebAppContext;
@@ -69,16 +71,16 @@ public class JettyWebAppServerImpl implements WebAppServer {
     private Server server;
 
     @LifeCycle(on = LifeCycleType.START)
-    protected void start() {
+    protected void startComponent() {
         this.log = new LoggingUtil(this.logger);
         this.log.debug("Starting...");
     }
 
     @LifeCycle(on = LifeCycleType.STOP)
-    protected void stop() {
+    protected void stopCoponent() {
         this.log.debug("Stopping...");
 
-        this.stopServer();
+        this.stop();
         this.server = null;
     }
 
@@ -86,7 +88,7 @@ public class JettyWebAppServerImpl implements WebAppServer {
      * {@inheritDoc}
      */
     @LifeCycleListener(phase = Phase.START)
-    public void startServer() throws DSBException {
+    public void start() throws DSBException {
         if (isStarted()) {
             this.log.info("Server is already started...");
             return;
@@ -142,7 +144,7 @@ public class JettyWebAppServerImpl implements WebAppServer {
      * {@inheritDoc}
      */
     @LifeCycleListener(phase = Phase.STOP) 
-    public void stopServer() {
+    public void stop() {
         if (this.server != null) {
             try {
                 this.server.stop();
@@ -150,6 +152,13 @@ public class JettyWebAppServerImpl implements WebAppServer {
                 this.log.warning(e.getMessage());
             }
         }
+    }
+
+    /* (non-Javadoc)
+     * @see org.petalslink.dsb.kernel.api.webapp.WebAppServer#getWebAppNames()
+     */
+    public List<String> getWebAppNames() {
+        return Arrays.asList(new String[]{WEBAPP_NAME});
     }
 
 }

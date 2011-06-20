@@ -16,6 +16,7 @@ import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
 import org.ow2.petals.util.LoggingUtil;
 import org.petalslink.dsb.annotations.LifeCycleListener;
 import org.petalslink.dsb.annotations.Phase;
+import org.petalslink.dsb.api.DSBException;
 import org.petalslink.dsb.kernel.api.service.CoreServiceManager;
 import org.petalslink.dsb.kernel.api.service.Server;
 import org.petalslink.dsb.kernel.api.service.ServiceServer;
@@ -49,7 +50,11 @@ public class ServiceServerImpl implements ServiceServer {
     public void stop() {
         log.end();
         if (server != null) {
-            server.stop();
+            try {
+                server.stop();
+            } catch (DSBException e) {
+                e.printStackTrace();
+            }
         }
     }
 

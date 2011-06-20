@@ -3,14 +3,16 @@
  */
 package org.petalslink.dsb.kernel.api.service;
 
+import org.petalslink.dsb.api.DSBException;
+
 /**
  * @author chamerling
  *
  */
 public interface Server {
     
-    void start();
+    void start() throws DSBException;
     
-    void stop();
+    void stop() throws DSBException;
 
 }

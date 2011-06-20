@@ -130,7 +130,7 @@ public class DSBInitializer implements PetalsStateListener {
         if (this.webAppServer != null) {
             this.log.info("Start the Web application server...");
             try {
-                this.webAppServer.startServer();
+                this.webAppServer.start();
             } catch (DSBException e) {
                 this.log.warning("Can not start the Web Application, embedded management will not be available!");
             }
@@ -148,7 +148,11 @@ public class DSBInitializer implements PetalsStateListener {
     public void onPetalsStopped(boolean success, Exception exception) {
         if (this.webAppServer != null) {
             this.log.info("Stop the HTTP server...");
-            this.webAppServer.stopServer();
+            try {
+                this.webAppServer.stop();
+            } catch (DSBException e) {
+                this.log.warning("Can not stop the Web Application");
+            }
         }
     }
 
