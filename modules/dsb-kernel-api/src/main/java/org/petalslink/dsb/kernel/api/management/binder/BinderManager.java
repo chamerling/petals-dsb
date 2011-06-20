@@ -16,19 +16,25 @@
  * 
  * Initial developer(s): EBM WebSourcing
  */
-package org.petalslink.dsb.kernel.messaging;
+package org.petalslink.dsb.kernel.api.management.binder;
 
-import org.ow2.petals.jbi.messaging.registry.AbstractEndpointRegistry;
-import org.petalslink.dsb.kernel.api.messaging.EndpointRegistry;
+import java.util.Set;
+
+import org.petalslink.dsb.ws.api.ServiceEndpoint;
 
 /**
- * Add some registry operations which are SOA4All specific
+ * Get information on bound services and more...
  * 
  * @author chamerling - eBM WebSourcing
+ * TODO : Change ServiceEndpoint to a DSB one
  * 
  */
-public abstract class EndpointRegistryImpl extends AbstractEndpointRegistry implements
-        EndpointRegistry {
+public interface BinderManager {
 
+    void addBind(String protocol, ServiceEndpoint endpoint);
+
+    Set<ServiceEndpoint> getBoundServices(String protocol);
+
+    void unbind(String protocol, ServiceEndpoint endpoint);
 
 }

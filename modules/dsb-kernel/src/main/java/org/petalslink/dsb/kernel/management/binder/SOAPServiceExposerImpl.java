@@ -93,7 +93,7 @@ public class SOAPServiceExposerImpl implements ServiceExposer {
     /**
      * {@inheritDoc}
      */
-    public void expose(ServiceEndpoint endpoint) throws BinderException {
+    public void expose(org.petalslink.dsb.ws.api.ServiceEndpoint endpoint) throws BinderException {
         if (!this.binderChecker.canExposeOnProtocol(this.getProtocol())) {
             throw new BinderException("No component found to expose SOAP service");
         }
@@ -102,20 +102,13 @@ public class SOAPServiceExposerImpl implements ServiceExposer {
         Map<String, String> extensions = new HashMap<String, String>();
         extensions.put(Constants.OUTPUT_DIR, this.workPath.getAbsolutePath());
         
-        QName itf = null;
-        if ((endpoint.getInterfacesName() != null) && (endpoint.getInterfacesName().size() > 0)) {
-            itf = endpoint.getInterfacesName().get(0);
-        }
-        
-        QName service = null;
-        if (endpoint.getServiceName() != null) {
-            service = endpoint.getServiceName();
-        }
+        QName itf = endpoint.getItf();
+        QName service = endpoint.getService();
 
         extensions.put(org.ow2.petals.tools.generator.commons.Constants.COMPONENT_VERSION,
                 org.petalslink.dsb.kernel.Constants.DEFAULT_SOAP_COMPONENT_VERSION);
 
-        String soapServiceName = endpoint.getEndpointName();
+        String soapServiceName = endpoint.getEndpoint();
         if (soapServiceName == null && itf != null) {
             // get the interface which is the only field which should not be null
             soapServiceName = itf.getLocalPart();
@@ -137,7 +130,7 @@ public class SOAPServiceExposerImpl implements ServiceExposer {
                 soapServiceName);
 
         // FIXME : Inject endpoint properties!!!!
-        Jbi2WS generator = new Jbi2WS(endpoint.getEndpointName(), service, itf, extensions);
+        Jbi2WS generator = new Jbi2WS(endpoint.getEndpoint(), service, itf, extensions);
         try {
             sa = generator.generate();
         } catch (JBIGenerationException e) {

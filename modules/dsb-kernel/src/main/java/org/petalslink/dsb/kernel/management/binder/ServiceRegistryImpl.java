@@ -30,9 +30,9 @@ import org.objectweb.fractal.fraclet.annotation.annotations.Monolog;
 import org.objectweb.fractal.fraclet.annotation.annotations.Provides;
 import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
 import org.objectweb.util.monolog.api.Logger;
-import org.ow2.petals.registry.api.Endpoint;
 import org.ow2.petals.util.LoggingUtil;
 import org.petalslink.dsb.kernel.api.management.binder.ServiceRegistry;
+import org.petalslink.dsb.ws.api.ServiceEndpoint;
 
 /**
  * TODO : Should register entries somewhere in file...
@@ -49,14 +49,14 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 
     private LoggingUtil log;
 
-    private Map<String, Map<String, Endpoint>> cache;
+    private Map<String, Map<String, ServiceEndpoint>> cache;
 
     @LifeCycle(on = LifeCycleType.START)
     protected void start() {
         this.log = new LoggingUtil(this.logger);
         this.log.debug("Starting...");
 
-        this.cache = new HashMap<String, Map<String, Endpoint>>();
+        this.cache = new HashMap<String, Map<String, ServiceEndpoint>>();
     }
 
     @LifeCycle(on = LifeCycleType.STOP)
@@ -67,10 +67,10 @@ public class ServiceRegistryImpl implements ServiceRegistry {
     /**
      * {@inheritDoc}
      */
-    public synchronized void addService(String protocol, String url, Endpoint endpoint) {
-        Map<String, Endpoint> map = this.cache.get(protocol);
+    public synchronized void addService(String protocol, String url, ServiceEndpoint endpoint) {
+        Map<String, ServiceEndpoint> map = this.cache.get(protocol);
         if (map == null) {
-            map = new HashMap<String, Endpoint>();
+            map = new HashMap<String, ServiceEndpoint>();
             this.cache.put(protocol, map);
         }
         map.put(url, endpoint);
@@ -80,7 +80,7 @@ public class ServiceRegistryImpl implements ServiceRegistry {
      * {@inheritDoc}
      */
     public void removeService(String protocol, String url) {
-        Map<String, Endpoint> map = this.cache.get(protocol);
+        Map<String, ServiceEndpoint> map = this.cache.get(protocol);
         if (map != null) {
             map.remove(url);
         }
@@ -91,7 +91,7 @@ public class ServiceRegistryImpl implements ServiceRegistry {
      */
     public Set<String> getURLs(String protocol) {
         Set<String> result = null;
-        Map<String, Endpoint> map = this.cache.get(protocol);
+        Map<String, ServiceEndpoint> map = this.cache.get(protocol);
         if (map != null) {
             result = map.keySet();
         } else {

@@ -18,42 +18,23 @@
  */
 package org.petalslink.dsb.kernel.api.management.binder;
 
-import java.util.Set;
-
-import org.ow2.petals.registry.api.Endpoint;
-
 /**
- * A registry used to manage services which have been bound.
+ * A {@link ServiceExposer} registry!
+ * 
+ * NOTE : It looks like fractal/spoon have problems at compile time if this
+ * class is in the API, NPE at compilation...
  * 
  * @author chamerling - eBM WebSourcing
- * TODO : Remove Endpoint and use a DSB one
  * 
  */
-public interface ServiceRegistry {
+public interface ServiceExposerRegistry {
 
     /**
-     * Add a service to the registry
+     * Get the binder for the given protocol name
      * 
-     * @param protocol
-     * @param url
-     * @param endpoint
+     * @param protocolName
+     * @return the binder if found, else null!
      */
-    void addService(String protocol, String url, Endpoint endpoint);
-
-    /**
-     * 
-     * @param protocol
-     * @param url
-     */
-    void removeService(String protocol, String url);
-
-    /**
-     * Get the list of services URL which have been registered for the given
-     * protocol
-     * 
-     * @param protocol
-     * @return
-     */
-    Set<String> getURLs(String protocol);
+    ServiceExposer getServiceExposer(String protocolName);
 
 }

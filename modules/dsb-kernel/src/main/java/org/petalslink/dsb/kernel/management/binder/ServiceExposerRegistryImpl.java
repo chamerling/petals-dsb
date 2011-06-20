@@ -46,12 +46,14 @@ import org.petalslink.dsb.kernel.api.management.binder.ServiceExposerRegistry;
 @Provides(interfaces = { @Interface(name = "service", signature = ServiceExposerRegistry.class) })
 public class ServiceExposerRegistryImpl implements ServiceExposerRegistry {
 
+    private static final String EXPOSER_PREFIX = "service-exposer-";
+
     @Monolog(name = "logger")
     private Logger logger;
 
     private LoggingUtil log;
 
-    @Requires(name = PREFIX, signature = ServiceExposer.class, cardinality = Cardinality.COLLECTION, contingency = Contingency.OPTIONAL)
+    @Requires(name = EXPOSER_PREFIX, signature = ServiceExposer.class, cardinality = Cardinality.COLLECTION, contingency = Contingency.OPTIONAL)
     private final Map<String, Object> binders = new Hashtable<String, Object>();
 
     @LifeCycle(on = LifeCycleType.START)
@@ -73,9 +75,9 @@ public class ServiceExposerRegistryImpl implements ServiceExposerRegistry {
         if (protocolName == null) {
             return null;
         }
-        Object o = this.binders.get(PREFIX + protocolName.toLowerCase());
+        Object o = this.binders.get(EXPOSER_PREFIX + protocolName.toLowerCase());
         if (o != null) {
-            result = (ServiceExposer) this.binders.get(PREFIX + protocolName.toLowerCase());
+            result = (ServiceExposer) this.binders.get(EXPOSER_PREFIX + protocolName.toLowerCase());
         }
         return result;
     }

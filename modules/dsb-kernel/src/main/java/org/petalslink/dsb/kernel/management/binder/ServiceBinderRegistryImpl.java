@@ -45,12 +45,14 @@ import org.petalslink.dsb.kernel.api.management.binder.ServiceBinderRegistry;
 @Provides(interfaces = { @Interface(name = "service", signature = ServiceBinderRegistry.class) })
 public class ServiceBinderRegistryImpl implements ServiceBinderRegistry {
 
+    private static final String BINDER_PREFIX = "service-binder-";
+
     @Monolog(name = "logger")
     private Logger logger;
 
     private LoggingUtil log;
 
-    @Requires(name = PREFIX, signature = ServiceBinder.class, cardinality = Cardinality.COLLECTION, contingency = Contingency.OPTIONAL)
+    @Requires(name = BINDER_PREFIX, signature = ServiceBinder.class, cardinality = Cardinality.COLLECTION, contingency = Contingency.OPTIONAL)
     private final Map<String, Object> binders = new Hashtable<String, Object>();
 
     @LifeCycle(on = LifeCycleType.START)
@@ -72,9 +74,9 @@ public class ServiceBinderRegistryImpl implements ServiceBinderRegistry {
         if (protocolName == null) {
             return null;
         }
-        Object o = this.binders.get(PREFIX + protocolName.toLowerCase());
+        Object o = this.binders.get(BINDER_PREFIX + protocolName.toLowerCase());
         if (o != null) {
-            result = (ServiceBinder) this.binders.get(PREFIX + protocolName.toLowerCase());
+            result = (ServiceBinder) this.binders.get(BINDER_PREFIX + protocolName.toLowerCase());
         }
         return result;
     }

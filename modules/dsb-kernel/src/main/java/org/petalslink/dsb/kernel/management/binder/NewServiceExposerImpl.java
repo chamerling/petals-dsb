@@ -35,9 +35,9 @@ import org.ow2.petals.container.lifecycle.ServiceAssemblyLifeCycle;
 import org.ow2.petals.container.lifecycle.ServiceUnitLifeCycle;
 import org.ow2.petals.jbi.descriptor.original.generated.Jbi;
 import org.ow2.petals.jbi.management.admin.AdminService;
-import org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint;
 import org.ow2.petals.jbi.messaging.registry.EndpointRegistry;
 import org.ow2.petals.jbi.messaging.registry.RegistryException;
+import org.ow2.petals.kernel.api.service.ServiceEndpoint;
 import org.ow2.petals.util.LoggingUtil;
 import org.petalslink.dsb.kernel.Constants;
 import org.petalslink.dsb.kernel.api.management.binder.BinderException;
@@ -96,9 +96,9 @@ public class NewServiceExposerImpl implements NewServiceExposer {
 
                 // TODO : Do not get all the endpoints but just endpoints which
                 // have been exposed with management API
-                List<ServiceEndpoint> endpoints = this.endpointRegistry.getEndpoints();
+                List<org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint> endpoints = this.endpointRegistry.getEndpoints();
 
-                for (ServiceEndpoint serviceEndpoint : endpoints) {
+                for (org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint serviceEndpoint : endpoints) {
                     if (this.isNew(serviceEndpoint) && this.isPlatformService(serviceEndpoint)) {
                         this.bind(serviceEndpoint);
                     } else {
@@ -238,7 +238,13 @@ public class NewServiceExposerImpl implements NewServiceExposer {
         if (exposer != null) {
             // let's expose !
             try {
-                exposer.expose(serviceEndpoint);
+                org.petalslink.dsb.ws.api.ServiceEndpoint ep = new org.petalslink.dsb.ws.api.ServiceEndpoint();
+                ep.setEndpoint(serviceEndpoint.getEndpointName());
+                if (serviceEndpoint.getInterfacesName() != null && serviceEndpoint.getInterfacesName().size() > 0) {
+                    ep.setItf(serviceEndpoint.getInterfacesName().get(0));
+                }
+                ep.setService(serviceEndpoint.getServiceName());
+                exposer.expose(ep);
                 this.exposedEndpoints.put(this.getKey(serviceEndpoint), serviceEndpoint);
 
             } catch (BinderException e) {

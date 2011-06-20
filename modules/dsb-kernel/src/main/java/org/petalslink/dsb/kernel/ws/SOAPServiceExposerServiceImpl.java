@@ -3,11 +3,7 @@
  */
 package org.petalslink.dsb.kernel.ws;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
-
-import javax.xml.namespace.QName;
 
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.fraclet.annotation.annotations.FractalComponent;
@@ -18,7 +14,6 @@ import org.objectweb.fractal.fraclet.annotation.annotations.Provides;
 import org.objectweb.fractal.fraclet.annotation.annotations.Requires;
 import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
 import org.objectweb.util.monolog.api.Logger;
-import org.ow2.petals.kernel.api.service.Location;
 import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
 import org.ow2.petals.tools.ws.KernelWebService;
 import org.ow2.petals.util.LoggingUtil;
@@ -27,7 +22,6 @@ import org.petalslink.dsb.kernel.api.management.binder.BinderException;
 import org.petalslink.dsb.kernel.api.management.binder.ServiceExposerRegistry;
 import org.petalslink.dsb.ws.api.SOAPServiceExposer;
 import org.petalslink.dsb.ws.api.ServiceEndpoint;
-import org.w3c.dom.Document;
 
 /**
  * 
@@ -79,35 +73,7 @@ public class SOAPServiceExposerServiceImpl implements SOAPServiceExposer, Kernel
         }
 
         try {
-            exposer.expose(new org.ow2.petals.kernel.api.service.ServiceEndpoint() {
-
-                public void setType(EndpointType type) {
-                }
-
-                public EndpointType getType() {
-                    return null;
-                }
-
-                public QName getServiceName() {
-                    return serviceEndpoint.getService();
-                }
-
-                public Location getLocation() {
-                    return null;
-                }
-
-                public List<QName> getInterfacesName() {
-                    return Arrays.asList(serviceEndpoint.getItf());
-                }
-
-                public String getEndpointName() {
-                    return serviceEndpoint.getEndpoint();
-                }
-
-                public Document getDescription() {
-                    return null;
-                }
-            });
+            exposer.expose(serviceEndpoint);
         } catch (BinderException e) {
             final String message = "Can not expose service due to internal problem";
             if (log.isDebugEnabled()) {

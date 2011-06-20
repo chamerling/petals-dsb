@@ -16,35 +16,44 @@
  * 
  * Initial developer(s): EBM WebSourcing
  */
-package org.petalslink.dsb.kernel.api.messaging;
+package org.petalslink.dsb.kernel.api.management.binder;
 
-import java.util.List;
+import java.util.Set;
 
-import org.ow2.petals.kernel.api.service.ServiceEndpoint;
+import org.petalslink.dsb.ws.api.ServiceEndpoint;
 
 /**
+ * A registry used to manage services which have been bound.
+ * 
  * @author chamerling - eBM WebSourcing
- *
+ * TODO : Remove Endpoint and use a DSB one
+ * 
  */
-public interface EndpointRegistry {
+public interface ServiceRegistry {
 
     /**
-     * Store a service which has been bound
+     * Add a service to the registry
      * 
+     * @param protocol
+     * @param url
      * @param endpoint
      */
-    void storeBoundService(ServiceEndpoint endpoint);
+    void addService(String protocol, String url, ServiceEndpoint endpoint);
 
     /**
-     * Delete a service which has been bound
-     */
-    void deleteBoundService();
-
-    /**
-     * Get a list of bound services
      * 
+     * @param protocol
+     * @param url
+     */
+    void removeService(String protocol, String url);
+
+    /**
+     * Get the list of services URL which have been registered for the given
+     * protocol
+     * 
+     * @param protocol
      * @return
      */
-    List<ServiceEndpoint> getBoundServices();
+    Set<String> getURLs(String protocol);
 
 }

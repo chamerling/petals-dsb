@@ -34,7 +34,6 @@ import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
 import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.jbi.descriptor.original.generated.Jbi;
 import org.ow2.petals.jbi.management.deployment.AtomicDeploymentService;
-import org.ow2.petals.kernel.api.service.ServiceEndpoint;
 import org.ow2.petals.kernel.configuration.ConfigurationService;
 import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
 import org.ow2.petals.tools.generator.jbi.api.JBIGenerationException;
@@ -45,6 +44,7 @@ import org.petalslink.dsb.kernel.api.management.binder.BinderChecker;
 import org.petalslink.dsb.kernel.api.management.binder.BinderException;
 import org.petalslink.dsb.kernel.api.management.binder.ServiceExposer;
 import org.petalslink.dsb.kernel.util.JBIFileHelper;
+import org.petalslink.dsb.ws.api.ServiceEndpoint;
 
 
 /**
@@ -101,21 +101,14 @@ public class RESTServiceExposerImpl implements ServiceExposer {
         File sa = null;
         Map<String, String> extensions = new HashMap<String, String>();
         extensions.put(Constants.OUTPUT_DIR, this.workPath.getAbsolutePath());
-        QName itf = null;
-        if ((endpoint.getInterfacesName() != null) && (endpoint.getInterfacesName().size() > 0)) {
-            itf = endpoint.getInterfacesName().get(0);
-        }
-        QName service = null;
-        if (endpoint.getServiceName() != null) {
-            service = endpoint.getServiceName();
-        }
+        QName itf = endpoint.getItf();
+        QName service = endpoint.getService();
 
         extensions.put(org.ow2.petals.tools.generator.commons.Constants.COMPONENT_VERSION,
                 org.petalslink.dsb.kernel.Constants.DEFAULT_REST_COMPONENT_VERSION);
 
         // FIXME : Inject endpoint properties!!!!
-
-        String endpointName = endpoint.getEndpointName();
+        String endpointName = endpoint.getEndpoint();
         if (endpointName
                 .startsWith(org.petalslink.dsb.kernel.Constants.REST_PLATFORM_ENDPOINT_PREFIX)) {
             endpointName = endpointName.substring(
@@ -127,7 +120,7 @@ public class RESTServiceExposerImpl implements ServiceExposer {
                 org.ow2.petals.tools.generator.jbi.restcommons.Constants.REST_ENDPOINT_ADDRESS,
                 endpointName);
 
-        Jbi2REST generator = new Jbi2REST(endpoint.getEndpointName(), service, itf, extensions);
+        Jbi2REST generator = new Jbi2REST(endpoint.getEndpoint(), service, itf, extensions);
         try {
             sa = generator.generate();
         } catch (JBIGenerationException e) {

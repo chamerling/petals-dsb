@@ -24,8 +24,6 @@ package org.petalslink.dsb.kernel.api.management.binder;
  */
 public interface ServiceBinderRegistry {
 
-    static final String PREFIX = "service-binder-";
-
     /**
      * Get the binder for the given protocol name
      * 

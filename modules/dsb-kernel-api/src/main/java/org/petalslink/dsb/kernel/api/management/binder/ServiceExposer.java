@@ -18,7 +18,7 @@
  */
 package org.petalslink.dsb.kernel.api.management.binder;
 
-import org.ow2.petals.kernel.api.service.ServiceEndpoint;
+import org.petalslink.dsb.ws.api.ServiceEndpoint;
 
 /**
  * Expose a service endpoint. One implementation per protocol!
