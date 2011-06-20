@@ -61,10 +61,18 @@ public class CXFRESTServiceExposerImpl implements RESTServiceExposer {
      */
     public Set<RESTServiceInformationBean> expose(Set<RESTServiceInformationBean> services) {
         Set<RESTServiceInformationBean> result = new HashSet<RESTServiceInformationBean>();
+        String rootAddress = "http://" + configurationService.getContainerConfiguration().getHost()
+                + ":" + configurationService.getContainerConfiguration().getWebservicePort()
+                + "/rest/kernel/";
+
         List<Object> list = new ArrayList<Object>();
         for (RESTServiceInformationBean bean : services) {
             if (this.log.isDebugEnabled()) {
                 this.log.debug("Adding REST service : " + bean);
+            }
+            if (log.isInfoEnabled()) {
+                log.info("Kernel service " + bean.componentName + " is exposed as REST service at "
+                        + rootAddress + bean.componentName);
             }
             list.add(bean.implem);
             result.add(bean);
@@ -72,9 +80,6 @@ public class CXFRESTServiceExposerImpl implements RESTServiceExposer {
 
         JAXRSServerFactoryBean sf = new JAXRSServerFactoryBean();
         sf.setBindingId(JAXRSBindingFactory.JAXRS_BINDING_ID);
-        String rootAddress = "http://" + configurationService.getContainerConfiguration().getHost()
-                + ":" + configurationService.getContainerConfiguration().getWebservicePort()
-                + "/rest/kernel/";
         sf.setAddress(rootAddress);
         sf.setServiceBeans(list);
         server = sf.create();

@@ -37,9 +37,8 @@ public class FractalHelper {
         for (Component c : components) {
             try {
                 Object content = c.getFcInterface("/content");
-                String name = Fractal.getNameController(c).getFcName();
                 RESTServiceInformationBean bean = new RESTServiceInformationBean();
-                bean.componentName = name;
+                bean.componentName = Fractal.getNameController(c).getFcName();
                 bean.implem = content;
                 result.add(bean);
             } catch (Exception e) {

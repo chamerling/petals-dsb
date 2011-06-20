@@ -14,7 +14,6 @@ import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.jbi.management.deployment.AtomicDeploymentService;
 import org.ow2.petals.kernel.api.server.PetalsException;
 import org.ow2.petals.util.LoggingUtil;
-import org.petalslink.dsb.annotations.service.CoreService;
 import org.petalslink.dsb.annotations.service.RESTService;
 import org.petalslink.dsb.kernel.rest.api.ServiceAssembly;
 import org.petalslink.dsb.kernel.rest.api.Status;
@@ -23,7 +22,6 @@ import org.petalslink.dsb.kernel.rest.api.Status;
  * @author chamerling
  * 
  */
-@CoreService(type="rest")
 @RESTService
 @FractalComponent
 @Provides(interfaces = { @Interface(name = "service", signature = ServiceAssembly.class) })

@@ -9,6 +9,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 /**
+ * Reach it at http://localhost:7600/rest/kernel/$METHODPATH
+ * 
  * @author chamerling
  * 
  */
