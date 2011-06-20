@@ -3,9 +3,9 @@
 
 <definition extends="RESTType" name="REST">
 
-  <component definition="org.petalslink.dsb.kernel.tools.rest.RESTServiceManagerImpl" name="RESTServiceManagerImpl"/>
-  <component definition="org.petalslink.dsb.kernel.tools.rest.CXFRESTServiceExposerImpl" name="RESTServiceExposerImpl"/>
-  <component definition="org.petalslink.dsb.kernel.tools.rest.GlobalRESTServiceRegistryImpl" name="RESTServiceRegistryImpl"/>
+  <component definition="org.petalslink.dsb.kernel.rest.RESTServiceManagerImpl" name="RESTServiceManagerImpl"/>
+  <component definition="org.petalslink.dsb.kernel.rest.CXFRESTServiceExposerImpl" name="RESTServiceExposerImpl"/>
+  <component definition="org.petalslink.dsb.kernel.rest.GlobalRESTServiceRegistryImpl" name="RESTServiceRegistryImpl"/>
  
   <!-- REST Services, they can be defined everywhere in the framework... -->
   <component definition="org.petalslink.dsb.kernel.rest.impl.ServiceAssemblyServiceImpl" name="RESTServiceAssemblyServiceImpl"/>
