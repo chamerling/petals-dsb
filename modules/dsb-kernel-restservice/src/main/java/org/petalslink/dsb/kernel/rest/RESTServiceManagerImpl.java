@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.petalslink.dsb.kernel.tools.rest;
+package org.petalslink.dsb.kernel.rest;
 
 import java.util.HashSet;
 import java.util.Set;

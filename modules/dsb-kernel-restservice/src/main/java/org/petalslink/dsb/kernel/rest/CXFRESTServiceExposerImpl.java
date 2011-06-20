@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.petalslink.dsb.kernel.tools.rest;
+package org.petalslink.dsb.kernel.rest;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -49,6 +49,9 @@ public class CXFRESTServiceExposerImpl implements RESTServiceExposer {
     @LifeCycle(on = LifeCycleType.STOP)
     protected void stop() {
         this.log.start();
+        if (server != null) {
+            server.stop();
+        }
     }
 
     /*

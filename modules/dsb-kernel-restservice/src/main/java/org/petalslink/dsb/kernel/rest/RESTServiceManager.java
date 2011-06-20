@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.petalslink.dsb.kernel.tools.rest;
+package org.petalslink.dsb.kernel.rest;
 
 import org.ow2.petals.tools.ws.WebServiceException;
 
