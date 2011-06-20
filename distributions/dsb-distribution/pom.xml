@@ -73,6 +73,11 @@
 	<!-- REST stuff -->
 	<dependency>
 		<groupId>org.petalslink.dsb</groupId>
+		<artifactId>dsb-kernel-restservice</artifactId>
+		<version>${project.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.petalslink.dsb</groupId>
 		<artifactId>dsb-kernel-restapi-impl</artifactId>
 		<version>${project.version}</version>
 	</dependency>
