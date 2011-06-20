@@ -47,6 +47,7 @@
 		<module>modules/dsb-federation-xmpp</module>
 		<module>modules/dsb-federation-xmppwebserver</module>
 		<module>modules/dsb-kernel-wsapi</module>
+		<module>modules/dsb-kernel-api</module>
 		<module>modules/dsb-kernel</module>
 		<module>modules/dsb-petals-oldies</module>
 		<module>modules/dsb-webapp</module>
@@ -55,6 +56,8 @@
    		<module>modules/dsb-transport</module>
    		<module>modules/dsb-transport-cxf</module>
    		<module>modules/dsb-transport-xmpp</module>
+   		<!--<module>modules/dsb-kernel-federationservice</module>-->
+
    		<module>modules/dsb-monitoring</module>
    		<module>modules/dsb-service-client</module>
 
