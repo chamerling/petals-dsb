@@ -16,7 +16,7 @@
  * 
  * Initial developer(s): EBM WebSourcing
  */
-package org.petalslink.dsb.transport.cxf;
+package org.petalslink.dsb.transport;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
@@ -67,8 +67,8 @@ public class Adapter {
             org.petalslink.dsb.api.MessageExchange messageExchange) throws MessagingException {
 
         org.petalslink.dsb.transport.MessageExchange me = new org.petalslink.dsb.transport.MessageExchange(
-                createServiceEndpoint(messageExchange.getConsumer()));
-        me.setEndpoint(createServiceEndpoint(messageExchange.getEndpoint()));
+                org.petalslink.dsb.jbi.Adapter.createServiceEndpoint(messageExchange.getConsumer()));
+        me.setEndpoint(org.petalslink.dsb.jbi.Adapter.createServiceEndpoint(messageExchange.getEndpoint()));
 
         me.setExchangeId(messageExchange.getId());
         me.setInterfaceName(messageExchange.getInterfaceName());
@@ -167,9 +167,9 @@ public class Adapter {
      */
     public static org.petalslink.dsb.api.MessageExchange createWSMessage(MessageExchange exchange) {
         org.petalslink.dsb.api.MessageExchange me = new org.petalslink.dsb.api.MessageExchange();
-        me.setConsumer(createServiceEndpoint(exchange.getConsumerEndpoint()));
+        me.setConsumer(org.petalslink.dsb.jbi.Adapter.createServiceEndpoint(exchange.getConsumerEndpoint()));
         me
-                .setEndpoint(createServiceEndpoint((org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint) exchange
+                .setEndpoint(org.petalslink.dsb.jbi.Adapter.createServiceEndpoint((org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint) exchange
                         .getEndpoint()));
         me.setId(exchange.getExchangeId());
         me.setInterfaceName(exchange.getInterfaceName());
@@ -276,54 +276,6 @@ public class Adapter {
             e.printStackTrace();
         }
         return null;
-    }
-
-    public static org.petalslink.dsb.api.ServiceEndpoint createServiceEndpoint(
-            org.ow2.petals.kernel.api.service.ServiceEndpoint serviceEndpoint) {
-        if (serviceEndpoint == null) {
-            return null;
-        }
-        org.petalslink.dsb.api.ServiceEndpoint se = new org.petalslink.dsb.api.ServiceEndpoint();
-        if (serviceEndpoint.getLocation() != null) {
-            se.setComponentLocation(serviceEndpoint.getLocation().getComponentName());
-            se.setSubdomainLocation(serviceEndpoint.getLocation().getSubdomainName());
-            se.setContainerLocation(serviceEndpoint.getLocation().getContainerName());
-        }
-
-        // TODO : change description to string
-        // se.setDescription(description);
-
-        se.setEndpointName(serviceEndpoint.getEndpointName());
-        se.setServiceName(serviceEndpoint.getServiceName());
-        List<QName> itfs = serviceEndpoint.getInterfacesName();
-        if (itfs != null) {
-            se.setInterfaces(itfs.toArray(new QName[itfs.size()]));
-        }
-        return se;
-    }
-
-    public static JBIServiceEndpointImpl createServiceEndpoint(
-            org.petalslink.dsb.api.ServiceEndpoint serviceEndpoint) {
-        JBIServiceEndpointImpl se = new JBIServiceEndpointImpl();
-        if (serviceEndpoint != null) {
-            Location location = new Location(serviceEndpoint.getSubdomainLocation(),
-                    serviceEndpoint.getContainerLocation(), serviceEndpoint.getComponentLocation());
-            se.setLocation(location);
-
-            se.setStringDescription(serviceEndpoint.getDescription());
-
-            se.setEndpointName(serviceEndpoint.getEndpointName());
-            se.setServiceName(serviceEndpoint.getServiceName());
-            QName[] itfs = serviceEndpoint.getInterfaces();
-            if (itfs != null) {
-                List<QName> list = new ArrayList<QName>();
-                for (QName qName : itfs) {
-                    list.add(qName);
-                }
-                se.setInterfacesName(list);
-            }
-        }
-        return se;
     }
 
     private static final InputStream forkStreamSource(StreamSource streamSource) {

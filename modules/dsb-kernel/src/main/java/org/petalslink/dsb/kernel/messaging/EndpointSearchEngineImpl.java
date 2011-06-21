@@ -28,7 +28,6 @@ import javax.xml.namespace.QName;
 
 import org.ow2.petals.communication.topology.TopologyService;
 import org.ow2.petals.jbi.descriptor.original.generated.LinkType;
-import org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint;
 import org.ow2.petals.jbi.messaging.registry.EndpointRegistry;
 import org.ow2.petals.jbi.messaging.registry.RegistryException;
 import org.ow2.petals.jbi.messaging.routing.RoutingException;
@@ -37,6 +36,8 @@ import org.ow2.petals.kernel.api.service.ServiceEndpoint.EndpointType;
 import org.ow2.petals.kernel.configuration.ConfigurationService;
 import org.ow2.petals.kernel.configuration.ContainerConfiguration;
 import org.ow2.petals.util.LoggingUtil;
+import org.petalslink.dsb.api.ServiceEndpoint;
+import org.petalslink.dsb.jbi.Adapter;
 import org.petalslink.dsb.kernel.api.PetalsService;
 import org.petalslink.dsb.kernel.api.messaging.EndpointSearchEngine;
 import org.petalslink.dsb.kernel.api.messaging.SearchException;
@@ -150,26 +151,28 @@ public class EndpointSearchEngineImpl implements EndpointSearchEngine, PetalsSer
 
         ServiceEndpoint targetedEndpoint = null;
 
-        if (givenEndpoint.getType() == EndpointType.INTERNAL) {
+        if (givenEndpoint.getType().equals(EndpointType.INTERNAL.toString())) {
             if (LinkType.SOFT.value().equals(linktype)) {
                 throw new SearchException("The target endpoint '"
                         + givenEndpoint.getEndpointName() + "' is not a SOFT link");
             } else {
                 targetedEndpoint = givenEndpoint;
             }
-        } else if (givenEndpoint.getType() == EndpointType.LINKED) {
+        } else if (givenEndpoint.getType().equals(EndpointType.LINKED.toString())) {
             if (LinkType.HARD.value().equals(linktype)) {
                 throw new SearchException("The target endpoint '"
                         + givenEndpoint.getEndpointName() + "' is not an HARD link");
             } else {
                 try {
-                    targetedEndpoint = this.endpointRegistry.getEndpoint(givenEndpoint
-                            .getServiceName(), givenEndpoint.getEndpointName());
+                    org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint serviceEndpoint = this.endpointRegistry
+                            .getEndpoint(givenEndpoint.getServiceName(),
+                                    givenEndpoint.getEndpointName());
+                    targetedEndpoint = Adapter.createServiceEndpoint(serviceEndpoint);
                 } catch (RegistryException e) {
                     throw new SearchException(e);
                 }
             }
-        } else if (givenEndpoint.getType() == EndpointType.EXTERNAL) {
+        } else if (givenEndpoint.getType() == EndpointType.EXTERNAL.toString()) {
             targetedEndpoint = this.findEndpointInRegistry(givenEndpoint);
         }
 
@@ -191,8 +194,9 @@ public class EndpointSearchEngineImpl implements EndpointSearchEngine, PetalsSer
 
         ServiceEndpoint targetedEndpoint = null;
         try {
-            targetedEndpoint = this.endpointRegistry.getEndpoint(givenEndpoint.getServiceName(),
+            org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint serviceEndpoint = this.endpointRegistry.getEndpoint(givenEndpoint.getServiceName(),
                     givenEndpoint.getEndpointName());
+            targetedEndpoint = Adapter.createServiceEndpoint(serviceEndpoint);
         } catch (RegistryException e) {
             throw new SearchException(e.getMessage());
         }
@@ -224,7 +228,7 @@ public class EndpointSearchEngineImpl implements EndpointSearchEngine, PetalsSer
             throws SearchException {
         this.log.call();
 
-        List<ServiceEndpoint> retrievedEndpoints = null;
+        List<org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint> retrievedEndpoints = null;
         // find an Endpoint with the specified InterfaceName
         try {
             retrievedEndpoints = this.getEnabledEndpoints(kindSearch.SERVICE_SEARCH,
@@ -235,9 +239,9 @@ public class EndpointSearchEngineImpl implements EndpointSearchEngine, PetalsSer
 
         List<Object> strategyParameters = getAndAnalyseStrategy(strategy);
 
-        List<ServiceEndpoint> orderedEndpoints = null;
+        List<org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint> orderedEndpoints = null;
         if (retrievedEndpoints.size() == 1) {
-            orderedEndpoints = new ArrayList<ServiceEndpoint>(1);
+            orderedEndpoints = new ArrayList<org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint>(1);
             orderedEndpoints.add(retrievedEndpoints.get(0));
         } else if (retrievedEndpoints.size() > 1) {
             try {
@@ -252,8 +256,14 @@ public class EndpointSearchEngineImpl implements EndpointSearchEngine, PetalsSer
             throw new SearchException("No endpoint found matching the target service '"
                     + givenServiceName + "'");
         }
+        
+        // transform
+        List<ServiceEndpoint> result = new ArrayList<ServiceEndpoint>();
+        for (org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint serviceEndpoint : orderedEndpoints) {
+            result.add(Adapter.createServiceEndpoint(serviceEndpoint));
+        }
 
-        return orderedEndpoints;
+        return result;
     }
 
     /**
@@ -275,7 +285,7 @@ public class EndpointSearchEngineImpl implements EndpointSearchEngine, PetalsSer
             throws SearchException {
         this.log.call();
 
-        List<ServiceEndpoint> retrievedEndpoints = null;
+        List<org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint> retrievedEndpoints = null;
         // find an Endpoint with the specified InterfaceName
         try {
             retrievedEndpoints = this.getEnabledEndpoints(kindSearch.INTERFACE_SEARCH,
@@ -286,9 +296,9 @@ public class EndpointSearchEngineImpl implements EndpointSearchEngine, PetalsSer
 
         List<Object> strategyParameters = getAndAnalyseStrategy(strategy);
 
-        List<ServiceEndpoint> orderedEndpoints = null;
+        List<org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint> orderedEndpoints = null;
         if (retrievedEndpoints.size() == 1) {
-            orderedEndpoints = new ArrayList<ServiceEndpoint>(1);
+            orderedEndpoints = new ArrayList<org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint>(1);
             orderedEndpoints.add(retrievedEndpoints.get(0));
         } else if (retrievedEndpoints.size() > 1) {
             try {
@@ -307,7 +317,11 @@ public class EndpointSearchEngineImpl implements EndpointSearchEngine, PetalsSer
             // + givenInterfaceName + "'");
         }
 
-        return orderedEndpoints;
+        List<ServiceEndpoint> result = new ArrayList<ServiceEndpoint>();
+        for (org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint serviceEndpoint : orderedEndpoints) {
+            result.add(Adapter.createServiceEndpoint(serviceEndpoint));
+        }
+        return result;
     }
 
     /**
@@ -324,11 +338,11 @@ public class EndpointSearchEngineImpl implements EndpointSearchEngine, PetalsSer
      * @return the list of valide endpoints
      * @throws RegistryException
      */
-    public List<ServiceEndpoint> getEnabledEndpoints(final kindSearch type, final QName givenName,
+    public List<org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint> getEnabledEndpoints(final kindSearch type, final QName givenName,
             String linkType) throws RegistryException {
         this.log.call();
 
-        List<ServiceEndpoint> enabledEndpoints = new ArrayList<ServiceEndpoint>();
+        List<org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint> enabledEndpoints = new ArrayList<org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint>();
         org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint[] potentialEndpoints = null;
 
         if (type == kindSearch.SERVICE_SEARCH) {
@@ -450,7 +464,13 @@ public class EndpointSearchEngineImpl implements EndpointSearchEngine, PetalsSer
     public List<ServiceEndpoint> getAll() {
         List<ServiceEndpoint> result = new ArrayList<ServiceEndpoint>();
         try {
-            result.addAll(this.endpointRegistry.getEndpoints());
+            List<org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint> eps = this.endpointRegistry.getEndpoints();
+            if (eps != null) {
+                for (org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint serviceEndpoint : eps) {
+                    result.add(Adapter.createServiceEndpoint(serviceEndpoint));
+                }
+            }
+            
         } catch (RegistryException e) {
             e.printStackTrace();
         }

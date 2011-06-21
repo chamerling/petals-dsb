@@ -49,14 +49,14 @@ public class Adapter {
         // create the JAXB Element
         org.petalslink.dsb.api.MessageExchange jaxbMessage = fromString(body);
         // use JAXB adapter
-        MessageExchange result = org.petalslink.dsb.transport.cxf.Adapter
+        MessageExchange result = org.petalslink.dsb.transport.Adapter
                 .createJBIMessage(jaxbMessage);
         return result;
     }
 
     public static Message createJabberMessage(MessageExchange messageExchange) {
         // create JAXB message
-        org.petalslink.dsb.api.MessageExchange jaxbMessage = org.petalslink.dsb.transport.cxf.Adapter
+        org.petalslink.dsb.api.MessageExchange jaxbMessage = org.petalslink.dsb.transport.Adapter
                 .createWSMessage(messageExchange);
         // create String from JAXB message
         String body = toString(jaxbMessage);

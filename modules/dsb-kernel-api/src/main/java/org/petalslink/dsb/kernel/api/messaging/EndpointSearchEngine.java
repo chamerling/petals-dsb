@@ -22,7 +22,7 @@ import java.util.List;
 
 import javax.xml.namespace.QName;
 
-import org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint;
+import org.petalslink.dsb.api.ServiceEndpoint;
 
 /**
  * TODO : The search engine must not be JBI dependant!
@@ -32,40 +32,15 @@ import org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint;
  */
 public interface EndpointSearchEngine {
 
-    /**
-     * @param givenEndpoint
-     * @param linkType
-     * @return
-     * @throws RoutingException
-     */
     ServiceEndpoint getTargetedEndpointFromGivenEndpoint(ServiceEndpoint givenEndpoint,
             String linkType) throws SearchException;
 
-    /**
-     * @param givenServiceName
-     * @param strategy
-     * @param linkType
-     * @return
-     * @throws RoutingException
-     */
     List<ServiceEndpoint> getTargetedEndpointFromGivenServiceName(QName givenServiceName,
             String strategy, String linkType) throws SearchException;
 
-    /**
-     * @param givenInterfaceName
-     * @param strategy
-     * @param linkType
-     * @return
-     * @throws RoutingException
-     */
     List<ServiceEndpoint> getTargetedEndpointFromGivenInterfaceName(QName givenInterfaceName,
             String strategy, String linkType) throws SearchException;
 
-    /**
-     * Get all the endpoints
-     * 
-     * @return
-     */
     List<ServiceEndpoint> getAll();
 
 }

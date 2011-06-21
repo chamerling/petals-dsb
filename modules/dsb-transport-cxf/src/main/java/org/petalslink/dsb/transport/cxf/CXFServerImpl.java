@@ -27,12 +27,14 @@ import org.objectweb.fractal.fraclet.annotation.annotations.Provides;
 import org.objectweb.fractal.fraclet.annotation.annotations.Requires;
 import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
 import org.objectweb.util.monolog.api.Logger;
-import org.petalslink.dsb.api.TransportService;
-import org.petalslink.dsb.transport.api.Receiver;
-import org.petalslink.dsb.transport.api.Server;
 import org.ow2.petals.kernel.configuration.ConfigurationService;
 import org.ow2.petals.kernel.configuration.ContainerConfiguration;
 import org.ow2.petals.util.LoggingUtil;
+import org.petalslink.dsb.annotations.LifeCycleListener;
+import org.petalslink.dsb.annotations.Phase;
+import org.petalslink.dsb.api.TransportService;
+import org.petalslink.dsb.transport.api.Receiver;
+import org.petalslink.dsb.transport.api.Server;
 
 /**
  * A CXF/JAX-WS implementation of the {@link Server}, receive messages and send
@@ -78,6 +80,7 @@ public class CXFServerImpl implements Server {
     /**
      * {@inheritDoc}
      */
+    @LifeCycleListener(phase = Phase.START, priority=101)
     public void startServer() {
         JaxWsServerFactoryBean svrFactory = new JaxWsServerFactoryBean();
         TransportService service = new TransportServiceImpl(this.receiver, this.log);

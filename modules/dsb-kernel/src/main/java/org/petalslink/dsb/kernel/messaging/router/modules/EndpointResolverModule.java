@@ -38,6 +38,7 @@ import org.ow2.petals.jbi.messaging.routing.module.endpoint.EndpointOrderer;
 import org.ow2.petals.kernel.configuration.ConfigurationService;
 import org.ow2.petals.transport.util.TransportSendContext;
 import org.ow2.petals.util.LoggingUtil;
+import org.petalslink.dsb.jbi.Adapter;
 import org.petalslink.dsb.kernel.api.PetalsService;
 import org.petalslink.dsb.kernel.api.messaging.EndpointSearchEngine;
 import org.petalslink.dsb.kernel.api.messaging.SearchException;
@@ -160,18 +161,29 @@ public class EndpointResolverModule implements SenderModule, PetalsService {
 
             ServiceEndpoint targetEndpoint = null;
             try {
-                targetEndpoint = this.endpointSearchEngine
-                        .getTargetedEndpointFromGivenEndpoint(givenEndpoint, linkType);
+                org.petalslink.dsb.api.ServiceEndpoint searchResultEndpoint = this.endpointSearchEngine
+                        .getTargetedEndpointFromGivenEndpoint(
+                                Adapter.createServiceEndpoint(givenEndpoint), linkType);
+                targetEndpoint = Adapter.createServiceEndpoint(searchResultEndpoint);
             } catch (SearchException e) {
                 throw new RoutingException(e);
             }
-            electedEndpoints.add(targetEndpoint);
-
+            if (targetEndpoint != null) {
+                electedEndpoints.add(targetEndpoint);
+            }
         } else if (givenServiceName != null) {
             // Case 2 : The endpoint is implicit, the service name is set.
             try {
-                electedEndpoints = this.endpointSearchEngine.getTargetedEndpointFromGivenServiceName(
-                        givenServiceName, strategy, linkType);
+                List<org.petalslink.dsb.api.ServiceEndpoint> searchResultEndpoints = this.endpointSearchEngine
+                        .getTargetedEndpointFromGivenServiceName(givenServiceName, strategy,
+                                linkType);
+
+                if (searchResultEndpoints != null) {
+                    for (org.petalslink.dsb.api.ServiceEndpoint serviceEndpoint : searchResultEndpoints) {
+                        electedEndpoints.add(Adapter.createServiceEndpoint(serviceEndpoint));
+                    }
+                }
+
             } catch (SearchException e) {
                 throw new RoutingException(e);
             }
@@ -183,8 +195,15 @@ public class EndpointResolverModule implements SenderModule, PetalsService {
              * given interface;
              */
             try {
-                electedEndpoints = this.endpointSearchEngine.getTargetedEndpointFromGivenInterfaceName(
-                        givenInterfaceName, strategy, linkType);
+                List<org.petalslink.dsb.api.ServiceEndpoint> searchResultEndpoints = this.endpointSearchEngine
+                        .getTargetedEndpointFromGivenInterfaceName(givenInterfaceName, strategy,
+                                linkType);
+                if (searchResultEndpoints != null) {
+                    for (org.petalslink.dsb.api.ServiceEndpoint serviceEndpoint : searchResultEndpoints) {
+                        electedEndpoints.add(Adapter.createServiceEndpoint(serviceEndpoint));
+                    }
+                }
+                
             } catch (SearchException e) {
                 throw new RoutingException(e);
             }

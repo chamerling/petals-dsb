@@ -31,10 +31,10 @@ import org.objectweb.fractal.fraclet.annotation.annotations.Requires;
 import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
 import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.communication.topology.TopologyService;
-import org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint;
 import org.ow2.petals.jbi.messaging.registry.EndpointRegistry;
 import org.ow2.petals.kernel.configuration.ConfigurationService;
 import org.ow2.petals.util.LoggingUtil;
+import org.petalslink.dsb.api.ServiceEndpoint;
 import org.petalslink.dsb.kernel.api.messaging.EndpointSearchEngine;
 import org.petalslink.dsb.kernel.api.messaging.SearchException;
 

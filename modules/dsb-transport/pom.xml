@@ -30,13 +30,23 @@
 			<artifactId>dsb-transport-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>dsb-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>dsb-jbi</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<!-- FIXME : We really need an API!!! -->
 		<dependency>
 			<groupId>org.ow2.petals</groupId>
 			<artifactId>petals-kernel</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		<!-- FIXME : Do we really need it? -->
+		<!-- FIXME : Do we really need it?	 -->
 		<dependency>
 			<groupId>org.objectweb.fractal.fraclet.annotation</groupId>
 			<artifactId>fractal-spoonlet</artifactId>

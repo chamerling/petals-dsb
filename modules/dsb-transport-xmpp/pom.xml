@@ -41,12 +41,6 @@
 			<artifactId>dsb-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<!--  FIXME : Just for serialization... -->
-		<dependency>
-			<groupId>org.petalslink.dsb</groupId>
-			<artifactId>dsb-transport-cxf</artifactId>
-			<version>${project.version}</version>
-		</dependency>
 		<dependency>
 			<groupId>org.ow2.petals</groupId>
 			<artifactId>petals-kernel</artifactId>

@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
@@ -7,16 +8,16 @@
 		<version>1.0-SNAPSHOT</version>
 		<relativePath>../dsb-parent/pom.xml</relativePath>
 	</parent>
-	
+
 	<groupId>org.petalslink.dsb</groupId>
 	<artifactId>dsb-transport-cxf</artifactId>
 	<packaging>jar</packaging>
 	<name>dsb-transport-cxf</name>
-	
+
 	<scm>
-      <connection>scm:svn:https://svn.petalslink.com/svnroot/trunk/research/commons/dsb/modules/dsb-transport-cxf</connection>
-      <developerConnection>${project.scm.connection}</developerConnection>
-  	</scm>
+		<connection>scm:svn:https://svn.petalslink.com/svnroot/trunk/research/commons/dsb/modules/dsb-transport-cxf</connection>
+		<developerConnection>${project.scm.connection}</developerConnection>
+	</scm>
 
 	<dependencies>
 		<dependency>
@@ -33,6 +34,11 @@
 		<dependency>
 			<groupId>org.petalslink.dsb</groupId>
 			<artifactId>dsb-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>dsb-annotations</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

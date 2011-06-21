@@ -23,6 +23,7 @@ import org.apache.cxf.transport.http.HTTPConduit;
 import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
 import org.petalslink.dsb.api.TransportException;
 import org.petalslink.dsb.api.TransportService;
+import org.petalslink.dsb.transport.Adapter;
 import org.petalslink.dsb.transport.api.Client;
 import org.petalslink.dsb.transport.api.ClientException;
 import org.ow2.petals.jbi.messaging.exchange.MessageExchange;
