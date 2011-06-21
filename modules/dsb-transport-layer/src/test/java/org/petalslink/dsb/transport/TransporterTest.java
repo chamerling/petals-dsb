@@ -15,8 +15,6 @@ import org.petalslink.dsb.transport.api.ClientFactory;
 import org.petalslink.dsb.transport.api.Context;
 import org.petalslink.dsb.transport.api.Receiver;
 
-import com.sun.org.apache.bcel.internal.generic.DALOAD;
-
 /**
  * @author chamerling
  * 
