@@ -26,9 +26,9 @@ import org.objectweb.fractal.fraclet.annotation.annotations.Monolog;
 import org.objectweb.fractal.fraclet.annotation.annotations.Provides;
 import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
 import org.objectweb.util.monolog.api.Logger;
-import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
 import org.ow2.petals.tools.ws.KernelWebService;
 import org.ow2.petals.util.LoggingUtil;
+import org.petalslink.dsb.ws.api.DSBWebServiceException;
 import org.petalslink.dsb.ws.api.HelloService;
 
 
@@ -63,7 +63,7 @@ public class HelloServiceImpl implements HelloService, KernelWebService {
     /**
      * {@inheritDoc}
      */
-    public String sayHello(String input) throws PEtALSWebServiceException {
+    public String sayHello(String input) throws DSBWebServiceException {
         System.out.println("Got input message : " + input);
         return "SOA4All DSB : " + input;
     }

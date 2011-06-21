@@ -18,6 +18,7 @@ import org.petalslink.dsb.service.client.ClientException;
 import org.petalslink.dsb.service.client.ClientFactory;
 import org.petalslink.dsb.service.client.Message;
 import org.petalslink.dsb.service.client.MessageListener;
+import org.petalslink.dsb.ws.api.DSBWebServiceException;
 import org.petalslink.dsb.ws.api.HelloService;
 
 public class PetalsTransportTest extends TestCase {
@@ -52,7 +53,7 @@ public class PetalsTransportTest extends TestCase {
         sf.setAddress("dsb://localhost/serviceA");
         sf.setServiceClass(HelloService.class);
         sf.setServiceBean(new HelloService() {
-            public String sayHello(String input) throws PEtALSWebServiceException {
+            public String sayHello(String input) throws DSBWebServiceException {
                 System.out.println("SAY HELLO INVOKED!");
                 return pre+input;
             }
@@ -69,7 +70,7 @@ public class PetalsTransportTest extends TestCase {
         String out = null;
         try {
             out = hello.sayHello(in);
-        } catch (PEtALSWebServiceException e) {
+        } catch (DSBWebServiceException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
             fail();

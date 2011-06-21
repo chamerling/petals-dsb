@@ -27,8 +27,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
 import org.petalslink.dsb.webapp.api.DSBManagement;
+import org.petalslink.dsb.ws.api.DSBWebServiceException;
 import org.petalslink.dsb.ws.api.HelloService;
 
 /**
@@ -59,7 +59,7 @@ public class IndexServlet extends HttpServlet {
             HelloService hello = dsbManagement.get(HelloService.class, "HelloWebServiceImpl", "webservice");
             try {
                 os.write(("Hello : " + hello.sayHello("oieoieoie")).getBytes());
-            } catch (PEtALSWebServiceException e) {
+            } catch (DSBWebServiceException e) {
                 e.printStackTrace();
             }
 

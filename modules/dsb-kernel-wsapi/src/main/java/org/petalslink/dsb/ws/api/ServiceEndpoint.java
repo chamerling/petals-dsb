@@ -21,10 +21,7 @@ package org.petalslink.dsb.ws.api;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
-
-import org.ow2.petals.kernel.ws.api.Constants;
 
 /**
  * The DSB Service Endpoint minimal definition.
@@ -33,7 +30,6 @@ import org.ow2.petals.kernel.ws.api.Constants;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(namespace = Constants.NS, name = "serviceendpoint")
 public class ServiceEndpoint {
 
     @XmlElement(name = "service")

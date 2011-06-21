@@ -33,6 +33,7 @@ import org.ow2.petals.kernel.configuration.ConfigurationService;
 import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
 import org.ow2.petals.util.LoggingUtil;
 import org.petalslink.dsb.kernel.api.management.component.ComponentInformationService;
+import org.petalslink.dsb.ws.api.DSBWebServiceException;
 import org.petalslink.dsb.ws.api.ProxyInformationService;
 
 
@@ -69,25 +70,25 @@ public class ProxyInformationServiceImpl implements ProxyInformationService {
     /**
      * {@inheritDoc}
      */
-    public String getRESTProxy(String restURL) throws PEtALSWebServiceException {
+    public String getRESTProxy(String restURL) throws DSBWebServiceException {
         if (this.log.isDebugEnabled()) {
             this.log.debug("Entering method : getRESTProxy with params restURL = " + restURL);
         }
 
         if (restURL == null) {
-            throw new PEtALSWebServiceException("Null URL is not allowed...");
+            throw new DSBWebServiceException("Null URL is not allowed...");
         }
 
         try {
             URI.create(restURL).toURL();
         } catch (MalformedURLException e) {
-            throw new PEtALSWebServiceException(e.getMessage());
+            throw new DSBWebServiceException(e.getMessage());
         }
 
         String result = null;
         String baseProxy = this.componentInformationService.getProperty("petals-bc-rest", "proxy");
         if (baseProxy == null) {
-            throw new PEtALSWebServiceException(
+            throw new DSBWebServiceException(
                     "Can not define the proy URL, the REST component seems to be inactive");
         }
 
@@ -105,25 +106,25 @@ public class ProxyInformationServiceImpl implements ProxyInformationService {
     /**
      * TODO : For now the REST proxy also serves as SOAP one... {@inheritDoc}
      */
-    public String getSOAPProxy(String wsdlURL) throws PEtALSWebServiceException {
+    public String getSOAPProxy(String wsdlURL) throws DSBWebServiceException {
         if (this.log.isDebugEnabled()) {
             this.log.debug("Entering method : getSOAPProxy with params wsdlURL = " + wsdlURL);
         }
 
         if (wsdlURL == null) {
-            throw new PEtALSWebServiceException("Null URL is not allowed...");
+            throw new DSBWebServiceException("Null URL is not allowed...");
         }
 
         try {
             URI.create(wsdlURL).toURL();
         } catch (MalformedURLException e) {
-            throw new PEtALSWebServiceException(e.getMessage());
+            throw new DSBWebServiceException(e.getMessage());
         }
 
         String result = null;
         String baseProxy = this.componentInformationService.getProperty("petals-bc-rest", "proxy");
         if (baseProxy == null) {
-            throw new PEtALSWebServiceException(
+            throw new DSBWebServiceException(
                     "Can not define the proy URL, the REST component seems to be inactive");
         }
 

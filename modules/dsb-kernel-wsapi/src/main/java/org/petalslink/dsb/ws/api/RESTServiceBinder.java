@@ -9,9 +9,6 @@ import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 
-import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
-import org.petalslink.dsb.ws.api.SOAPServiceBinder;
-
 /**
  * Bind REST services to the Bus. See {@link SOAPServiceBinder} for more details.
  * 
@@ -34,7 +31,7 @@ public interface RESTServiceBinder {
      */
     @WebMethod
     ServiceEndpoint bindRESTService(@WebParam(name = "restBaseURL") String restURL,
-            @WebParam(name = "endpointName") String endpointName) throws PEtALSWebServiceException;
+            @WebParam(name = "endpointName") String endpointName) throws DSBWebServiceException;
 
     /**
      * Unbind a service which is already bound to the DSB
@@ -45,7 +42,7 @@ public interface RESTServiceBinder {
      */
     @WebMethod
     boolean unbindRESTService(@WebParam(name = "restBaseURL") String restURL)
-            throws PEtALSWebServiceException;
+            throws DSBWebServiceException;
     
     /**
      * Get a list of REST services which are bound to the DSB
@@ -54,6 +51,6 @@ public interface RESTServiceBinder {
      * @throws PEtALSWebServiceException
      */
     @WebMethod
-    Set<String> getRESTServices() throws PEtALSWebServiceException;
+    Set<String> getRESTServices() throws DSBWebServiceException;
 
 }

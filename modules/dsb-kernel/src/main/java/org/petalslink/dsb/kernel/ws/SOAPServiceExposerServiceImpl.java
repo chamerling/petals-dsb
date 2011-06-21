@@ -20,6 +20,7 @@ import org.ow2.petals.util.LoggingUtil;
 import org.petalslink.dsb.kernel.Constants;
 import org.petalslink.dsb.kernel.api.management.binder.BinderException;
 import org.petalslink.dsb.kernel.api.management.binder.ServiceExposerRegistry;
+import org.petalslink.dsb.ws.api.DSBWebServiceException;
 import org.petalslink.dsb.ws.api.SOAPServiceExposer;
 import org.petalslink.dsb.ws.api.ServiceEndpoint;
 
@@ -62,12 +63,12 @@ public class SOAPServiceExposerServiceImpl implements SOAPServiceExposer, Kernel
      * org.petalslink.dsb.ws.api.ServiceExposer#expose(org.petalslink.dsb.ws
      * .api.ServiceEndpoint)
      */
-    public boolean expose(final ServiceEndpoint serviceEndpoint) throws PEtALSWebServiceException {
+    public boolean expose(final ServiceEndpoint serviceEndpoint) throws DSBWebServiceException {
         this.log.call();
         org.petalslink.dsb.kernel.api.management.binder.ServiceExposer exposer = serviceExposerRegistry
                 .getServiceExposer(Constants.SOAP_SERVICE_EXPOSER);
         if (exposer == null) {
-            throw new PEtALSWebServiceException(
+            throw new DSBWebServiceException(
                     "Can not find a valid service exposer for protocol '"
                             + Constants.SOAP_SERVICE_EXPOSER + "'");
         }
@@ -81,7 +82,7 @@ public class SOAPServiceExposerServiceImpl implements SOAPServiceExposer, Kernel
             } else {
                 this.log.warning(message + " : " + e.getMessage());
             }
-            throw new PEtALSWebServiceException(message, e);
+            throw new DSBWebServiceException(message, e);
         }
 
         // FIXME : Return value!
@@ -95,8 +96,8 @@ public class SOAPServiceExposerServiceImpl implements SOAPServiceExposer, Kernel
      * org.petalslink.dsb.ws.api.ServiceExposer#delete(org.petalslink.dsb.ws
      * .api.ServiceEndpoint)
      */
-    public boolean delete(ServiceEndpoint serviceEndpoint) throws PEtALSWebServiceException {
-        throw new PEtALSWebServiceException("Not implemented");
+    public boolean delete(ServiceEndpoint serviceEndpoint) throws DSBWebServiceException {
+        throw new DSBWebServiceException("Not implemented");
     }
 
     /*
@@ -104,8 +105,8 @@ public class SOAPServiceExposerServiceImpl implements SOAPServiceExposer, Kernel
      * 
      * @see org.petalslink.dsb.ws.api.ServiceExposer#getWebServices()
      */
-    public Set<String> getWebServices() throws PEtALSWebServiceException {
-        throw new PEtALSWebServiceException("Not implemented");
+    public Set<String> getWebServices() throws DSBWebServiceException {
+        throw new DSBWebServiceException("Not implemented");
     }
 
     /*

@@ -12,12 +12,12 @@ import org.objectweb.fractal.fraclet.annotation.annotations.Requires;
 import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
 import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.kernel.configuration.ConfigurationService;
-import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
 import org.ow2.petals.util.LoggingUtil;
 import org.petalslink.dsb.annotations.LifeCycleListener;
 import org.petalslink.dsb.annotations.Phase;
 import org.petalslink.dsb.kernel.api.service.ConsumeService;
 import org.petalslink.dsb.kernel.api.service.CoreServiceManager;
+import org.petalslink.dsb.ws.api.DSBWebServiceException;
 import org.petalslink.dsb.ws.api.HelloService;
 
 /**
@@ -66,7 +66,7 @@ public class ConsumeServiceImpl implements ConsumeService {
             String out = null;
             try {
                 out = client.sayHello("Christophe");
-            } catch (PEtALSWebServiceException e) {
+            } catch (DSBWebServiceException e) {
                 e.printStackTrace();
             }
             System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>> GOT RESPONSE ON THE CLIENT : " + out);

@@ -38,6 +38,7 @@ import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
 import org.ow2.petals.util.LoggingUtil;
 import org.petalslink.dsb.kernel.api.management.component.ComponentInformationService;
 import org.petalslink.dsb.kernel.util.EndpointHelper;
+import org.petalslink.dsb.ws.api.DSBWebServiceException;
 import org.petalslink.dsb.ws.api.PlatformServiceInformationService;
 import org.petalslink.dsb.ws.api.ServiceEndpoint;
 
@@ -78,7 +79,7 @@ public class PlatformServiceInformationServiceImpl implements PlatformServiceInf
     /**
      * {@inheritDoc}
      */
-    public String getPlatformRESTService(String restURL) throws PEtALSWebServiceException {
+    public String getPlatformRESTService(String restURL) throws DSBWebServiceException {
         if (this.log.isDebugEnabled()) {
             this.log.debug("Entering method : getPlatformRESTService with params restURL = "
                     + restURL);
@@ -98,7 +99,7 @@ public class PlatformServiceInformationServiceImpl implements PlatformServiceInf
     /**
      * {@inheritDoc}
      */
-    public String getPlatformWebService(String wsdlURL) throws PEtALSWebServiceException {
+    public String getPlatformWebService(String wsdlURL) throws DSBWebServiceException {
         if (this.log.isDebugEnabled()) {
             this.log.debug("Entering method : getPlatformWebService with params wsdlURL = "
                     + wsdlURL);
@@ -152,7 +153,7 @@ public class PlatformServiceInformationServiceImpl implements PlatformServiceInf
     /**
      * {@inheritDoc}
      */
-    public ServiceEndpoint getRESTServiceEndpoint(String restURL) throws PEtALSWebServiceException {
+    public ServiceEndpoint getRESTServiceEndpoint(String restURL) throws DSBWebServiceException {
         if (this.log.isDebugEnabled()) {
             this.log.debug("Entering method : getRESTServiceEndpoint with params restURL = "
                     + restURL);
@@ -160,7 +161,7 @@ public class PlatformServiceInformationServiceImpl implements PlatformServiceInf
         try {
             return EndpointHelper.getRESTEndpoint(new URI(restURL));
         } catch (URISyntaxException e) {
-            throw new PEtALSWebServiceException(e.getMessage());
+            throw new DSBWebServiceException(e.getMessage());
         }
     }
 
@@ -168,7 +169,7 @@ public class PlatformServiceInformationServiceImpl implements PlatformServiceInf
      * {@inheritDoc}
      */
     public List<ServiceEndpoint> getWebServiceEndpoint(String wsdlURI)
-            throws PEtALSWebServiceException {
+            throws DSBWebServiceException {
         if (this.log.isDebugEnabled()) {
             this.log.debug("Entering method : getWebServiceEndpoint with params wsdlURI = "
                     + wsdlURI);
@@ -176,20 +177,20 @@ public class PlatformServiceInformationServiceImpl implements PlatformServiceInf
         try {
             return EndpointHelper.getEndpoints(new URI(wsdlURI));
         } catch (URISyntaxException e) {
-            throw new PEtALSWebServiceException(e.getMessage());
+            throw new DSBWebServiceException(e.getMessage());
         }
     }
 
     /**
      * {@inheritDoc}
      */
-    public boolean isRESTServiceBound(String restURL) throws PEtALSWebServiceException {
+    public boolean isRESTServiceBound(String restURL) throws DSBWebServiceException {
         if (this.log.isDebugEnabled()) {
             this.log.debug("Entering method : isRESTServiceBound with params restURL = " + restURL);
         }
         ServiceEndpoint serviceEndpoint = this.getRESTServiceEndpoint(restURL);
         if (serviceEndpoint == null) {
-            throw new PEtALSWebServiceException("Can not generate an Endpoint from the given URL "
+            throw new DSBWebServiceException("Can not generate an Endpoint from the given URL "
                     + restURL);
         }
 
@@ -199,7 +200,7 @@ public class PlatformServiceInformationServiceImpl implements PlatformServiceInf
             endpoints = this.endpointRegistry.query(serviceEndpoint.getEndpoint(), serviceEndpoint
                     .getItf(), serviceEndpoint.getService(), null, null, null, null);
         } catch (RegistryException e) {
-            throw new PEtALSWebServiceException(e.getMessage());
+            throw new DSBWebServiceException(e.getMessage());
         }
         return (endpoints != null) && (endpoints.size() > 0);
     }
@@ -207,13 +208,13 @@ public class PlatformServiceInformationServiceImpl implements PlatformServiceInf
     /**
      * {@inheritDoc}
      */
-    public boolean isWebServiceBound(String wsdlURL) throws PEtALSWebServiceException {
+    public boolean isWebServiceBound(String wsdlURL) throws DSBWebServiceException {
         if (this.log.isDebugEnabled()) {
             this.log.debug("Entering method : isWebServiceBound with params wsdlURL = " + wsdlURL);
         }
         List<ServiceEndpoint> serviceEndpoint = this.getWebServiceEndpoint(wsdlURL);
         if (serviceEndpoint == null) {
-            throw new PEtALSWebServiceException("Can not generate an Endpoint from the given URL "
+            throw new DSBWebServiceException("Can not generate an Endpoint from the given URL "
                     + wsdlURL);
         }
 

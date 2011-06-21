@@ -23,9 +23,6 @@ import javax.jws.WebParam;
 import javax.jws.WebResult;
 import javax.jws.WebService;
 
-import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
-import org.petalslink.dsb.ws.api.SOAPServiceBinder;
-
 /**
  * DEPRECATED : This service bind or proxify existing web services to the bus.
  * 
@@ -47,7 +44,7 @@ public interface SOAPBinderService {
      */
     @WebMethod
     boolean bindWebService(@WebParam(name = "wsdlURI") String wsdlURI)
-            throws PEtALSWebServiceException;
+            throws DSBWebServiceException;
 
     /**
      * Unbind a service which has already been binded?
@@ -60,7 +57,7 @@ public interface SOAPBinderService {
      */
     @WebMethod
     boolean unbindWebService(@WebParam(name = "wsdlURI") String wsdlURI)
-            throws PEtALSWebServiceException;
+            throws DSBWebServiceException;
 
     /**
      * Get the list of bound web services
@@ -80,7 +77,7 @@ public interface SOAPBinderService {
      */
     @WebMethod
     boolean proxifyWebService(@WebParam(name = "wsdlURI") String wsdlURI)
-            throws PEtALSWebServiceException;
+            throws DSBWebServiceException;
 
     /**
      * Unproxify a proxyfied service
@@ -91,7 +88,7 @@ public interface SOAPBinderService {
      */
     @WebMethod
     boolean unproxifyWebService(@WebParam(name = "wsdlURI") String wsdlURI)
-            throws PEtALSWebServiceException;
+            throws DSBWebServiceException;
 
     /**
      * Get the list of proxified web services
@@ -104,5 +101,5 @@ public interface SOAPBinderService {
 
     @WebMethod
     @WebResult(name = "serviceAddress")
-    boolean exposeService(ServiceEndpoint serviceEndpoint) throws PEtALSWebServiceException;
+    boolean exposeService(ServiceEndpoint serviceEndpoint) throws DSBWebServiceException;
 }

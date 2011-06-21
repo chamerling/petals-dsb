@@ -12,7 +12,6 @@ import org.objectweb.fractal.fraclet.annotation.annotations.Requires;
 import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
 import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.kernel.configuration.ConfigurationService;
-import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
 import org.ow2.petals.util.LoggingUtil;
 import org.petalslink.dsb.annotations.LifeCycleListener;
 import org.petalslink.dsb.annotations.Phase;
@@ -20,6 +19,7 @@ import org.petalslink.dsb.api.DSBException;
 import org.petalslink.dsb.kernel.api.service.CoreServiceManager;
 import org.petalslink.dsb.kernel.api.service.Server;
 import org.petalslink.dsb.kernel.api.service.ServiceServer;
+import org.petalslink.dsb.ws.api.DSBWebServiceException;
 import org.petalslink.dsb.ws.api.HelloService;
 
 /**
@@ -68,7 +68,7 @@ public class ServiceServerImpl implements ServiceServer {
         if (configurationService.getContainerConfiguration().getName().equals("0")) {
             CoreServiceManager manager = new CoreServiceManagerImpl();
             this.server = manager.createService(HelloService.class, new HelloService() {
-                public String sayHello(String input) throws PEtALSWebServiceException {
+                public String sayHello(String input) throws DSBWebServiceException {
                     System.out.println("SAY HELLO IS INVOKED ON SERVER!!!");
                     return "You said : " + input;
                 }

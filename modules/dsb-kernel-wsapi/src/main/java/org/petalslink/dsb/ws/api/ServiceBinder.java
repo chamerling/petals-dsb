@@ -24,8 +24,6 @@ import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 
-import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
-
 /**
  * The Web service binder service is in charge of calling inner services to bind
  * given Web services to the bus.
@@ -48,7 +46,7 @@ public interface ServiceBinder {
      */
     @WebMethod
     boolean bindWebService(@WebParam(name = "wsdlURL") String wsdlURL)
-            throws PEtALSWebServiceException;
+            throws DSBWebServiceException;
 
     /**
      * Unbind an already bound service
@@ -61,7 +59,7 @@ public interface ServiceBinder {
      */
     @WebMethod
     boolean unbindWebService(@WebParam(name = "wsdlURL") String wsdlURL)
-            throws PEtALSWebServiceException;
+            throws DSBWebServiceException;
 
     /**
      * Get a list of bound Web services
@@ -70,7 +68,7 @@ public interface ServiceBinder {
      * @throws PEtALSWebServiceException
      */
     @WebMethod
-    Set<String> getWebServices() throws PEtALSWebServiceException;
+    Set<String> getWebServices() throws DSBWebServiceException;
 
     /**
      * Bind a REST service to the bus
@@ -85,7 +83,7 @@ public interface ServiceBinder {
      */
     @WebMethod
     boolean bindRESTService(@WebParam(name = "restBaseURL") String restURL,
-            @WebParam(name = "endpointName") String endpointName) throws PEtALSWebServiceException;
+            @WebParam(name = "endpointName") String endpointName) throws DSBWebServiceException;
 
     /**
      * Unbind a service which is already bound to the DSB
@@ -96,7 +94,7 @@ public interface ServiceBinder {
      */
     @WebMethod
     boolean unbindRESTService(@WebParam(name = "restBaseURL") String restURL)
-            throws PEtALSWebServiceException;
+            throws DSBWebServiceException;
 
     /**
      * Get a list of REST services which are bound to the DSB
@@ -105,6 +103,6 @@ public interface ServiceBinder {
      * @throws PEtALSWebServiceException
      */
     @WebMethod
-    Set<String> getRESTServices() throws PEtALSWebServiceException;
+    Set<String> getRESTServices() throws DSBWebServiceException;
 
 }

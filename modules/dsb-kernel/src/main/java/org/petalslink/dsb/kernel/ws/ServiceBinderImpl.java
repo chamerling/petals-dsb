@@ -29,9 +29,9 @@ import org.objectweb.fractal.fraclet.annotation.annotations.Provides;
 import org.objectweb.fractal.fraclet.annotation.annotations.Requires;
 import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
 import org.objectweb.util.monolog.api.Logger;
-import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
 import org.ow2.petals.tools.ws.KernelWebService;
 import org.ow2.petals.util.LoggingUtil;
+import org.petalslink.dsb.ws.api.DSBWebServiceException;
 import org.petalslink.dsb.ws.api.RESTServiceBinder;
 import org.petalslink.dsb.ws.api.SOAPServiceBinder;
 import org.petalslink.dsb.ws.api.ServiceBinder;
@@ -74,7 +74,7 @@ public class ServiceBinderImpl implements ServiceBinder, KernelWebService {
     /**
      * {@inheritDoc}
      */
-    public boolean bindWebService(String wsdlURL) throws PEtALSWebServiceException {
+    public boolean bindWebService(String wsdlURL) throws DSBWebServiceException {
         this.log.warning("Deprecated, use SOAPServiceBinderServiceImpl instead");
         this.soapServiceBinder.bindWebService(wsdlURL);
         return true;
@@ -84,7 +84,7 @@ public class ServiceBinderImpl implements ServiceBinder, KernelWebService {
      * {@inheritDoc}
      */
     public boolean bindRESTService(String restURL, String endpointName)
-            throws PEtALSWebServiceException {
+            throws DSBWebServiceException {
         this.log.warning("Deprecated, use RESTServiceBinderServiceImpl instead");
         this.restServiceBinder.bindRESTService(restURL, endpointName);
         return true;
@@ -100,7 +100,7 @@ public class ServiceBinderImpl implements ServiceBinder, KernelWebService {
     /**
      * {@inheritDoc}
      */
-    public Set<String> getRESTServices() throws PEtALSWebServiceException {
+    public Set<String> getRESTServices() throws DSBWebServiceException {
         this.log.warning("Deprecated, use RESTServiceBinderServiceImpl instead");
 
         return this.restServiceBinder.getRESTServices();
@@ -109,7 +109,7 @@ public class ServiceBinderImpl implements ServiceBinder, KernelWebService {
     /**
      * {@inheritDoc}
      */
-    public Set<String> getWebServices() throws PEtALSWebServiceException {
+    public Set<String> getWebServices() throws DSBWebServiceException {
         this.log.warning("Deprecated, use SOAPServiceBinderServiceImpl instead");
 
         return this.soapServiceBinder.getWebServices();
@@ -118,7 +118,7 @@ public class ServiceBinderImpl implements ServiceBinder, KernelWebService {
     /**
      * {@inheritDoc}
      */
-    public boolean unbindRESTService(String restURL) throws PEtALSWebServiceException {
+    public boolean unbindRESTService(String restURL) throws DSBWebServiceException {
         this.log.warning("Deprecated, use RESTServiceBinderServiceImpl instead");
 
         return this.restServiceBinder.unbindRESTService(restURL);
@@ -127,7 +127,7 @@ public class ServiceBinderImpl implements ServiceBinder, KernelWebService {
     /**
      * {@inheritDoc}
      */
-    public boolean unbindWebService(String wsdlURL) throws PEtALSWebServiceException {
+    public boolean unbindWebService(String wsdlURL) throws DSBWebServiceException {
         this.log.warning("Deprecated, use SOAPServiceBinderServiceImpl instead");
 
         return this.soapServiceBinder.unbindWebService(wsdlURL);

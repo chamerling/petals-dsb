@@ -10,8 +10,6 @@ import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 
-import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
-
 /**
  * This service is in charge of binding external Web services to the DSB. It is
  * up to the DSB to manage the bindings.
@@ -32,7 +30,7 @@ public interface SOAPServiceBinder {
      */
     @WebMethod
     List<ServiceEndpoint> bindWebService(@WebParam(name = "wsdlURL") String wsdlURL)
-            throws PEtALSWebServiceException;
+            throws DSBWebServiceException;
 
     /**
      * Unbind an already bound service
@@ -45,7 +43,7 @@ public interface SOAPServiceBinder {
      */
     @WebMethod
     boolean unbindWebService(@WebParam(name = "wsdlURL") String wsdlURL)
-            throws PEtALSWebServiceException;
+            throws DSBWebServiceException;
 
     /**
      * Get a list of bound Web services
@@ -54,6 +52,6 @@ public interface SOAPServiceBinder {
      * @throws PEtALSWebServiceException
      */
     @WebMethod
-    Set<String> getWebServices() throws PEtALSWebServiceException;
+    Set<String> getWebServices() throws DSBWebServiceException;
 
 }

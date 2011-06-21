@@ -22,8 +22,6 @@ import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 
-import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
-
 /**
  * Get some information about the proxy services. The proxy services are
  * services which are bound the the DSB and which are exposed by components.
@@ -43,7 +41,7 @@ public interface ProxyInformationService {
      */
     @WebMethod
     String getRESTProxy(@WebParam(name = "restURL") String restURL)
-            throws PEtALSWebServiceException;
+            throws DSBWebServiceException;
 
     /**
      * Get the SOAP proxy URL for the given SOAP wsdl.
@@ -54,6 +52,6 @@ public interface ProxyInformationService {
      */
     @WebMethod
     String getSOAPProxy(@WebParam(name = "wsdlURL") String wsdlURL)
-            throws PEtALSWebServiceException;
+            throws DSBWebServiceException;
 
 }

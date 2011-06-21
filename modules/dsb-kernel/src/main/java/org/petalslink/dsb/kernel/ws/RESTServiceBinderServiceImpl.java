@@ -17,13 +17,13 @@ import org.objectweb.fractal.fraclet.annotation.annotations.Provides;
 import org.objectweb.fractal.fraclet.annotation.annotations.Requires;
 import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
 import org.objectweb.util.monolog.api.Logger;
-import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
 import org.ow2.petals.tools.ws.KernelWebService;
 import org.ow2.petals.util.LoggingUtil;
 import org.petalslink.dsb.kernel.Constants;
 import org.petalslink.dsb.kernel.api.management.binder.BinderException;
 import org.petalslink.dsb.kernel.api.management.binder.ServiceBinderRegistry;
 import org.petalslink.dsb.kernel.api.management.binder.ServiceRegistry;
+import org.petalslink.dsb.ws.api.DSBWebServiceException;
 import org.petalslink.dsb.ws.api.RESTServiceBinder;
 import org.petalslink.dsb.ws.api.ServiceEndpoint;
 
@@ -69,10 +69,10 @@ public class RESTServiceBinderServiceImpl implements RESTServiceBinder, KernelWe
      * java.lang.String)
      */
     public ServiceEndpoint bindRESTService(String restURL, String endpointName)
-            throws PEtALSWebServiceException {
+            throws DSBWebServiceException {
 
         if (this.serviceRegistry.getURLs(Constants.REST_SERVICE_BINDER).contains(restURL)) {
-            throw new PEtALSWebServiceException("This REST service '" + restURL
+            throw new DSBWebServiceException("This REST service '" + restURL
                     + "' is already bound");
         }
 
@@ -89,10 +89,10 @@ public class RESTServiceBinderServiceImpl implements RESTServiceBinder, KernelWe
                     result = eps.get(0);
                 }
             } catch (BinderException e) {
-                throw new PEtALSWebServiceException("Can not bind REST service", e);
+                throw new DSBWebServiceException("Can not bind REST service", e);
             }
         } else {
-            throw new PEtALSWebServiceException(
+            throw new DSBWebServiceException(
                     "No valid service binder can be found for REST services");
         }
         return result;
@@ -105,8 +105,8 @@ public class RESTServiceBinderServiceImpl implements RESTServiceBinder, KernelWe
      * org.petalslink.dsb.ws.api.ServiceBinder#unbindRESTService(java.lang.String
      * )
      */
-    public boolean unbindRESTService(String restURL) throws PEtALSWebServiceException {
-        throw new PEtALSWebServiceException("Not implemented");
+    public boolean unbindRESTService(String restURL) throws DSBWebServiceException {
+        throw new DSBWebServiceException("Not implemented");
     }
 
     /*
@@ -114,7 +114,7 @@ public class RESTServiceBinderServiceImpl implements RESTServiceBinder, KernelWe
      * 
      * @see org.petalslink.dsb.ws.api.ServiceBinder#getRESTServices()
      */
-    public Set<String> getRESTServices() throws PEtALSWebServiceException {
+    public Set<String> getRESTServices() throws DSBWebServiceException {
         return this.serviceRegistry.getURLs(Constants.REST_SERVICE_BINDER);
     }
 

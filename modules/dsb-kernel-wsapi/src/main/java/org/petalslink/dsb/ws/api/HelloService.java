@@ -20,8 +20,6 @@ package org.petalslink.dsb.ws.api;
 
 import javax.jws.WebService;
 
-import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
-
 /**
  * @deprecated just for some testing purposes.
  * 
@@ -31,6 +29,6 @@ import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
 @WebService(name = "HelloService", targetNamespace = "http://api.ws.dsb.petalslink.org/")
 public interface HelloService {
 
-    String sayHello(String input) throws PEtALSWebServiceException;
+    String sayHello(String input) throws DSBWebServiceException;
 
 }

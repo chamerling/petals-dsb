@@ -41,6 +41,7 @@ import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
 import org.ow2.petals.util.LoggingUtil;
 import org.petalslink.dsb.webapp.api.DSBManagement;
 import org.petalslink.dsb.ws.api.DSBInformationService;
+import org.petalslink.dsb.ws.api.DSBWebServiceException;
 import org.petalslink.dsb.ws.api.ServiceInformation;
 
 /**
@@ -93,7 +94,7 @@ public class DSBManagementImpl implements DSBManagement {
     public Set<String> getContainerServices() {
         try {
             return new HashSet<String>(dsbInformationService.getWebServices());
-        } catch (PEtALSWebServiceException e) {
+        } catch (DSBWebServiceException e) {
         }
         return null;
     }

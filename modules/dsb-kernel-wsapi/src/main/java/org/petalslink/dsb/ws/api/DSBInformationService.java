@@ -23,8 +23,6 @@ import java.util.List;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 
-import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
-
 /**
  * Get all the DSB informations.
  * TODO : To be extended.
@@ -43,6 +41,6 @@ public interface DSBInformationService {
      * @throws PEtALSWebServiceException
      */
     @WebMethod
-    List<String> getWebServices() throws PEtALSWebServiceException;
+    List<String> getWebServices() throws DSBWebServiceException;
 
 }

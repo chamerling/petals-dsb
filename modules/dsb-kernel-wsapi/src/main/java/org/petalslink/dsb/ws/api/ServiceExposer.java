@@ -8,8 +8,6 @@ import java.util.Set;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 
-import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
-
 /**
  * This service is used to expose DSB services as external services.
  * 
@@ -29,7 +27,7 @@ public interface ServiceExposer {
      * @throws PEtALSWebServiceException
      */
     @WebMethod
-    boolean expose(ServiceEndpoint serviceEndpoint) throws PEtALSWebServiceException;
+    boolean expose(ServiceEndpoint serviceEndpoint) throws DSBWebServiceException;
 
     /**
      * Delete a service which has been exposed
@@ -39,7 +37,7 @@ public interface ServiceExposer {
      * @throws PEtALSWebServiceException
      */
     @WebMethod
-    boolean delete(ServiceEndpoint serviceEndpoint) throws PEtALSWebServiceException;
+    boolean delete(ServiceEndpoint serviceEndpoint) throws DSBWebServiceException;
 
     /**
      * Get the list of service which have been exposed by the current service.
@@ -49,5 +47,5 @@ public interface ServiceExposer {
      * @throws PEtALSWebServiceException
      */
     @WebMethod
-    Set<String> getWebServices() throws PEtALSWebServiceException;
+    Set<String> getWebServices() throws DSBWebServiceException;
 }

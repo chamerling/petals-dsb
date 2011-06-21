@@ -23,9 +23,6 @@ import java.util.List;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 
-import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
-import org.petalslink.dsb.ws.api.SOAPServiceBinder;
-
 /**
  * Get informations about platform services. Platform services are services
  * which are bound to the DSB using the Binder Services (
@@ -46,7 +43,7 @@ public interface PlatformServiceInformationService {
      * @throws PEtALSWebServiceException
      */
     @WebMethod
-    List<ServiceEndpoint> getWebServiceEndpoint(String wsdlURL) throws PEtALSWebServiceException;
+    List<ServiceEndpoint> getWebServiceEndpoint(String wsdlURL) throws DSBWebServiceException;
 
     /**
      * Get the DSB Service endpoint information for the given REST URL
@@ -56,7 +53,7 @@ public interface PlatformServiceInformationService {
      * @throws PEtALSWebServiceException
      */
     @WebMethod
-    ServiceEndpoint getRESTServiceEndpoint(String restURL) throws PEtALSWebServiceException;
+    ServiceEndpoint getRESTServiceEndpoint(String restURL) throws DSBWebServiceException;
 
     /**
      * Test if the given WSDL service is bound to the DSB (should be on another
@@ -67,7 +64,7 @@ public interface PlatformServiceInformationService {
      * @throws PEtALSWebServiceException
      */
     @WebMethod
-    boolean isWebServiceBound(String wsdlURL) throws PEtALSWebServiceException;
+    boolean isWebServiceBound(String wsdlURL) throws DSBWebServiceException;
 
     /**
      * Test if the given REST service is bound to the DSB
@@ -77,7 +74,7 @@ public interface PlatformServiceInformationService {
      * @throws PEtALSWebServiceException
      */
     @WebMethod
-    boolean isRESTServiceBound(String restURL) throws PEtALSWebServiceException;
+    boolean isRESTServiceBound(String restURL) throws DSBWebServiceException;
 
     /**
      * Get the web service exposed by the DSB for the given WSDL (not the inner
@@ -88,7 +85,7 @@ public interface PlatformServiceInformationService {
      * @throws PEtALSWebServiceException
      */
     @WebMethod
-    String getPlatformWebService(String wsdlURL) throws PEtALSWebServiceException;
+    String getPlatformWebService(String wsdlURL) throws DSBWebServiceException;
 
     /**
      * Get the REST service exposed by the DSB for the given REST URL (not the
@@ -99,6 +96,6 @@ public interface PlatformServiceInformationService {
      * @throws PEtALSWebServiceException
      */
     @WebMethod
-    String getPlatformRESTService(String restURL) throws PEtALSWebServiceException;
+    String getPlatformRESTService(String restURL) throws DSBWebServiceException;
 
 }

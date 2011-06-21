@@ -26,11 +26,5 @@
 			<version>3.8.1</version>
 			<scope>test</scope>
 		</dependency>
-
-		<dependency>
-			<groupId>org.ow2.petals</groupId>
-			<artifactId>petals-kernel-wsapi</artifactId>
-		</dependency>
-
 	</dependencies>
 </project>

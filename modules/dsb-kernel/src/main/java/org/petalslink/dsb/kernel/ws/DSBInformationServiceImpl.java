@@ -35,6 +35,7 @@ import org.ow2.petals.tools.ws.WebServiceException;
 import org.ow2.petals.tools.ws.WebServiceManager;
 import org.ow2.petals.util.LoggingUtil;
 import org.petalslink.dsb.ws.api.DSBInformationService;
+import org.petalslink.dsb.ws.api.DSBWebServiceException;
 
 
 /**
@@ -78,12 +79,12 @@ public class DSBInformationServiceImpl implements KernelWebService, DSBInformati
     /**
      * {@inheritDoc}
      */
-    public List<String> getWebServices() throws PEtALSWebServiceException {
+    public List<String> getWebServices() throws DSBWebServiceException {
         List<String> result = null;
         try {
             result = this.wsManager.getServicesURL();
         } catch (WebServiceException e) {
-            throw new PEtALSWebServiceException(e.getMessage());
+            throw new DSBWebServiceException(e.getMessage());
         }
         return result;
     }

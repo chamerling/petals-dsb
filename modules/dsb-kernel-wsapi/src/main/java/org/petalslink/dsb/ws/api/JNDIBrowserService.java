@@ -21,8 +21,6 @@ package org.petalslink.dsb.ws.api;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 
-import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
-
 /**
  * Access to the JNDI information of the local container.
  * @deprecated : Not used.
@@ -40,6 +38,6 @@ public interface JNDIBrowserService {
      * @throws PEtALSWebServiceException
      */
     @WebMethod(operationName = "browse")
-    String browse() throws PEtALSWebServiceException;
+    String browse() throws DSBWebServiceException;
 
 }

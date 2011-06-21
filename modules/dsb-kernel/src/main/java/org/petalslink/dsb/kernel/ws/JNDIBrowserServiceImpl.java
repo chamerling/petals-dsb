@@ -35,6 +35,7 @@ import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
 import org.ow2.petals.tools.ws.KernelWebService;
 import org.ow2.petals.util.JNDIUtil;
 import org.ow2.petals.util.LoggingUtil;
+import org.petalslink.dsb.ws.api.DSBWebServiceException;
 import org.petalslink.dsb.ws.api.JNDIBrowserService;
 
 
@@ -72,14 +73,14 @@ public class JNDIBrowserServiceImpl implements JNDIBrowserService, KernelWebServ
     /**
      * {@inheritDoc}
      */
-    public String browse() throws PEtALSWebServiceException {
+    public String browse() throws DSBWebServiceException {
         String result = null;
         try {
             InitialContext initialContext = this.jndiService.getInitialContext();
             result = JNDIUtil.browseJNDI(initialContext, null, 0);
             System.out.println(result);
         } catch (NamingException e) {
-            throw new PEtALSWebServiceException(e.getMessage());
+            throw new DSBWebServiceException(e.getMessage());
         }
         return result;
     }

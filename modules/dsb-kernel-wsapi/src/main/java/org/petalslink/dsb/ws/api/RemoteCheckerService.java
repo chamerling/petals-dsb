@@ -21,8 +21,6 @@ package org.petalslink.dsb.ws.api;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 
-import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
-
 /**
  * This is just a ping service used by remote containers to check if the local
  * container is able to receive messages. This is used by client and server to
@@ -41,5 +39,5 @@ public interface RemoteCheckerService {
      * @throws PEtALSWebServiceException
      */
     @WebMethod
-    boolean ping() throws PEtALSWebServiceException;
+    boolean ping() throws DSBWebServiceException;
 }

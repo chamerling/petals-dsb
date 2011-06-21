@@ -19,7 +19,7 @@
 package org.petalslink.dsb.kernel.communication;
 
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
-import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
+import org.petalslink.dsb.ws.api.DSBWebServiceException;
 import org.petalslink.dsb.ws.api.RemoteCheckerService;
 
 
@@ -59,7 +59,7 @@ public class RemoteCheckerClient implements RemoteCheckerService {
     /**
      * {@inheritDoc}
      */
-    public boolean ping() throws PEtALSWebServiceException {
+    public boolean ping() throws DSBWebServiceException {
         return this.remoteCheckerClient.ping();
     }
 }

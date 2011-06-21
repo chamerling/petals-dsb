@@ -17,13 +17,13 @@ import org.objectweb.fractal.fraclet.annotation.annotations.Provides;
 import org.objectweb.fractal.fraclet.annotation.annotations.Requires;
 import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
 import org.objectweb.util.monolog.api.Logger;
-import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
 import org.ow2.petals.tools.ws.KernelWebService;
 import org.ow2.petals.util.LoggingUtil;
 import org.petalslink.dsb.kernel.Constants;
 import org.petalslink.dsb.kernel.api.management.binder.BinderException;
 import org.petalslink.dsb.kernel.api.management.binder.ServiceBinderRegistry;
 import org.petalslink.dsb.kernel.api.management.binder.ServiceRegistry;
+import org.petalslink.dsb.ws.api.DSBWebServiceException;
 import org.petalslink.dsb.ws.api.SOAPServiceBinder;
 import org.petalslink.dsb.ws.api.ServiceEndpoint;
 
@@ -64,9 +64,9 @@ public class SOAPServiceBinderServiceImpl implements SOAPServiceBinder, KernelWe
     /* (non-Javadoc)
      * @see org.petalslink.dsb.ws.api.ServiceBinder#bindWebService(java.lang.String)
      */
-    public List<ServiceEndpoint> bindWebService(String wsdlURL) throws PEtALSWebServiceException {
+    public List<ServiceEndpoint> bindWebService(String wsdlURL) throws DSBWebServiceException {
         if (this.serviceRegistry.getURLs(Constants.SOAP_SERVICE_BINDER).contains(wsdlURL)) {
-            throw new PEtALSWebServiceException("This SOAP service '" + wsdlURL
+            throw new DSBWebServiceException("This SOAP service '" + wsdlURL
                     + "' is already bound");
         }
 
@@ -80,10 +80,10 @@ public class SOAPServiceBinderServiceImpl implements SOAPServiceBinder, KernelWe
                 result = binder.bind(props);
             } catch (BinderException e) {
                 e.printStackTrace();
-                throw new PEtALSWebServiceException("Can not bind WSDL service", e);
+                throw new DSBWebServiceException("Can not bind WSDL service", e);
             }
         } else {
-            throw new PEtALSWebServiceException(
+            throw new DSBWebServiceException(
                     "No valid service binder can be found for SOAP services");
         }
 
@@ -93,14 +93,14 @@ public class SOAPServiceBinderServiceImpl implements SOAPServiceBinder, KernelWe
     /* (non-Javadoc)
      * @see org.petalslink.dsb.ws.api.ServiceBinder#unbindWebService(java.lang.String)
      */
-    public boolean unbindWebService(String wsdlURL) throws PEtALSWebServiceException {
-        throw new PEtALSWebServiceException("Not implemented");
+    public boolean unbindWebService(String wsdlURL) throws DSBWebServiceException {
+        throw new DSBWebServiceException("Not implemented");
     }
 
     /* (non-Javadoc)
      * @see org.petalslink.dsb.ws.api.ServiceBinder#getWebServices()
      */
-    public Set<String> getWebServices() throws PEtALSWebServiceException {
+    public Set<String> getWebServices() throws DSBWebServiceException {
         return this.serviceRegistry.getURLs(Constants.SOAP_SERVICE_BINDER);
     }
 
