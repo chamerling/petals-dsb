@@ -39,18 +39,5 @@
 			<version>1.1.1</version>
 			<scope>provided</scope>
 		</dependency>
-
 	</dependencies>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-eclipse-plugin</artifactId>
-				<version>2.7</version>
-				<configuration>
-					<addGroupIdToProjectName>true</addGroupIdToProjectName>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
 </project>
