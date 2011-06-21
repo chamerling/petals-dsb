@@ -22,6 +22,7 @@ import java.util.Arrays;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
@@ -56,6 +57,9 @@ public class ServiceEndpoint {
 
     @XmlElement
     private String subdomainLocation;
+    
+    @XmlAttribute
+    private String type;
 
     public String getEndpointName() {
         return this.endpointName;
@@ -184,6 +188,20 @@ public class ServiceEndpoint {
         builder.append(this.subdomainLocation);
         builder.append("]");
         return builder.toString();
+    }
+
+    /**
+     * @return the type
+     */
+    public String getType() {
+        return type;
+    }
+
+    /**
+     * @param type the type to set
+     */
+    public void setType(String type) {
+        this.type = type;
     }
 
 }
