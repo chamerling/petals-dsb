@@ -57,6 +57,7 @@
    		<module>modules/dsb-transport-cxf</module>
    		<module>modules/dsb-transport-xmpp</module>
    		<!--<module>modules/dsb-kernel-federationservice</module>-->
+		<module>modules/dsb-jbi</module>
 
    		<module>modules/dsb-monitoring</module>
    		<module>modules/dsb-service-client</module>
