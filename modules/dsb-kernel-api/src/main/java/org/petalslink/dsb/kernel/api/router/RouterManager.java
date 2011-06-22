@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.petalslink.dsb.kernel.api.messaging;
+package org.petalslink.dsb.kernel.api.router;
 
 /**
  * Manages {@link RouterModule}s.
