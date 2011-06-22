@@ -8,5 +8,5 @@ package org.petalslink.dsb.annotations;
  *
  */
 public enum Phase {
-    START, STOP, SHUTDOWN, PRESTART, PRESTOP, PRESHUTDOWN
+    INIT, START, STOP, SHUTDOWN, PRESTART, PRESTOP, PRESHUTDOWN
 }
