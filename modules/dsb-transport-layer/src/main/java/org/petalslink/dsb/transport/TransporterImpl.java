@@ -21,6 +21,7 @@ package org.petalslink.dsb.transport;
 import java.util.ConcurrentModificationException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Logger;
 
 import org.petalslink.dsb.api.MessageExchange;
 import org.petalslink.dsb.api.TransportException;
@@ -32,7 +33,8 @@ import org.petalslink.dsb.transport.api.Context;
 import org.petalslink.dsb.transport.api.ReceiveInterceptor;
 import org.petalslink.dsb.transport.api.Receiver;
 import org.petalslink.dsb.transport.api.SendInterceptor;
-import org.petalslink.dsb.transport.api.Sender;
+import org.petalslink.dsb.transport.api.Server;
+import org.petalslink.dsb.transport.api.Transporter;
 
 /**
  * A generic transport layer inspired from Petals ESB NIO transporter.
@@ -40,7 +42,9 @@ import org.petalslink.dsb.transport.api.Sender;
  * @author chamerling - eBM WebSourcing
  * 
  */
-public class Transporter implements Sender, Receiver {
+public class TransporterImpl implements Transporter {
+    
+    private static Logger log = Logger.getLogger(TransporterImpl.class.getName());
 
     /**
      * Map of exchanges that are blocked during a synchronous send
@@ -48,11 +52,6 @@ public class Transporter implements Sender, Receiver {
     private Map<String, MessageExchange> pendingSyncExchanges;
 
     private boolean stopTraffic;
-
-    // @Monolog(name = "logger")
-    // private Logger logger;
-
-    // private LoggingUtil log;
 
     /**
      * The Transporter listener component will be notified when a message is
@@ -78,14 +77,21 @@ public class Transporter implements Sender, Receiver {
      */
     private ReceiveInterceptor receiveInterceptor;
 
+    private Server server;
+
     public void start() {
         // this.log = new LoggingUtil(this.logger);
         // this.log.debug("Starting...");
         this.pendingSyncExchanges = new ConcurrentHashMap<String, MessageExchange>(100);
+        if (this.server != null) {
+            this.server.startServer();
+        }
     }
 
     public void stop() {
-        // this.log.debug("Stopping...");
+        if (this.server != null) {
+            this.server.startServer();
+        }
     }
 
     /**
@@ -289,7 +295,11 @@ public class Transporter implements Sender, Receiver {
             // this.log.debug("The message " + messageExchange.getId()
             // + " is not a synchronized response");
             // }
-            this.transportListener.onMessage(messageExchange);
+            if (this.transportListener != null) {
+                this.transportListener.onMessage(messageExchange);
+            } else {
+                // NOP for now...
+            }
         }
     }
 
@@ -335,5 +345,16 @@ public class Transporter implements Sender, Receiver {
     public void sendAsync(MessageExchange exchange, Context context, Receiver listener)
             throws TransportException {
         throw new TransportException("Not implemented");
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.petalslink.dsb.transport.api.Transporter#setServer(org.petalslink
+     * .dsb.transport.api.Server)
+     */
+    public void setServer(Server server) {
+        this.server = server;
     }
 }

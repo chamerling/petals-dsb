@@ -33,7 +33,7 @@ public class TransporterTest extends TestCase {
 
     public void testSend() {
         final AtomicInteger counter = new AtomicInteger(0);
-        final Transporter t = new Transporter();
+        final TransporterImpl t = new TransporterImpl();
         t.setClientFactory(new ClientFactory() {
 
             public void releaseClient(Context context, Client client) {
@@ -87,7 +87,7 @@ public class TransporterTest extends TestCase {
      */
     public void testSendSync() throws Exception {
         final AtomicInteger counter = new AtomicInteger(0);
-        final Transporter t = new Transporter();
+        final TransporterImpl t = new TransporterImpl();
         t.setClientFactory(new ClientFactory() {
 
             public void releaseClient(Context context, Client client) {

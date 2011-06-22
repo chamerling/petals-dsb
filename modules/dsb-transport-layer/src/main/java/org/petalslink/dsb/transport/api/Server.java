@@ -39,4 +39,12 @@ public interface Server {
      */
     void stopServer();
 
+    /**
+     * Hook to real transport. Can be used by the current server to send back
+     * messages.
+     * 
+     * @param receiver
+     */
+    void setReceiver(Receiver receiver);
+
 }

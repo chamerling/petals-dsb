@@ -15,6 +15,16 @@ public class Context {
     public String containerName;
 
     public String componentName;
+    
+    /**
+     * Inet hostname where we can send messages to
+     */
+    public String hostName;
+    
+    /**
+     * Transport port which listens to messages
+     */
+    public long port;
 
     /**
      * The QOS of the transport
