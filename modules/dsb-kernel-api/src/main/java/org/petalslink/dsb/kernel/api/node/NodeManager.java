@@ -23,5 +23,8 @@ public interface NodeManager {
     
     @WebMethod
     Node remove(String name) throws DSBException;
+    
+    @WebMethod
+    Node me();
 
 }
