@@ -3,9 +3,14 @@
  */
 package org.petalslink.dsb.kernel.ws.jbi;
 
+import java.io.ByteArrayOutputStream;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 
 import org.objectweb.fractal.fraclet.annotation.annotations.FractalComponent;
 import org.objectweb.fractal.fraclet.annotation.annotations.Interface;
@@ -20,6 +25,7 @@ import org.ow2.petals.container.lifecycle.ServiceUnitLifeCycle;
 import org.ow2.petals.jbi.descriptor.JBIDescriptorException;
 import org.ow2.petals.jbi.descriptor.original.JBIDescriptorBuilder;
 import org.ow2.petals.jbi.descriptor.original.generated.Jbi;
+import org.ow2.petals.jbi.descriptor.original.generated.ServiceAssembly;
 import org.ow2.petals.jbi.management.admin.AdminService;
 import org.ow2.petals.util.LoggingUtil;
 import org.petalslink.dsb.ws.api.DSBWebServiceException;
@@ -40,6 +46,18 @@ public class ServiceArtefactsInformationServiceImpl implements ServiceArtefactsI
 
     @Requires(name = "admin", signature = AdminService.class)
     private AdminService adminService;
+
+    private static Marshaller marshaller = null;
+
+    static {
+        try {
+            final JAXBContext jaxbContext = JAXBContext
+                    .newInstance(new Class[] { ServiceAssembly.class });
+            marshaller = jaxbContext.createMarshaller();
+            // marshaller.setSchema(schema);
+        } catch (JAXBException e) {
+        }
+    }
 
     @LifeCycle(on = LifeCycleType.START)
     protected void start() {
@@ -80,7 +98,17 @@ public class ServiceArtefactsInformationServiceImpl implements ServiceArtefactsI
      */
     public Set<String> getSUForComponent(String componentName) throws DSBWebServiceException {
         log.start();
-        throw new DSBWebServiceException("Not implemented");
+        Set<String> result = new HashSet<String>();
+        List<ServiceUnitLifeCycle> suLifeCyles = this.adminService
+                .getServiceUnitsLifeCyclesForComponent(componentName);
+        if (suLifeCyles == null) {
+            throw new DSBWebServiceException("Component %s not found", componentName);
+        }
+
+        for (ServiceUnitLifeCycle serviceUnitLifeCycle : suLifeCyles) {
+            result.add(serviceUnitLifeCycle.getSuName());
+        }
+        return result;
     }
 
     /*
@@ -138,8 +166,11 @@ public class ServiceArtefactsInformationServiceImpl implements ServiceArtefactsI
         return result;
     }
 
-    /* (non-Javadoc)
-     * @see org.petalslink.dsb.ws.api.jbi.ServiceArtefactsInformationService#getSADescription(java.lang.String)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.petalslink.dsb.ws.api.jbi.ServiceArtefactsInformationService#
+     * getSADescription(java.lang.String)
      */
     public String getSADescription(String saName) throws DSBWebServiceException {
         log.start();
@@ -150,7 +181,14 @@ public class ServiceArtefactsInformationServiceImpl implements ServiceArtefactsI
         if (sa == null) {
             throw new DSBWebServiceException("SA %s not found", saName);
         }
-        // TODO
-        throw new DSBWebServiceException("Not implemented");
+
+        ServiceAssembly descriptor = sa.getServiceAssembly();
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        try {
+            marshaller.marshal(descriptor, bos);
+        } catch (JAXBException e) {
+            throw new DSBWebServiceException("Unable to generate the descriptor...", e);
+        }
+        return bos.toString();
     }
 }
