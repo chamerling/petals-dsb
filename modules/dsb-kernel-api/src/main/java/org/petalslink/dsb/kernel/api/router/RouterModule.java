@@ -5,6 +5,9 @@ package org.petalslink.dsb.kernel.api.router;
 
 import java.util.List;
 
+import javax.jws.WebMethod;
+import javax.jws.WebService;
+
 import org.petalslink.dsb.api.DSBException;
 import org.petalslink.dsb.api.MessageExchange;
 import org.petalslink.dsb.api.ServiceEndpoint;
@@ -17,12 +20,14 @@ import org.petalslink.dsb.api.ServiceEndpoint;
  * @author chamerling
  * 
  */
+@WebService
 public interface RouterModule {
 
     /**
      * 
      * @param message
      */
+    @WebMethod
     List<ServiceEndpoint> route(MessageExchange message) throws DSBException;
 
     /**
@@ -30,6 +35,7 @@ public interface RouterModule {
      * 
      * @return
      */
+    @WebMethod
     String getName();
 
 }

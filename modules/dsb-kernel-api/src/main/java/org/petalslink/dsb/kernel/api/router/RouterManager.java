@@ -3,12 +3,16 @@
  */
 package org.petalslink.dsb.kernel.api.router;
 
+import javax.jws.WebMethod;
+import javax.jws.WebService;
+
 /**
  * Manages {@link RouterModule}s.
  * 
  * @author chamerling
  *
  */
+@WebService
 public interface RouterManager {
     
     /**
@@ -17,6 +21,7 @@ public interface RouterManager {
      * @param name
      * @return
      */
+    @WebMethod
     RouterModule getModule(String name);
     
     /**
@@ -24,6 +29,7 @@ public interface RouterManager {
      * 
      * @param module
      */
+    @WebMethod
     void addModule(RouterModule module);
     
     /**
@@ -32,6 +38,7 @@ public interface RouterManager {
      * @param name
      * @return
      */
+    @WebMethod
     RouterModule deleteModule(String name);
 
 }

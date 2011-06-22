@@ -17,12 +17,54 @@ import javax.xml.bind.annotation.XmlType;
 public class Node {
 
     @XmlElement
-    String name;
+    private String name;
 
     @XmlElement
-    String host;
+    private String host;
 
     @XmlElement
-    long port;
+    private long port;
+
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * @return the host
+     */
+    public String getHost() {
+        return host;
+    }
+
+    /**
+     * @param host the host to set
+     */
+    public void setHost(String host) {
+        this.host = host;
+    }
+
+    /**
+     * @return the port
+     */
+    public long getPort() {
+        return port;
+    }
+
+    /**
+     * @param port the port to set
+     */
+    public void setPort(long port) {
+        this.port = port;
+    }
 
 }
