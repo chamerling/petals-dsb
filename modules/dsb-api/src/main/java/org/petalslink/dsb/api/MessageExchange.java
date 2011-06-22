@@ -21,6 +21,7 @@ package org.petalslink.dsb.api;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -93,6 +94,7 @@ public class MessageExchange {
      */
     public MessageExchange() {
         this.properties = new ArrayList<Property>(0);
+        this.id = UUID.randomUUID().toString();
     }
 
     public NormalizedMessage getIn() {
