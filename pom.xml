@@ -55,6 +55,7 @@
 		<module>modules/dsb-transport-api</module>
    		<module>modules/dsb-transport</module>
    		<module>modules/dsb-transport-layer</module>
+   		<module>modules/dsb-transport-soap</module>
    		<module>modules/dsb-transport-cxf</module>
    		<module>modules/dsb-transport-xmpp</module>
    		<!--<module>modules/dsb-kernel-federationservice</module>-->
