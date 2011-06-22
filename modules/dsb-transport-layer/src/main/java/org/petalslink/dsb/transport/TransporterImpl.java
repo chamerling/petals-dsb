@@ -84,13 +84,13 @@ public class TransporterImpl implements Transporter {
         // this.log.debug("Starting...");
         this.pendingSyncExchanges = new ConcurrentHashMap<String, MessageExchange>(100);
         if (this.server != null) {
-            this.server.startServer();
+            this.server.start();
         }
     }
 
     public void stop() {
         if (this.server != null) {
-            this.server.startServer();
+            this.server.stop();
         }
     }
 

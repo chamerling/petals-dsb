@@ -7,7 +7,7 @@ package org.petalslink.dsb.transport.api;
  * @author chamerling
  * 
  */
-public interface Transporter extends Sender, Receiver {
+public interface Transporter extends Sender, Receiver, LifeCycle {
 
     /**
      * Set the factory which is in charge of creating clients to send messages
@@ -27,5 +27,13 @@ public interface Transporter extends Sender, Receiver {
     void setReceiveInterceptor(ReceiveInterceptor receiveInterceptor);
 
     void setSendInterceptor(SendInterceptor sendInterceptor);
+
+    /**
+     * This is generally the upper layer ie the routing layer which will be
+     * notified by the transporter using this receiver
+     * 
+     * @param transportListener
+     */
+    void setTransportListener(Receiver transportListener);
 
 }

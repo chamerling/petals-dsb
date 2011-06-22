@@ -27,17 +27,7 @@ package org.petalslink.dsb.transport.api;
  * @author chamerling - eBM WebSourcing
  * 
  */
-public interface Server {
-
-    /**
-     * 
-     */
-    void startServer();
-
-    /**
-     * 
-     */
-    void stopServer();
+public interface Server extends LifeCycle {
 
     /**
      * Hook to real transport. Can be used by the current server to send back

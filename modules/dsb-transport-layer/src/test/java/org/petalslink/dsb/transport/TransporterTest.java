@@ -14,6 +14,7 @@ import org.petalslink.dsb.transport.api.ClientException;
 import org.petalslink.dsb.transport.api.ClientFactory;
 import org.petalslink.dsb.transport.api.Context;
 import org.petalslink.dsb.transport.api.Receiver;
+import org.petalslink.dsb.transport.api.Transporter;
 
 /**
  * @author chamerling
@@ -87,7 +88,7 @@ public class TransporterTest extends TestCase {
      */
     public void testSendSync() throws Exception {
         final AtomicInteger counter = new AtomicInteger(0);
-        final TransporterImpl t = new TransporterImpl();
+        final Transporter t = new TransporterImpl();
         t.setClientFactory(new ClientFactory() {
 
             public void releaseClient(Context context, Client client) {
