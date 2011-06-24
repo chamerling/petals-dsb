@@ -1,0 +1,809 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions targetNamespace="http://webservices.air.defense.gouv.fr/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://webservices.air.defense.gouv.fr/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:si="http://soapinterop.org/xsd">
+  <types>
+    <xsd:schema targetNamespace="http://webservices.air.defense.gouv.fr/">
+      <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+      <xsd:import namespace="http://schemas.xmlsoap.org/wsdl/"/>
+      <xsd:complexType name="MTBA">
+        <xsd:all>
+          <xsd:element name="mtba" type="xsd:string"/>
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="CTPersonne">
+        <xsd:all>
+          <xsd:element name="code_serv" type="xsd:string"/>
+          <xsd:element name="nid" type="xsd:string"/>
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfCTPersonne">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:CTPersonne[]"/>
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="CTService">
+        <xsd:all>
+          <xsd:element name="libelle_court_serv" type="xsd:string"/>
+          <xsd:element name="libelle_long_serv" type="xsd:string"/>
+          <xsd:element name="code_serv" type="xsd:string"/>
+          <xsd:element name="pere_serv" type="xsd:string"/>
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfCTService">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:CTService[]"/>
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="CTInfo">
+        <xsd:all>
+          <xsd:element name="type" type="xsd:string"/>
+          <xsd:element name="id" type="xsd:string"/>
+          <xsd:element name="lib" type="xsd:string"/>
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="NIDUID">
+        <xsd:all>
+          <xsd:element name="nid" type="xsd:string"/>
+          <xsd:element name="uid" type="xsd:string"/>
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="UnitePere">
+        <xsd:all>
+          <xsd:element name="code" type="xsd:string"/>
+          <xsd:element name="pere" type="xsd:boolean"/>
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfUnitePere">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:UnitePere[]"/>
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfNIDUID">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:NIDUID[]"/>
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfMTBA">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:MTBA[]"/>
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfString">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="xsd:string[]"/>
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfCTInfo">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:CTInfo[]"/>
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="NIDUIDtrigra">
+        <xsd:all>
+          <xsd:element name="nid" type="xsd:string"/>
+          <xsd:element name="uid" type="xsd:string"/>
+          <xsd:element name="hierarch_grade" type="xsd:string"/>
+          <xsd:element name="nom" type="xsd:string"/>
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfNIDUIDtri">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:NIDUIDtrigra[]"/>
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="CTInfopers">
+        <xsd:all>
+          <xsd:element name="nom" type="xsd:string"/>
+          <xsd:element name="prenom" type="xsd:string"/>
+          <xsd:element name="trig_grade" type="xsd:string"/>
+          <xsd:element name="arme_grade" type="xsd:string"/>
+          <xsd:element name="nid" type="xsd:string"/>
+          <xsd:element name="uid" type="xsd:string"/>
+          <xsd:element name="email" type="xsd:string"/>
+          <xsd:element name="pnia" type="xsd:string"/>
+          <xsd:element name="poste" type="xsd:string"/>
+          <xsd:element name="unite" type="xsd:string"/>
+          <xsd:element name="base" type="xsd:string"/>
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfCTInfopers">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:CTInfopers[]"/>
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+    </xsd:schema>
+  </types>
+  <message name="getPhotoURLByNIDResponse">
+    <part name="return" type="xsd:string">
+    </part>
+  </message>
+  <message name="isSubalterneNIDResponse">
+    <part name="return" type="xsd:boolean">
+    </part>
+  </message>
+  <message name="getStructureParUniteRequest">
+    <part name="code_ba" type="xsd:string">
+    </part>
+    <part name="code_unit" type="xsd:string">
+    </part>
+  </message>
+  <message name="getSubalternesResponse">
+    <part name="return" type="tns:ArrayOfString">
+    </part>
+  </message>
+  <message name="getChefUniteParNIDResponse">
+    <part name="return" type="xsd:string">
+    </part>
+  </message>
+  <message name="setPersResponse">
+    <part name="return" type="xsd:string">
+    </part>
+  </message>
+  <message name="getVueServicePersonnesResponse">
+    <part name="return" type="tns:ArrayOfCTPersonne">
+    </part>
+  </message>
+  <message name="getFirstMTBAByUIDResponse">
+    <part name="return" type="xsd:string">
+    </part>
+  </message>
+  <message name="getServiceFilsRequest">
+    <part name="code_serv" type="xsd:string">
+    </part>
+  </message>
+  <message name="getSubalternesNIDResponse">
+    <part name="return" type="tns:ArrayOfString">
+    </part>
+  </message>
+  <message name="getSubalternesRequest">
+    <part name="uid" type="xsd:string">
+    </part>
+  </message>
+  <message name="getMTBAByUIDRequest">
+    <part name="uid" type="xsd:string">
+    </part>
+  </message>
+  <message name="countPersUniteRequest">
+    <part name="code_ba" type="xsd:string">
+    </part>
+    <part name="code_unit" type="xsd:string">
+    </part>
+  </message>
+  <message name="getPersonneInfosNIDRequest">
+    <part name="nid_pers" type="xsd:string">
+    </part>
+  </message>
+  <message name="getChefUniteParNIDRequest">
+    <part name="nid" type="xsd:string">
+    </part>
+  </message>
+  <message name="getStructureParNidResponse">
+    <part name="return" type="tns:ArrayOfCTService">
+    </part>
+  </message>
+  <message name="getVueServiceServicesResponse">
+    <part name="return" type="tns:ArrayOfCTService">
+    </part>
+  </message>
+  <message name="getNIDByUIDRequest">
+    <part name="uid" type="xsd:string">
+    </part>
+  </message>
+  <message name="getSubalternesNIDRequest">
+    <part name="nid" type="xsd:string">
+    </part>
+  </message>
+  <message name="getMTBAByNIDRequest">
+    <part name="nid" type="xsd:string">
+    </part>
+  </message>
+  <message name="getEquipeServiceRequest">
+    <part name="code" type="xsd:string">
+    </part>
+  </message>
+  <message name="getStructureParUniteResponse">
+    <part name="return" type="tns:ArrayOfCTService">
+    </part>
+  </message>
+  <message name="getPhotoURLByUIDRequest">
+    <part name="uid" type="xsd:string">
+    </part>
+  </message>
+  <message name="getPersonneInfosResponse">
+    <part name="return" type="tns:ArrayOfString">
+    </part>
+  </message>
+  <message name="getPhotoURLByUIDResponse">
+    <part name="return" type="xsd:string">
+    </part>
+  </message>
+  <message name="getChefUniteRequest">
+    <part name="code_ba" type="xsd:string">
+    </part>
+    <part name="code_unit" type="xsd:string">
+    </part>
+  </message>
+  <message name="getPhotoURLByNIDRequest">
+    <part name="nid" type="xsd:string">
+    </part>
+  </message>
+  <message name="getVueServicePersonnesRequest">
+    <part name="nid" type="xsd:string">
+    </part>
+    <part name="depth" type="xsd:string">
+    </part>
+  </message>
+  <message name="getEmailByNIDResponse">
+    <part name="return" type="xsd:string">
+    </part>
+  </message>
+  <message name="getUnitesBaseRequest">
+    <part name="code" type="xsd:string">
+    </part>
+  </message>
+  <message name="getServiceFilsResponse">
+    <part name="return" type="tns:ArrayOfCTService">
+    </part>
+  </message>
+  <message name="getFirstMTBAByUIDRequest">
+    <part name="uid" type="xsd:string">
+    </part>
+  </message>
+  <message name="getUnitesFillesResponse">
+    <part name="return" type="tns:ArrayOfUnitePere">
+    </part>
+  </message>
+  <message name="getUIDByNIDRequest">
+    <part name="nid" type="xsd:string">
+    </part>
+  </message>
+  <message name="getChefUniteResponse">
+    <part name="return" type="xsd:string">
+    </part>
+  </message>
+  <message name="countPersBaseResponse">
+    <part name="return" type="xsd:string">
+    </part>
+  </message>
+  <message name="getUnitesBaseResponse">
+    <part name="return" type="tns:ArrayOfUnitePere">
+    </part>
+  </message>
+  <message name="getNIDByUIDResponse">
+    <part name="return" type="xsd:string">
+    </part>
+  </message>
+  <message name="getEmailByNIDRequest">
+    <part name="nid" type="xsd:string">
+    </part>
+  </message>
+  <message name="getVueServiceServicesRequest">
+    <part name="nid" type="xsd:string">
+    </part>
+    <part name="depth" type="xsd:string">
+    </part>
+  </message>
+  <message name="countPersUniteResponse">
+    <part name="return" type="xsd:string">
+    </part>
+  </message>
+  <message name="isSubalterneNIDRequest">
+    <part name="nidChef" type="xsd:string">
+    </part>
+    <part name="nidTester" type="xsd:string">
+    </part>
+  </message>
+  <message name="getMTBAByUIDResponse">
+    <part name="return" type="tns:ArrayOfMTBA">
+    </part>
+  </message>
+  <message name="checkBDDResponse">
+    <part name="return" type="xsd:float">
+    </part>
+  </message>
+  <message name="getEquipeServiceResponse">
+    <part name="return" type="tns:ArrayOfNIDUID">
+    </part>
+  </message>
+  <message name="setPersRequest">
+    <part name="nid" type="xsd:string">
+    </part>
+    <part name="base" type="xsd:string">
+    </part>
+    <part name="unite" type="xsd:string">
+    </part>
+    <part name="grade" type="xsd:string">
+    </part>
+  </message>
+  <message name="getUnitesFillesRequest">
+    <part name="code_ba" type="xsd:string">
+    </part>
+    <part name="code_unit" type="xsd:string">
+    </part>
+  </message>
+  <message name="getMTBAByNIDResponse">
+    <part name="return" type="tns:ArrayOfMTBA">
+    </part>
+  </message>
+  <message name="getPersonneInfosRequest">
+    <part name="uid" type="xsd:string">
+    </part>
+  </message>
+  <message name="countPersBaseRequest">
+    <part name="code_ba" type="xsd:string">
+    </part>
+  </message>
+  <message name="getPersonneInfosNIDResponse">
+    <part name="return" type="tns:ArrayOfCTInfopers">
+    </part>
+  </message>
+  <message name="getUIDByNIDResponse">
+    <part name="return" type="xsd:string">
+    </part>
+  </message>
+  <message name="getStructureParNidRequest">
+    <part name="matricule_pers" type="xsd:string">
+    </part>
+  </message>
+  <message name="checkBDDRequest">
+  </message>
+  <portType name="ServicesCSIAPortType">
+    <operation name="getPhotoURLByNID">
+<documentation>Fournit l'URL de la photo du personnel en fonction de son NID.</documentation>
+      <input message="tns:getPhotoURLByNIDRequest">
+    </input>
+      <output message="tns:getPhotoURLByNIDResponse">
+    </output>
+    </operation>
+    <operation name="getPhotoURLByUID">
+<documentation>Fournit l'URL de la photo du personnel en fonction de son UID.</documentation>
+      <input message="tns:getPhotoURLByUIDRequest">
+    </input>
+      <output message="tns:getPhotoURLByUIDResponse">
+    </output>
+    </operation>
+    <operation name="getMTBAByNID">
+<documentation>Fournit la liste des téléphones MTBA d'un personnel en fonction de son NID.</documentation>
+      <input message="tns:getMTBAByNIDRequest">
+    </input>
+      <output message="tns:getMTBAByNIDResponse">
+    </output>
+    </operation>
+    <operation name="getMTBAByUID">
+<documentation>Fournit la liste des téléphones MTBA d'un personnel en fonction de son UID.</documentation>
+      <input message="tns:getMTBAByUIDRequest">
+    </input>
+      <output message="tns:getMTBAByUIDResponse">
+    </output>
+    </operation>
+    <operation name="getFirstMTBAByUID">
+<documentation>Fournit le premier téléphone MTBA d'un personnel en fonction de son UID.</documentation>
+      <input message="tns:getFirstMTBAByUIDRequest">
+    </input>
+      <output message="tns:getFirstMTBAByUIDResponse">
+    </output>
+    </operation>
+    <operation name="getEmailByNID">
+<documentation>Renvoie l'email du personnel sur Intradef si celui-ci en dispose.</documentation>
+      <input message="tns:getEmailByNIDRequest">
+    </input>
+      <output message="tns:getEmailByNIDResponse">
+    </output>
+    </operation>
+    <operation name="getUIDByNID">
+<documentation>Fournit l'UID d'un personnel à partir de son NID.</documentation>
+      <input message="tns:getUIDByNIDRequest">
+    </input>
+      <output message="tns:getUIDByNIDResponse">
+    </output>
+    </operation>
+    <operation name="getNIDByUID">
+<documentation>Fournit le NID d'un personnel à partir de son UID.</documentation>
+      <input message="tns:getNIDByUIDRequest">
+    </input>
+      <output message="tns:getNIDByUIDResponse">
+    </output>
+    </operation>
+    <operation name="checkBDD">
+<documentation>Renvoie un délai indicatif pour la connection à la BDD.</documentation>
+      <input message="tns:checkBDDRequest">
+    </input>
+      <output message="tns:checkBDDResponse">
+    </output>
+    </operation>
+    <operation name="getSubalternes">
+<documentation>Renvoie les uids des subalternes d'un personnel.</documentation>
+      <input message="tns:getSubalternesRequest">
+    </input>
+      <output message="tns:getSubalternesResponse">
+    </output>
+    </operation>
+    <operation name="isSubalterneNID">
+<documentation>Renvoie vrai si le deuxième nid et le subalterne du premier nid.</documentation>
+      <input message="tns:isSubalterneNIDRequest">
+    </input>
+      <output message="tns:isSubalterneNIDResponse">
+    </output>
+    </operation>
+    <operation name="getSubalternesNID">
+<documentation>Renvoie les NID des subalternes d'un personnel à l'aide du NID de celui-ci.</documentation>
+      <input message="tns:getSubalternesNIDRequest">
+    </input>
+      <output message="tns:getSubalternesNIDResponse">
+    </output>
+    </operation>
+    <operation name="getPersonneInfos">
+<documentation>Renvoie à partir d'un UID les informations suivantes (dans l'ordre) : grade, nom, fonction et prenom</documentation>
+      <input message="tns:getPersonneInfosRequest">
+    </input>
+      <output message="tns:getPersonneInfosResponse">
+    </output>
+    </operation>
+    <operation name="getEquipeService">
+<documentation>Renvoi les nid et uid des personnels directement rattachés à un service.</documentation>
+      <input message="tns:getEquipeServiceRequest">
+    </input>
+      <output message="tns:getEquipeServiceResponse">
+    </output>
+    </operation>
+    <operation name="getVueServiceServices">
+<documentation>Renvoie les services rattachés à un service en fonction du NID de son chef de service et de la profondeur.</documentation>
+      <input message="tns:getVueServiceServicesRequest">
+    </input>
+      <output message="tns:getVueServiceServicesResponse">
+    </output>
+    </operation>
+    <operation name="getChefUnite">
+<documentation>A partir du couple (code base, code unite), retourne le NID du chef de l'unité.</documentation>
+      <input message="tns:getChefUniteRequest">
+    </input>
+      <output message="tns:getChefUniteResponse">
+    </output>
+    </operation>
+    <operation name="getVueServicePersonnes">
+<documentation>Renvoie les personnes rattachées à un service en fonction du NID de son chef de service et de la profondeur.</documentation>
+      <input message="tns:getVueServicePersonnesRequest">
+    </input>
+      <output message="tns:getVueServicePersonnesResponse">
+    </output>
+    </operation>
+    <operation name="countPersUnite">
+<documentation>Renvoie le nombre de personnel d'une unité.</documentation>
+      <input message="tns:countPersUniteRequest">
+    </input>
+      <output message="tns:countPersUniteResponse">
+    </output>
+    </operation>
+    <operation name="countPersBase">
+<documentation>Renvoie le nombre de personnel d'une base.</documentation>
+      <input message="tns:countPersBaseRequest">
+    </input>
+      <output message="tns:countPersBaseResponse">
+    </output>
+    </operation>
+    <operation name="getUnitesBase">
+<documentation>Renvoie des tuples contenant code unité et unité filliative(booléen) pour une base.</documentation>
+      <input message="tns:getUnitesBaseRequest">
+    </input>
+      <output message="tns:getUnitesBaseResponse">
+    </output>
+    </operation>
+    <operation name="getUnitesFilles">
+<documentation>A partir du couple (code base, code unite), retourne la liste des unités attachées.</documentation>
+      <input message="tns:getUnitesFillesRequest">
+    </input>
+      <output message="tns:getUnitesFillesResponse">
+    </output>
+    </operation>
+    <operation name="getStructureParUnite">
+<documentation>Renvoie l'identifiant de la structure la plus haute de l'unité.</documentation>
+      <input message="tns:getStructureParUniteRequest">
+    </input>
+      <output message="tns:getStructureParUniteResponse">
+    </output>
+    </operation>
+    <operation name="getStructureParNid">
+<documentation>Renvoie l'identifiant de la structure du chef de service(nid).</documentation>
+      <input message="tns:getStructureParNidRequest">
+    </input>
+      <output message="tns:getStructureParNidResponse">
+    </output>
+    </operation>
+    <operation name="getServiceFils">
+<documentation>Renvoie les fils d'un service'.</documentation>
+      <input message="tns:getServiceFilsRequest">
+    </input>
+      <output message="tns:getServiceFilsResponse">
+    </output>
+    </operation>
+    <operation name="getPersonneInfosNID">
+<documentation>Renvoie les informations d'une personne.</documentation>
+      <input message="tns:getPersonneInfosNIDRequest">
+    </input>
+      <output message="tns:getPersonneInfosNIDResponse">
+    </output>
+    </operation>
+    <operation name="getChefUniteParNID">
+<documentation>A partir du NID d'un subalterne retourne le NID du chef de l'unité.</documentation>
+      <input message="tns:getChefUniteParNIDRequest">
+    </input>
+      <output message="tns:getChefUniteParNIDResponse">
+    </output>
+    </operation>
+    <operation name="setPers">
+<documentation>mise à jour d'un personnel.</documentation>
+      <input message="tns:setPersRequest">
+    </input>
+      <output message="tns:setPersResponse">
+    </output>
+    </operation>
+  </portType>
+  <binding name="ServicesCSIABinding" type="tns:ServicesCSIAPortType">
+    <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="getPhotoURLByNID">
+      <soap:operation soapAction="http://site2.csia.ba217.air.defense.gouv.fr/ws/annu.php/getPhotoURLByNID" style="rpc"/>
+      <input>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </input>
+      <output>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </output>
+    </operation>
+    <operation name="getPhotoURLByUID">
+      <soap:operation soapAction="http://site2.csia.ba217.air.defense.gouv.fr/ws/annu.php/getPhotoURLByUID" style="rpc"/>
+      <input>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </input>
+      <output>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </output>
+    </operation>
+    <operation name="getMTBAByNID">
+      <soap:operation soapAction="http://site2.csia.ba217.air.defense.gouv.fr/ws/annu.php/getMTBAByNID" style="rpc"/>
+      <input>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </input>
+      <output>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </output>
+    </operation>
+    <operation name="getMTBAByUID">
+      <soap:operation soapAction="http://site2.csia.ba217.air.defense.gouv.fr/ws/annu.php/getMTBAByUID" style="rpc"/>
+      <input>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </input>
+      <output>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </output>
+    </operation>
+    <operation name="getFirstMTBAByUID">
+      <soap:operation soapAction="http://site2.csia.ba217.air.defense.gouv.fr/ws/annu.php/getFirstMTBAByUID" style="rpc"/>
+      <input>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </input>
+      <output>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </output>
+    </operation>
+    <operation name="getEmailByNID">
+      <soap:operation soapAction="http://site2.csia.ba217.air.defense.gouv.fr/ws/annu.php/getEmailByNID" style="rpc"/>
+      <input>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </input>
+      <output>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </output>
+    </operation>
+    <operation name="getUIDByNID">
+      <soap:operation soapAction="http://site2.csia.ba217.air.defense.gouv.fr/ws/annu.php/getUIDByNID" style="rpc"/>
+      <input>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </input>
+      <output>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </output>
+    </operation>
+    <operation name="getNIDByUID">
+      <soap:operation soapAction="http://site2.csia.ba217.air.defense.gouv.fr/ws/annu.php/getNIDByUID" style="rpc"/>
+      <input>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </input>
+      <output>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </output>
+    </operation>
+    <operation name="checkBDD">
+      <soap:operation soapAction="http://site2.csia.ba217.air.defense.gouv.fr/ws/annu.php/checkBDD" style="rpc"/>
+      <input>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </input>
+      <output>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </output>
+    </operation>
+    <operation name="getSubalternes">
+      <soap:operation soapAction="http://site2.csia.ba217.air.defense.gouv.fr/ws/annu.php/getSubalternes" style="rpc"/>
+      <input>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </input>
+      <output>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </output>
+    </operation>
+    <operation name="isSubalterneNID">
+      <soap:operation soapAction="http://site2.csia.ba217.air.defense.gouv.fr/ws/annu.php/isSubalterneNID" style="rpc"/>
+      <input>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </input>
+      <output>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </output>
+    </operation>
+    <operation name="getSubalternesNID">
+      <soap:operation soapAction="http://site2.csia.ba217.air.defense.gouv.fr/ws/annu.php/getSubalternesNID" style="rpc"/>
+      <input>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </input>
+      <output>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </output>
+    </operation>
+    <operation name="getPersonneInfos">
+      <soap:operation soapAction="http://site2.csia.ba217.air.defense.gouv.fr/ws/annu.php/getPersonneInfos" style="rpc"/>
+      <input>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </input>
+      <output>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </output>
+    </operation>
+    <operation name="getEquipeService">
+      <soap:operation soapAction="http://site2.csia.ba217.air.defense.gouv.fr/ws/annu.php/getEquipeService" style="rpc"/>
+      <input>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </input>
+      <output>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </output>
+    </operation>
+    <operation name="getVueServiceServices">
+      <soap:operation soapAction="http://site2.csia.ba217.air.defense.gouv.fr/ws/annu.php/getVueServiceServices" style="rpc"/>
+      <input>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </input>
+      <output>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </output>
+    </operation>
+    <operation name="getChefUnite">
+      <soap:operation soapAction="http://site2.csia.ba217.air.defense.gouv.fr/ws/annu.php/getChefUnite" style="rpc"/>
+      <input>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </input>
+      <output>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </output>
+    </operation>
+    <operation name="getVueServicePersonnes">
+      <soap:operation soapAction="http://site2.csia.ba217.air.defense.gouv.fr/ws/annu.php/getVueServicePersonnes" style="rpc"/>
+      <input>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </input>
+      <output>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </output>
+    </operation>
+    <operation name="countPersUnite">
+      <soap:operation soapAction="http://site2.csia.ba217.air.defense.gouv.fr/ws/annu.php/countPersUnite" style="rpc"/>
+      <input>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </input>
+      <output>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </output>
+    </operation>
+    <operation name="countPersBase">
+      <soap:operation soapAction="http://site2.csia.ba217.air.defense.gouv.fr/ws/annu.php/countPersBase" style="rpc"/>
+      <input>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </input>
+      <output>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </output>
+    </operation>
+    <operation name="getUnitesBase">
+      <soap:operation soapAction="http://site2.csia.ba217.air.defense.gouv.fr/ws/annu.php/getUnitesBase" style="rpc"/>
+      <input>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </input>
+      <output>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </output>
+    </operation>
+    <operation name="getUnitesFilles">
+      <soap:operation soapAction="http://site2.csia.ba217.air.defense.gouv.fr/ws/annu.php/getUnitesFilles" style="rpc"/>
+      <input>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </input>
+      <output>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </output>
+    </operation>
+    <operation name="getStructureParUnite">
+      <soap:operation soapAction="http://site2.csia.ba217.air.defense.gouv.fr/ws/annu.php/getStructureParUnite" style="rpc"/>
+      <input>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </input>
+      <output>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </output>
+    </operation>
+    <operation name="getStructureParNid">
+      <soap:operation soapAction="http://site2.csia.ba217.air.defense.gouv.fr/ws/annu.php/getStructureParNid" style="rpc"/>
+      <input>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </input>
+      <output>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </output>
+    </operation>
+    <operation name="getServiceFils">
+      <soap:operation soapAction="http://site2.csia.ba217.air.defense.gouv.fr/ws/annu.php/getServiceFils" style="rpc"/>
+      <input>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </input>
+      <output>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </output>
+    </operation>
+    <operation name="getPersonneInfosNID">
+      <soap:operation soapAction="http://site2.csia.ba217.air.defense.gouv.fr/ws/annu.php/getPersonneInfosNID" style="rpc"/>
+      <input>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </input>
+      <output>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </output>
+    </operation>
+    <operation name="getChefUniteParNID">
+      <soap:operation soapAction="http://site2.csia.ba217.air.defense.gouv.fr/ws/annu.php/getChefUniteParNID" style="rpc"/>
+      <input>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </input>
+      <output>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </output>
+    </operation>
+    <operation name="setPers">
+      <soap:operation soapAction="http://site2.csia.ba217.air.defense.gouv.fr/ws/annu.php/setPers" style="rpc"/>
+      <input>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </input>
+      <output>
+        <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://webservices.air.defense.gouv.fr/"/>
+      </output>
+    </operation>
+  </binding>
+  <service name="ServicesCSIA">
+    <port name="ServicesCSIAPort" binding="tns:ServicesCSIABinding">
+      <soap:address location="http://site2.csia.ba217.air.defense.gouv.fr/ws/annu.php"/>
+    </port>
+  </service>
+</definitions>

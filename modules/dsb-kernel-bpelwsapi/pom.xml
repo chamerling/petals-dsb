@@ -29,8 +29,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.ow2.petals</groupId>
-			<artifactId>petals-kernel-wsapi</artifactId>
+			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>dsb-kernel-wsapi</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 
 	</dependencies>

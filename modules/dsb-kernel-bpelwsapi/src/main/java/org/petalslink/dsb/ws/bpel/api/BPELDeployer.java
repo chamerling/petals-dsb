@@ -7,7 +7,7 @@ import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 
-import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
+import org.petalslink.dsb.ws.api.DSBWebServiceException;
 
 /**
  * Deploy BPEL description files into the DSB. The files will be packaged in the
@@ -21,8 +21,8 @@ import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
 public interface BPELDeployer {
 
     @WebMethod(operationName = "deploy")
-    boolean deploy(@WebParam(name = "bpelDescriptor") BPELDescriptor bpelDescriptor,
-            @WebParam(name = "partners") PartnerLinkDescriptor[] partners)
-            throws PEtALSWebServiceException;
-
+    boolean deploy(@WebParam(name = "bpel") BPELDescriptor bpelDescriptor,
+            @WebParam(name = "resources") LinkedResourceDescriptor[] resources)
+            throws DSBWebServiceException;
+    
 }

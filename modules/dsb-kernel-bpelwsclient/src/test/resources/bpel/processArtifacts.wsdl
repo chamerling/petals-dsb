@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:tns="http://air.defense.gouv.frArtifacts" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:wsdl="http://webservices.air.defense.gouv.fr/" xmlns:wsdl1="http://webdef.air.defense.gouv.fr/" xmlns:wsdl2="http://petals.ow2.org/petals-bc-mail" xmlns:wsdl3="http://air.defense.gouv.fr" name="processArtifacts" targetNamespace="http://air.defense.gouv.frArtifacts">
+  <plnk:partnerLinkType name="Pannuv2">
+    <plnk:role name="Rannuv2" portType="wsdl:ServicesCSIAPortType"/>
+  </plnk:partnerLinkType>
+  <plnk:partnerLinkType name="Psigabase">
+    <plnk:role name="Rsigabase" portType="wsdl1:sigabaseportType"/>
+  </plnk:partnerLinkType>
+    <plnk:partnerLinkType name="pmail">
+    <plnk:role name="rmail" portType="wsdl2:SendMailGeneric"/>
+  </plnk:partnerLinkType>
+    <import location="wsdl.wsdl" namespace="http://webservices.air.defense.gouv.fr/"/>
+    <import location="wsdlsiga.wsdl" namespace="http://webdef.air.defense.gouv.fr/"/>
+    <import location="component.wsdl" namespace="http://petals.ow2.org/petals-bc-mail"/>
+</definitions>

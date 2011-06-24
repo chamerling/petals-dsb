@@ -35,9 +35,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.cxf</groupId>
-			<artifactId>cxf-bundle-minimal</artifactId>
-			<version>2.2.2</version>
+			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>dsb-cxfutils</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 </project>

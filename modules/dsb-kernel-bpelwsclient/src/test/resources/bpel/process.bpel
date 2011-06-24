@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<process name="iaffectation"
+         targetNamespace="http://air.defense.gouv.fr/"
+         suppressJoinFailure="yes"
+         xmlns:tns="http://air.defense.gouv.fr/"
+         xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+         xmlns:bpws="http://docs.oasis-open.org/wsbpel/2.0/process/executable" 
+         xmlns:ns1="http://air.defense.gouv.frArtifacts"
+         xmlns:ns="http://webdef.air.defense.gouv.fr/"
+         xmlns:ns0="http://webservices.air.defense.gouv.fr/"
+         xmlns:ns2="http://petals.ow2.org/petals-bc-mail">
+
+
+
+    
+    <!-- =================================================================== -->
+    <!-- WSDL IMPORTS                                                        -->
+    <!-- Import the partner's web services definitions                       -->
+    <!-- =================================================================== -->
+
+    <!-- Petals BC-Mail component's WSDL -->
+    <bpws:import namespace="http://petals.ow2.org/petals-bc-mail" location="component.wsdl" importType="http://schemas.xmlsoap.org/wsdl/" />
+
+    <!-- WSDL which import all the partner's WSDL-->
+    <bpws:import namespace="http://air.defense.gouv.frArtifacts" location="processArtifacts.wsdl" importType="http://schemas.xmlsoap.org/wsdl/" />
+
+    <!-- Air Armee WSDLs -->
+    <bpws:import namespace="http://webdef.air.defense.gouv.fr/" location="wsdlsiga.wsdl" importType="http://schemas.xmlsoap.org/wsdl/" />
+    <bpws:import namespace="http://webservices.air.defense.gouv.fr/" location="wsdl.wsdl" importType="http://schemas.xmlsoap.org/wsdl/" />
+    
+    <!-- WSDL used to expose the BPEL process on Petals -->
+    <import location="process.wsdl" namespace="http://air.defense.gouv.fr/" importType="http://schemas.xmlsoap.org/wsdl/" />
+
+
+
+
+    <!-- =================================================================== -->
+    <!-- PARTNERLINKS                                                        -->
+    <!-- List of services participating in this BPEL process                 -->
+    <!-- =================================================================== -->
+    <partnerLinks>
+        <!-- The 'client' role represents the requester of this service. -->
+        <partnerLink
+            name="client"
+            partnerLinkType="tns:iaffectation"
+            myRole="iaffectationProvider" />
+        <bpws:partnerLink 
+            name="annuv2"
+            partnerLinkType="ns1:Pannuv2"
+            partnerRole="Rannuv2" />
+        <bpws:partnerLink 
+            name="sigabase"
+            partnerLinkType="ns1:Psigabase"
+            partnerRole="Rsigabase" />
+        <bpws:partnerLink 
+            name="mail"
+            partnerLinkType="ns1:pmail"
+            partnerRole="rmail" />
+    </partnerLinks>
+
+
+
+    
+    <!-- =================================================================== -->
+    <!-- VARIABLES                                                           -->
+    <!-- List of messages and XML documents used within this BPEL process    -->
+    <!-- =================================================================== -->
+    <variables>
+        
+        <!-- Reference to the message passed as input during initiation -->
+        <variable name="processInput"
+            messageType="tns:iaffectationRequestMessage"/>
+        
+        <!-- Reference to the message that will be returned to the requester -->
+        <variable name="processOutput"
+            messageType="tns:iaffectationResponseMessage"/>
+
+        <bpws:variable name="sigabaseInsertAffectationAgreeRequest"
+            messageType="ns:insertAffectationAgreeeRequest" />
+
+        <bpws:variable name="sigabaseInsertAffectationAgreeResponse"
+            messageType="ns:insertAffectationAgreeeResponse" />
+
+        <bpws:variable name="sigabaseGetInfoAffectationRequest"
+            messageType="ns:getinfoaffectationRequest" />
+        
+        <bpws:variable name="sigabaseGetInfoAffectationResponse"
+            messageType="ns:getinfoaffectationResponse" />
+
+        <bpws:variable name="annuv2GetChefUniteParNIDRequest"
+            messageType="ns0:getChefUniteParNIDRequest" />
+        
+        <bpws:variable name="annuv2GetChefUniteParNIDResponse"
+            messageType="ns0:getChefUniteParNIDResponse" />
+        
+        <bpws:variable name="annuv2GetEmailByNIDRequest"
+            messageType="ns0:getEmailByNIDRequest" />
+
+        <bpws:variable name="annuv2GetEmailByNIDResponse"
+            messageType="ns0:getEmailByNIDResponse" />
+        
+        <bpws:variable name="sendMailRequest"
+            messageType="ns2:SendMailGenericRequest" />
+    </variables>
+
+    <!-- ================================================================= -->         
+    <!-- ORCHESTRATION LOGIC                                               -->
+    <!-- Set of activities coordinating the flow of messages across the    -->
+    <!-- services integrated within this business process                  -->
+    <!-- ================================================================= -->         
+    <sequence name="main">
+        
+        <!-- Receive input. (Maps to the operation in the processName.wsdl)  -->
+        <receive name="receiveInput"
+            partnerLink="client"
+            portType="tns:iaffectation"
+            operation="process"
+            variable="processInput"
+            createInstance="yes" />
+
+        <assign validate="no" name="nid">
+            <copy>
+                <from>$processInput.payload/tns:input</from>
+                <to>$sigabaseInsertAffectationAgreeRequest.nid</to>
+            </copy>
+        </assign>
+
+        <invoke name="insertaffectationagreee" partnerLink="sigabase" operation="insertAffectationAgreee" portType="ns:sigabaseportType" inputVariable="sigabaseInsertAffectationAgreeRequest" outputVariable="sigabaseInsertAffectationAgreeResponse" />
+
+        <assign validate="no" name="idaffectation">
+            <copy>
+                <from>$sigabaseInsertAffectationAgreeResponse.num</from>
+                <to>$sigabaseGetInfoAffectationRequest.num</to>
+            </copy>
+        </assign>
+
+        <invoke name="getinfoaffectation" partnerLink="sigabase" operation="getinfoaffectation" inputVariable="sigabaseGetInfoAffectationRequest" outputVariable="sigabaseGetInfoAffectationResponse" />
+
+        <assign validate="no" name="nid2">
+            <copy>
+                <from>$processInput.payload/tns:input</from>
+                <to>$annuv2GetChefUniteParNIDRequest.nid</to>
+            </copy>
+        </assign>
+        <invoke name="getchef" partnerLink="annuv2" operation="getChefUniteParNID" portType="ns0:ServicesCSIAPortType" inputVariable="annuv2GetChefUniteParNIDRequest" outputVariable="annuv2GetChefUniteParNIDResponse" />
+
+        <assign validate="no" name="nidchef">
+            <copy>
+                <from>$annuv2GetChefUniteParNIDResponse.return</from>
+                <to>$annuv2GetEmailByNIDRequest.nid</to>
+            </copy>
+        </assign>
+        <invoke name="getmailchef" partnerLink="annuv2" operation="getEmailByNID" portType="ns0:ServicesCSIAPortType" inputVariable="annuv2GetEmailByNIDRequest" outputVariable="annuv2GetEmailByNIDResponse" />
+
+        <assign validate="no" name="mailchef">
+        	<copy>
+                <from>
+                   <!-- <literal>cyril.alfonso@air.defense.gouv.fr</literal>  --> 
+                    <literal>nicolas.salatge@ebmwebsourcing.com</literal>
+                </from>
+                <to>$sendMailRequest.mail/ns2:from</to>
+            </copy>
+            <copy>
+                <from>
+                   <!-- <literal>cyril.alfonso@air.defense.gouv.fr</literal>  --> 
+                    <literal>nicolas.salatge@ebmwebsourcing.com</literal>
+                </from>
+                <to>$sendMailRequest.mail/ns2:to</to>
+            </copy>
+            <copy>
+                <from>
+                    <literal>Notification affectation : chef</literal>
+                </from>
+                <to>$sendMailRequest.mail/ns2:subject</to>
+            </copy>
+            <copy>
+                <from>concat($annuv2GetEmailByNIDResponse.return," affectation base : ",$sigabaseGetInfoAffectationResponse.parameters/base," Unite : ",$sigabaseGetInfoAffectationResponse.parameters/unite," ")</from>
+                <to>$sendMailRequest.mail/ns2:body</to>
+            </copy>
+        </assign>
+        <invoke name="mail" operation="SendMailGeneric" inputVariable="sendMailRequest"  partnerLink="mail" />
+
+        <assign validate="no" name="nid3">
+            <copy>
+                <from>$processInput.payload/tns:input</from>
+                <to>$annuv2GetEmailByNIDRequest.nid</to>
+            </copy>
+        </assign>
+        <bpws:invoke name="getmailadminis" partnerLink="annuv2" operation="getEmailByNID" portType="ns0:ServicesCSIAPortType" inputVariable="annuv2GetEmailByNIDRequest" outputVariable="annuv2GetEmailByNIDResponse"/>
+        
+        <assign validate="no" name="preparemailadminis">
+        	<copy>
+                <from>
+                   <!-- <literal>cyril.alfonso@air.defense.gouv.fr</literal>  --> 
+                    <literal>nicolas.salatge@ebmwebsourcing.com</literal>
+                </from>
+                <to>$sendMailRequest.mail/ns2:from</to>
+            </copy>
+            <copy>
+                <from>$annuv2GetEmailByNIDResponse.return</from>
+                <to>$sendMailRequest.mail/ns2:to</to>
+            </copy>
+            <copy>
+                <from>
+                    <literal>&quot;Notification&quot;</literal>
+                </from>
+                <to>$sendMailRequest.mail/ns2:subject</to>
+            </copy>
+        </assign>
+        <invoke name="mailadminis" operation="SendMailGeneric" inputVariable="sendMailRequest" partnerLink="mail" />
+
+        <assign>
+            <copy>
+                <from>
+                    <literal>&quot;good&quot;</literal>
+                </from>
+                <to>$processOutput.payload/tns:result</to>
+            </copy>
+        </assign>
+
+        <reply name="replyOutput"
+            partnerLink="client"
+            portType="tns:iaffectation"
+            operation="process" 
+            variable="processOutput" />
+    </sequence>
+</process>
+

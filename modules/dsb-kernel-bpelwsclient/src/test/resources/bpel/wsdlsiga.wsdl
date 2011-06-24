@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="verifierAdresse" targetNamespace="http://webdef.air.defense.gouv.fr/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://webdef.air.defense.gouv.fr/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://webdef.air.defense.gouv.fr/">
+      <xsd:element name="info">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="base" nillable="true" type="xsd:string"/>
+            <xsd:element name="commandement" nillable="true" type="xsd:string"/>
+            <xsd:element name="datedebut" nillable="true" type="xsd:dateTime"/>
+            <xsd:element name="libellereference" nillable="true" type="xsd:string"/>
+            <xsd:element name="mentionaffectation" nillable="true" type="xsd:string"/>
+            <xsd:element name="unite" nillable="true" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="insertAffectationAgreeeResponse">
+    <wsdl:part name="num" type="xsd:string">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="insertAffectationAgreeeRequest">
+    <wsdl:part name="nid" type="xsd:string">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getinfoaffectationResponse">
+    <wsdl:part name="parameters" element="tns:info">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getinfoaffectationRequest">
+    <wsdl:part name="num" type="xsd:string">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="sigabaseportType">
+    <wsdl:operation name="getinfoaffectation">
+      <wsdl:input message="tns:getinfoaffectationRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:getinfoaffectationResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="insertAffectationAgreee">
+      <wsdl:input message="tns:insertAffectationAgreeeRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:insertAffectationAgreeeResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="sigabaseBinding" type="tns:sigabaseportType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getinfoaffectation">
+      <soap:operation soapAction="http://webdef.air.defense.gouv.fr/getinfoaffectation"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="insertAffectationAgreee">
+      <soap:operation soapAction="http://webdef.air.defense.gouv.fr/insertAffectationAgreee"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="sigabase">
+    <wsdl:port name="sigabaseport" binding="tns:sigabaseBinding">
+      <soap:address location="http://site1.csia.ba217.air.defense.gouv.fr/wssigabase/sigabase.php"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

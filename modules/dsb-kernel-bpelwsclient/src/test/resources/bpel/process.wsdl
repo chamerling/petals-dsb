@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+<definitions name="iaffectation"
+        targetNamespace="http://air.defense.gouv.fr/"
+        xmlns:tns="http://air.defense.gouv.fr/"
+        xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype"
+        xmlns="http://schemas.xmlsoap.org/wsdl/"
+        xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+        >
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     TYPE DEFINITION - List of types participating in this BPEL process 
+     The BPEL Designer will generate default request and response types
+     but you can define or import any XML Schema type and use them as part 
+     of the message types.
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->    
+    <types>
+        <schema attributeFormDefault="unqualified" elementFormDefault="qualified" 
+                targetNamespace="http://air.defense.gouv.fr/" 
+                xmlns="http://www.w3.org/2001/XMLSchema">
+
+            <complexType name="iaffectationRequest">
+                    <sequence>
+                        <element name="input" type="string"/>
+                    </sequence>
+            </complexType>
+
+            <complexType name="iaffectationResponse">
+                    <sequence>
+                        <element name="result" type="string"/>
+                    </sequence>
+            </complexType>
+        </schema>
+    </types>
+
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     MESSAGE TYPE DEFINITION - Definition of the message types used as 
+     part of the port type defintions
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->    
+    <message name="iaffectationRequestMessage">
+        <part name="payload" type="tns:iaffectationRequest"/>
+    </message>
+    <message name="iaffectationResponseMessage">
+        <part name="payload" type="tns:iaffectationResponse"/>
+    </message>
+
+    
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     PORT TYPE DEFINITION - A port type groups a set of operations into
+     a logical service unit.
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->    
+
+    <!-- portType implemented by the processName BPEL process -->
+    <portType name="iaffectation">
+        <operation name="process">
+            <input name="iaffectationRequestMessage" message="tns:iaffectationRequestMessage" />
+            <output name="iaffectationResponseMessage" message="tns:iaffectationResponseMessage"/>
+        </operation>
+    </portType>
+
+ 
+ <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     BINDING DEFINITION 
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->    
+  
+ 	<binding name="iaffectationBinding" type="tns:iaffectation">
+    	
+    	<soap:binding style="rpc"
+ 			transport="http://schemas.xmlsoap.org/soap/http" />
+   		
+   		<operation name="process">
+			<soap:operation soapAction="http://air.defense.gouv.fr/process" />
+			<input name="iaffectationRequestMessage">
+    			<soap:body use="literal" 
+					namespace="http://air.defense.gouv.fr/" />
+    		</input>
+    		<output name="iaffectationResponseMessage">
+    			<soap:body use="literal"
+    				namespace="http://air.defense.gouv.fr/" />
+    		</output>
+		</operation>
+		
+	</binding>
+      
+ <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     SERVICE DEFINITION 
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->    
+  
+    <service name="affectation">
+    	<port name="affectationEndpoint" binding="tns:iaffectationBinding">
+    		<soap:address location="affectationEndpoint"></soap:address>
+    	</port>
+    </service>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     PARTNER LINK TYPE DEFINITION
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->    
+    <plnk:partnerLinkType name="iaffectation">
+        <plnk:role name="iaffectationProvider" portType="tns:iaffectation"/>
+    </plnk:partnerLinkType>
+    
+</definitions>

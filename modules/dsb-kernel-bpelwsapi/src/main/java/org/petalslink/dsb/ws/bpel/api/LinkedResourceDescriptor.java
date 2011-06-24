@@ -12,7 +12,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlType
-public class PartnerLinkDescriptor {
+public class LinkedResourceDescriptor {
 
     /**
      * The data handler to handle WSDL file
@@ -24,7 +24,7 @@ public class PartnerLinkDescriptor {
      */
     private String fileName;
 
-    public PartnerLinkDescriptor() {
+    public LinkedResourceDescriptor() {
     }
 
     @XmlMimeType("application/octet-stream")
