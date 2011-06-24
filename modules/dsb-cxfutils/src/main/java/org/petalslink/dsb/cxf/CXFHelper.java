@@ -3,8 +3,6 @@
  */
 package org.petalslink.dsb.cxf;
 
-import javax.jws.WebService;
-
 import org.apache.cxf.jaxb.JAXBDataBinding;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
