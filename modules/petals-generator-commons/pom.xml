@@ -8,16 +8,16 @@
 		<version>1.0-SNAPSHOT</version>
 		<relativePath>../dsb-parent/pom.xml</relativePath>
 	</parent>
-	
+
 	<groupId>org.petalslink.dsb</groupId>
 	<artifactId>petals-generator-commons</artifactId>
 	<packaging>jar</packaging>
 	<name>petals-generator-commons</name>
-	
+
 	<scm>
-      <connection>scm:svn:https://svn.petalslink.com/svnroot/trunk/research/commons/dsb/modules/petals-generator-commons</connection>
-      <developerConnection>${project.scm.connection}</developerConnection>
-  	</scm>
+		<connection>scm:svn:https://svn.petalslink.com/svnroot/trunk/research/commons/dsb/modules/petals-generator-commons</connection>
+		<developerConnection>${project.scm.connection}</developerConnection>
+	</scm>
 
 	<dependencies>
 		<dependency>
@@ -27,9 +27,18 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>petals-jbi-generator-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>com.ebmwebsourcing.commons</groupId>
 			<artifactId>commons-jbi</artifactId>
 			<version>0.9.2</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
 		</dependency>
 	</dependencies>
 	<build>

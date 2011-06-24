@@ -29,6 +29,8 @@ public interface Constants {
     static final String COMPONENT_NAME = "component.name";
 
     static final String OUTPUT_DIR = Constants.class.getCanonicalName() + ".outputdir";
+    
+    static final String INPUT_DIR = Constants.class.getCanonicalName() + ".inputdir";
 
     static final String SA_NAME = Constants.class.getCanonicalName() + ".sa.name";
 
