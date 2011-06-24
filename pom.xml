@@ -60,7 +60,10 @@
    		<module>modules/dsb-transport-xmpp</module>
    		<!--<module>modules/dsb-kernel-federationservice</module>-->
 		<module>modules/dsb-jbi</module>
-
+		
+		<module>modules/dsb-router</module>
+		<module>modules/dsb-microkernel</module>
+		
    		<module>modules/dsb-monitoring</module>
    		<module>modules/dsb-service-client</module>
 
@@ -87,6 +90,7 @@
 		<module>modules/petals-generator-wscommons</module>
 		<module>modules/petals-generator-restcommons</module>
 		<module>modules/petals-jbi-generator-api</module>
+		<module>modules/petals-generator-bpel</module>
 		<module>modules/petals-jbi2ws</module>
 		<module>modules/petals-jbi2rest</module>
 		<module>modules/petals-ws2jbi</module>
