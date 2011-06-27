@@ -16,7 +16,7 @@
  * 
  * Initial developer(s): EBM WebSourcing
  */
-package org.petalslink.dsb.kernel.util;
+package org.petalslink.dsb.jbi;
 
 import java.io.File;
 import java.io.IOException;
