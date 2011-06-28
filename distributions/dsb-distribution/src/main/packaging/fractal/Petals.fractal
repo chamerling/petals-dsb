@@ -22,6 +22,7 @@
   <component definition="DSBCoreService" name="DSBCoreService"/>
   
   <component definition="REST" name="REST"/>
+  <component definition="BPEL" name="BPEL"/>
   
   <component definition="org.petalslink.dsb.kernel.io.client.DSBClientFactoryImpl" name="DSBClientFactoryImpl"/>
 
@@ -140,5 +141,11 @@
   <!-- REST -->
   <binding client="REST.atomicDeploymentService" server="JBI-Management.atomicDeploymentService"/>
   <binding client="REST.configuration" server="ConfigurationServiceImpl.service"/>
+  
+  <!-- BPEL -->
+  <!-- NOT READY, problem with classloaders
+  <binding client="BPEL.atomicDeploymentService" server="JBI-Management.atomicDeploymentService"/>
+  <binding client="BPEL.configuration" server="ConfigurationServiceImpl.service"/>
+  -->
   
 </definition>

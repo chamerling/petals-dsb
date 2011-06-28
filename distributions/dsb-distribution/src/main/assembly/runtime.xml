@@ -27,6 +27,7 @@
 				<exclude>
 					org.petalslink.dsb:dsb-webapp
 				</exclude>
+				<exclude>org.petalslink.dsb:dsb-bundle-bpelgenerator</exclude>
 			</excludes>
 			<!-- force lib names, to avoid "artifact-version-date.jar" name for snapshot libraries -->
 			<outputFileNameMapping>${artifact.artifactId}-${artifact.baseVersion}.${artifact.extension}</outputFileNameMapping>
@@ -41,6 +42,17 @@
 			<outputFileNameMapping>dsb-webapp.war</outputFileNameMapping>
 			<outputDirectory>/webapps</outputDirectory>
 		</dependencySet>
+<!-- Not ready, need some work on classloader but strange result with fractal...
+		<dependencySet>
+			<includes>
+				<include>
+					org.petalslink.dsb:dsb-bundle-bpelgenerator
+				</include>
+			</includes>
+			<unpack>true</unpack>
+			<outputDirectory>/lib</outputDirectory>
+		</dependencySet>
+		-->
 	</dependencySets>
 
 	<fileSets>
