@@ -50,7 +50,7 @@ public class ConfigurationLoader {
         if (configuration == null || configuration.isDirectory()) {
             return result;
         }
-        
+
         File folder = configuration.getParentFile();
         Properties props = new Properties();
         try {
@@ -145,21 +145,20 @@ public class ConfigurationLoader {
                 .get(TOPOLLSERVICE)) : null;
         result.toPoll.setServiceName(serviceName);
 
-        result.replyTo = new ServicePollerInformation();
-        result.replyTo.setEndpointName(values.get(REPLYENDPOINT));
-
+        String replyEP = values.get(REPLYENDPOINT);
         itf = values.get(REPLYINTERFACE) != null ? QName.valueOf(values.get(REPLYINTERFACE)) : null;
-        result.replyTo.setInterfaceName(itf);
         operation = values.get(REPLYOPERATION) != null ? QName.valueOf(values.get(REPLYOPERATION))
                 : null;
-        result.replyTo.setOperation(operation);
         serviceName = values.get(REPLYSERVICE) != null ? QName.valueOf(values.get(REPLYSERVICE))
                 : null;
-        result.replyTo.setServiceName(serviceName);
 
-        // load the document. Its name is key.xml
-
+        if (itf != null || serviceName != null || replyEP != null) {
+            result.replyTo = new ServicePollerInformation();
+            result.replyTo.setEndpointName(replyEP);
+            result.replyTo.setInterfaceName(itf);
+            result.replyTo.setOperation(operation);
+            result.replyTo.setServiceName(serviceName);
+        }
         return result;
     }
-
 }
