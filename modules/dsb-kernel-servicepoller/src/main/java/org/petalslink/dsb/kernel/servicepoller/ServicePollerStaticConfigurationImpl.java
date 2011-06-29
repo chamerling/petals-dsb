@@ -63,10 +63,12 @@ public class ServicePollerStaticConfigurationImpl implements ServicePollerStatic
         if (configPath == null || !configPath.exists() || !configPath.isDirectory()) {
             return null;
         }
-        if (log.isInfoEnabled()) {
-            log.info("");
+        
+        File config = new File(configPath, CONFIG_FILE);
+        if (!config.exists()) {
+            return null;
         }
-        return ConfigurationLoader.load(new File(configPath, CONFIG_FILE));
+        return ConfigurationLoader.load(config);
     }
 
     /**
