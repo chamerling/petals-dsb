@@ -30,6 +30,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>dsb-annotations</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
 			<artifactId>petals-servicepoller2jbi</artifactId>
 			<version>${project.version}</version>
 		</dependency>
