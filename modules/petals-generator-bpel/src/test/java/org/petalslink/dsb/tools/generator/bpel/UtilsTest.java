@@ -40,6 +40,10 @@ public class UtilsTest extends TestCase {
 
     public void testGetFromEmptyFolder() throws Exception {
         URL url = UtilsTest.class.getResource("/empty");
+        System.out.println("URL of empty folder : " + url);
+        if (url == null) {
+            fail("Can not get the URL of empty folder");
+        }
         File folder = new File(url.toURI());
         File[] files = Utils.getBPELFiles(folder);
         assertNotNull(files);
