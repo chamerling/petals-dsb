@@ -74,15 +74,15 @@ public class BPELDeployerClientTest extends TestCase {
             result = client.deploy(bpel, null);
         } catch (DSBWebServiceException e) {
             fail(e.getMessage());
+        } finally {
+            server.stop();
         }
 
         assertEquals(1, called.intValue());
         assertEquals(1, match.intValue());
         assertEquals(2, assertions.intValue());
-
         assertTrue(result);
 
-        server.stop();
     }
 
     public void testSendWithResources() {
@@ -144,6 +144,8 @@ public class BPELDeployerClientTest extends TestCase {
             result = client.deploy(bpel, new File[] { resource1, resource2 });
         } catch (DSBWebServiceException e) {
             fail(e.getMessage());
+        } finally {
+            server.stop();
         }
 
         assertEquals(1, called.intValue());
@@ -152,6 +154,5 @@ public class BPELDeployerClientTest extends TestCase {
 
         assertTrue(result);
 
-        server.stop();
     }
 }
