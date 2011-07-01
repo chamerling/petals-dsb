@@ -110,6 +110,10 @@
 		<module>modules/dsb-kernel-bpelservice</module>
 		<module>modules/dsb-bundle-bpelgenerator</module>
 		
+		<!-- Monitoring -->
+		<module>modules/dsb-kernel-monitoringservice</module>
+		<module>modules/dsb-monitoring-api</module>
+		
 		<!-- Independant things, to be moved elsewhere -->
 		<module>modules/gms-core</module>
    		<module>modules/gms-prototype</module>
