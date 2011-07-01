@@ -13,6 +13,8 @@
 	<packaging>jar</packaging>
 
 	<name>dsb-monitoring</name>
+	
+	<description>This is an old and deprecated module which is used to store message in memory inside the DSB and just return messages when requested by web service clients.</description>
 
 	<scm>
 		<connection>scm:svn:https://svn.petalslink.com/svnroot/trunk/research/commons/dsb/modules/dsb-monitoring</connection>
