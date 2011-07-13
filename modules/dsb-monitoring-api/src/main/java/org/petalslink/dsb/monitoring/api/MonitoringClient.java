@@ -19,6 +19,6 @@ import org.petalslink.dsb.api.DSBException;
 public interface MonitoringClient {
 
     @WebMethod
-    void send(@WebParam(name = "reportlist") ReportList reportList) throws DSBException;
+    void send(@WebParam(name = "reportlist") ReportListBean reportList) throws DSBException;
 
 }

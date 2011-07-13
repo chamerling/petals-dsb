@@ -40,7 +40,13 @@
 			<artifactId>dsb-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+
+		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>dsb-jbi</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.petalslink.dsb</groupId>
 			<artifactId>dsb-monitoring-api</artifactId>

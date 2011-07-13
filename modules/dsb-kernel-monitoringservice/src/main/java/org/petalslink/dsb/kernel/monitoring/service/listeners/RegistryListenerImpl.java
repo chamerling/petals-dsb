@@ -15,8 +15,10 @@ import org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint;
 import org.ow2.petals.jbi.messaging.registry.RegistryListener;
 import org.ow2.petals.util.LoggingUtil;
 import org.petalslink.dsb.api.DSBException;
+import org.petalslink.dsb.jbi.Adapter;
 import org.petalslink.dsb.kernel.monitoring.service.ConfigurationService;
 import org.petalslink.dsb.monitoring.api.MonitoringAdminClient;
+import org.petalslink.dsb.monitoring.api.MonitoringClientFactory;
 
 /**
  * Notify the monitoring Bus that a new endpoint has been added in the registry.
@@ -36,6 +38,9 @@ public class RegistryListenerImpl implements RegistryListener {
 
     @Requires(name = "monitoringconfiguration", signature = ConfigurationService.class)
     private ConfigurationService configurationService;
+
+    @Requires(name = "monitoringclientfactory", signature = MonitoringClientFactory.class)
+    private MonitoringClientFactory factory;
 
     @Monolog(name = "logger")
     private Logger logger;
@@ -72,17 +77,18 @@ public class RegistryListenerImpl implements RegistryListener {
         }
 
         // let's say to the monitoring platform that there is something new...
+        org.petalslink.dsb.api.ServiceEndpoint serviceEndpoint = Adapter
+                .createServiceEndpoint(endpoint);
         if (this.log.isInfoEnabled()) {
             this.log.info("Notifying monitoring Bus that endpoint has been registered : "
-                    + endpoint);
+                    + serviceEndpoint);
         }
         MonitoringAdminClient client = getClient();
         if (client == null) {
             log.warning("Can not get any client to send message to monitoring layer");
             return;
         }
-        // /TODO translate
-        org.petalslink.dsb.api.ServiceEndpoint serviceEndpoint = new org.petalslink.dsb.api.ServiceEndpoint();
+
         try {
             client.createMonitoringEndpoint(serviceEndpoint);
         } catch (DSBException e) {
@@ -94,9 +100,7 @@ public class RegistryListenerImpl implements RegistryListener {
      * 
      */
     private MonitoringAdminClient getClient() {
-        // TODO
-        System.out.println("TODO");
-        return null;
+        return factory.getMonitoringAdminClient(configurationService.getAdminURL());
     }
 
     /**
@@ -111,7 +115,25 @@ public class RegistryListenerImpl implements RegistryListener {
             }
             return;
         }
-        // TODO = Unregister!
+
+        org.petalslink.dsb.api.ServiceEndpoint serviceEndpoint = Adapter
+                .createServiceEndpoint(endpoint);
+        if (this.log.isInfoEnabled()) {
+            this.log.info("Notifying monitoring Bus that endpoint has been unregistered : "
+                    + serviceEndpoint);
+        }
+
+        MonitoringAdminClient client = getClient();
+        if (client == null) {
+            log.warning("Can not get any client to send message to monitoring layer");
+            return;
+        }
+
+        try {
+            client.deleteMonitoringEndpoint(serviceEndpoint);
+        } catch (DSBException e) {
+            this.log.warning("Can not delete monitoring endpoint", e);
+        }
     }
 
     // private class AddTask extends Thread {

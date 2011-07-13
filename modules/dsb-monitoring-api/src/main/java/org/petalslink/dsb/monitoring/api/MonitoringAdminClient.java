@@ -30,4 +30,15 @@ public interface MonitoringAdminClient {
             @WebParam(name = "serviceEndpoint") ServiceEndpoint serviceEndpoint)
             throws DSBException;
 
+    /**
+     * Delete a monitoring endpoint based on the service endpoint used to create
+     * it...
+     * 
+     * @param serviceEndpoint
+     * @throws DSBException
+     */
+    void deleteMonitoringEndpoint(
+            @WebParam(name = "serviceEndpoint") ServiceEndpoint serviceEndpoint)
+            throws DSBException;
+
 }
