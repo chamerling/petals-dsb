@@ -113,6 +113,8 @@
 		<!-- Monitoring -->
 		<module>modules/dsb-kernel-monitoringservice</module>
 		<module>modules/dsb-monitoring-api</module>
+		<module>modules/dsb-monitoring-standaloneserver</module>
+		<module>modules/dsb-eaiserbsm-connector</module>
 		
 		<!-- Independant things, to be moved elsewhere -->
 		<module>modules/gms-core</module>
