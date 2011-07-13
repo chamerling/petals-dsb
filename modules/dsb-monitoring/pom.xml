@@ -12,7 +12,7 @@
 	<artifactId>dsb-monitoring</artifactId>
 	<packaging>jar</packaging>
 
-	<name>dsb-monitoring</name>
+	<name>dsb-monitoring :: @DEPRECATED</name>
 	
 	<description>This is an old and deprecated module which is used to store message in memory inside the DSB and just return messages when requested by web service clients.</description>
 
