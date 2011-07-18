@@ -32,10 +32,6 @@ import org.petalslink.dsb.monitoring.api.MonitoringClientFactory;
 @Provides(interfaces = { @Interface(name = "service", signature = RegistryListener.class) })
 public class RegistryListenerImpl implements RegistryListener {
 
-    private static final String ENDPOINT_SUFFIX = "_WSDMMonitoring";
-
-    // private static Admin_Service adminService;
-
     @Requires(name = "monitoringconfiguration", signature = ConfigurationService.class)
     private ConfigurationService configurationService;
 
@@ -135,79 +131,4 @@ public class RegistryListenerImpl implements RegistryListener {
             this.log.warning("Can not delete monitoring endpoint", e);
         }
     }
-
-    // private class AddTask extends Thread {
-    //
-    // private final ServiceEndpoint endpoint;
-    //
-    // /**
-    // *
-    // */
-    // public AddTask(ServiceEndpoint serviceEndpoint) {
-    // this.endpoint = serviceEndpoint;
-    // }
-    //
-    // @Override
-    // public void run() {
-    // URL wsdl = null;
-    // try {
-    // wsdl = new
-    // URL(RegistryListenerImpl.this.configurationService.getAdminURL()
-    // + "?wsdl");
-    // } catch (MalformedURLException e) {
-    // RegistryListenerImpl.this.log.warning(e.getMessage());
-    // }
-    //
-    // MonitoringAdminClient client = getClient(wsdl);
-    // if (client != null) {
-    // Admin port = client.getAdminSOAP();
-    // javax.xml.namespace.QName _createMonitoringEndpoint_wsdmServiceName =
-    // this.endpoint
-    // .getServiceName();
-    // java.lang.String _createMonitoringEndpoint_wsdmProviderEndpointName =
-    // this.endpoint
-    // .getEndpointName() + ENDPOINT_SUFFIX;
-    // boolean _createMonitoringEndpoint_exposeInSoap = true;
-    // java.lang.String _createMonitoringEndpoint__return =
-    // port.createMonitoringEndpoint(
-    // _createMonitoringEndpoint_wsdmServiceName,
-    // _createMonitoringEndpoint_wsdmProviderEndpointName,
-    // _createMonitoringEndpoint_exposeInSoap);
-    // RegistryListenerImpl.this.log.info("createMonitoringEndpoint.result="
-    // + _createMonitoringEndpoint__return);
-    //
-    // } else {
-    // RegistryListenerImpl.this.log.error("Can not get admin service client...");
-    // }
-    // }
-    // }
-    //
-    // private static synchronized Admin_Service getClient(URL wsdlURL) {
-    // if (adminService == null) {
-    // try {
-    // adminService = new Admin_Service(wsdlURL, new
-    // QName("http://ow2.petals.org/Admin/",
-    // "Admin"));
-    // } catch (Exception e) {
-    // adminService = null;
-    // }
-    // }
-    // return adminService;
-    // }
-    //
-    // public static void writeDocument(final Document document, final
-    // OutputStream outputStream)
-    // throws Exception {
-    //
-    // if ((document != null) && (outputStream != null)) {
-    // Transformer transformer =
-    // TransformerFactory.newInstance().newTransformer();
-    //
-    // transformer.transform(new DOMSource(document), new
-    // StreamResult(outputStream));
-    // } else {
-    // throw new Exception("Can not write document to output stream");
-    // }
-    // }
-
 }

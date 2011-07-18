@@ -160,9 +160,6 @@ public class MonitoringModule implements SenderModule, ReceiverModule {
             throw new DSBException("Can nto get any client to send report to monitoring layer");
         }
         client.send(reports);
-        // ReportTaskSender reportThread = new ReportTaskSender(reports,
-        // address, this.log);
-        // this.executorService.submit(reportThread);
     }
 
     /**
