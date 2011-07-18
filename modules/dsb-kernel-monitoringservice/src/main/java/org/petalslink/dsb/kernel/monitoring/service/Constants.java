@@ -9,7 +9,7 @@ package org.petalslink.dsb.kernel.monitoring.service;
  */
 public interface Constants {
 
-    static String CONFIG_FILE = "wsdm.cfg";
+    static String CONFIG_FILE = "monitoring.cfg";
 
     static String ACTIVE_PARAM = "monitoring.active";
 
