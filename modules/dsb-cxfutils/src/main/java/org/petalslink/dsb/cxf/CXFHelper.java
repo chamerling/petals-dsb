@@ -35,6 +35,24 @@ public class CXFHelper {
         return clazz.cast(client);
     }
 
+    /**
+     * Get a client instance for a given URL. The URL is a final one and is not
+     * built from the JAXWS annotations like in
+     * {@link #getClient(String, Class)}
+     * 
+     * @param <T>
+     * @param fullURL
+     * @param clazz
+     * @return
+     */
+    public static <T> T getClientFromFinalURL(String fullURL, Class<T> clazz) {
+        JaxWsProxyFactoryBean factory = new JaxWsProxyFactoryBean();
+        factory.setAddress(fullURL);
+        factory.setServiceClass(clazz);
+        Object client = factory.create();
+        return clazz.cast(client);
+    }
+
     public static <T> Server getService(String baseURL, Class<T> clazz, Object bean) {
         final JaxWsServerFactoryBean sf = new JaxWsServerFactoryBean();
         sf.setDataBinding(new JAXBDataBinding());
