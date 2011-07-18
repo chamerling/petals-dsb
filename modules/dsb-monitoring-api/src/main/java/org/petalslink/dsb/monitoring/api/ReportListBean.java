@@ -3,6 +3,7 @@
  */
 package org.petalslink.dsb.monitoring.api;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -29,6 +30,9 @@ public class ReportListBean {
      * @return the reports
      */
     public List<ReportBean> getReports() {
+        if (reports == null) {
+            reports = new ArrayList<ReportBean>(4);
+        }
         return reports;
     }
 
