@@ -212,6 +212,7 @@ public class MonitoringModule implements SenderModule, ReceiverModule {
 
                     // create date client in
                     ReportBean report1 = new ReportBean();
+                    report1.setType("t1");
                     this.setSOACommonInformation(exchange, report1);
                     report1.setDate(TimeStamperHandler.getInstance().getTimeStamp(exchange)
                             .getDateClientIn());
@@ -221,6 +222,7 @@ public class MonitoringModule implements SenderModule, ReceiverModule {
 
                     // create date provider in
                     ReportBean report2 = new ReportBean();
+                    report1.setType("t2");
                     this.setSOACommonInformation(exchange, report2);
                     report2.setDate(TimeStamperHandler.getInstance().getTimeStamp(exchange)
                             .getDateProviderIn());
@@ -247,6 +249,7 @@ public class MonitoringModule implements SenderModule, ReceiverModule {
 
                     // create date provider out
                     ReportBean report3 = new ReportBean();
+                    report1.setType("t3");
                     this.setSOACommonInformation(exchange, report3);
                     report3.setDate(TimeStamperHandler.getInstance().getTimeStamp(exchange)
                             .getDateProviderOut());
@@ -256,6 +259,7 @@ public class MonitoringModule implements SenderModule, ReceiverModule {
 
                     // create date client out
                     ReportBean report4 = new ReportBean();
+                    report1.setType("t4");
                     this.setSOACommonInformation(exchange, report4);
                     report4.setDate(TimeStamperHandler.getInstance().getTimeStamp(exchange)
                             .getDateClientOut());
@@ -272,6 +276,7 @@ public class MonitoringModule implements SenderModule, ReceiverModule {
 
                     // create date client in
                     ReportBean report1 = new ReportBean();
+                    report1.setType("t1");
                     this.setSOACommonInformation(exchange, report1);
                     report1.setDate(TimeStamperHandler.getInstance().getTimeStamp(exchange)
                             .getDateClientIn());
@@ -280,6 +285,7 @@ public class MonitoringModule implements SenderModule, ReceiverModule {
 
                     // create date provider in
                     ReportBean report2 = new ReportBean();
+                    report1.setType("t2");
                     this.setSOACommonInformation(exchange, report2);
                     report2.setDate(TimeStamperHandler.getInstance().getTimeStamp(exchange)
                             .getDateProviderIn());
@@ -288,6 +294,7 @@ public class MonitoringModule implements SenderModule, ReceiverModule {
 
                     // create date provider out
                     ReportBean report3 = new ReportBean();
+                    report1.setType("t3");
                     this.setSOACommonInformation(exchange, report3);
                     report3.setDate(TimeStamperHandler.getInstance().getTimeStamp(exchange)
                             .getDateProviderOut());
@@ -322,6 +329,7 @@ public class MonitoringModule implements SenderModule, ReceiverModule {
 
                     // create date client out
                     ReportBean report4 = new ReportBean();
+                    report1.setType("t4");
                     this.setSOACommonInformation(exchange, report4);
                     report4.setDate(TimeStamperHandler.getInstance().getTimeStamp(exchange)
                             .getDateProviderOut());
