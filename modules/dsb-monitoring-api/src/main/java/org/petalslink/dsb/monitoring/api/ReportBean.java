@@ -47,6 +47,12 @@ public class ReportBean {
 
     @XmlElement
     private Date date;
+    
+    /**
+     * The report type ie t1, t2, t3, t4... Not an enum to be extensible...
+     */
+    @XmlElement
+    private String type;
 
     /**
      * 
