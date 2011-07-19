@@ -38,6 +38,34 @@
 			<artifactId>dsb-monitoring-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
 	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>net.sf.alchim</groupId>
+				<artifactId>spoon-maven-plugin</artifactId>
+				<version>0.7.1</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>recompile</goal>
+						</goals>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>log4j</groupId>
+						<artifactId>log4j</artifactId>
+						<version>1.2.9</version>
+					</dependency>
+					<dependency>
+						<groupId>org.objectweb.monolog</groupId>
+						<artifactId>monolog</artifactId>
+						<version>1.8</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+		</plugins>
+	</build>
 </project>
