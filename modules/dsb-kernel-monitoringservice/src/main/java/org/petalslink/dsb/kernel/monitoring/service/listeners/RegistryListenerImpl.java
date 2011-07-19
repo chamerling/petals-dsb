@@ -11,11 +11,10 @@ import org.objectweb.fractal.fraclet.annotation.annotations.Provides;
 import org.objectweb.fractal.fraclet.annotation.annotations.Requires;
 import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
 import org.objectweb.util.monolog.api.Logger;
-import org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint;
-import org.ow2.petals.jbi.messaging.registry.RegistryListener;
 import org.ow2.petals.util.LoggingUtil;
 import org.petalslink.dsb.api.DSBException;
-import org.petalslink.dsb.jbi.Adapter;
+import org.petalslink.dsb.api.ServiceEndpoint;
+import org.petalslink.dsb.kernel.api.messaging.RegistryListener;
 import org.petalslink.dsb.kernel.monitoring.service.ConfigurationService;
 import org.petalslink.dsb.monitoring.api.MonitoringAdminClient;
 import org.petalslink.dsb.monitoring.api.MonitoringClientFactory;
@@ -62,7 +61,7 @@ public class RegistryListenerImpl implements RegistryListener {
     /**
      * {@inheritDoc}
      */
-    public void onRegister(ServiceEndpoint endpoint) {
+    public void onRegister(ServiceEndpoint endpoint) throws DSBException {
         if (!configurationService.isActive()) {
             if (this.log.isDebugEnabled()) {
                 this.log.debug("Monitoring is not active, do not register endpoint");
@@ -73,11 +72,9 @@ public class RegistryListenerImpl implements RegistryListener {
         }
 
         // let's say to the monitoring platform that there is something new...
-        org.petalslink.dsb.api.ServiceEndpoint serviceEndpoint = Adapter
-                .createServiceEndpoint(endpoint);
         if (this.log.isInfoEnabled()) {
             this.log.info("Notifying monitoring Bus that endpoint has been registered : "
-                    + serviceEndpoint);
+                    + endpoint);
         }
         MonitoringAdminClient client = getClient();
         if (client == null) {
@@ -86,7 +83,7 @@ public class RegistryListenerImpl implements RegistryListener {
         }
 
         try {
-            client.createMonitoringEndpoint(serviceEndpoint);
+            client.createMonitoringEndpoint(endpoint);
         } catch (DSBException e) {
             this.log.warning("Can not add monitoring endpoint", e);
         }
@@ -102,7 +99,7 @@ public class RegistryListenerImpl implements RegistryListener {
     /**
      * {@inheritDoc}
      */
-    public void onUnregister(ServiceEndpoint endpoint) {
+    public void onUnregister(ServiceEndpoint endpoint) throws DSBException {
         if (!configurationService.isActive()) {
             if (this.log.isDebugEnabled()) {
                 this.log.debug("Monitoring is not active, do not unregister endpoint");
@@ -112,11 +109,9 @@ public class RegistryListenerImpl implements RegistryListener {
             return;
         }
 
-        org.petalslink.dsb.api.ServiceEndpoint serviceEndpoint = Adapter
-                .createServiceEndpoint(endpoint);
         if (this.log.isInfoEnabled()) {
             this.log.info("Notifying monitoring Bus that endpoint has been unregistered : "
-                    + serviceEndpoint);
+                    + endpoint);
         }
 
         MonitoringAdminClient client = getClient();
@@ -126,9 +121,16 @@ public class RegistryListenerImpl implements RegistryListener {
         }
 
         try {
-            client.deleteMonitoringEndpoint(serviceEndpoint);
+            client.deleteMonitoringEndpoint(endpoint);
         } catch (DSBException e) {
             this.log.warning("Can not delete monitoring endpoint", e);
         }
+    }
+    
+    /* (non-Javadoc)
+     * @see org.petalslink.dsb.kernel.api.messaging.RegistryListener#getName()
+     */
+    public String getName() {
+        return "MonitoringRegistryListener";
     }
 }
