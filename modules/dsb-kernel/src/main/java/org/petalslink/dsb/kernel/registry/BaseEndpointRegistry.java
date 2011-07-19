@@ -41,6 +41,8 @@ import org.ow2.petals.registry.api.Query;
 import org.ow2.petals.registry.api.exception.RegistryException;
 import org.ow2.petals.registry.api.util.XMLUtil;
 import org.ow2.petals.registry.client.api.RegistryClient;
+import org.petalslink.dsb.api.DSBException;
+import org.petalslink.dsb.jbi.Adapter;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentFragment;
 
@@ -93,9 +95,26 @@ public abstract class BaseEndpointRegistry extends AbstractEndpointRegistry {
 
         this.registerEndpoint(endpoint);
 
-        if (this.getListeners() != null) {
-            for (RegistryListener listener : this.getListeners()) {
-                listener.onRegister(endpoint);
+        // DSB FIX. The listeners can be used by configuration but will be adapted to the DSB one
+        // cf http://jira.petalslink.com/browse/COMMONS-52
+        // @deprecated in the DSB
+        //if (this.getListeners() != null) {
+        //    for (RegistryListener listener : this.getListeners()) {
+        //        listener.onRegister(endpoint);
+        //    }
+        //}
+        
+        if (this.getList() != null) {
+            for (org.petalslink.dsb.kernel.api.messaging.RegistryListener listener : this.getList()) {
+                try {
+                    if (this.log.isDebugEnabled()) {
+                        this.log.debug("Calling registry listener '" + listener.getName()
+                                + "' on new endpoint");
+                    }
+                    listener.onRegister(Adapter.createServiceEndpoint(endpoint));
+                } catch (DSBException e) {
+                    log.warning("Got an error while calling registry listener", e);
+                }
             }
         }
         return endpoint;
@@ -179,7 +198,23 @@ public abstract class BaseEndpointRegistry extends AbstractEndpointRegistry {
                     "Can not delete endpoint under " + key, e);
         }
 
-        List<RegistryListener> listeners = this.getListeners();
+        // DSB FIX
+        // see http://jira.petalslink.com/browse/COMMONS-52
+        // List<RegistryListener> listeners = this.getListeners();
+        // if (listeners != null) {
+        // final JBIServiceEndpointImpl endpoint = new JBIServiceEndpointImpl();
+        // endpoint.setServiceName(ep.getService());
+        // endpoint.setEndpointName(ep.getName());
+        // List<QName> interfaces = new ArrayList<QName>(1);
+        // interfaces.add(ep.getInterface());
+        // endpoint.setInterfacesName(interfaces);
+        // endpoint.setStringDescription(ep.getDescription());
+        // for (RegistryListener listener : this.getListeners()) {
+        // listener.onUnregister(endpoint);
+        // }
+        // }
+        
+        List<org.petalslink.dsb.kernel.api.messaging.RegistryListener> listeners = getList();
         if (listeners != null) {
             final JBIServiceEndpointImpl endpoint = new JBIServiceEndpointImpl();
             endpoint.setServiceName(ep.getService());
@@ -188,8 +223,16 @@ public abstract class BaseEndpointRegistry extends AbstractEndpointRegistry {
             interfaces.add(ep.getInterface());
             endpoint.setInterfacesName(interfaces);
             endpoint.setStringDescription(ep.getDescription());
-            for (RegistryListener listener : this.getListeners()) {
-                listener.onUnregister(endpoint);
+            for (org.petalslink.dsb.kernel.api.messaging.RegistryListener listener : listeners) {
+                try {
+                    if (this.log.isDebugEnabled()) {
+                        this.log.debug("Calling registry listener '" + listener.getName()
+                                + "' on endpoint unregistration");
+                    }
+                    listener.onUnregister(Adapter.createServiceEndpoint(endpoint));
+                } catch (DSBException e) {
+                    log.warning("Got an error while calling registry listener", e);
+                }
             }
         }
     }

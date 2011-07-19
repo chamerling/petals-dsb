@@ -29,12 +29,13 @@ import org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint;
 import org.ow2.petals.jbi.messaging.registry.EndpointRegistry;
 import org.ow2.petals.jbi.messaging.registry.RegistryException;
 import org.ow2.petals.util.LoggingUtil;
+import org.petalslink.dsb.kernel.api.messaging.RegistryListenerManager;
 
 /**
  * @author chamerling - eBM WebSourcing
  *
  */
-public abstract class AbstractEndpointRegistry implements EndpointRegistry {
+public abstract class AbstractEndpointRegistry implements EndpointRegistry, RegistryListenerManager {
 
     protected LoggingUtil log;
 

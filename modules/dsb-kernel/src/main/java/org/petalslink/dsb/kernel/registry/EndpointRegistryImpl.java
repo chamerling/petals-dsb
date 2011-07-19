@@ -46,7 +46,11 @@ import org.ow2.petals.registry.api.exception.RegistryException;
 import org.ow2.petals.registry.client.RegistryClientFactory;
 import org.ow2.petals.registry.core.factory.RegistryFactory;
 import org.ow2.petals.util.LoggingUtil;
+import org.petalslink.dsb.api.DSBException;
+import org.petalslink.dsb.api.ServiceEndpoint;
+import org.petalslink.dsb.jbi.Adapter;
 import org.petalslink.dsb.kernel.api.PetalsService;
+import org.petalslink.dsb.kernel.api.messaging.RegistryListenerManager;
 
 import static org.ow2.petals.kernel.configuration.ConfigurationService.MASTER;
 import static org.ow2.petals.kernel.configuration.ConfigurationService.PEER;
@@ -64,14 +68,14 @@ import static org.ow2.petals.kernel.configuration.ConfigurationService.STANDALON
  * 
  */
 public class EndpointRegistryImpl extends BaseEndpointRegistry implements EndpointRegistry,
-        PetalsService {
+        PetalsService, RegistryListenerManager {
 
     // required services
     protected ConfigurationService configurationService;
 
     protected org.ow2.petals.communication.topology.TopologyService localTopologyService;
 
-    protected Hashtable<String, Object> listeners = new Hashtable<String, Object>();
+    protected List<RegistryListener> registryListeners = new ArrayList<RegistryListener>();
 
     // local things
     protected ContainerConfiguration localContainerConfiguration;
@@ -81,12 +85,16 @@ public class EndpointRegistryImpl extends BaseEndpointRegistry implements Endpoi
     private Configuration localConfig;
 
     private boolean registeredOnMaster = false;
+    
+    // a new manager
+    protected RegistryListenerManager listenerManager;
 
     /**
      * @param log
      */
     public EndpointRegistryImpl(LoggingUtil log) {
         this.log = log;
+        this.listenerManager = new RegistryListenerManagerImpl();
     }
 
     /**
@@ -369,20 +377,25 @@ public class EndpointRegistryImpl extends BaseEndpointRegistry implements Endpoi
 
     /**
      * {@inheritDoc}
+     * @deprecated use {@link #getList()}
      */
     public List<RegistryListener> getListeners() {
-        List<RegistryListener> result = null;
-        if (this.listeners != null) {
-            result = new ArrayList<RegistryListener>();
-            for (Object o : this.listeners.values()) {
-                if (o instanceof RegistryListener) {
-                    result.add((RegistryListener) o);
-                }
-            }
-        }
-        return result;
+        return registryListeners;
     }
-
+    
+    /* (non-Javadoc)
+     * @see org.petalslink.dsb.kernel.registry.RegistryListenerManager#addListener(org.ow2.petals.jbi.messaging.registry.RegistryListener)
+     */
+    public void addListener(RegistryListener listener) throws DSBException {
+        if (registryListeners == null) {
+            this.registryListeners = new ArrayList<RegistryListener>();
+        }
+        if (listener == null) {
+            throw new DSBException("The listener can not be null");
+        }
+        this.registryListeners.add(listener);
+    }
+    
     class TopologyExceptionHandler implements Thread.UncaughtExceptionHandler {
 
         public void uncaughtException(Thread t, Throwable e) {
@@ -470,7 +483,103 @@ public class EndpointRegistryImpl extends BaseEndpointRegistry implements Endpoi
         this.localTopologyService = topologyService;
     }
 
+    /**
+     * Set the listeners from configuration
+     * 
+     * @param listeners
+     */
     public void setListeners(Hashtable<String, Object> listeners) {
-        this.listeners = listeners;
+        if (listeners != null) {
+            
+            // oldies
+            for (Object o : listeners.values()) {
+                if (o != null && o instanceof RegistryListener) {
+                    try {
+                        this.addListener((RegistryListener) o);
+                    } catch (DSBException e) {
+                    }
+                }
+            }
+            
+            // new listeners with state and more...
+            // create a DSB listener instance from the petals ESB one
+            for (final String key : listeners.keySet()) {
+                final Object o = listeners.get(key);
+                if (o != null && o instanceof RegistryListener) {
+                    final RegistryListener registryListener = (RegistryListener)o;
+                    try {
+                        this.add(new org.petalslink.dsb.kernel.api.messaging.RegistryListener() {
+                            public void onUnregister(ServiceEndpoint endpoint) throws DSBException {
+                                log.call("Calling onUnregister in registry listener '" + getName()
+                                        + "' for " + endpoint.toString());
+                                registryListener.onUnregister(Adapter.createServiceEndpoint(endpoint));
+                            }
+
+                            public void onRegister(ServiceEndpoint endpoint) throws DSBException {
+                                log.call("Calling onRegister in registry listener '" + getName()
+                                        + "' for " + endpoint.toString());
+                                registryListener.onUnregister(Adapter.createServiceEndpoint(endpoint));
+                            }
+
+                            public String getName() {
+                                return key;
+                            }
+                        });
+                    } catch (DSBException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
+    
+    // The listener manager stuff...
+
+    /* (non-Javadoc)
+     * @see org.petalslink.dsb.kernel.api.messaging.RegistryListenerManager#getList()
+     */
+    public List<org.petalslink.dsb.kernel.api.messaging.RegistryListener> getList() {
+        return this.listenerManager.getList();
+    }
+
+    /* (non-Javadoc)
+     * @see org.petalslink.dsb.kernel.api.messaging.RegistryListenerManager#add(org.petalslink.dsb.kernel.api.messaging.RegistryListener)
+     */
+    public void add(org.petalslink.dsb.kernel.api.messaging.RegistryListener listener)
+            throws DSBException {
+        if (log.isDebugEnabled()) {
+            this.log.debug("Adding a registry listener " + listener.getName());
+        }
+        this.listenerManager.add(listener);
+    }
+
+    /* (non-Javadoc)
+     * @see org.petalslink.dsb.kernel.api.messaging.RegistryListenerManager#get(java.lang.String)
+     */
+    public org.petalslink.dsb.kernel.api.messaging.RegistryListener get(String name)
+            throws DSBException {
+        return this.listenerManager.get(name);
+    }
+
+    /* (non-Javadoc)
+     * @see org.petalslink.dsb.kernel.api.messaging.RegistryListenerManager#remove(java.lang.String)
+     */
+    public org.petalslink.dsb.kernel.api.messaging.RegistryListener remove(String name)
+            throws DSBException {
+        return this.listenerManager.remove(name);
+    }
+
+    /* (non-Javadoc)
+     * @see org.petalslink.dsb.kernel.api.messaging.RegistryListenerManager#setState(java.lang.String, boolean)
+     */
+    public void setState(String name, boolean onoff) {
+        this.listenerManager.setState(name, onoff);        
+    }
+
+    /* (non-Javadoc)
+     * @see org.petalslink.dsb.kernel.api.messaging.RegistryListenerManager#getState(java.lang.String)
+     */
+    public boolean getState(String name) {
+        return this.listenerManager.getState(name);
     }
 }
