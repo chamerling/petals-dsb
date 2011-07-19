@@ -28,11 +28,7 @@ public class CXFHelper {
             address = address + "/";
         }
         address = address + JAXWSHelper.getWebServiceName(clazz);
-        JaxWsProxyFactoryBean factory = new JaxWsProxyFactoryBean();
-        factory.setAddress(address);
-        factory.setServiceClass(clazz);
-        Object client = factory.create();
-        return clazz.cast(client);
+        return getClientFromFinalURL(address, clazz);
     }
 
     /**
@@ -54,9 +50,6 @@ public class CXFHelper {
     }
 
     public static <T> Server getService(String baseURL, Class<T> clazz, Object bean) {
-        final JaxWsServerFactoryBean sf = new JaxWsServerFactoryBean();
-        sf.setDataBinding(new JAXBDataBinding());
-        sf.setServiceBean(bean);
         Class<?> wsClass = JAXWSHelper.getWebServiceClass(clazz);
         String serviceName = JAXWSHelper.getWebServiceName(wsClass);
         if (serviceName == null) {
@@ -67,8 +60,16 @@ public class CXFHelper {
             address = address + "/";
         }
         address = address + serviceName;
+        return getServiceFromFinalURL(address, clazz, bean);
+    }
+        
+    public static <T> Server getServiceFromFinalURL(String finalURL, Class<T> clazz, Object bean) {
+        final JaxWsServerFactoryBean sf = new JaxWsServerFactoryBean();
+        sf.setDataBinding(new JAXBDataBinding());
+        sf.setServiceBean(bean);
+        Class<?> wsClass = JAXWSHelper.getWebServiceClass(clazz);
 
-        sf.setAddress(address);
+        sf.setAddress(finalURL);
         sf.setServiceClass(wsClass);
 
         return new Server() {
@@ -83,4 +84,5 @@ public class CXFHelper {
             }
         };
     }
+
 }
