@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jxb:bindings version="1.0" xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+	jxb:extensionBindingPrefixes="xjc">
+
+	<!-- CAUTION : generateIsSetMethod set to true is mandatory for easybox
+		! -->
+	<jxb:globalBindings generateElementClass="false"
+		generateIsSetMethod="true">
+		<!-- <xjc:superClass name="com.ebmwebsourcing.easybox.impl.AbstractJaxbModelObject" />-->
+	</jxb:globalBindings>
+
+	<jxb:bindings schemaLocation="esrawreport10.xsd" node="/xs:schema">
+		<jxb:schemaBindings>
+			<jxb:package name="easybox.petalslink.com.esrawreport._1" />
+			<jxb:nameXmlTransform>
+				<jxb:elementName prefix="EJaxb" />
+				<jxb:typeName prefix="EJaxb" />
+			</jxb:nameXmlTransform>
+		</jxb:schemaBindings>
+	</jxb:bindings>
+
+</jxb:bindings>

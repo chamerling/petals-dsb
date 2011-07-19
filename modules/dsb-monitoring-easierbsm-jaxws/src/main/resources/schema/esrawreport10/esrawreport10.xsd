@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2011 EBM Websourcing.
+  All rights reserved. This program and the accompanying materials
+  are made available under the terms of the GNU Lesser Public License v2.1
+  which accompanies this distribution, and is available at
+  http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+  
+  Contributors:
+      EBM Websourcing - initial API and implementation
+-->
+<schema targetNamespace="http://com.petalslink/esrawreport/1.0"
+	elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:tns="http://com.petalslink/esrawreport/1.0">
+
+	<complexType name="ReportType">
+		<sequence>
+			<element name="exchangeId" type="string"></element>
+			<element name="timeStamp" type="tns:reportTimeStampType" />
+			<element name="dateInGMT" type="dateTime"></element>
+			<element name="consumerEndpointAddress" type="string"></element>
+			<element name="serviceQName" type="QName"></element>
+			<element name="operationName" type="string"></element>
+			<element name="interfaceQName" type="QName"></element>
+			<element name="providerEndpointAddress" type="string"></element>
+			<element name="endpointName" type="string"></element>
+			<element name="contentLength" type="long"></element>
+			<element name="doesThisResponseIsAnException" type="boolean">
+			</element>
+			<any></any>
+		</sequence>
+	</complexType>
+
+
+	<simpleType name="reportTimeStampType">
+		<restriction base="string">
+			<enumeration value="t1" />
+			<enumeration value="t2" />
+			<enumeration value="t3" />
+			<enumeration value="t4" />
+		</restriction>
+	</simpleType>
+
+	<element name="report" type="tns:ReportType"></element>
+
+	<complexType name="ReportListType">
+		<sequence>
+			<element ref="tns:report" minOccurs="1" maxOccurs="unbounded"></element>
+		</sequence>
+	</complexType>
+
+	<element name="reportList" type="tns:ReportListType"></element>
+
+	<!-- <complexType name="RawReportType"> -->
+	<!-- <sequence> -->
+	<!-- <element name="exchangeId" type="string"></element> -->
+	<!-- <element name="requestIn" type="tns:ReportType"></element> -->
+	<!-- <element name="requestOut" type="tns:ReportType"></element> -->
+	<!-- <element name="responseIn" type="tns:ReportType"></element> -->
+	<!-- <element name="responseOut" type="tns:ReportType"></element> -->
+	<!-- </sequence> -->
+	<!-- </complexType> -->
+<!---->
+	<!-- <element name="rawReport" type="tns:RawReportType"></element> -->
+
+</schema>

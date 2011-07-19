@@ -1,0 +1,4 @@
+REWRITE_SYSTEM "http://com.petalslink.easyesb/exchange/1.0" "classpath:schema/exchange10/exchange10.xsd"
+PUBLIC "http://com.petalslink.easyesb/exchange/1.0" "classpath:schema/exchange10/exchange10.xsd"
+
+

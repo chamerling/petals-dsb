@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2011 EBM Websourcing.
+  All rights reserved. This program and the accompanying materials
+  are made available under the terms of the GNU Lesser Public License v2.1
+  which accompanies this distribution, and is available at
+  http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+  
+  Contributors:
+      EBM Websourcing - initial API and implementation
+-->
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:tns="http://com.petalslink.easyesb/service/wsdmadmin/1.0" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="Admin"
+	xmlns:soa="http://com.petalslink.easyesb/soa/model/datatype/1.0"
+	xmlns:data="http://com.petalslink.easyesb/data/wsdmadmin/1.0"
+	targetNamespace="http://com.petalslink.easyesb/service/wsdmadmin/1.0">
+	<wsdl:types>
+		<xsd:schema targetNamespace="http://com.petalslink.easyesb/data/wsdmadmin/1.0"
+			xmlns:tns="http://com.petalslink.easyesb/data/wsdmadmin/1.0">
+
+
+
+			<xsd:element name="adminFault">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="message" type="xsd:string"
+							minOccurs="0" maxOccurs="1"></xsd:element>
+						<xsd:element name="stacktrace" type="xsd:string"
+							minOccurs="0" maxOccurs="1"></xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+
+
+			<!-- Add WSDM administration type -->
+			<xsd:element name="createMonitoringEndpoint">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="wsdmServiceName" type="xsd:QName"></xsd:element>
+						<xsd:element name="wsdmProviderEndpointName" type="xsd:string" />
+						<xsd:element name="exposeInSoap" type="xsd:boolean" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="createMonitoringEndpointResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="wsdmEndpointName" type="xsd:string"></xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="getAllMonitoringEndpoints">
+				<xsd:complexType>
+					<xsd:sequence>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="getAllMonitoringEndpointsResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="endpoint" type="tns:MonitoringEndpointType"
+							minOccurs="0" maxOccurs="unbounded"></xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:complexType name="MonitoringEndpointType">
+				<xsd:sequence>
+					<xsd:element name="name" type="xsd:QName"></xsd:element>
+					<xsd:element name="address" type="xsd:string"></xsd:element>
+					<xsd:element name="operations" type="tns:OperationListType"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="OperationListType">
+				<xsd:sequence>
+					<xsd:element name="operationName" type="xsd:string"
+						minOccurs="0" maxOccurs="unbounded"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+		</xsd:schema>
+	</wsdl:types>
+
+	<wsdl:message name="adminExceptionMsg">
+		<wsdl:part name="parameters" element="data:adminFault"></wsdl:part>
+	</wsdl:message>
+
+
+	<!-- Add WSDM messages -->
+	<wsdl:message name="createMonitoringEndpointRequest">
+		<wsdl:part name="parameters" element="data:createMonitoringEndpoint"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="createMonitoringEndpointResponse">
+		<wsdl:part name="parameters" element="data:createMonitoringEndpointResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getAllMonitoringEndpointsRequest">
+		<wsdl:part name="parameters" element="data:getAllMonitoringEndpoints"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getAllMonitoringEndpointsResponse">
+		<wsdl:part name="parameters" element="data:getAllMonitoringEndpointsResponse"></wsdl:part>
+	</wsdl:message>
+
+	<wsdl:portType name="WSDMAdminItf">
+		<!-- Add WSDM ooperation -->
+		<wsdl:operation name="createMonitoringEndpoint">
+			<wsdl:input message="tns:createMonitoringEndpointRequest"></wsdl:input>
+			<wsdl:output message="tns:createMonitoringEndpointResponse"></wsdl:output>
+			<wsdl:fault name="fault" message="tns:adminExceptionMsg"></wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getAllMonitoringEndpoints">
+			<wsdl:input message="tns:getAllMonitoringEndpointsRequest"></wsdl:input>
+			<wsdl:output message="tns:getAllMonitoringEndpointsResponse"></wsdl:output>
+			<wsdl:fault name="fault" message="tns:adminExceptionMsg"></wsdl:fault>
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<wsdl:binding name="WSDMAdminSoapBinding" type="tns:WSDMAdminItf">
+
+
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+
+		<wsdl:operation name="createMonitoringEndpoint">
+			<soap:operation
+				soapAction="http://com.petalslink.easyesb/service/wsdmadmin/1.0/createMonitoringEndpoint" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="fault">
+				<soap:fault use="literal" name="fault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getAllMonitoringEndpoints">
+			<soap:operation
+				soapAction="http://com.petalslink.easyesb/service/wsdmadmin/1.0/getAllMonitoringEndpoints" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="fault">
+				<soap:fault use="literal" name="fault" />
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+
+	<wsdl:service name="WSDMAdminService">
+		<wsdl:port name="WSDMAdminEndpoint" binding="tns:WSDMAdminSoapBinding">
+			<soap:address location="http://www.example.org/" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
