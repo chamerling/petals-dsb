@@ -188,7 +188,7 @@ public class Jbi2WS implements JBIGenerationEngine {
 
         File suFileProvide = null;
         try {
-            suFileProvide = JBIUtils.createSUZipFile(null, suZipFiles, null, suConsumerName,
+            suFileProvide = JBIUtils.createSUZipFile(null, null, suZipFiles, suConsumerName,
                     jbiXmlForSuProvide, workDirectory, this.outputDir);
         } catch (GeneratorException e1) {
             throw new JBIGenerationException(e1);
