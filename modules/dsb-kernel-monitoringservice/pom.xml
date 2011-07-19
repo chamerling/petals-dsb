@@ -36,6 +36,13 @@
 
 		<dependency>
 			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>dsb-kernel</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
 			<artifactId>dsb-kernel-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
