@@ -50,6 +50,7 @@ import org.ow2.petals.transport.Transporter;
 import org.ow2.petals.transport.util.TransportSendContext;
 import org.ow2.petals.util.LoggingUtil;
 import org.petalslink.dsb.annotations.LifeCycleListener;
+import org.petalslink.dsb.annotations.Phase;
 
 import static javax.jbi.management.LifeCycleMBean.SHUTDOWN;
 import static javax.jbi.management.LifeCycleMBean.STARTED;
@@ -72,8 +73,9 @@ import static javax.jbi.management.LifeCycleMBean.STOPPED;
 @FractalComponent
 @Provides(interfaces = {
         @Interface(name = "service", signature = org.ow2.petals.jbi.messaging.routing.RouterService.class),
-        @Interface(name = "transportlistener", signature = TransportListener.class) })
-public class RouterServiceImpl implements RouterService, TransportListener {
+        @Interface(name = "transportlistener", signature = TransportListener.class),
+        @Interface(name = "routermodulemanager", signature = RouterModuleManager.class) })
+public class RouterServiceImpl implements RouterService, TransportListener, RouterModuleManager {
 
     private static final String INSTALLMODULE_FRACTAL_PREFIX = "installmodule";
 
@@ -158,7 +160,12 @@ public class RouterServiceImpl implements RouterService, TransportListener {
     @Requires(name = TRANSPORTER_FRACTAL_PREFIX, signature = Transporter.class, cardinality = Cardinality.COLLECTION, contingency = Contingency.OPTIONAL)
     private final Map<String, Object> transporters = new Hashtable<String, Object>();
 
-    @Requires(name = "routermodulemanager", signature = RouterModuleManager.class)
+    // @Requires(name = "modulemanager", signature = RouterModuleManager.class)
+    /*
+     * For now it is not a require since I have an exception at startup...
+     * IllegalBindingException: Mandatory client interface unbound (client
+     * interface = /Petals/JBI-Messaging/DSBRouterServiceImpl.modulemanager)
+     */
     private RouterModuleManager routerModuleManager;
 
     /*
@@ -301,7 +308,8 @@ public class RouterServiceImpl implements RouterService, TransportListener {
         }
 
         if (exchange != null) {
-            for (org.petalslink.dsb.kernel.messaging.router.ReceiverModule receiver : this.routerModuleManager.getReceivers()) {
+            for (org.petalslink.dsb.kernel.messaging.router.ReceiverModule receiver : this.routerModuleManager
+                    .getReceivers()) {
                 if (log.isDebugEnabled()) {
                     log.debug(String.format("Receiver module %s is called", receiver.getName()));
                 }
@@ -357,7 +365,8 @@ public class RouterServiceImpl implements RouterService, TransportListener {
 
             // Get the list of elected endpoints from the sender modules
             final Map<ServiceEndpoint, TransportSendContext> electedDestinations = new LinkedHashMap<ServiceEndpoint, TransportSendContext>();
-            for (org.petalslink.dsb.kernel.messaging.router.SenderModule senderModule : routerModuleManager.getSenders()) {
+            for (org.petalslink.dsb.kernel.messaging.router.SenderModule senderModule : routerModuleManager
+                    .getSenders()) {
                 if (log.isDebugEnabled()) {
                     log.debug(String.format("Sender module %s is called", senderModule.getName()));
                 }
@@ -404,7 +413,8 @@ public class RouterServiceImpl implements RouterService, TransportListener {
 
         // Get the list of elected endpoints from the sender modules
         final Map<ServiceEndpoint, TransportSendContext> electedDestinations = new LinkedHashMap<ServiceEndpoint, TransportSendContext>();
-        for (org.petalslink.dsb.kernel.messaging.router.SenderModule senderModule : routerModuleManager.getSenders()) {
+        for (org.petalslink.dsb.kernel.messaging.router.SenderModule senderModule : routerModuleManager
+                .getSenders()) {
             if (log.isDebugEnabled()) {
                 log.debug(String.format("Sender module %s is called", senderModule.getName()));
             }
@@ -428,7 +438,8 @@ public class RouterServiceImpl implements RouterService, TransportListener {
             responseExchange = this.sendToConsumer(transportSendContext, exchange, true, timeout);
         }
 
-        for (org.petalslink.dsb.kernel.messaging.router.ReceiverModule receiverModule : routerModuleManager.getReceivers()) {
+        for (org.petalslink.dsb.kernel.messaging.router.ReceiverModule receiverModule : routerModuleManager
+                .getReceivers()) {
             if (log.isDebugEnabled()) {
                 log.debug(String.format("Receiver module %s is called", receiverModule.getName()));
             }
@@ -501,6 +512,8 @@ public class RouterServiceImpl implements RouterService, TransportListener {
     protected void start() throws RoutingException {
         this.log = new LoggingUtil(this.logger);
         this.log.call();
+
+        this.routerModuleManager = new RouterModuleManagerImpl();
 
         this.exchangeQueues = new ConcurrentHashMap<String, BlockingQueue<org.ow2.petals.jbi.messaging.exchange.MessageExchange>>();
         this.pendingMessageExchanges = new ConcurrentHashMap<String, List<org.ow2.petals.jbi.messaging.exchange.MessageExchange>>();
@@ -862,30 +875,31 @@ public class RouterServiceImpl implements RouterService, TransportListener {
 
         return bypass;
     }
-    
+
     // Router Module ACK
     /**
      * Load the modules into the manager
      */
-    @LifeCycleListener
-    protected void loadModules() {
+    @LifeCycleListener(phase=Phase.START)
+    public void loadModules() {
+        System.out.println("LOADING MODULES");
         if (log.isDebugEnabled()) {
             log.debug("Ack to add modules to manager");
-        }       
+        }
         for (String key : senderModules.keySet()) {
             Object o = senderModules.get(key);
             if (o != null && o instanceof SenderModule) {
-                addModule(key, (SenderModule)o);
+                addModule(key, (SenderModule) o);
             }
         }
         for (String key : receiverModules.keySet()) {
             Object o = receiverModules.get(key);
             if (o != null && o instanceof ReceiverModule) {
-                addModule(key, (ReceiverModule)o);
+                addModule(key, (ReceiverModule) o);
             }
         }
     }
-    
+
     void addModule(final String name, final SenderModule sender) {
         if (log.isDebugEnabled()) {
             log.debug(String.format("Adding sender module %s to manager", name));
@@ -893,30 +907,101 @@ public class RouterServiceImpl implements RouterService, TransportListener {
         this.routerModuleManager.add(new org.petalslink.dsb.kernel.messaging.router.SenderModule() {
             public void electEndpoints(Map<ServiceEndpoint, TransportSendContext> electedEndpoints,
                     ComponentContext sourceComponentContext,
-                    org.ow2.petals.jbi.messaging.exchange.MessageExchange exchange) throws RoutingException {
-                sender.electEndpoints(electedEndpoints, sourceComponentContext, exchange);            
+                    org.ow2.petals.jbi.messaging.exchange.MessageExchange exchange)
+                    throws RoutingException {
+                sender.electEndpoints(electedEndpoints, sourceComponentContext, exchange);
             }
-            
+
             public String getName() {
                 return name;
             }
         });
     }
-    
+
     void addModule(final String name, final ReceiverModule receiver) {
         if (log.isDebugEnabled()) {
             log.debug(String.format("Adding receiver module %s to manager", name));
         }
-        this.routerModuleManager.add(new org.petalslink.dsb.kernel.messaging.router.ReceiverModule() {
-            
-            public boolean receiveExchange(org.ow2.petals.jbi.messaging.exchange.MessageExchange exchange,
-                    ComponentContext sourceComponentContext) throws RoutingException {
-                return receiver.receiveExchange(exchange, sourceComponentContext);
-            }
-            
-            public String getName() {
-                return name;
-            }
-        });
+        this.routerModuleManager
+                .add(new org.petalslink.dsb.kernel.messaging.router.ReceiverModule() {
+
+                    public boolean receiveExchange(
+                            org.ow2.petals.jbi.messaging.exchange.MessageExchange exchange,
+                            ComponentContext sourceComponentContext) throws RoutingException {
+                        return receiver.receiveExchange(exchange, sourceComponentContext);
+                    }
+
+                    public String getName() {
+                        return name;
+                    }
+                });
+    }
+
+    // Try to fix some issue...
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.petalslink.dsb.kernel.messaging.router.RouterModuleManager#add(org
+     * .petalslink.dsb.kernel.messaging.router.SenderModule)
+     */
+    public void add(org.petalslink.dsb.kernel.messaging.router.SenderModule module) {
+        this.routerModuleManager.add(module);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.petalslink.dsb.kernel.messaging.router.RouterModuleManager#add(org
+     * .petalslink.dsb.kernel.messaging.router.ReceiverModule)
+     */
+    public void add(org.petalslink.dsb.kernel.messaging.router.ReceiverModule module) {
+        this.routerModuleManager.add(module);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.petalslink.dsb.kernel.messaging.router.RouterModuleManager#setState
+     * (java.lang.String, boolean)
+     */
+    public void setState(String name, boolean onoff) {
+        this.routerModuleManager.setState(name, onoff);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.petalslink.dsb.kernel.messaging.router.RouterModuleManager#getState
+     * (java.lang.String)
+     */
+    public boolean getState(String name) {
+        return this.routerModuleManager.getState(name);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.petalslink.dsb.kernel.messaging.router.RouterModuleManager#getSenders
+     * ()
+     */
+    public List<org.petalslink.dsb.kernel.messaging.router.SenderModule> getSenders() {
+        return this.routerModuleManager.getSenders();
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.petalslink.dsb.kernel.messaging.router.RouterModuleManager#getReceivers
+     * ()
+     */
+    public List<org.petalslink.dsb.kernel.messaging.router.ReceiverModule> getReceivers() {
+        return this.routerModuleManager.getReceivers();
     }
 }
