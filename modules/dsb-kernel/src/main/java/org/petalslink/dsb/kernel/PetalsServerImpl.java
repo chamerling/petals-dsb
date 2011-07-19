@@ -73,7 +73,6 @@ import org.ow2.petals.kernel.configuration.DomainConfiguration;
 import org.ow2.petals.kernel.server.FractalHelper;
 import org.ow2.petals.kernel.server.MBeanHelper;
 import org.ow2.petals.kernel.server.PetalsStopThread;
-import org.ow2.petals.monitoring.router.Monitoring;
 import org.ow2.petals.service.ServiceEndpointImpl;
 import org.ow2.petals.tools.ws.WebServiceException;
 import org.ow2.petals.tools.ws.WebServiceManager;
@@ -91,7 +90,6 @@ import static org.ow2.petals.kernel.server.MBeanHelper.DOMAIN;
 import static org.ow2.petals.kernel.server.MBeanHelper.ENDPOINT_MBEAN;
 import static org.ow2.petals.kernel.server.MBeanHelper.INSTALLATION_MBEAN;
 import static org.ow2.petals.kernel.server.MBeanHelper.LOGGER_MBEAN;
-import static org.ow2.petals.kernel.server.MBeanHelper.MONITORING_MBEAN;
 import static org.ow2.petals.kernel.server.MBeanHelper.PETALS_ADMIN;
 import static org.ow2.petals.kernel.server.MBeanHelper.findLocalJMXServer;
 
@@ -787,9 +785,9 @@ public class PetalsServerImpl extends org.ow2.petals.kernel.server.PetalsServerI
                         + ",type=service");
 
         // register the monitoring tool
-        Monitoring monitoring = new Monitoring();
-        jmxServer.registerMBean(monitoring, new ObjectName(DOMAIN + ":name=" + MONITORING_MBEAN
-                + ",type=service"));
+        //Monitoring monitoring = new Monitoring();
+        //jmxServer.registerMBean(monitoring, new ObjectName(DOMAIN + ":name=" + MONITORING_MBEAN
+         //       + ",type=service"));
 
         // bind the fractal router monitoring to the monitoring tool
         // TODO: Uncomment
