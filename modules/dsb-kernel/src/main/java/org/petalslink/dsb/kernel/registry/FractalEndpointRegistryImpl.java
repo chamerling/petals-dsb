@@ -54,7 +54,7 @@ import org.w3c.dom.Document;
 @FractalComponent
 @Provides(interfaces = {
         @Interface(name = "service", signature = org.ow2.petals.jbi.messaging.registry.EndpointRegistry.class),
-        @Interface(name = "registrylistener", signature = org.petalslink.dsb.kernel.api.messaging.RegistryListenerManager.class) })
+        @Interface(name = "registrylistenermanager", signature = org.petalslink.dsb.kernel.api.messaging.RegistryListenerManager.class) })
 public class FractalEndpointRegistryImpl implements EndpointRegistry, RegistryListenerManager {
 
     /**
