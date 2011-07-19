@@ -23,4 +23,12 @@ public class MonitoringAdminService implements MonitoringAdminClient {
         System.out.println("Create a monitoring endpoint for " + serviceEndpoint);
     }
 
+    /* (non-Javadoc)
+     * @see org.petalslink.dsb.monitoring.api.MonitoringAdminClient#deleteMonitoringEndpoint(org.petalslink.dsb.api.ServiceEndpoint)
+     */
+    public void deleteMonitoringEndpoint(ServiceEndpoint serviceEndpoint) throws DSBException {
+        // TODO Auto-generated method stub
+        
+    }
+
 }
