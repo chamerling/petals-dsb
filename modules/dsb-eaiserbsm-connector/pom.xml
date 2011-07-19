@@ -16,10 +16,6 @@
 	<name>dsb-eaiserbsm-connector</name>
 	<description>EasierBSM connector ie send reports to EasierBSM</description>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -32,5 +28,33 @@
 			<artifactId>dsb-monitoring-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>dsb-cxfutils</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>dsb-monitoring-easierbsm-jaxws</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>dsb-monitoring-easierbsm-admin-jaxws</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<!-- <dependency> <artifactId>wsdm-monitoring</artifactId> <groupId>com.ebmwebsourcing.easierbsm</groupId> 
+			<version>1.0-SNAPSHOT</version> <scope>test</scope> </dependency> <dependency> 
+			<artifactId>ws-binding-wsdmadmin-client</artifactId> <groupId>com.ebmwebsourcing.easierbsm</groupId> 
+			<version>1.0-SNAPSHOT</version> <scope>test</scope> </dependency> <dependency> 
+			<artifactId>ws-binding-wsdm</artifactId> <groupId>com.ebmwebsourcing.easierbsm</groupId> 
+			<version>1.0-SNAPSHOT</version> <scope>test</scope> </dependency> <dependency> 
+			<artifactId>ws-binding-wsdmadmin</artifactId> <groupId>com.ebmwebsourcing.easierbsm</groupId> 
+			<version>1.0-SNAPSHOT</version> <scope>test</scope> </dependency> <dependency> 
+			<artifactId>ws-binding-rawreport</artifactId> <groupId>com.ebmwebsourcing.easierbsm</groupId> 
+			<version>1.0-SNAPSHOT</version> <scope>test</scope> </dependency> <dependency> 
+			<artifactId>esb-distribution</artifactId> <groupId>com.ebmwebsourcing.easyesb</groupId> 
+			<version>1.0-SNAPSHOT</version> <scope>test</scope> </dependency> -->
 	</dependencies>
 </project>
