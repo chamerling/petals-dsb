@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.objectweb.fractal.fraclet.annotation.annotations.FractalComponent;
 import org.objectweb.fractal.fraclet.annotation.annotations.Interface;
@@ -69,6 +70,8 @@ public class NewServiceExposerImpl implements NewServiceExposer {
     private AdminService adminService;
 
     private Map<String, ServiceEndpoint> exposedEndpoints;
+    
+    private AtomicLong nbCalls = new AtomicLong(0);
 
     private final Object object = new Object();
 
@@ -88,9 +91,12 @@ public class NewServiceExposerImpl implements NewServiceExposer {
      * {@inheritDoc}
      */
     public void expose() {
+        long current = nbCalls.incrementAndGet();
         this.log.debug("Got a #expose call, waiting previous call to complete...");
+        this.log.debug("Waiting previous expose to complete (current call is '"+current+"')...");
         synchronized (this.object) {
-            this.log.debug("Let's expose new endpoints!");
+            this.log.debug("Seems that all previous tasks are complete (current call is '"+current+"'), let's go...");
+            this.log.debug("Let's expose new endpoints (current call is '"+current+"')!");
             // wait if another thread is already calling this...
             try {
 
@@ -249,6 +255,9 @@ public class NewServiceExposerImpl implements NewServiceExposer {
 
             } catch (BinderException e) {
                 this.log.warning("Problem while binding : " + e.getMessage());
+                if (log.isDebugEnabled()) {
+                    log.warning("Stack cause", e);
+                }
             }
         } else {
             this.log.warning("No service exposer has been found for protocol : " + protocolName);

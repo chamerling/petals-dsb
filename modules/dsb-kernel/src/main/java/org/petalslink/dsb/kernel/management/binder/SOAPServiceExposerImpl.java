@@ -34,7 +34,6 @@ import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
 import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.jbi.descriptor.original.generated.Jbi;
 import org.ow2.petals.jbi.management.deployment.AtomicDeploymentService;
-import org.ow2.petals.kernel.api.service.ServiceEndpoint;
 import org.ow2.petals.kernel.configuration.ConfigurationService;
 import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
 import org.ow2.petals.tools.generator.jbi.api.JBIGenerationException;
@@ -45,7 +44,6 @@ import org.petalslink.dsb.jbi.JBIFileHelper;
 import org.petalslink.dsb.kernel.api.management.binder.BinderChecker;
 import org.petalslink.dsb.kernel.api.management.binder.BinderException;
 import org.petalslink.dsb.kernel.api.management.binder.ServiceExposer;
-
 
 /**
  * @author chamerling - eBM WebSourcing
@@ -98,10 +96,17 @@ public class SOAPServiceExposerImpl implements ServiceExposer {
             throw new BinderException("No component found to expose SOAP service");
         }
 
+        if (log.isDebugEnabled()) {
+            log.debug(String.format(
+                    "Trying to expose service wich is defined as EP = %s, SRV=%s and ITF = %s",
+                    endpoint.getEndpoint(), endpoint.getService().toString(), endpoint.getItf()
+                            .toString()));
+        }
+
         File sa = null;
         Map<String, String> extensions = new HashMap<String, String>();
         extensions.put(Constants.OUTPUT_DIR, this.workPath.getAbsolutePath());
-        
+
         QName itf = endpoint.getItf();
         QName service = endpoint.getService();
 
@@ -110,14 +115,16 @@ public class SOAPServiceExposerImpl implements ServiceExposer {
 
         String soapServiceName = endpoint.getEndpoint();
         if (soapServiceName == null && itf != null) {
-            // get the interface which is the only field which should not be null
+            // get the interface which is the only field which should not be
+            // null
             soapServiceName = itf.getLocalPart();
         }
-        
+
         if (soapServiceName == null) {
-            throw new BinderException("Can not find a valid name to create service name from given endpoint and interface");
+            throw new BinderException(
+                    "Can not find a valid name to create service name from given endpoint and interface");
         }
-        
+
         if (soapServiceName
                 .startsWith(org.petalslink.dsb.kernel.Constants.SOAP_PLATFORM_ENDPOINT_PREFIX)) {
             soapServiceName = soapServiceName.substring(
@@ -134,6 +141,9 @@ public class SOAPServiceExposerImpl implements ServiceExposer {
         try {
             sa = generator.generate();
         } catch (JBIGenerationException e) {
+            if (log.isDebugEnabled()) {
+                e.printStackTrace();
+            }
             throw new BinderException(e.getMessage());
         }
 
@@ -155,8 +165,8 @@ public class SOAPServiceExposerImpl implements ServiceExposer {
             if (success) {
                 this.log.info("Service assembly '" + saName + "' has been deployed");
             } else {
-                this.log.warning("Failed to deploy the Service Assembly located at '" + sa.toURI().toURL()
-                        + "'");
+                this.log.warning("Failed to deploy the Service Assembly located at '"
+                        + sa.toURI().toURL() + "'");
                 throw new PEtALSWebServiceException("Deployment failure");
             }
         } catch (Exception e) {
