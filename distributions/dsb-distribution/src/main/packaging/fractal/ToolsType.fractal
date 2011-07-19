@@ -10,7 +10,6 @@
   <interface signature="org.ow2.petals.kernel.configuration.ConfigurationService" role="client" name="configuration"/>
   <interface signature="org.ow2.petals.system.repository.artifact.ArtifactRepositoryService" role="client" name="artifactrepository"/>
   <interface signature="org.ow2.petals.jbi.messaging.registry.EndpointRegistry" role="client" name="endpoint"/>
-  <interface signature="org.petalslink.dsb.kernel.monitor.router.MonitoringStorageService" role="client" name="storage"/>
   <interface signature="org.ow2.petals.jbi.management.admin.AdminService" role="client" name="adminService"/>
   <interface signature="org.ow2.petals.kernel.admin.PetalsAdminInterface" role="client" name="petalsAdminService"/>
   <interface signature="org.ow2.petals.communication.topology.TopologyService" role="client" name="topology"/>

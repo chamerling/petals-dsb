@@ -23,7 +23,6 @@
   
   <!-- DSB specific services -->
   <component definition="org.petalslink.dsb.kernel.ws.HelloServiceImpl" name="HelloWebServiceImpl"/>
-  <component definition="org.petalslink.dsb.kernel.monitor.ws.DistributedMonitoringServiceImpl" name="MonitoringServiceImpl"/>
   <component definition="org.petalslink.dsb.kernel.ws.ServiceBinderImpl" name="ServiceBinderImpl"/>
   <component definition="org.petalslink.dsb.kernel.ws.JNDIBrowserServiceImpl" name="JNDIBrowserServiceImpl"/>
   <component definition="org.petalslink.dsb.kernel.ws.ServiceInformationImpl" name="ServiceInformationImpl"/>
@@ -72,12 +71,7 @@
   <binding client="InstallationWebServiceImpl.artifactrepository" server="this.artifactrepository"/>
   <binding client="InstallationWebServiceImpl.componentInstallation" server="this.componentInstallationService"/>
   <binding client="ServiceAssemblyStateWebServiceImpl.adminService" server="this.adminService"/>
-  
-  <!-- SOA4All -->
-  <binding client="MonitoringServiceImpl.storageService" server="this.storage"/>
-  <binding client="MonitoringServiceImpl.topologyService" server="this.topology"/>
-  <binding client="MonitoringServiceImpl.registryService" server="this.endpoint"/>
-  
+    
   <!-- DEPRECATED : use SOAPServiceBinderImpl and RESTServiceBinderImpl define below -->
   <binding client="ServiceBinderImpl.soapservice-binder" server="SOAPServiceBinderImpl.webservice"/>
   <binding client="ServiceBinderImpl.restservice-binder" server="RESTServiceBinderImpl.webservice"/>

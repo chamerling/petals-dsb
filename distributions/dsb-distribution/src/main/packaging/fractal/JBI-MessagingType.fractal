@@ -7,8 +7,10 @@
   <interface signature="org.ow2.petals.transport.TransportListener" role="server" name="transportlistener"/>
   <interface signature="org.ow2.petals.jbi.messaging.registry.EndpointRegistry" role="server" name="endpoint"/>
   <interface signature="org.ow2.petals.jbi.messaging.control.ExchangeCheckerClient" role="server" name="exchangechecker"/>
-  <interface signature="org.petalslink.dsb.kernel.monitor.router.MonitoringStorageService" role="server" name="storage"/>
   <interface signature="org.petalslink.dsb.kernel.api.messaging.EndpointSearchEngine" role="server" name="endpointsearchengine"/>
+  
+  <interface signature="org.petalslink.dsb.kernel.api.messaging.RegistryListenerManager" role="server" name="registrylistenermanager"/>
+  <interface signature="org.petalslink.dsb.kernel.messaging.router.RouterModuleManager" role="server" name="routermodulemanager"/>
 
   <!-- client -->
   <interface signature="org.ow2.petals.kernel.configuration.ConfigurationService" role="client" name="configuration"/>
@@ -28,5 +30,4 @@
   
   <!--<interface signature="org.petalslink.dsb.kernel.messaging.EndpointSearchEngine" role="client" name="federationendpointsearchengine"/>-->
   <!--<interface signature="org.petalslink.dsb.kernel.federation.FederationEngine" role="client" name="federationengine"/>-->
-  
 </definition>

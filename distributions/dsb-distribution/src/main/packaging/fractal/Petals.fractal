@@ -22,7 +22,8 @@
   <component definition="DSBCoreService" name="DSBCoreService"/>
   
   <component definition="REST" name="REST"/>
-  <component definition="BPEL" name="BPEL"/>
+  <!--<component definition="BPEL" name="BPEL"/>-->
+  <component definition="DSBMonitoring" name="DSBMonitoring"/>
   
   <component definition="org.petalslink.dsb.kernel.io.client.DSBClientFactoryImpl" name="DSBClientFactoryImpl"/>
 
@@ -83,7 +84,6 @@
   <!-- Tools -->
   <binding client="Tools.artifactrepository" server="System.artifactrepository"/>
   <binding client="Tools.endpoint" server="JBI-Messaging.endpoint"/>
-  <binding client="Tools.storage" server="JBI-Messaging.storage"/>
   <binding client="Tools.adminService" server="JBI-Management.adminService"/>
   <binding client="Tools.petalsAdminService" server="PetalsAdminServiceImpl.service"/>
   <binding client="Tools.topology" server="Communication.topology"/>
@@ -147,5 +147,10 @@
   <binding client="BPEL.atomicDeploymentService" server="JBI-Management.atomicDeploymentService"/>
   <binding client="BPEL.configuration" server="ConfigurationServiceImpl.service"/>
   -->
+  
+  <!-- Monitoring -->
+  <binding client="DSBMonitoring.registrylistenermanager" server="JBI-Messaging.registrylistenermanager"/>
+  <binding client="DSBMonitoring.configuration" server="ConfigurationServiceImpl.service"/>
+  <binding client="DSBMonitoring.routermodulemanager" server="JBI-Messaging.routermodulemanager"/>
   
 </definition>

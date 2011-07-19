@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE definition PUBLIC "-//objectweb.org//DTD Fractal ADL 2.0//EN" "classpath://org/objectweb/fractal/adl/xml/standard.dtd">
+
+<definition extends="DSBMonitoringType" name="DSBMonitoring">
+
+	<!-- CREATE INSTANCES -->
+	<!-- Common part -->
+	<component definition="org.petalslink.dsb.kernel.monitoring.service.FileConfigurationServiceImpl" name="DSBMonitoringConfiguration" />
+	<component definition="org.petalslink.dsb.kernel.monitoring.service.listeners.RegistryListenerImpl" name="DSBMonitoringRegistryListener"/>
+	<component definition="org.petalslink.dsb.kernel.monitoring.service.routing.MonitoringModule" name="DSBMonitoringRouterMonitoringModule"/>
+	<component definition="org.petalslink.dsb.kernel.monitoring.service.routing.TimeStampModule" name="DSBMonitoringTimeStampMonitoringModule"/>
+	<component definition="org.petalslink.dsb.kernel.monitoring.service.listeners.ListenerManager" name="DSBListenerManager"/>
+	<component definition="org.petalslink.dsb.kernel.monitoring.service.routing.ModuleRegistration" name="ModuleRegistration"/>
+	
+	<!-- Implementation dependent -->
+	<component definition="org.petalslink.dsb.kernel.service.easierbsm.EasierBSMClientFactory" name="DSBMonitoringClientFactory"/>
+	
+	<!-- BINDINGS -->
+	<!-- Common part -->
+	<binding client="DSBMonitoringConfiguration.configuration" server="this.configuration"/>
+	<binding client="DSBMonitoringRegistryListener.monitoringconfiguration" server="DSBMonitoringConfiguration.service"/>
+	<binding client="DSBMonitoringRegistryListener.monitoringclientfactory" server="DSBMonitoringClientFactory.service"/>
+	<binding client="DSBMonitoringRouterMonitoringModule.monitoringconfiguration" server="DSBMonitoringConfiguration.service"/>
+	<binding client="DSBMonitoringRouterMonitoringModule.monitoringclientfactory" server="DSBMonitoringClientFactory.service"/>
+
+	<!-- These two lines are temporary -->
+	<binding client="DSBListenerManager.listener" server="DSBMonitoringRegistryListener.service"/>
+	<binding client="DSBListenerManager.registrylistenermanager" server="this.registrylistenermanager"/>
+	
+	<!-- will need to be removed when the modules will be detected by the FW -->
+	<binding client="ModuleRegistration.routermodulemanager" server="this.routermodulemanager"/>
+	<binding client="ModuleRegistration.sendermodule-640" server="DSBMonitoringRouterMonitoringModule.reportSender"/>
+	<binding client="ModuleRegistration.receivermodule-100" server="DSBMonitoringRouterMonitoringModule.reportReceiver"/>
+	<binding client="ModuleRegistration.sendermodule-650" server="DSBMonitoringTimeStampMonitoringModule.timestampSender"/>
+	<binding client="ModuleRegistration.receivermodule-110" server="DSBMonitoringTimeStampMonitoringModule.timestampReceiver"/>
+	
+	<!-- Implementation dependent -->
+	<!-- Nothing...-->
+</definition>
