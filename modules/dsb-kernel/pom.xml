@@ -47,6 +47,12 @@
 			<artifactId>dsb-annotations</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>dsb-fractalutils</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.petalslink.dsb</groupId>
@@ -175,7 +181,8 @@
 			<groupId>org.ow2.petals.monitoring</groupId>
 			<version>1.0-SNAPSHOT</version> </dependency>
 		-->
-
+		
+		<!--  Other stuff... -->
 		<dependency>
 			<groupId>org.objectweb.fractal.julia</groupId>
 			<artifactId>julia-runtime</artifactId>
