@@ -114,7 +114,10 @@
 		<module>modules/dsb-kernel-monitoringservice</module>
 		<module>modules/dsb-monitoring-api</module>
 		<module>modules/dsb-monitoring-standaloneserver</module>
+		<module>modules/dsb-monitoring-easierbsm-jaxws</module>
+		<module>modules/dsb-monitoring-easierbsm-admin-jaxws</module>
 		<module>modules/dsb-eaiserbsm-connector</module>
+		<module>modules/dsb-kernel-easierbsmservice</module>
 		
 		<!-- Independant things, to be moved elsewhere -->
 		<module>modules/gms-core</module>
@@ -130,6 +133,12 @@
 				<module>forks/wsdm-monitoring</module>
 			</modules>
 		</profile>
+			<profile>
+				<id>mocks</id>
+				<modules>
+					<module>mocks/dsb-easierbsm-mock</module>
+				</modules>
+			</profile>
 		<profile>
 			<id>distributions</id>
 			<modules>
