@@ -28,8 +28,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.petalslink.dsb.webapp.api.DSBManagement;
-import org.petalslink.dsb.ws.api.DSBWebServiceException;
-import org.petalslink.dsb.ws.api.HelloService;
 
 /**
  * @author chamerling - eBM WebSourcing
@@ -54,17 +52,8 @@ public class IndexServlet extends HttpServlet {
         if (os != null) {
             os.write("<html><header><title>Distributed Service Bus</title></header><body>"
                     .getBytes());
-            
-            // test :
-            HelloService hello = dsbManagement.get(HelloService.class, "HelloWebServiceImpl", "webservice");
-            try {
-                os.write(("Hello : " + hello.sayHello("oieoieoie")).getBytes());
-            } catch (DSBWebServiceException e) {
-                e.printStackTrace();
-            }
 
             if (dsbManagement != null) {
-
                 os.write("<h2>Container Information</h2>".getBytes());
                 os.write(dsbManagement.getContainerInfo().getBytes());
 
@@ -108,7 +97,7 @@ public class IndexServlet extends HttpServlet {
                     os.write("No services".getBytes());
                 }
             } else {
-                os.write("<b>No information provided</b>".getBytes());
+                os.write("<b>No information provided (DSB Management has not been injected...)</b>".getBytes());
             }
             os.write("</body></html>".getBytes());
         }
