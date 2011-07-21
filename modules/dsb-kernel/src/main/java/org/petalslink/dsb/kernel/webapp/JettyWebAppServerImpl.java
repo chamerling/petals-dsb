@@ -19,11 +19,17 @@
 package org.petalslink.dsb.kernel.webapp;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.mortbay.jetty.Server;
+import org.mortbay.jetty.handler.ContextHandlerCollection;
+import org.mortbay.jetty.servlet.Context;
+import org.mortbay.jetty.servlet.ServletHolder;
 import org.mortbay.jetty.webapp.WebAppContext;
 import org.objectweb.fractal.fraclet.annotation.annotations.FractalComponent;
 import org.objectweb.fractal.fraclet.annotation.annotations.Interface;
@@ -43,7 +49,6 @@ import org.petalslink.dsb.kernel.api.DSBConfigurationService;
 import org.petalslink.dsb.kernel.api.webapp.WebAppServer;
 import org.petalslink.dsb.webapp.api.DSBManagement;
 
-
 /**
  * @author chamerling - eBM WebSourcing
  * 
@@ -51,7 +56,7 @@ import org.petalslink.dsb.webapp.api.DSBManagement;
 @FractalComponent
 @Provides(interfaces = { @Interface(name = "service", signature = WebAppServer.class) })
 public class JettyWebAppServerImpl implements WebAppServer {
-    
+
     public static final String WEBAPP_NAME = "dsb-webapp";
 
     @Monolog(name = "logger")
@@ -59,7 +64,7 @@ public class JettyWebAppServerImpl implements WebAppServer {
 
     private LoggingUtil log;
 
-    @Requires(name = "dsbmanagement", signature = DSBManagement.class, contingency=Contingency.OPTIONAL)
+    @Requires(name = "dsbmanagement", signature = DSBManagement.class, contingency = Contingency.OPTIONAL)
     private DSBManagement dsbManagement;
 
     @Requires(name = "configuration", signature = ConfigurationService.class)
@@ -97,40 +102,66 @@ public class JettyWebAppServerImpl implements WebAppServer {
         // get the webapps path
         File webappdir = new File(this.configurationService.getContainerConfiguration()
                 .getRootDirectoryPath(), "webapps");
-        File webapp = new File(webappdir, WEBAPP_NAME + ".war");
 
-        if ((webapp == null) || !webapp.exists()) {
-            throw new DSBException("Can not find the Web application under the webapps folder");
-        }
+        File[] webapps = webappdir.listFiles(new FileFilter() {
+            public boolean accept(File pathname) {
+                return pathname.getAbsolutePath().endsWith(".war");
+            }
+        });
 
         this.server = new Server(this.dsbConfigurationService.getWebAppPort());
-        WebAppContext context = new WebAppContext();
-        context.setContextPath("/");
-        context.setWar(webapp.getAbsolutePath());
-        File workPath = new File(this.configurationService.getContainerConfiguration()
-                .getRootDirectoryPath(), "work");
-        context.setTempDirectory(new File(workPath, WEBAPP_NAME));
-        context.setExtractWAR(true);
-        DSBManagement management = new ProxyManagement(this.dsbManagement);
+        Set<String> webappsName = new HashSet<String>(webapps.length);
+        final ContextHandlerCollection contexts = new ContextHandlerCollection();
 
-        try {
-            WebAppClassLoader classloader = new WebAppClassLoader(management.getClass()
-                    .getClassLoader(), context, this.logger);
-            context.setClassLoader(classloader);
-        } catch (IOException e1) {
+        for (File webapp : webapps) {
+            
+            String webappName = webapp.getName();
+            if (webappName.endsWith(".war")) {
+                webappName = webappName.substring(0, webappName.length() - 4);
+            }
+            
+            WebAppContext context = new WebAppContext();
+            context.setContextPath("/" + webappName);
+            context.setWar(webapp.getAbsolutePath());
+            File tmp = new File(this.configurationService.getContainerConfiguration()
+                    .getRootDirectoryPath(), "work");
+            File workPath = new File(tmp, webappName);
+            File tmpDir = new  File(workPath, webappName);
+            tmpDir.mkdirs();
+            context.setTempDirectory(tmpDir);
+            context.setExtractWAR(true);
+
+            // set DSBManagement in the context, will be used or not
+            // TODO : Set a DSB API...
+            DSBManagement management = new ProxyManagement(this.dsbManagement);
+            try {
+                WebAppClassLoader classloader = new WebAppClassLoader(management.getClass()
+                        .getClassLoader(), context, this.logger);
+                context.setClassLoader(classloader);
+            } catch (IOException e1) {
+            }
+            context.getServletContext().setAttribute("dsbmanagement", management);
+            context.setAttribute("dsbmanagement", management);
+            // this.server.setHandler(context);
+            contexts.addHandler(context);
+            webappsName.add(webappName);
         }
-
-        context.getServletContext().setAttribute("dsbmanagement", management);
-        context.setAttribute("dsbmanagement", management);
-
-        this.server.setHandler(context);
+        
+        // add a webapp for listing all the webapps under /dsb
+        final Context welcomeContext = new Context(contexts, "/dsb", Context.SESSIONS);
+        final ServletHolder welcomeServlet = new ServletHolder(new ListServlet(webappsName));
+        welcomeServlet.setName("DSBWebappsListServlet");
+        welcomeServlet.setInitOrder(1);
+        welcomeContext.addServlet(welcomeServlet, "/*");
+        
+        this.server.setHandler(contexts);
         try {
             this.server.start();
         } catch (Throwable e) {
             this.log.warning(e.getMessage());
         }
         this.log.info("The DSB Web application is available at http://localhost:"
-                + this.dsbConfigurationService.getWebAppPort());
+                + this.dsbConfigurationService.getWebAppPort() + "/dsb/");
     }
 
     /**
@@ -143,7 +174,7 @@ public class JettyWebAppServerImpl implements WebAppServer {
     /**
      * {@inheritDoc}
      */
-    @LifeCycleListener(phase = Phase.STOP) 
+    @LifeCycleListener(phase = Phase.STOP)
     public void stop() {
         if (this.server != null) {
             try {
@@ -154,11 +185,12 @@ public class JettyWebAppServerImpl implements WebAppServer {
         }
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.petalslink.dsb.kernel.api.webapp.WebAppServer#getWebAppNames()
      */
     public List<String> getWebAppNames() {
-        return Arrays.asList(new String[]{WEBAPP_NAME});
+        return Arrays.asList(new String[] { WEBAPP_NAME });
     }
-
 }
