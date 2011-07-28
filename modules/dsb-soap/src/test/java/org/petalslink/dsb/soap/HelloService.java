@@ -10,7 +10,7 @@ import javax.jws.WebService;
  * @author chamerling
  *
  */
-@WebService
+@WebService(targetNamespace="http://api.ws.dsb.petalslink.org/")
 public interface HelloService {
 
     @WebMethod

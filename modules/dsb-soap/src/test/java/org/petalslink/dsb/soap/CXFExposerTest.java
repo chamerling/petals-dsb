@@ -161,7 +161,7 @@ public class CXFExposerTest extends TestCase {
                 try {
                     DocumentBuilder builder = DocumentBuilderFactory.newInstance()
                             .newDocumentBuilder();
-                    String xml = "<ns2:sayHelloResponse xmlns:ns2=\"http://soap.dsb.petalslink.org/\"><return>hello</return></ns2:sayHelloResponse>";
+                    String xml = "<ns2:sayHelloResponse xmlns:ns2=\"http://api.ws.dsb.petalslink.org/\"><return>hello</return></ns2:sayHelloResponse>";
                     Document document = builder.parse(new InputSource(new StringReader(xml)));
                     exchange.setOut(document);
                 } catch (ParserConfigurationException e) {
