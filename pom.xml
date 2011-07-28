@@ -119,6 +119,12 @@
 		<module>modules/dsb-eaiserbsm-connector</module>
 		<module>modules/dsb-kernel-easierbsmservice</module>
 		
+		<!-- SOAP -->
+		<module>modules/dsb-soap</module>
+		
+		<!-- Notification -->
+		<module>modules/dsb-kernel-pubsubservice</module>
+		
 		<!-- Independant things, to be moved elsewhere -->
 		<module>modules/gms-core</module>
    		<module>modules/gms-prototype</module>
