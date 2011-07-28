@@ -6,6 +6,8 @@ package org.petalslink.dsb.soap;
 import javax.xml.namespace.QName;
 
 import org.petalslink.dsb.soap.api.Service;
+import org.petalslink.dsb.soap.api.ServiceException;
+import org.petalslink.dsb.soap.api.SimpleExchange;
 
 /**
  * @author chamerling
@@ -20,10 +22,11 @@ public abstract class AbstractService implements Service {
     protected QName endpointName;
 
     protected String wsdl;
-    
+
     protected String url;
 
-    public AbstractService(QName interfaceName, QName serviceName, QName endpointName, String wsdl, String url) {
+    public AbstractService(QName interfaceName, QName serviceName, QName endpointName, String wsdl,
+            String url) {
         super();
         this.interfaceName = interfaceName;
         this.serviceName = serviceName;
@@ -75,6 +78,36 @@ public abstract class AbstractService implements Service {
      */
     public QName getService() {
         return serviceName;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.petalslink.dsb.soap.api.Service#invoke(org.petalslink.dsb.soap.api
+     * .SimpleExchange)
+     */
+    public final void invoke(SimpleExchange exchange) throws ServiceException {
+        pre(exchange);
+        doInvoke(exchange);
+        post(exchange);
+    }
+
+    /**
+     * @param exchange
+     */
+    protected void post(SimpleExchange exchange) throws ServiceException {
+    }
+
+    /**
+     * @param exchange
+     */
+    protected abstract void doInvoke(SimpleExchange exchange) throws ServiceException;
+
+    /**
+     * @param exchange
+     */
+    protected void pre(SimpleExchange exchange) throws ServiceException {
     }
 
 }
