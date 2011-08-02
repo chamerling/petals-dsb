@@ -126,6 +126,7 @@ public class SOAPMessageUtils {
             soapPart.setContent(preppedMsgSrc);
             soapMessage.saveChanges();
         } catch (SOAPException ex) {
+            ex.printStackTrace();
         }
         return soapMessage;
     }
@@ -140,6 +141,21 @@ public class SOAPMessageUtils {
      */
     public static SOAPMessage buildSOAPMessage(Document soapMessageAsDocument,
             MessageFactory messageFactory) {
+        try {
+            return buildSOAPMessage(
+                    convertDOMSource2InputSource(new DOMSource(soapMessageAsDocument))
+                            .getByteStream(), messageFactory);
+        } catch (SOAPException e) {
+        }
+        return null;
+    }
+    
+    /**
+     * 
+     * @param soapMessageAsDocument
+     * @return
+     */
+    public static SOAPMessage buildSOAPMessage(Document soapMessageAsDocument) {
         try {
             return buildSOAPMessage(
                     convertDOMSource2InputSource(new DOMSource(soapMessageAsDocument))
