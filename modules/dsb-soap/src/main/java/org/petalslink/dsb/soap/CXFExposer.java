@@ -3,6 +3,7 @@
  */
 package org.petalslink.dsb.soap;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
@@ -17,11 +18,14 @@ import org.petalslink.dsb.soap.api.ServiceException;
  * 
  */
 public class CXFExposer implements Exposer {
+    
+    private List<Service> services;
 
     /**
      * 
      */
     public CXFExposer() {
+        this.services = new ArrayList<Service>();
     }
 
     /*
@@ -31,7 +35,7 @@ public class CXFExposer implements Exposer {
      * org.petalslink.dsb.soap.api.Exposer#expose(org.petalslink.dsb.soap.api
      * .Service)
      */
-    public Server expose(Service service) throws ServiceException {
+    public Server expose(final Service service) throws ServiceException {
         // create the wrapper and push it to CXF...
         ServiceWrapper wrapper = new ServiceWrapper(service);
         JaxWsServiceFactoryBean sf = new JaxWsServiceFactoryBean();
@@ -52,10 +56,12 @@ public class CXFExposer implements Exposer {
                 if (cxfServer != null) {
                     cxfServer.stop();
                 }
+                services.remove(service);
             }
 
             public void start() {
                 cxfServer = ssf.create();
+                services.add(service);
             }
         };
     }
@@ -66,8 +72,7 @@ public class CXFExposer implements Exposer {
      * @see org.petalslink.dsb.soap.api.Exposer#getServices()
      */
     public List<Service> getServices() {
-        // TODO Auto-generated method stub
-        return null;
+        return this.services;
     }
 
 }
