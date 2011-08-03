@@ -19,6 +19,7 @@ import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
 import org.objectweb.fractal.util.Fractal;
 import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.util.LoggingUtil;
+import org.petalslink.dsb.fractal.utils.FractalHelper;
 import org.petalslink.dsb.kernel.api.tools.ws.WebServiceInformationBean;
 import org.petalslink.dsb.kernel.api.tools.ws.WebServiceRegistry;
 
@@ -65,7 +66,7 @@ public class GlobalWebServiceRegistryImpl implements WebServiceRegistry {
      * @see org.petalslink.dsb.kernel.tools.ws.WebServiceRegistry#load()
      */
     public synchronized void load() {
-        Component root = FractalWSHelper.getRootComponent(this.component);
+        Component root = FractalHelper.getRootComponent(this.component);
         try {
             Set<WebServiceInformationBean> beans = FractalWSHelper.getAllBeans(Fractal
                     .getContentController(root));

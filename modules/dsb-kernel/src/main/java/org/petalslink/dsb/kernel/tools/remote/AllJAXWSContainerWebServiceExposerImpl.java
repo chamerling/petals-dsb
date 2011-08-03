@@ -12,6 +12,7 @@ import org.objectweb.fractal.fraclet.annotation.annotations.Requires;
 import org.objectweb.fractal.util.Fractal;
 import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.kernel.configuration.ContainerConfiguration;
+import org.petalslink.dsb.fractal.utils.FractalHelper;
 import org.petalslink.dsb.kernel.api.tools.remote.ContainerWebServiceExposer;
 import org.petalslink.dsb.kernel.api.tools.ws.WebServiceException;
 import org.petalslink.dsb.kernel.api.tools.ws.WebServiceExposer;
@@ -74,7 +75,7 @@ public class AllJAXWSContainerWebServiceExposerImpl implements ContainerWebServi
 
     private Set<WebServiceInformationBean> getAllWebServiceInformationBean() {
         // get the top level component to be able to get all the components...
-        Component root = FractalWSHelper.getRootComponent(this.component);
+        Component root = FractalHelper.getRootComponent(this.component);
         try {
             return FractalWSHelper.getAllBeans(Fractal.getContentController(root));
         } catch (NoSuchInterfaceException e) {
