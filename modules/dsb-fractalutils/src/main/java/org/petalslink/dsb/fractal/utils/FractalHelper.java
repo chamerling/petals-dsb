@@ -4,6 +4,7 @@
 package org.petalslink.dsb.fractal.utils;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -52,6 +53,14 @@ public class FractalHelper {
         return parent;
     }
 
+    /**
+     * Get all the component which are annotated with the given annotation at
+     * the Class level.
+     * 
+     * @param parentContentController
+     * @param annotation
+     * @return
+     */
     public static final List<Component> getAllComponentsWithAnnotation(
             final ContentController parentContentController, Class<? extends Annotation> annotation) {
         List<Component> components = new ArrayList<Component>();
@@ -74,6 +83,35 @@ public class FractalHelper {
                     components.add(component);
                 }
             } catch (NoSuchInterfaceException e) {
+            }
+        }
+        return components;
+    }
+
+    public static final List<Component> getAllComponentsWithMethodAnnotation(
+            final ContentController parentContentController, Class<? extends Annotation> annotation) {
+        List<Component> components = new ArrayList<Component>();
+
+        ContentController subContentController = null;
+
+        for (Component component : parentContentController.getFcSubComponents()) {
+            try {
+                subContentController = Fractal.getContentController(component);
+                if (subContentController.getFcSubComponents().length > 0) {
+                    components.addAll(getAllComponentsWithMethodAnnotation(subContentController,
+                            annotation));
+                }
+            } catch (NoSuchInterfaceException e1) {
+            }
+
+            Object o = getContent(component);
+            if (o != null) {
+                Method[] methods = o.getClass().getMethods();
+                for (Method m : methods) {
+                    if (m.isAnnotationPresent(annotation)) {
+                        components.add(component);
+                    }
+                }
             }
         }
         return components;
@@ -116,7 +154,7 @@ public class FractalHelper {
         }
         return result;
     }
-    
+
     /**
      * Recursively get all the components (not the composites) from the given
      * content controller.
@@ -149,6 +187,22 @@ public class FractalHelper {
             if (!isComposite(component)) {
                 result.add(component);
             }
+        }
+        return result;
+    }
+
+    /**
+     * Get the content of a given component if it exists and if the given
+     * component is not null
+     * 
+     * @param component
+     * @return
+     */
+    public static final Object getContent(Component component) {
+        Object result = null;
+        try {
+            result = component.getFcInterface("/content");
+        } catch (NoSuchInterfaceException e) {
         }
         return result;
     }

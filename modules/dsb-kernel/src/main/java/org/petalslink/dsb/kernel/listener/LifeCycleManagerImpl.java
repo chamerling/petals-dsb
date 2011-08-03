@@ -27,7 +27,6 @@ import org.ow2.petals.util.LoggingUtil;
 import org.petalslink.dsb.annotations.LifeCycleListener;
 import org.petalslink.dsb.annotations.Phase;
 import org.petalslink.dsb.kernel.api.listener.LifeCycleManager;
-import org.petalslink.dsb.kernel.util.FractalHelper;
 
 /**
  * @author chamerling
@@ -64,8 +63,8 @@ public class LifeCycleManagerImpl implements LifeCycleManager {
             } else {
                 Component parentcontainer = sc.getFcSuperComponents()[0];
                 ContentController cc = Fractal.getContentController(parentcontainer);
-                List<Component> components = FractalHelper.getAllComponentsWithAnnotation(cc,
-                        LifeCycleListener.class);
+                List<Component> components = org.petalslink.dsb.fractal.utils.FractalHelper
+                        .getAllComponentsWithAnnotation(cc, LifeCycleListener.class);
 
                 // order
                 Map<Integer, Set<Bean>> map = new TreeMap<Integer, Set<Bean>>(
@@ -150,8 +149,8 @@ public class LifeCycleManagerImpl implements LifeCycleManager {
             } else {
                 Component parentcontainer = sc.getFcSuperComponents()[0];
                 ContentController cc = Fractal.getContentController(parentcontainer);
-                List<Component> components = FractalHelper.getAllComponentsWithAnnotation(cc,
-                        LifeCycleListener.class);
+                List<Component> components = org.petalslink.dsb.fractal.utils.FractalHelper
+                        .getAllComponentsWithAnnotation(cc, LifeCycleListener.class);
 
                 // TODO : Fix the order of the set with the Comparator
                 Map<Integer, Set<Bean>> map = new TreeMap<Integer, Set<Bean>>(
