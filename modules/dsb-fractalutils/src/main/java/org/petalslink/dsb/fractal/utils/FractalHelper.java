@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.NoSuchInterfaceException;
 import org.objectweb.fractal.api.control.ContentController;
+import org.objectweb.fractal.api.control.NameController;
 import org.objectweb.fractal.api.control.SuperController;
 import org.objectweb.fractal.util.Fractal;
 
@@ -203,6 +204,21 @@ public class FractalHelper {
         try {
             result = component.getFcInterface("/content");
         } catch (NoSuchInterfaceException e) {
+        }
+        return result;
+    }
+
+    /**
+     * @param component
+     * @return
+     */
+    public static String getName(Component component) {
+        String result = null;
+        try {
+            NameController nc = Fractal.getNameController(component);
+            result = nc.getFcName();
+        } catch (NoSuchInterfaceException e) {
+            result = "NameNotFound";
         }
         return result;
     }
