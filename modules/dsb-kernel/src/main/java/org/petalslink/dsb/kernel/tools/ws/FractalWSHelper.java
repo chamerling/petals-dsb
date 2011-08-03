@@ -7,9 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.objectweb.fractal.api.Component;
-import org.objectweb.fractal.api.NoSuchInterfaceException;
 import org.objectweb.fractal.api.control.ContentController;
-import org.objectweb.fractal.api.control.SuperController;
 import org.objectweb.fractal.util.Fractal;
 import org.ow2.petals.tools.ws.WebServiceHelper;
 import org.petalslink.dsb.fractal.utils.FractalHelper;
