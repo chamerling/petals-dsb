@@ -64,7 +64,7 @@ public class LifeCycleManagerImpl implements LifeCycleManager {
                 Component parentcontainer = sc.getFcSuperComponents()[0];
                 ContentController cc = Fractal.getContentController(parentcontainer);
                 List<Component> components = org.petalslink.dsb.fractal.utils.FractalHelper
-                        .getAllComponentsWithAnnotation(cc, LifeCycleListener.class);
+                        .getAllComponentsWithMethodAnnotation(cc, LifeCycleListener.class);
 
                 // order
                 Map<Integer, Set<Bean>> map = new TreeMap<Integer, Set<Bean>>(
@@ -150,7 +150,7 @@ public class LifeCycleManagerImpl implements LifeCycleManager {
                 Component parentcontainer = sc.getFcSuperComponents()[0];
                 ContentController cc = Fractal.getContentController(parentcontainer);
                 List<Component> components = org.petalslink.dsb.fractal.utils.FractalHelper
-                        .getAllComponentsWithAnnotation(cc, LifeCycleListener.class);
+                        .getAllComponentsWithMethodAnnotation(cc, LifeCycleListener.class);
 
                 // TODO : Fix the order of the set with the Comparator
                 Map<Integer, Set<Bean>> map = new TreeMap<Integer, Set<Bean>>(
