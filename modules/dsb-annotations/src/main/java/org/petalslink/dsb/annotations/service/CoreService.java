@@ -18,9 +18,17 @@ public @interface CoreService {
     
     /**
      * A standard human readable description
+     * 
      * @return
      */
     String description() default "";
+    
+    /**
+     * The service name
+     * 
+     * @return
+     */
+    String name() default "";
     
     /**
      * The URL where the service description (WSDL, WADL, ...) can be found.

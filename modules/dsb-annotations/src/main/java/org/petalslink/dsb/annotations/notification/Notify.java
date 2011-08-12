@@ -19,5 +19,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.METHOD })
 public @interface Notify {
+    String[] topics() default "";
 
+    String dialect() default "";
 }
