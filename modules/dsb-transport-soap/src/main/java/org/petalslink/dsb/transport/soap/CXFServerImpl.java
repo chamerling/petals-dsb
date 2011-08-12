@@ -38,7 +38,7 @@ public class CXFServerImpl implements Server {
 
     private Receiver receiver;
     
-    private org.petalslink.dsb.cxf.Server server;
+    private org.petalslink.dsb.commons.service.api.Service server;
 
     private String host;
 
