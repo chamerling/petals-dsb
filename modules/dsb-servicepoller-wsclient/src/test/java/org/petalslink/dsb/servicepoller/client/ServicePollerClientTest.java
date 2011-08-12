@@ -104,7 +104,7 @@ public class ServicePollerClientTest extends TestCase {
         };
 
         String url = "http://localhost:9787/services/";
-        org.petalslink.dsb.cxf.Server server = createServer(url, beanServer);
+        org.petalslink.dsb.commons.service.api.Service server = createServer(url, beanServer);
         server.start();
         ServicePoller client = createClient(url);
         Document document = null;
@@ -140,7 +140,7 @@ public class ServicePollerClientTest extends TestCase {
         return new ServicePollerClient(url);
     }
 
-    private org.petalslink.dsb.cxf.Server createServer(String url, ServicePoller bean) {
+    private org.petalslink.dsb.commons.service.api.Service createServer(String url, ServicePoller bean) {
         return CXFHelper.getService(url, ServicePollerService.class, new ServicePollerServiceAdapter(bean));
     }
 
