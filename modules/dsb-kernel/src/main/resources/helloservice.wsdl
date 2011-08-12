@@ -1,0 +1,58 @@
+<ns1:definitions name="HelloServiceService" targetNamespace="http://api.ws.dsb.petalslink.org/" xmlns:ns1="http://schemas.xmlsoap.org/wsdl/" xmlns:ns10="http://www.w3.org/ns/wsdl/soap" xmlns:ns11="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:ns2="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:ns3="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns5="http://schemas.xmlsoap.org/wsdl/http/" xmlns:ns7="http://www.w3.org/ns/wsdl" xmlns:ns8="http://petals.ow2.org/wsdlExtensions" xmlns:ns9="http://www.w3.org/ns/wsdl/http" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+   <ns1:types>
+      <xs:schema attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://api.ws.dsb.petalslink.org/">
+         <xs:element name="sayHello" type="tns:sayHello" xmlns:tns="http://api.ws.dsb.petalslink.org/"/>
+         <xs:element name="sayHelloResponse" type="tns:sayHelloResponse" xmlns:tns="http://api.ws.dsb.petalslink.org/"/>
+         <xs:complexType name="sayHello">
+            <xs:sequence>
+               <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+            </xs:sequence>
+         </xs:complexType>
+         <xs:complexType name="sayHelloResponse">
+            <xs:sequence>
+               <xs:element minOccurs="0" name="return" type="xs:string"/>
+            </xs:sequence>
+         </xs:complexType>
+         <xs:element name="DSBWebServiceException" type="tns:DSBWebServiceException" xmlns:tns="http://api.ws.dsb.petalslink.org/"/>
+         <xs:complexType name="DSBWebServiceException">
+            <xs:sequence/>
+         </xs:complexType>
+      </xs:schema>
+   </ns1:types>
+   <ns1:message name="DSBWebServiceException">
+      <ns1:part element="tns:DSBWebServiceException" name="DSBWebServiceException" xmlns:tns="http://api.ws.dsb.petalslink.org/"/>
+   </ns1:message>
+   <ns1:message name="sayHelloResponse">
+      <ns1:part element="tns:sayHelloResponse" name="parameters" xmlns:tns="http://api.ws.dsb.petalslink.org/"/>
+   </ns1:message>
+   <ns1:message name="sayHello">
+      <ns1:part element="tns:sayHello" name="parameters" xmlns:tns="http://api.ws.dsb.petalslink.org/"/>
+   </ns1:message>
+   <ns1:portType name="HelloService">
+      <ns1:operation name="sayHello">
+         <ns1:input message="tns:sayHello" name="sayHello" xmlns:tns="http://api.ws.dsb.petalslink.org/"/>
+         <ns1:output message="tns:sayHelloResponse" name="sayHelloResponse" xmlns:tns="http://api.ws.dsb.petalslink.org/"/>
+         <ns1:fault message="tns:DSBWebServiceException" name="DSBWebServiceException" xmlns:tns="http://api.ws.dsb.petalslink.org/"/>
+      </ns1:operation>
+   </ns1:portType>
+   <ns1:binding name="HelloServiceServiceSoapBinding" type="tns:HelloService" xmlns:tns="http://api.ws.dsb.petalslink.org/">
+      <ns3:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+      <ns1:operation name="sayHello">
+         <ns3:operation soapAction="" style="document"/>
+         <ns1:input name="sayHello">
+            <ns3:body use="literal"/>
+         </ns1:input>
+         <ns1:output name="sayHelloResponse">
+            <ns3:body use="literal"/>
+         </ns1:output>
+         <ns1:fault name="DSBWebServiceException">
+            <ns3:fault name="DSBWebServiceException" use="literal"/>
+         </ns1:fault>
+      </ns1:operation>
+   </ns1:binding>
+   <ns1:service name="HelloServiceService">
+      <ns1:port binding="tns:HelloServiceServiceSoapBinding" name="HelloServicePort" xmlns:tns="http://api.ws.dsb.petalslink.org/">
+         <ns3:address location="http://192.168.2.13:8084/petals/services/HelloServicePortService"/>
+      </ns1:port>
+   </ns1:service>
+</ns1:definitions>
