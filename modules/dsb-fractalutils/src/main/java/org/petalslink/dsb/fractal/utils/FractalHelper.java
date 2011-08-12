@@ -118,6 +118,34 @@ public class FractalHelper {
         return components;
     }
 
+    // TODO
+    public static final List<Component> getAllComponentsWithInterface(
+            final ContentController parentContentController, Class<?> clazz) {
+        List<Component> components = new ArrayList<Component>();
+
+        ContentController subContentController = null;
+
+        for (Component component : parentContentController.getFcSubComponents()) {
+            try {
+                subContentController = Fractal.getContentController(component);
+                if (subContentController.getFcSubComponents().length > 0) {
+                    components.addAll(getAllComponentsWithInterface(subContentController, clazz));
+                }
+            } catch (NoSuchInterfaceException e1) {
+            }
+
+            Object o = getContent(component);
+            try {
+                // FIXME : do it in a clean way with introspection...
+                clazz.cast(o);
+                components.add(component);
+            } catch (ClassCastException e) {
+                // can not cast...
+            }
+        }
+        return components;
+    }
+
     /**
      * Return the content controller of the given component is any available and
      * if the component is not null...
