@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
 import org.apache.cxf.jaxws.support.JaxWsServiceFactoryBean;
-import org.petalslink.dsb.cxf.Server;
 import org.petalslink.dsb.soap.api.Exposer;
 import org.petalslink.dsb.soap.api.Service;
 import org.petalslink.dsb.soap.api.ServiceException;
@@ -18,7 +17,7 @@ import org.petalslink.dsb.soap.api.ServiceException;
  * 
  */
 public class CXFExposer implements Exposer {
-    
+
     private List<Service> services;
 
     /**
@@ -35,7 +34,8 @@ public class CXFExposer implements Exposer {
      * org.petalslink.dsb.soap.api.Exposer#expose(org.petalslink.dsb.soap.api
      * .Service)
      */
-    public Server expose(final Service service) throws ServiceException {
+    public org.petalslink.dsb.commons.service.api.Service expose(final Service service)
+            throws ServiceException {
         // create the wrapper and push it to CXF...
         ServiceWrapper wrapper = new ServiceWrapper(service);
         JaxWsServiceFactoryBean sf = new JaxWsServiceFactoryBean();
@@ -49,7 +49,7 @@ public class CXFExposer implements Exposer {
         sf.setPopulateFromClass(false);
         ssf.setServiceBean(wrapper);
 
-        return new Server() {
+        return new org.petalslink.dsb.commons.service.api.Service() {
             org.apache.cxf.endpoint.Server cxfServer;
 
             public void stop() {

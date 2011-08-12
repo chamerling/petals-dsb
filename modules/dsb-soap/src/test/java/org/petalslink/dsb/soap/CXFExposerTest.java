@@ -24,7 +24,6 @@ import javax.xml.transform.stream.StreamResult;
 import junit.framework.TestCase;
 
 import org.petalslink.dsb.cxf.CXFHelper;
-import org.petalslink.dsb.cxf.Server;
 import org.petalslink.dsb.soap.api.Exposer;
 import org.petalslink.dsb.soap.api.Service;
 import org.petalslink.dsb.soap.api.ServiceException;
@@ -74,7 +73,7 @@ public class CXFExposerTest extends TestCase {
             }
         };
 
-        Server server = exposer.expose(service);
+        org.petalslink.dsb.commons.service.api.Service server = exposer.expose(service);
         try {
             server.start();
             HelloService client = CXFHelper.getClientFromFinalURL(url, HelloService.class);
@@ -127,7 +126,7 @@ public class CXFExposerTest extends TestCase {
             }
         };
 
-        Server server = null;
+        org.petalslink.dsb.commons.service.api.Service server = null;
         try {
             server = exposer.expose(service);
             server.start();
@@ -197,7 +196,7 @@ public class CXFExposerTest extends TestCase {
             }
         };
 
-        Server server = null;
+        org.petalslink.dsb.commons.service.api.Service server = null;
         try {
             server = exposer.expose(service);
             server.start();
@@ -253,7 +252,7 @@ public class CXFExposerTest extends TestCase {
             }
         };
 
-        Server server = null;
+        org.petalslink.dsb.commons.service.api.Service server = null;
         try {
             server = exposer.expose(service);
             server.start();

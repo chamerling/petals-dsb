@@ -20,7 +20,7 @@ public interface Exposer {
      * @param service
      * @throws ServiceException
      */
-    org.petalslink.dsb.cxf.Server expose(Service service) throws ServiceException;
+    org.petalslink.dsb.commons.service.api.Service expose(Service service) throws ServiceException;
     
     /**
      * Get all the exposed services
