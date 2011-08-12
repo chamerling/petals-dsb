@@ -3,8 +3,8 @@
  */
 package org.petalslink.dsb.monitoring.standaloneserver;
 
+import org.petalslink.dsb.commons.service.api.Service;
 import org.petalslink.dsb.cxf.CXFHelper;
-import org.petalslink.dsb.cxf.Server;
 import org.petalslink.dsb.monitoring.api.MonitoringClient;
 
 /**
@@ -21,11 +21,11 @@ public class Main {
         String monitoringURL = "http://localhost:6475/monitoringadmin/";
 
         System.out.println("Starting report server at " + baseURL);
-        Server reportServer = CXFHelper.getService(baseURL, MonitoringClient.class,
+        Service reportServer = CXFHelper.getService(baseURL, MonitoringClient.class,
                 new MonitoringService());
         reportServer.start();
 
-        Server monitoringService = CXFHelper.getService(monitoringURL,
+        Service monitoringService = CXFHelper.getService(monitoringURL,
                 MonitoringAdminService.class, new MonitoringAdminService());
         monitoringService.start();
 
