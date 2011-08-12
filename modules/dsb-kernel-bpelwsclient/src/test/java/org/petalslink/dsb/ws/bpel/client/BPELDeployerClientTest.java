@@ -12,8 +12,8 @@ import javax.activation.DataHandler;
 
 import junit.framework.TestCase;
 
+import org.petalslink.dsb.commons.service.api.Service;
 import org.petalslink.dsb.cxf.CXFHelper;
-import org.petalslink.dsb.cxf.Server;
 import org.petalslink.dsb.ws.api.DSBWebServiceException;
 import org.petalslink.dsb.ws.bpel.api.BPELDeployer;
 import org.petalslink.dsb.ws.bpel.api.BPELDescriptor;
@@ -48,7 +48,7 @@ public class BPELDeployerClientTest extends TestCase {
         File bpel = new File(folder, bpelFileName);
 
         // create the server
-        Server server = CXFHelper.getService(address, BPELDeployer.class, new BPELDeployer() {
+        Service server = CXFHelper.getService(address, BPELDeployer.class, new BPELDeployer() {
             public boolean deploy(BPELDescriptor bpelDescriptor,
                     LinkedResourceDescriptor[] resources) throws DSBWebServiceException {
                 called.incrementAndGet();
@@ -113,7 +113,7 @@ public class BPELDeployerClientTest extends TestCase {
         File resource2 = new File(folder, rFileName2);
 
         // create the server
-        Server server = CXFHelper.getService(address, BPELDeployer.class, new BPELDeployer() {
+        Service server = CXFHelper.getService(address, BPELDeployer.class, new BPELDeployer() {
             public boolean deploy(BPELDescriptor bpelDescriptor,
                     LinkedResourceDescriptor[] resources) throws DSBWebServiceException {
                 called.incrementAndGet();
