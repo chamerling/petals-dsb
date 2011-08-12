@@ -24,6 +24,8 @@
   <component definition="REST" name="REST"/>
   <!--<component definition="BPEL" name="BPEL"/>-->
   <component definition="DSBMonitoring" name="DSBMonitoring"/>
+  <component definition="WebService" name="WebService"/>
+  
   
   <component definition="org.petalslink.dsb.kernel.io.client.DSBClientFactoryImpl" name="DSBClientFactoryImpl"/>
 
