@@ -37,6 +37,11 @@
 	<packaging>pom</packaging>
 
 	<modules>
+		
+		<!-- Commons -->
+		<module>modules/dsb-commons-serviceapi</module>
+		
+		<!-- DSB -->
 		<module>modules/dsb-parent</module>
 		<module>modules/dsb-annotations</module>
 		<module>modules/dsb-api</module>
@@ -123,6 +128,9 @@
 		<module>modules/dsb-soap</module>
 		
 		<!-- Notification -->
+		<module>modules/dsb-notification-commons</module>
+		<module>modules/dsb-notification-jaxws</module>
+		<module>modules/dsb-notification-service</module>
 		<module>modules/dsb-kernel-pubsubservice</module>
 		
 		<!-- Independant things, to be moved elsewhere -->
