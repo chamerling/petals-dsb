@@ -28,6 +28,11 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>dsb-commons-serviceapi</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-bundle-minimal</artifactId>
 		</dependency>

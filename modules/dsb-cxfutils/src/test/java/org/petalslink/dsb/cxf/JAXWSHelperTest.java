@@ -5,6 +5,8 @@ package org.petalslink.dsb.cxf;
 
 import junit.framework.TestCase;
 
+import org.petalslink.dsb.commons.service.api.Service;
+
 /**
  * @author chamerling
  * 
@@ -25,14 +27,14 @@ public class JAXWSHelperTest extends TestCase {
     }
 
     public void testGetService() {
-        Server server = CXFHelper.getService(url, HelloService.class, new HelloServiceImpl());
+        Service server = CXFHelper.getService(url, HelloService.class, new HelloServiceImpl());
         assertNotNull(server);
         server.start();
         server.stop();
     }
 
     public void testGetServiceAndCallIt() {
-        Server server = null;
+        Service server = null;
         try {
             server = CXFHelper.getService(url, HelloService.class, new HelloServiceImpl());
             server.start();

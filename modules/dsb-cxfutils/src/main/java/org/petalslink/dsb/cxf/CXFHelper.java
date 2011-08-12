@@ -6,6 +6,7 @@ package org.petalslink.dsb.cxf;
 import org.apache.cxf.jaxb.JAXBDataBinding;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
+import org.petalslink.dsb.commons.service.api.Service;
 import org.petalslink.dsb.jaxws.JAXWSHelper;
 
 /**
@@ -49,7 +50,7 @@ public class CXFHelper {
         return clazz.cast(client);
     }
 
-    public static <T> Server getService(String baseURL, Class<T> clazz, Object bean) {
+    public static <T> Service getService(String baseURL, Class<T> clazz, Object bean) {
         Class<?> wsClass = JAXWSHelper.getWebServiceClass(clazz);
         String serviceName = JAXWSHelper.getWebServiceName(wsClass);
         if (serviceName == null) {
@@ -63,7 +64,7 @@ public class CXFHelper {
         return getServiceFromFinalURL(address, clazz, bean);
     }
         
-    public static <T> Server getServiceFromFinalURL(String finalURL, Class<T> clazz, Object bean) {
+    public static <T> Service getServiceFromFinalURL(String finalURL, Class<T> clazz, Object bean) {
         final JaxWsServerFactoryBean sf = new JaxWsServerFactoryBean();
         sf.setDataBinding(new JAXBDataBinding());
         sf.setServiceBean(bean);
@@ -72,7 +73,7 @@ public class CXFHelper {
         sf.setAddress(finalURL);
         sf.setServiceClass(wsClass);
 
-        return new Server() {
+        return new Service() {
             org.apache.cxf.endpoint.Server server;
 
             public void stop() {
@@ -84,5 +85,4 @@ public class CXFHelper {
             }
         };
     }
-
 }
