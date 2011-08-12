@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wstop:TopicSet xmlns:wstop="http://docs.oasis-open.org/wsn/t-1">
+	<tns:DSBTopic xmlns:tns="http://www.petalslink.org/dsb/topicsns/"
+		wstop:topic="true" />
+</wstop:TopicSet>

@@ -1,0 +1,43 @@
+
+<b:Notify xmlns:b="http://docs.oasis-open.org/wsn/b-2"
+	xmlns:add="http://www.w3.org/2005/08/addressing">
+	<!--1 or more repetitions: -->
+	<b:NotificationMessage>
+		<!--Optional: -->
+		<b:SubscriptionReference>
+			<add:Address>?</add:Address>
+			<!--Optional: -->
+			<add:ReferenceParameters>
+				<!--You may enter ANY elements at this point -->
+			</add:ReferenceParameters>
+			<!--Optional: -->
+			<add:Metadata>
+				<!--You may enter ANY elements at this point -->
+			</add:Metadata>
+			<!--You may enter ANY elements at this point -->
+		</b:SubscriptionReference>
+		<!--Optional: -->
+		<b:Topic Dialect="?">
+			e
+			<!--You may enter ANY elements at this point -->
+			gero
+		</b:Topic>
+		<!--Optional: -->
+		<b:ProducerReference>
+			<add:Address>?</add:Address>
+			<!--Optional: -->
+			<add:ReferenceParameters>
+				<!--You may enter ANY elements at this point -->
+			</add:ReferenceParameters>
+			<!--Optional: -->
+			<add:Metadata>
+				<!--You may enter ANY elements at this point -->
+			</add:Metadata>
+			<!--You may enter ANY elements at this point -->
+		</b:ProducerReference>
+		<b:Message>
+			<!--You may enter ANY elements at this point -->
+		</b:Message>
+	</b:NotificationMessage>
+	<!--You may enter ANY elements at this point -->
+</b:Notify>

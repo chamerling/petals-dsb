@@ -1,0 +1,22 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:bw="http://docs.oasis-open.org/wsn/bw-2" xmlns:b="http://docs.oasis-open.org/wsn/b-2"
+	xmlns:add="http://www.w3.org/2005/08/addressing">
+	<soapenv:Header />
+	<soapenv:Body>
+		<bw:Subscribe>
+			<!--Optional: -->
+			<b:Subscribe>
+				<b:ConsumerReference>
+					<add:Address>http://localhost:9999/foo/bar/NotificationConsumerService
+					</add:Address>
+				</b:ConsumerReference>
+				<b:Filter>
+					<b:TopicExpression Dialect="http://www.w3.org/TR/1999/REC-xpath-19991116"
+						xmlns:mows-ev="http://docs.oasis-open.org/wsdm/2004/12/mows/wsdm-mows-events.xml">
+						DSBTopic
+		     </b:TopicExpression>
+				</b:Filter>
+			</b:Subscribe>
+		</bw:Subscribe>
+	</soapenv:Body>
+</soapenv:Envelope>

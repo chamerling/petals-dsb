@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+  Copyright (c) 2011 EBM Websourcing.
+  All rights reserved. This program and the accompanying materials
+  are made available under the terms of the GNU Lesser Public License v2.1
+  which accompanies this distribution, and is available at
+  http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+  
+  Contributors:
+      EBM Websourcing - initial API and implementation
+-->
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:tns="http://com.ebmwebsourcing.easyesb/soa/model/endpoint/notification"
+	xmlns:bw2="http://docs.oasis-open.org/wsn/bw-2"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:soa="http://com.petalslink.easyesb/soa/model/datatype/1.0" name="SubscriptionManagerDefinition"
+	targetNamespace="http://com.ebmwebsourcing.easyesb/soa/model/endpoint/notification">
+
+	<wsdl:import location="../notification/wsdl/notification/bw-2.wsdl"
+		namespace="http://docs.oasis-open.org/wsn/bw-2"></wsdl:import>
+
+
+
+	<wsdl:binding name="SubscriptionManagerBinding"
+		type="bw2:SubscriptionManager">
+
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="Renew">
+			<soap:operation
+				soapAction="http://com.ebmwebsourcing.easyesb/soa/model/endpoint/notification/Renew" />
+			<wsdl:input name="RenewRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="RenewResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="ResourceUnknownFault">
+				<soap:fault use="literal" name="ResourceUnknownFault" />
+			</wsdl:fault>
+			<wsdl:fault name="UnacceptableTerminationTimeFault">
+				<soap:fault use="literal"
+					name="UnacceptableTerminationTimeFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="Unsubscribe">
+			<soap:operation
+				soapAction="http://com.ebmwebsourcing.easyesb/soa/model/endpoint/notification/Unsubscribe" />
+			<wsdl:input name="UnsubscribeRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="UnsubscribeResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="ResourceUnknownFault">
+				<soap:fault use="literal" name="ResourceUnknownFault" />
+			</wsdl:fault>
+			<wsdl:fault name="UnableToDestroySubscriptionFault">
+				<soap:fault use="literal"
+					name="UnableToDestroySubscriptionFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+</wsdl:definitions>

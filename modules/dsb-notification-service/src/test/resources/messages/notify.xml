@@ -1,0 +1,44 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:b="http://docs.oasis-open.org/wsn/b-2" xmlns:add="http://www.w3.org/2005/08/addressing">
+	<soapenv:Header />
+	<soapenv:Body>
+		<b:Notify>
+			<!--1 or more repetitions: -->
+			<b:NotificationMessage>
+				<!--Optional: -->
+				<b:SubscriptionReference>
+					<add:Address>?</add:Address>
+					<!--Optional: -->
+					<add:ReferenceParameters>
+						<!--You may enter ANY elements at this point -->
+					</add:ReferenceParameters>
+					<!--Optional: -->
+					<add:Metadata>
+						<!--You may enter ANY elements at this point -->
+					</add:Metadata>
+					<!--You may enter ANY elements at this point -->
+				</b:SubscriptionReference>
+				<!--Optional: -->
+				<b:Topic Dialect="?">
+				</b:Topic>
+				<!--Optional: -->
+				<b:ProducerReference>
+					<add:Address>?</add:Address>
+					<!--Optional: -->
+					<add:ReferenceParameters>
+						<!--You may enter ANY elements at this point -->
+					</add:ReferenceParameters>
+					<!--Optional: -->
+					<add:Metadata>
+						<!--You may enter ANY elements at this point -->
+					</add:Metadata>
+					<!--You may enter ANY elements at this point -->
+				</b:ProducerReference>
+				<b:Message>
+					<!--You may enter ANY elements at this point -->
+				</b:Message>
+			</b:NotificationMessage>
+			<!--You may enter ANY elements at this point -->
+		</b:Notify>
+	</soapenv:Body>
+</soapenv:Envelope>
