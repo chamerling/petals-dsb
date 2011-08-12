@@ -14,11 +14,11 @@ import easyesb.petalslink.com.service.wsdmadmin._1_0.WSDMAdminItf;
  */
 public class App {
     public static void main(String[] args) {
-        String reportURL = "";
-        String wsdmURL = "";
-        Server reportServer = CXFHelper.getServiceFromFinalURL(reportURL, RawReportInterface.class,
+        String reportURL = "http://localhost:8086/services/ReportService";
+        String wsdmURL = "http://localhost:8086/services/adminExternalEndpoint";
+        Service reportServer = CXFHelper.getServiceFromFinalURL(reportURL, RawReportInterface.class,
                 new org.petalslink.dsb.mocks.easierbsm.RawReportInterface());
-        Server wsdmServer = CXFHelper.getServiceFromFinalURL(wsdmURL, WSDMAdminItf.class,
+        Service wsdmServer = CXFHelper.getServiceFromFinalURL(wsdmURL, WSDMAdminItf.class,
                 new org.petalslink.dsb.mocks.easierbsm.WSDMAdminItf());
 
         reportServer.start();
