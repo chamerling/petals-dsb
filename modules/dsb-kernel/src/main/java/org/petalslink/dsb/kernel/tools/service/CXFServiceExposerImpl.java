@@ -64,9 +64,8 @@ public class CXFServiceExposerImpl implements ServiceExposer {
      * 
      * @see org.petalslink.dsb.kernel.tools.service.ServiceExposer#expose()
      */
-    @LifeCycleListener()
+    @LifeCycleListener(priority = 0)
     public void expose() throws DSBException {
-        System.out.println("EXPOSING SERVICES!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         List<Service> services = this.registry.getServices();
         if (log.isDebugEnabled()) {
             log.debug(String.format("Got %d services to expose", services.size()));
