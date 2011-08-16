@@ -80,6 +80,12 @@ public interface DSBConfigurationService {
     String getRemoteTransport();
 
     int getWSTransportPort();
+    
+    /**
+     * Get the base URL for kernel web services
+     * @return
+     */
+    String getWSKernelBaseURL();
 
     /**
      * @deprecated use {@link FederationConfigurationService}

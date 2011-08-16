@@ -39,6 +39,7 @@ import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.kernel.configuration.ConfigurationService;
 import org.ow2.petals.util.LoggingUtil;
 import org.petalslink.dsb.kernel.api.DSBConfigurationService;
+import org.petalslink.dsb.kernel.api.tools.ws.WebServiceExposer;
 
 /**
  * @author chamerling - eBM WebSourcing
@@ -313,6 +314,26 @@ public class DSBConfigurationServiceImpl implements DSBConfigurationService {
     public boolean isFederationAware() {
         log.warning("Deprecated, use the FederationConfigurationService instead!");
         return false;
+    }
+    
+    /* (non-Javadoc)
+     * @see org.petalslink.dsb.kernel.api.DSBConfigurationService#getWSKernelBaseURL()
+     */
+    public String getWSKernelBaseURL() {
+        StringBuffer sb = new StringBuffer("http://");
+        sb.append(configurationService.getContainerConfiguration().getHost());
+        sb.append(":");
+        sb.append(configurationService.getContainerConfiguration().getWebservicePort());
+        sb.append("/");
+        String pre = configurationService.getContainerConfiguration().getWebservicePrefix();
+        if (pre == null) {
+            pre = WebServiceExposer.DEFAULT_PREFIX;
+        } else {
+            pre = pre.trim();
+        }
+        sb.append(pre);
+        sb.append('/');
+        return sb.toString();
     }
 
 }
