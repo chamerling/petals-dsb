@@ -6,8 +6,6 @@ package org.petalslink.dsb.kernel.tools.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.ws.WebServiceProvider;
-
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.fraclet.annotation.annotations.FractalComponent;
 import org.objectweb.fractal.fraclet.annotation.annotations.Interface;
@@ -17,8 +15,8 @@ import org.objectweb.fractal.fraclet.annotation.annotations.Provides;
 import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
 import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.util.LoggingUtil;
+import org.petalslink.dsb.annotations.service.WebService;
 import org.petalslink.dsb.fractal.utils.FractalHelper;
-import org.petalslink.dsb.soap.ServiceWrapper;
 import org.petalslink.dsb.soap.api.Service;
 
 /**
@@ -59,16 +57,18 @@ public class GlobalServiceRegistryImpl implements ServiceRegistry {
      * org.petalslink.dsb.kernel.tools.service.ServiceRegistry#getServices()
      */
     public List<Service> getServices() {
+        // get all the components which are annotated with the right
+        // annotation and which are implementing the Service interface
         List<Service> result = new ArrayList<Service>();
-        List<Component> components = FractalHelper.getAllComponentsWithInterface(
+        List<Component> components = FractalHelper.getAllComponentsWithAnnotation(
                 FractalHelper.getContentController(FractalHelper.getRootComponent(component)),
-                Service.class);
+                WebService.class);
         for (Component component : components) {
-            if (component instanceof Service) {
-                result.add((Service) component);
+            Object o = FractalHelper.getContent(component);
+            if (o instanceof Service) {
+                result.add((Service) o);
             }
         }
         return result;
     }
-
 }

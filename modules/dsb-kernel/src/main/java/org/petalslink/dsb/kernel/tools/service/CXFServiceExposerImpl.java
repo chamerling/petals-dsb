@@ -80,8 +80,19 @@ public class CXFServiceExposerImpl implements ServiceExposer {
                     org.petalslink.dsb.commons.service.api.Service s = this.exposer.expose(service);
                     s.start();
                     this.exposed.add(s);
+                    log.info(String.format(
+                            "Service is exposed and is available as Web service at %s",
+                            service.getURL()));
                 } catch (ServiceException e) {
                     final String message = "Problem while exposing service";
+                    if (log.isDebugEnabled()) {
+                        log.warning(message, e);
+                    } else {
+                        log.warning(message);
+                    }
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    final String message = "Unknown problem while exposing service";
                     if (log.isDebugEnabled()) {
                         log.warning(message, e);
                     } else {
