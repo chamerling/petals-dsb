@@ -34,30 +34,15 @@
 		</dependency>
 
 		<!-- BPEL -->
-		<!-- 
-		<dependency>
-			<groupId>org.petalslink.dsb</groupId>
-			<artifactId>dsb-kernel-bpelservice</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		-->
+		<!-- <dependency> <groupId>org.petalslink.dsb</groupId> <artifactId>dsb-kernel-bpelservice</artifactId> 
+			<version>${project.version}</version> </dependency> -->
 
 		<!-- This is an Hack for classloading issues and bad SNAPSHOT dependencies 
 			cf assemblies -->
-		<!-- 
-		<dependency>
-			<groupId>org.petalslink.dsb</groupId>
-			<artifactId>dsb-bundle-bpelgenerator</artifactId>
-			<version>${project.version}</version>
-			<type>zip</type>
-			<exclusions>
-				<exclusion>
-					<groupId>org.petalslink.dsb</groupId>
-					<artifactId>petals-generator-bpel</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		-->
+		<!-- <dependency> <groupId>org.petalslink.dsb</groupId> <artifactId>dsb-bundle-bpelgenerator</artifactId> 
+			<version>${project.version}</version> <type>zip</type> <exclusions> <exclusion> 
+			<groupId>org.petalslink.dsb</groupId> <artifactId>petals-generator-bpel</artifactId> 
+			</exclusion> </exclusions> </dependency> -->
 
 
 		<!-- FIXME : Uncomment when merged -->
@@ -73,21 +58,21 @@
 			<!-- <scope>runtime</scope> -->
 		</dependency>
 
-		<!-- Raw monitoring @ Deprecated-->
+		<!-- Raw monitoring @ Deprecated -->
 		<dependency>
 			<groupId>org.petalslink.dsb</groupId>
 			<artifactId>dsb-monitoring</artifactId>
 			<version>${project.version}</version>
 			<!-- <scope>runtime</scope> -->
 		</dependency>
-		
+
 		<!-- EasierBSM based Monitoring -->
 		<dependency>
 			<groupId>org.petalslink.dsb</groupId>
 			<artifactId>dsb-kernel-easierbsmservice</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.petalslink.dsb</groupId>
 			<artifactId>dsb-kernel-monitoringservice</artifactId>
@@ -113,6 +98,19 @@
 			<version>${project.version}</version>
 		</dependency>
 
+		<!-- Notification -->
+		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>dsb-kernel-notificationservice</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>dsb-kernel-pubsubservice</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
 		<!-- <dependency> <groupId>eu.soa4all.dsb.petals.webapp</groupId> <artifactId>soa4all-petals-webapp</artifactId> 
 			<version>1.0-SNAPSHOT</version> <scope>runtime</scope> <type>war</type> </dependency> -->
 		<!-- Related to Petals Kernel version used -->
@@ -122,7 +120,6 @@
 			<version>2.1</version>
 			<scope>runtime</scope>
 		</dependency>
-
 	</dependencies>
 
 	<build>
