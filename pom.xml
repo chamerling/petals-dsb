@@ -132,6 +132,7 @@
 		<module>modules/dsb-notification-jaxws</module>
 		<module>modules/dsb-notification-service</module>
 		<module>modules/dsb-kernel-pubsubservice</module>
+		<module>modules/dsb-kernel-notificationservice</module>
 		
 		<!-- Independant things, to be moved elsewhere -->
 		<module>modules/gms-core</module>
