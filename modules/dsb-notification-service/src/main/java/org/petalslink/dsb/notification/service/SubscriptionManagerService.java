@@ -3,6 +3,8 @@
  */
 package org.petalslink.dsb.notification.service;
 
+import java.util.logging.Logger;
+
 import javax.xml.namespace.QName;
 
 import org.petalslink.dsb.soap.AbstractService;
@@ -11,27 +13,26 @@ import org.petalslink.dsb.soap.api.SimpleExchange;
 import org.w3c.dom.Document;
 
 import com.ebmwebsourcing.wsstar.basefaults.datatypes.impl.impl.WsrfbfModelFactoryImpl;
-import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.GetCurrentMessage;
-import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.GetCurrentMessageResponse;
-import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Subscribe;
-import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.SubscribeResponse;
+import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Renew;
+import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.RenewResponse;
+import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Unsubscribe;
+import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.UnsubscribeResponse;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.refinedabstraction.RefinedWsnbFactory;
-import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.utils.WsnbException;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.impl.impl.WsnbModelFactoryImpl;
 import com.ebmwebsourcing.wsstar.resource.datatypes.impl.impl.WsrfrModelFactoryImpl;
 import com.ebmwebsourcing.wsstar.resourcelifetime.datatypes.impl.impl.WsrfrlModelFactoryImpl;
 import com.ebmwebsourcing.wsstar.resourceproperties.datatypes.impl.impl.WsrfrpModelFactoryImpl;
 import com.ebmwebsourcing.wsstar.topics.datatypes.impl.impl.WstopModelFactoryImpl;
-import com.ebmwebsourcing.wsstar.wsnb.services.INotificationProducer;
+import com.ebmwebsourcing.wsstar.wsnb.services.ISubscriptionManager;
 import com.ebmwebsourcing.wsstar.wsnb.services.impl.util.Wsnb4ServUtils;
-import com.ebmwebsourcing.wsstar.wsrfbf.services.faults.AbsWSStarFault;
 
 /**
- * 
  * @author chamerling
  * 
  */
-public class NotificationProducerService extends AbstractService {
+public class SubscriptionManagerService extends AbstractService {
+
+    private static Logger logger = Logger.getLogger(SubscriptionManagerService.class.getName());
 
     static {
         Wsnb4ServUtils.initModelFactories(new WsrfbfModelFactoryImpl(),
@@ -40,7 +41,7 @@ public class NotificationProducerService extends AbstractService {
                 new WsnbModelFactoryImpl());
     }
 
-    private INotificationProducer producer;
+    private ISubscriptionManager subscriptionManager;
 
     /**
      * @param interfaceName
@@ -49,26 +50,24 @@ public class NotificationProducerService extends AbstractService {
      * @param wsdl
      * @param url
      */
-    public NotificationProducerService(QName interfaceName, QName serviceName, QName endpointName,
-            String wsdl, String url, INotificationProducer producer) {
+    public SubscriptionManagerService(QName interfaceName, QName serviceName, QName endpointName,
+            String wsdl, String url, ISubscriptionManager manager) {
         super(interfaceName, serviceName, endpointName, wsdl, url);
-        if (producer == null) {
-            throw new IllegalArgumentException("Producer is null!");
+        if (manager == null) {
+            throw new IllegalArgumentException("Manager is null!");
         }
-        this.producer = producer;
+        this.subscriptionManager = manager;
     }
 
     /*
      * (non-Javadoc)
      * 
      * @see
-     * org.petalslink.dsb.soap.api.Service#invoke(org.petalslink.dsb.soap.api
-     * .SimpleExchange)
+     * org.petalslink.dsb.soap.AbstractService#doInvoke(org.petalslink.dsb.soap
+     * .api.SimpleExchange)
      */
-    public void doInvoke(SimpleExchange exchange) throws ServiceException {
-        System.out.println("Notification producer");
-        System.out.println("org.petalslink.dsb.notification.service.NotificationProducerService");
-
+    @Override
+    protected void doInvoke(SimpleExchange exchange) throws ServiceException {
         if (exchange == null || exchange.getIn() == null) {
             throw new ServiceException("Incoming message is null...");
         }
@@ -77,34 +76,33 @@ public class NotificationProducerService extends AbstractService {
             throw new ServiceException("Incoming operation is null...");
         }
 
-        if ("Subscribe".equals(operation.getLocalPart())) {
+        if ("Renew".equals(operation.getLocalPart())) {
+            logger.finest("Renew");
             try {
-                Subscribe subscribe = RefinedWsnbFactory.getInstance().getWsnbReader()
-                        .readSubscribe(exchange.getIn());
-                SubscribeResponse res = this.producer.subscribe(subscribe);
+                Renew renew = RefinedWsnbFactory.getInstance().getWsnbReader()
+                        .readRenew(exchange.getIn());
+                RenewResponse response = this.subscriptionManager.renew(renew);
                 Document docResp = RefinedWsnbFactory.getInstance().getWsnbWriter()
-                        .writeSubscribeResponseAsDOM(res);
+                        .writeRenewResponseAsDOM(response);
                 exchange.setOut(docResp);
-            } catch (WsnbException e) {
-                e.printStackTrace();
-                throw new ServiceException(e);
-            } catch (AbsWSStarFault e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 throw new ServiceException(e);
             }
-        } else if ("GetCurrentMessage".equals(operation.getLocalPart())) {
+        } else if ("Unsubscribe".equals(operation.getLocalPart())) {
+            logger.finest("Unsubscribe");
             try {
-                GetCurrentMessage getCurrentMessage = RefinedWsnbFactory.getInstance()
-                        .getWsnbReader().readGetCurrentMessage(exchange.getIn());
-                GetCurrentMessageResponse res = this.producer.getCurrentMessage(getCurrentMessage);
+                Unsubscribe unsubscribe = RefinedWsnbFactory.getInstance().getWsnbReader()
+                        .readUnsubscribe(exchange.getIn());
+                UnsubscribeResponse response = this.subscriptionManager.unsubscribe(unsubscribe);
                 Document docResp = RefinedWsnbFactory.getInstance().getWsnbWriter()
-                        .writeGetCurrentMessageResponseAsDOM(res);
+                        .writeUnsubscribeResponseAsDOM(response);
                 exchange.setOut(docResp);
-            } catch (WsnbException e) {
-                throw new ServiceException(e);
-            } catch (AbsWSStarFault e) {
+            } catch (Exception e) {
+                e.printStackTrace();
                 throw new ServiceException(e);
             }
+
         } else {
             throw new ServiceException("Unknown operation '" + operation + "'");
         }

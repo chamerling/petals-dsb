@@ -14,12 +14,14 @@ import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
 import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.util.LoggingUtil;
 import org.petalslink.dsb.notification.commons.NotificationException;
-import org.petalslink.dsb.notification.commons.NotificationSender;
+import org.petalslink.dsb.notification.commons.api.NotificationSender;
 import org.w3c.dom.Document;
 
 /**
  * Use this service to send notification to notification subscribers. This
- * service embeds the core engine which will get all the subscriptions
+ * service embeds the core engine which will get all the subscriptions. This
+ * service is an internal one to be used by other DSB kernel services through
+ * the NotificationCenter.
  * 
  * @author chamerling
  * 
@@ -35,6 +37,7 @@ public class NotificationSenderServiceImpl implements NotificationSender {
 
     @LifeCycle(on = LifeCycleType.START)
     protected void start() {
+        // set the notification sender in the notification center
         this.log = new LoggingUtil(this.logger);
         NotificationCenter.get().setNotifificationSender(this);
     }
@@ -56,6 +59,7 @@ public class NotificationSenderServiceImpl implements NotificationSender {
                     "Sending a notification message to topic '%s' with dialect '%s'",
                     topic.toString(), dialect));
         }
+        System.out.println("Got a notify request, sending the message to the core engine...");
     }
 
 }

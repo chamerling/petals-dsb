@@ -15,9 +15,14 @@ import org.w3c.dom.Document;
 public class Exchange implements SimpleExchange {
 
     private Document in;
+
     private QName operation;
+
     private Document fault;
+
     private Document out;
+
+    private Exception e;
 
     /**
      * 
@@ -99,6 +104,26 @@ public class Exchange implements SimpleExchange {
      */
     public void setOperation(QName operation) {
         this.operation = operation;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.petalslink.dsb.soap.api.SimpleExchange#getException()
+     */
+    public Exception getException() {
+        return e;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.petalslink.dsb.soap.api.SimpleExchange#setException(java.lang.Exception
+     * )
+     */
+    public void setException(Exception exception) {
+        this.e = exception;
     }
 
 }

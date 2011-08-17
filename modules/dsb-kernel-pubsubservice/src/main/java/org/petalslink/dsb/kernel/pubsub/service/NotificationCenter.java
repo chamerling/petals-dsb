@@ -3,7 +3,8 @@
  */
 package org.petalslink.dsb.kernel.pubsub.service;
 
-import org.petalslink.dsb.notification.commons.NotificationSender;
+import org.petalslink.dsb.notification.commons.api.NotificationManager;
+import org.petalslink.dsb.notification.commons.api.NotificationSender;
 
 /**
  * 
@@ -22,6 +23,8 @@ public class NotificationCenter {
     }
 
     private NotificationSender sender;
+    
+    private NotificationManager manager;
 
     private NotificationCenter() {
     }

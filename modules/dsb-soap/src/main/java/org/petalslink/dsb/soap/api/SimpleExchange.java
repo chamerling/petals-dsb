@@ -25,6 +25,10 @@ public interface SimpleExchange {
 
     void setFault(Document fault);
 
+    Exception getException();
+
+    void setException(Exception exception);
+
     QName getOperation();
 
     void setOperation(QName operation);

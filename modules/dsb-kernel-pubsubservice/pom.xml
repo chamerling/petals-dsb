@@ -14,6 +14,8 @@
 	<version>1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
+	<description>The pubsub service is an internal DSB service to be used by other kernel components to interact using a pub/sub mechanism</description>
+
 	<name>dsb-kernel-pubsubservice</name>
 
 	<properties>

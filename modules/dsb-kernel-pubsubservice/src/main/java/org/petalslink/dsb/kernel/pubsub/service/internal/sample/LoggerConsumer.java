@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.petalslink.dsb.kernel.pubsub.service.consumer;
+package org.petalslink.dsb.kernel.pubsub.service.internal.sample;
 
 import javax.xml.transform.TransformerException;
 
@@ -20,8 +20,6 @@ import org.w3c.dom.Document;
  * 
  */
 @FractalComponent
-// @Provides(interfaces = { @Interface(name = "service", signature =
-// enclosing_type) })
 public class LoggerConsumer {
 
     @Monolog(name = "logger")

@@ -8,9 +8,11 @@ import org.objectweb.fractal.fraclet.annotation.annotations.Interface;
 import org.objectweb.fractal.fraclet.annotation.annotations.LifeCycle;
 import org.objectweb.fractal.fraclet.annotation.annotations.Monolog;
 import org.objectweb.fractal.fraclet.annotation.annotations.Provides;
+import org.objectweb.fractal.fraclet.annotation.annotations.Requires;
 import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
 import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.util.LoggingUtil;
+import org.petalslink.dsb.notification.commons.api.NotificationManager;
 
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.GetCurrentMessage;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.GetCurrentMessageResponse;
@@ -21,7 +23,8 @@ import com.ebmwebsourcing.wsstar.wsnb.services.INotificationProducer;
 import com.ebmwebsourcing.wsstar.wsrfbf.services.faults.AbsWSStarFault;
 
 /**
- * This notification producer service is just a facade to the real notification engine.
+ * This notification producer service is just a facade to the real notification
+ * engine.
  * 
  * @author chamerling
  * 
@@ -35,7 +38,8 @@ public class NotificationProducerServiceImpl implements INotificationProducer {
 
     private LoggingUtil log;
 
-    private INotificationProducer delegate;
+    @Requires(name = "notification-manager", signature = NotificationManager.class)
+    private NotificationManager notificationManager;
 
     @LifeCycle(on = LifeCycleType.START)
     protected void start() {
@@ -56,7 +60,8 @@ public class NotificationProducerServiceImpl implements INotificationProducer {
      */
     public GetCurrentMessageResponse getCurrentMessage(GetCurrentMessage getCurrentMessage)
             throws WsnbException, AbsWSStarFault {
-        return delegate.getCurrentMessage(getCurrentMessage);
+        System.out.println("Got a getCurrentMessage!");
+        return getINotificationProducer().getCurrentMessage(getCurrentMessage);
     }
 
     /*
@@ -69,7 +74,12 @@ public class NotificationProducerServiceImpl implements INotificationProducer {
      * )
      */
     public SubscribeResponse subscribe(Subscribe subscribe) throws WsnbException, AbsWSStarFault {
-        return delegate.subscribe(subscribe);
+        System.out.println("Got a subscribe!");
+        return getINotificationProducer().subscribe(subscribe);
+    }
+
+    private synchronized INotificationProducer getINotificationProducer() {
+        return notificationManager.getNotificationProducerEngine();
     }
 
 }

@@ -15,6 +15,7 @@ import org.jdom.JDOMException;
 import org.jdom.Namespace;
 import org.jdom.input.DOMBuilder;
 import org.jdom.output.DOMOutputter;
+import org.petalslink.dsb.notification.commons.api.NotificationManager;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -41,10 +42,12 @@ import com.ebmwebsourcing.wsstar.wsnb.services.impl.topic.WstConstants;
 import com.ebmwebsourcing.wsstar.wsnb.services.impl.util.Wsnb4ServUtils;
 
 /**
+ * The default implementation of the notification manager.
+ * 
  * @author chamerling
  * 
  */
-public class NotificationManager {
+public class NotificationManagerImpl implements NotificationManager {
 
     public static final String EBM_RESOURCEIDS_PREFIX = "ebm";
 
@@ -55,7 +58,7 @@ public class NotificationManager {
     public static final QName SUPPORTED_QNAME_ATTR = new QName(EBM_TOPICS_EXTENSION_NAMESPACE_URI,
             "supported", EBM_RESOURCEIDS_PREFIX);
 
-    private static Logger logger = Logger.getLogger(NotificationManager.class.getName());
+    private static Logger logger = Logger.getLogger(NotificationManagerImpl.class.getName());
 
     private TopicNamespaceType topicNamespace;
 
@@ -83,7 +86,7 @@ public class NotificationManager {
     /**
 	 * 
 	 */
-    public NotificationManager(URL topicNamespaces, List<String> supportedTopics,
+    public NotificationManagerImpl(URL topicNamespaces, List<String> supportedTopics,
             QName serviceName, QName interfaceName, String endpointName) {
         this.endpointName = endpointName;
         this.serviceName = serviceName;
@@ -293,36 +296,52 @@ public class NotificationManager {
         return res;
     }
 
-    /**
-     * @return the topicNamespace
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.petalslink.dsb.notification.commons.NotificationManager#getTopicNamespace
+     * ()
      */
     public TopicNamespaceType getTopicNamespace() {
         return topicNamespace;
     }
 
-    /**
-     * @return the topicSet
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.petalslink.dsb.notification.commons.NotificationManager#getTopicSet()
      */
     public TopicSetType getTopicSet() {
         return topicSet;
     }
 
-    /**
-     * @return the topicsManagerEngine
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.petalslink.dsb.notification.commons.NotificationManager#
+     * getTopicsManagerEngine()
      */
     public TopicsManagerEngine getTopicsManagerEngine() {
         return topicsManagerEngine;
     }
 
-    /**
-     * @return the subscriptionManagerEngine
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.petalslink.dsb.notification.commons.NotificationManager#
+     * getSubscriptionManagerEngine()
      */
     public SubscriptionManagerEngine getSubscriptionManagerEngine() {
         return subscriptionManagerEngine;
     }
 
-    /**
-     * @return the notificationProducerEngine
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.petalslink.dsb.notification.commons.NotificationManager#
+     * getNotificationProducerEngine()
      */
     public NotificationProducerEngine getNotificationProducerEngine() {
         return notificationProducerEngine;

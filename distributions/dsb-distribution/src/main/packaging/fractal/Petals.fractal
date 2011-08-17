@@ -25,7 +25,7 @@
   <!--<component definition="BPEL" name="BPEL"/>-->
   <component definition="DSBMonitoring" name="DSBMonitoring"/>
   <component definition="WebService" name="WebService"/>
-  
+  <component definition="Notification" name="Notification"/>
   
   <component definition="org.petalslink.dsb.kernel.io.client.DSBClientFactoryImpl" name="DSBClientFactoryImpl"/>
 
@@ -155,4 +155,7 @@
   <binding client="DSBMonitoring.configuration" server="ConfigurationServiceImpl.service"/>
   <binding client="DSBMonitoring.routermodulemanager" server="JBI-Messaging.routermodulemanager"/>
   
+  <!-- Notification -->
+  <binding client="Notification.dsbconfiguration" server="DSBManagement.dsbconfiguration"/>
+  <binding client="Notification.configuration" server="ConfigurationServiceImpl.service"/>
 </definition>

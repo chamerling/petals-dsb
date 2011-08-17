@@ -1,10 +1,11 @@
 /**
  * 
  */
-package org.petalslink.dsb.notification.commons;
+package org.petalslink.dsb.notification.commons.api;
 
 import javax.xml.namespace.QName;
 
+import org.petalslink.dsb.notification.commons.NotificationException;
 import org.w3c.dom.Document;
 
 /**

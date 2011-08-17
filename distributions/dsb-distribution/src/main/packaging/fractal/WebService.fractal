@@ -14,13 +14,9 @@
 <definition name="WebService" extends="WebServiceType">
 
 	<!-- components -->
-	<component name="ServiceRegistry" definition="org.petalslink.dsb.kernel.tools.service.AtomicServiceRegistryImpl" />
 	<component name="ServiceExposer" definition="org.petalslink.dsb.kernel.tools.service.CXFServiceExposerImpl" />
-	
-	<!-- samples -->
-	<component name="Hello" definition="org.petalslink.dsb.kernel.tools.service.sample.HelloService" />
+	<component name="ServiceRegistry" definition="org.petalslink.dsb.kernel.tools.service.GlobalServiceRegistryImpl"/>
 
-	<binding client="ServiceRegistry.service-provider-hello" server="Hello.service" />
 	<binding client="ServiceExposer.registry" server="ServiceRegistry.service" />
 	
 </definition>

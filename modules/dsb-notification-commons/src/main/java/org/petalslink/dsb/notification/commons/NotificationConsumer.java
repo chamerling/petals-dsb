@@ -6,6 +6,8 @@ package org.petalslink.dsb.notification.commons;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.petalslink.dsb.notification.commons.api.NotificationManager;
+
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Notify;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.utils.WsnbException;
 import com.ebmwebsourcing.wsstar.wsnb.services.INotificationConsumer;

@@ -3,12 +3,12 @@
  */
 package org.petalslink.dsb.notification.service;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.xml.namespace.QName;
 
 import org.petalslink.dsb.soap.AbstractService;
+import org.petalslink.dsb.soap.api.Service;
 import org.petalslink.dsb.soap.api.ServiceException;
 import org.petalslink.dsb.soap.api.SimpleExchange;
 
@@ -25,6 +25,8 @@ import com.ebmwebsourcing.wsstar.wsnb.services.INotificationConsumer;
 import com.ebmwebsourcing.wsstar.wsnb.services.impl.util.Wsnb4ServUtils;
 
 /**
+ * Expose the notification consumer as a {@link Service}
+ * 
  * @author chamerling
  * 
  */
@@ -39,6 +41,9 @@ public class NotificationConsumerService extends AbstractService {
                 new WsnbModelFactoryImpl());
     }
 
+    /**
+     * The internal Notification Consumer
+     */
     private INotificationConsumer consumer;
 
     /**
@@ -65,10 +70,6 @@ public class NotificationConsumerService extends AbstractService {
      * .SimpleExchange)
      */
     public void doInvoke(SimpleExchange exchange) throws ServiceException {
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine("Got an invoke");
-        }
-
         if (exchange == null || exchange.getIn() == null) {
             throw new ServiceException("Incoming message is null...");
         }
@@ -77,10 +78,6 @@ public class NotificationConsumerService extends AbstractService {
             throw new ServiceException("Incoming operation is null...");
         }
 
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine("Operation is " + operation);
-        }
-        
         if ("Notify".equals(operation.getLocalPart())) {
             logger.finest("Notify");
             try {

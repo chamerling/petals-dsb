@@ -15,8 +15,9 @@ import junit.framework.TestCase;
 
 import org.petalslink.dsb.notification.commons.AbstractNotificationSender;
 import org.petalslink.dsb.notification.commons.NotificationException;
-import org.petalslink.dsb.notification.commons.NotificationManager;
-import org.petalslink.dsb.notification.commons.NotificationSender;
+import org.petalslink.dsb.notification.commons.NotificationManagerImpl;
+import org.petalslink.dsb.notification.commons.api.NotificationManager;
+import org.petalslink.dsb.notification.commons.api.NotificationSender;
 import org.w3c.dom.Document;
 
 import com.ebmwebsourcing.wsaddressing10.api.type.EndpointReferenceType;
@@ -43,7 +44,7 @@ public class LocalNotificationSenderTest extends TestCase {
         QName serviceName = QName.valueOf("Service");
         QName interfaceName = QName.valueOf("Interface");
         String endpointName = "Enpoint";
-        NotificationManager notificationManager = new NotificationManager(topicNamespaces,
+        NotificationManager notificationManager = new NotificationManagerImpl(topicNamespaces,
                 supportedTopics, serviceName, interfaceName, endpointName);
         NotificationSender sender = new AbstractNotificationSender(
                 notificationManager.getNotificationProducerEngine()) {

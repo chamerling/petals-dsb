@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.petalslink.dsb.notification.commons.api.NotificationSender;
 import org.w3c.dom.Document;
 
 import com.ebmwebsourcing.wsaddressing10.api.type.EndpointReferenceType;

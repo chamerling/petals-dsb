@@ -3,6 +3,9 @@
  */
 package org.petalslink.dsb.soap;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.xml.namespace.QName;
 
 import org.petalslink.dsb.soap.api.Service;
@@ -14,6 +17,8 @@ import org.petalslink.dsb.soap.api.SimpleExchange;
  * 
  */
 public abstract class AbstractService implements Service {
+
+    private static Logger logger = Logger.getLogger(AbstractService.class.getName());
 
     protected QName interfaceName;
 
@@ -88,6 +93,20 @@ public abstract class AbstractService implements Service {
      * .SimpleExchange)
      */
     public final void invoke(SimpleExchange exchange) throws ServiceException {
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("Got an invoke on service");
+        }
+
+        if (exchange == null) {
+            final String message = "Exchange is null and should not...";
+            logger.warning(message);
+            throw new ServiceException(message);
+        }
+
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("Operation is " + exchange.getOperation());
+        }
+
         pre(exchange);
         doInvoke(exchange);
         post(exchange);
@@ -100,6 +119,10 @@ public abstract class AbstractService implements Service {
     }
 
     /**
+     * Need to be implemented as the method which processes the incoming
+     * message. At this step, the exchange is not null but inner values may
+     * be...
+     * 
      * @param exchange
      */
     protected abstract void doInvoke(SimpleExchange exchange) throws ServiceException;

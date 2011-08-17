@@ -52,6 +52,8 @@ public class NotificationConsumerServiceImpl implements INotificationConsumer {
     public void notify(Notify notify) throws WsnbException {
         // TODO Auto-generated method stub
         // TODO
+        System.out.println("Got a NOTIFY!!!");
+        System.out.println("TODO");
     }
 
 }
