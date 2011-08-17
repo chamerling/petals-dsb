@@ -1,10 +1,35 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<wsdl:definitions name="NotificationConsumerService"
+<wsdl:definitions name="NotificationProducerService"
 	targetNamespace="http://docs.oasis-open.org/wsn/bw-2" xmlns:ns1="http://docs.oasis-open.org/wsn/b-2"
-	xmlns:ns2="http://schemas.xmlsoap.org/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
-	xmlns:tns="http://docs.oasis-open.org/wsn/bw-2" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	xmlns:ns2="http://docs.oasis-open.org/wsrf/r-2" xmlns:ns3="http://schemas.xmlsoap.org/soap/http"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://docs.oasis-open.org/wsn/bw-2"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 	<wsdl:types>
+		<xs:schema targetNamespace="http://docs.oasis-open.org/wsrf/r-2"
+			version="1.0" xmlns:ns1="http://docs.oasis-open.org/wsrf/bf-2"
+			xmlns:tns="http://docs.oasis-open.org/wsrf/r-2" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+			<xs:import namespace="http://docs.oasis-open.org/wsrf/bf-2" />
+			<xs:element name="ResourceUnavailableFault" type="tns:ResourceUnavailableFaultType" />
+			<xs:element name="ResourceUnknownFault" type="tns:ResourceUnknownFaultType" />
+			<xs:complexType name="ResourceUnknownFaultType">
+				<xs:complexContent>
+					<xs:extension base="ns1:BaseFaultType">
+						<xs:sequence />
+						<xs:anyAttribute namespace="##other"
+							processContents="skip" />
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="ResourceUnavailableFaultType">
+				<xs:complexContent>
+					<xs:extension base="ns1:BaseFaultType">
+						<xs:sequence />
+						<xs:anyAttribute namespace="##other"
+							processContents="skip" />
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+		</xs:schema>
 		<xs:schema elementFormDefault="qualified"
 			targetNamespace="http://docs.oasis-open.org/wsrf/bf-2" version="1.0"
 			xmlns:ns1="http://www.w3.org/2005/08/addressing" xmlns:tns="http://docs.oasis-open.org/wsrf/bf-2"
@@ -139,6 +164,36 @@
 							processContents="skip" />
 					</xs:extension>
 				</xs:complexContent>
+			</xs:complexType>
+		</xs:schema>
+		<xs:schema elementFormDefault="unqualified"
+			targetNamespace="http://docs.oasis-open.org/wsn/bw-2" version="1.0"
+			xmlns:ns1="http://docs.oasis-open.org/wsn/b-2" xmlns:tns="http://docs.oasis-open.org/wsn/bw-2"
+			xmlns:xs="http://www.w3.org/2001/XMLSchema">
+			<xs:import namespace="http://docs.oasis-open.org/wsn/b-2" />
+			<xs:element name="GetCurrentMessage" type="tns:GetCurrentMessage" />
+			<xs:element name="GetCurrentMessageResponse" type="tns:GetCurrentMessageResponse" />
+			<xs:element name="Subscribe" type="tns:Subscribe" />
+			<xs:element name="SubscribeResponse" type="tns:SubscribeResponse" />
+			<xs:complexType name="Subscribe">
+				<xs:sequence>
+					<xs:element minOccurs="0" ref="ns1:Subscribe" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="SubscribeResponse">
+				<xs:sequence>
+					<xs:element minOccurs="0" ref="ns1:SubscribeResponse" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="GetCurrentMessage">
+				<xs:sequence>
+					<xs:element minOccurs="0" ref="ns1:GetCurrentMessage" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="GetCurrentMessageResponse">
+				<xs:sequence>
+					<xs:element minOccurs="0" ref="ns1:GetCurrentMessageResponse" />
+				</xs:sequence>
 			</xs:complexType>
 		</xs:schema>
 		<xs:schema elementFormDefault="qualified"
@@ -411,30 +466,11 @@
 					<xs:sequence />
 				</xs:complexType>
 			</xs:element>
-			<xs:complexType name="NotificationMessageHolderType">
-				<xs:sequence>
-					<xs:element minOccurs="0" name="SubscriptionReference"
-						type="ns1:EndpointReferenceType" />
-					<xs:element minOccurs="0" name="Topic" type="tns:TopicExpressionType" />
-					<xs:element minOccurs="0" name="ProducerReference"
-						type="ns1:EndpointReferenceType" />
-					<xs:element name="Message">
-						<xs:complexType>
-							<xs:sequence>
-								<xs:any namespace="##other" processContents="lax" />
-							</xs:sequence>
-						</xs:complexType>
-					</xs:element>
-				</xs:sequence>
-			</xs:complexType>
-			<xs:complexType mixed="true" name="TopicExpressionType">
+			<xs:complexType name="FilterType">
 				<xs:sequence>
 					<xs:any maxOccurs="unbounded" minOccurs="0" namespace="##other"
 						processContents="lax" />
 				</xs:sequence>
-				<xs:attribute name="Dialect" type="xs:anyURI" use="required" />
-				<xs:anyAttribute namespace="##other"
-					processContents="skip" />
 			</xs:complexType>
 			<xs:complexType name="UnsupportedPolicyRequestFaultType">
 				<xs:complexContent>
@@ -469,6 +505,15 @@
 					</xs:extension>
 				</xs:complexContent>
 			</xs:complexType>
+			<xs:complexType mixed="true" name="TopicExpressionType">
+				<xs:sequence>
+					<xs:any maxOccurs="unbounded" minOccurs="0" namespace="##other"
+						processContents="lax" />
+				</xs:sequence>
+				<xs:attribute name="Dialect" type="xs:anyURI" use="required" />
+				<xs:anyAttribute namespace="##other"
+					processContents="skip" />
+			</xs:complexType>
 			<xs:complexType name="UnableToDestroyPullPointFaultType">
 				<xs:complexContent>
 					<xs:extension base="ns2:BaseFaultType">
@@ -477,6 +522,22 @@
 							processContents="skip" />
 					</xs:extension>
 				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="NotificationMessageHolderType">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="SubscriptionReference"
+						type="ns1:EndpointReferenceType" />
+					<xs:element minOccurs="0" name="Topic" type="tns:TopicExpressionType" />
+					<xs:element minOccurs="0" name="ProducerReference"
+						type="ns1:EndpointReferenceType" />
+					<xs:element name="Message">
+						<xs:complexType>
+							<xs:sequence>
+								<xs:any namespace="##other" processContents="lax" />
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
 			</xs:complexType>
 			<xs:complexType name="NotifyMessageNotSupportedFaultType">
 				<xs:complexContent>
@@ -522,12 +583,6 @@
 							processContents="skip" />
 					</xs:extension>
 				</xs:complexContent>
-			</xs:complexType>
-			<xs:complexType name="FilterType">
-				<xs:sequence>
-					<xs:any maxOccurs="unbounded" minOccurs="0" namespace="##other"
-						processContents="lax" />
-				</xs:sequence>
 			</xs:complexType>
 			<xs:complexType name="UnableToGetMessagesFaultType">
 				<xs:complexContent>
@@ -795,32 +850,237 @@
 
 		</xs:schema>
 	</wsdl:types>
-	<wsdl:message name="Notify">
-		<wsdl:part element="ns1:Notify" name="Notify">
+	<wsdl:message name="InvalidProducerPropertiesExpressionFault">
+		<wsdl:part element="ns1:InvalidProducerPropertiesExpressionFault"
+			name="InvalidProducerPropertiesExpressionFault">
 		</wsdl:part>
 	</wsdl:message>
-	<wsdl:portType name="NotificationConsumer">
-		<wsdl:operation name="Notify">
-			<wsdl:input message="tns:Notify" name="Notify">
+	<wsdl:message name="NoCurrentMessageOnTopicFault">
+		<wsdl:part element="ns1:NoCurrentMessageOnTopicFault" name="NoCurrentMessageOnTopicFault">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="NotifyMessageNotSupportedFault">
+		<wsdl:part element="ns1:NotifyMessageNotSupportedFault"
+			name="NotifyMessageNotSupportedFault">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="GetCurrentMessageResponse">
+		<wsdl:part element="tns:GetCurrentMessageResponse" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="MultipleTopicsSpecifiedFault">
+		<wsdl:part element="ns1:MultipleTopicsSpecifiedFault" name="MultipleTopicsSpecifiedFault">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="TopicExpressionDialectUnknownFault">
+		<wsdl:part element="ns1:TopicExpressionDialectUnknownFault"
+			name="TopicExpressionDialectUnknownFault">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="Subscribe">
+		<wsdl:part element="tns:Subscribe" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="ResourceUnknownFault">
+		<wsdl:part element="ns2:ResourceUnknownFault" name="ResourceUnknownFault">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="UnrecognizedPolicyRequestFault">
+		<wsdl:part element="ns1:UnrecognizedPolicyRequestFault"
+			name="UnrecognizedPolicyRequestFault">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="UnsupportedPolicyRequestFault">
+		<wsdl:part element="ns1:UnsupportedPolicyRequestFault" name="UnsupportedPolicyRequestFault">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="InvalidMessageContentExpressionFault">
+		<wsdl:part element="ns1:InvalidMessageContentExpressionFault"
+			name="InvalidMessageContentExpressionFault">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="InvalidTopicExpressionFault">
+		<wsdl:part element="ns1:InvalidTopicExpressionFault" name="InvalidTopicExpressionFault">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="UnacceptableInitialTerminationTimeFault">
+		<wsdl:part element="ns1:UnacceptableInitialTerminationTimeFault"
+			name="UnacceptableInitialTerminationTimeFault">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="GetCurrentMessage">
+		<wsdl:part element="tns:GetCurrentMessage" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="SubscribeCreationFailedFault">
+		<wsdl:part element="ns1:SubscribeCreationFailedFault" name="SubscribeCreationFailedFault">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="SubscribeResponse">
+		<wsdl:part element="tns:SubscribeResponse" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="InvalidFilterFault">
+		<wsdl:part element="ns1:InvalidFilterFault" name="InvalidFilterFault">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="TopicNotSupportedFault">
+		<wsdl:part element="ns1:TopicNotSupportedFault" name="TopicNotSupportedFault">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:portType name="NotificationProducer">
+		<wsdl:operation name="Subscribe">
+			<wsdl:input message="tns:Subscribe" name="Subscribe">
 			</wsdl:input>
+			<wsdl:output message="tns:SubscribeResponse" name="SubscribeResponse">
+			</wsdl:output>
+			<wsdl:fault message="tns:TopicNotSupportedFault" name="TopicNotSupportedFault">
+			</wsdl:fault>
+			<wsdl:fault message="tns:InvalidFilterFault" name="InvalidFilterFault">
+			</wsdl:fault>
+			<wsdl:fault message="tns:TopicExpressionDialectUnknownFault"
+				name="TopicExpressionDialectUnknownFault">
+			</wsdl:fault>
+			<wsdl:fault message="tns:UnacceptableInitialTerminationTimeFault"
+				name="UnacceptableInitialTerminationTimeFault">
+			</wsdl:fault>
+			<wsdl:fault message="tns:SubscribeCreationFailedFault"
+				name="SubscribeCreationFailedFault">
+			</wsdl:fault>
+			<wsdl:fault message="tns:InvalidMessageContentExpressionFault"
+				name="InvalidMessageContentExpressionFault">
+			</wsdl:fault>
+			<wsdl:fault message="tns:InvalidTopicExpressionFault"
+				name="InvalidTopicExpressionFault">
+			</wsdl:fault>
+			<wsdl:fault message="tns:UnsupportedPolicyRequestFault"
+				name="UnsupportedPolicyRequestFault">
+			</wsdl:fault>
+			<wsdl:fault message="tns:UnrecognizedPolicyRequestFault"
+				name="UnrecognizedPolicyRequestFault">
+			</wsdl:fault>
+			<wsdl:fault message="tns:ResourceUnknownFault" name="ResourceUnknownFault">
+			</wsdl:fault>
+			<wsdl:fault message="tns:NotifyMessageNotSupportedFault"
+				name="NotifyMessageNotSupportedFault">
+			</wsdl:fault>
+			<wsdl:fault message="tns:InvalidProducerPropertiesExpressionFault"
+				name="InvalidProducerPropertiesExpressionFault">
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="GetCurrentMessage">
+			<wsdl:input message="tns:GetCurrentMessage" name="GetCurrentMessage">
+			</wsdl:input>
+			<wsdl:output message="tns:GetCurrentMessageResponse"
+				name="GetCurrentMessageResponse">
+			</wsdl:output>
+			<wsdl:fault message="tns:TopicNotSupportedFault" name="TopicNotSupportedFault">
+			</wsdl:fault>
+			<wsdl:fault message="tns:TopicExpressionDialectUnknownFault"
+				name="TopicExpressionDialectUnknownFault">
+			</wsdl:fault>
+			<wsdl:fault message="tns:MultipleTopicsSpecifiedFault"
+				name="MultipleTopicsSpecifiedFault">
+			</wsdl:fault>
+			<wsdl:fault message="tns:InvalidTopicExpressionFault"
+				name="InvalidTopicExpressionFault">
+			</wsdl:fault>
+			<wsdl:fault message="tns:ResourceUnknownFault" name="ResourceUnknownFault">
+			</wsdl:fault>
+			<wsdl:fault message="tns:NoCurrentMessageOnTopicFault"
+				name="NoCurrentMessageOnTopicFault">
+			</wsdl:fault>
 		</wsdl:operation>
 	</wsdl:portType>
-	<wsdl:binding name="NotificationConsumerServiceSoapBinding"
-		type="tns:NotificationConsumer">
+	<wsdl:binding name="NotificationProducerServiceSoapBinding"
+		type="tns:NotificationProducer">
 		<soap:binding style="document"
 			transport="http://schemas.xmlsoap.org/soap/http" />
-		<wsdl:operation name="Notify">
+		<wsdl:operation name="Subscribe">
 			<soap:operation
-				soapAction="http://com.ebmwebsourcing.easyesb/soa/model/endpoint/notification/Notify"
+				soapAction="http://com.ebmwebsourcing.easyesb/soa/model/endpoint/notification/Subscribe"
 				style="document" />
-			<wsdl:input name="Notify">
+			<wsdl:input name="Subscribe">
 				<soap:body use="literal" />
 			</wsdl:input>
+			<wsdl:output name="SubscribeResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="TopicNotSupportedFault">
+				<soap:fault name="TopicNotSupportedFault" use="literal" />
+			</wsdl:fault>
+			<wsdl:fault name="InvalidFilterFault">
+				<soap:fault name="InvalidFilterFault" use="literal" />
+			</wsdl:fault>
+			<wsdl:fault name="TopicExpressionDialectUnknownFault">
+				<soap:fault name="TopicExpressionDialectUnknownFault"
+					use="literal" />
+			</wsdl:fault>
+			<wsdl:fault name="UnacceptableInitialTerminationTimeFault">
+				<soap:fault name="UnacceptableInitialTerminationTimeFault"
+					use="literal" />
+			</wsdl:fault>
+			<wsdl:fault name="SubscribeCreationFailedFault">
+				<soap:fault name="SubscribeCreationFailedFault" use="literal" />
+			</wsdl:fault>
+			<wsdl:fault name="InvalidMessageContentExpressionFault">
+				<soap:fault name="InvalidMessageContentExpressionFault"
+					use="literal" />
+			</wsdl:fault>
+			<wsdl:fault name="InvalidTopicExpressionFault">
+				<soap:fault name="InvalidTopicExpressionFault" use="literal" />
+			</wsdl:fault>
+			<wsdl:fault name="UnsupportedPolicyRequestFault">
+				<soap:fault name="UnsupportedPolicyRequestFault" use="literal" />
+			</wsdl:fault>
+			<wsdl:fault name="UnrecognizedPolicyRequestFault">
+				<soap:fault name="UnrecognizedPolicyRequestFault" use="literal" />
+			</wsdl:fault>
+			<wsdl:fault name="ResourceUnknownFault">
+				<soap:fault name="ResourceUnknownFault" use="literal" />
+			</wsdl:fault>
+			<wsdl:fault name="NotifyMessageNotSupportedFault">
+				<soap:fault name="NotifyMessageNotSupportedFault" use="literal" />
+			</wsdl:fault>
+			<wsdl:fault name="InvalidProducerPropertiesExpressionFault">
+				<soap:fault name="InvalidProducerPropertiesExpressionFault"
+					use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="GetCurrentMessage">
+			<soap:operation
+				soapAction="http://com.ebmwebsourcing.easyesb/soa/model/endpoint/notification/GetCurrentMessage"
+				style="document" />
+			<wsdl:input name="GetCurrentMessage">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="GetCurrentMessageResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="TopicNotSupportedFault">
+				<soap:fault name="TopicNotSupportedFault" use="literal" />
+			</wsdl:fault>
+			<wsdl:fault name="TopicExpressionDialectUnknownFault">
+				<soap:fault name="TopicExpressionDialectUnknownFault"
+					use="literal" />
+			</wsdl:fault>
+			<wsdl:fault name="MultipleTopicsSpecifiedFault">
+				<soap:fault name="MultipleTopicsSpecifiedFault" use="literal" />
+			</wsdl:fault>
+			<wsdl:fault name="InvalidTopicExpressionFault">
+				<soap:fault name="InvalidTopicExpressionFault" use="literal" />
+			</wsdl:fault>
+			<wsdl:fault name="ResourceUnknownFault">
+				<soap:fault name="ResourceUnknownFault" use="literal" />
+			</wsdl:fault>
+			<wsdl:fault name="NoCurrentMessageOnTopicFault">
+				<soap:fault name="NoCurrentMessageOnTopicFault" use="literal" />
+			</wsdl:fault>
 		</wsdl:operation>
 	</wsdl:binding>
-	<wsdl:service name="NotificationConsumerService">
-		<wsdl:port binding="tns:NotificationConsumerServiceSoapBinding"
-			name="NotificationConsumerPort">
+	<wsdl:service name="NotificationProducerService">
+		<wsdl:port binding="tns:NotificationProducerServiceSoapBinding"
+			name="NotificationProducerPort">
 			<soap:address location="http://localhost:8889/foo/bar/Service" />
 		</wsdl:port>
 	</wsdl:service>
