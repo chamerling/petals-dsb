@@ -43,7 +43,10 @@ public class NotificationHelperTest extends TestCase {
         String producerAddress = "http://localhost:9998/foo/Producer";
         String endpointAddress = "http://localhost:9998/foo/Endpoint";
         String uuid = UUID.randomUUID().toString();
-        QName topicUsed = new QName("http://dsb.petalslink.org/notification", "Sample");
+        // All the fields are required for the topic! If not, there will be an
+        // exception in
+        // com.ebmwebsourcing.wsstar.basenotification.datatypes.impl.impl.WsnbWriterImpl.writeNotifyAsDOM(Notify)
+        QName topicUsed = new QName("http://dsb.petalslink.org/notification", "Sample", "dsbn");
         String dialect = "dialect";
         Document notifPayload = null;
         try {
@@ -55,15 +58,15 @@ public class NotificationHelperTest extends TestCase {
         try {
             Notify n = NotificationHelper.createNotification(producerAddress, endpointAddress,
                     uuid, topicUsed, dialect, notifPayload);
-            
+
             try {
-                final Document request = RefinedWsnbFactory.getInstance().getWsnbWriter().writeNotifyAsDOM(n);
+                final Document request = RefinedWsnbFactory.getInstance().getWsnbWriter()
+                        .writeNotifyAsDOM(n);
                 System.out.println(XMLHelper.createStringFromDOMDocument(request));
             } catch (Exception e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-            
 
         } catch (NotificationException e) {
             fail(e.getMessage());
