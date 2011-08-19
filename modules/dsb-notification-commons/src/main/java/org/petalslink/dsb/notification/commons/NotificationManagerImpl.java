@@ -20,7 +20,6 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import com.ebmwebsourcing.easycommons.xml.XMLPrettyPrinter;
-import com.ebmwebsourcing.wsstar.basefaults.datatypes.api.utils.SOAUtil;
 import com.ebmwebsourcing.wsstar.basefaults.datatypes.impl.impl.WsrfbfModelFactoryImpl;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.utils.WsnbException;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.impl.impl.WsnbModelFactoryImpl;
