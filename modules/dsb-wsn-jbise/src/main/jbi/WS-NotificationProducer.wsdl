@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:wsbw-2="http://docs.oasis-open.org/wsn/bw-2"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://docs.oasis-open.org/wsn/b-2"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	name="WS-NotificationProducer" targetNamespace="http://docs.oasis-open.org/wsn/b-2">
+
+	<!-- ================================================== -->
+	<!-- ================== imports ======================= -->
+	<!-- ================================================== -->
+	<wsdl:import location="bw-2.wsdl" namespace="http://docs.oasis-open.org/wsn/bw-2"></wsdl:import>
+
+	<!-- ================================================== -->
+	<!-- ========== Binding part definition =============== -->
+	<!-- ================================================== -->
+	<!-- SubscritpionManager binding definition -->
+	<wsdl:binding name="SubscriptionManagerBinding" type="wsbw-2:SubscriptionManager">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="Renew">
+			<soap:operation soapAction="http://docs.oasis-open.org/wsn/br-2/Renew" />
+			<wsdl:input name="RenewRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="RenewResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="ResourceUnknownFault">
+				<soap:fault use="literal" name="ResourceUnknownFault" />
+			</wsdl:fault>
+			<wsdl:fault name="UnacceptableTerminationTimeFault">
+				<soap:fault use="literal" name="UnacceptableTerminationTimeFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="Unsubscribe">
+			<soap:operation soapAction="http://docs.oasis-open.org/wsn/br-2/Unsubscribe" />
+			<wsdl:input name="UnsubscribeRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="UnsubscribeResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="ResourceUnknownFault">
+				<soap:fault use="literal" name="ResourceUnknownFault" />
+			</wsdl:fault>
+			<wsdl:fault name="UnableToDestroySubscriptionFault">
+				<soap:fault use="literal" name="UnableToDestroySubscriptionFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+	<!-- NotificationProducer binding definition -->
+	<wsdl:binding name="NotificationProducerBinding" type="wsbw-2:NotificationProducer">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="Subscribe">
+			<soap:operation soapAction="http://docs.oasis-open.org/wsn/br-2/Subscribe" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="ResourceUnknownFault">
+				<soap:fault use="literal" name="ResourceUnknownFault" />
+			</wsdl:fault>
+			<wsdl:fault name="InvalidFilterFault">
+				<soap:fault use="literal" name="InvalidFilterFault" />
+			</wsdl:fault>
+			<wsdl:fault name="TopicExpressionDialectUnknownFault">
+				<soap:fault use="literal" name="TopicExpressionDialectUnknownFault" />
+			</wsdl:fault>
+			<wsdl:fault name="InvalidTopicExpressionFault">
+				<soap:fault use="literal" name="InvalidTopicExpressionFault" />
+			</wsdl:fault>
+			<wsdl:fault name="TopicNotSupportedFault">
+				<soap:fault use="literal" name="TopicNotSupportedFault" />
+			</wsdl:fault>
+			<wsdl:fault name="InvalidProducerPropertiesExpressionFault">
+				<soap:fault use="literal"
+					name="InvalidProducerPropertiesExpressionFault" />
+			</wsdl:fault>
+			<wsdl:fault name="InvalidMessageContentExpressionFault">
+				<soap:fault use="literal" name="InvalidMessageContentExpressionFault" />
+			</wsdl:fault>
+			<wsdl:fault name="UnacceptableInitialTerminationTimeFault">
+				<soap:fault use="literal" name="UnacceptableInitialTerminationTimeFault" />
+			</wsdl:fault>
+			<wsdl:fault name="UnrecognizedPolicyRequestFault">
+				<soap:fault use="literal" name="UnrecognizedPolicyRequestFault" />
+			</wsdl:fault>
+			<wsdl:fault name="UnsupportedPolicyRequestFault">
+				<soap:fault use="literal" name="UnsupportedPolicyRequestFault" />
+			</wsdl:fault>
+			<wsdl:fault name="NotifyMessageNotSupportedFault">
+				<soap:fault use="literal" name="NotifyMessageNotSupportedFault" />
+			</wsdl:fault>
+			<wsdl:fault name="SubscribeCreationFailedFault">
+				<soap:fault use="literal" name="SubscribeCreationFailedFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="GetCurrentMessage">
+			<soap:operation soapAction="http://docs.oasis-open.org/wsn/br-2/GetCurrentMessage" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="ResourceUnknownFault">
+				<soap:fault use="literal" name="ResourceUnknownFault" />
+			</wsdl:fault>
+			<wsdl:fault name="TopicExpressionDialectUnknownFault">
+				<soap:fault use="literal" name="TopicExpressionDialectUnknownFault" />
+			</wsdl:fault>
+			<wsdl:fault name="InvalidTopicExpressionFault">
+				<soap:fault use="literal" name="InvalidTopicExpressionFault" />
+			</wsdl:fault>
+			<wsdl:fault name="TopicNotSupportedFault">
+				<soap:fault use="literal" name="TopicNotSupportedFault" />
+			</wsdl:fault>
+			<wsdl:fault name="NoCurrentMessageOnTopicFault">
+				<soap:fault use="literal" name="NoCurrentMessageOnTopicFault" />
+			</wsdl:fault>
+			<wsdl:fault name="MultipleTopicsSpecifiedFault">
+				<soap:fault use="literal" name="MultipleTopicsSpecifiedFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+
+	<!-- ============================================= -->
+	<!-- =========== Service part definition ========= -->
+	<!-- ============================================= -->
+	<wsdl:service name="NotificationProducerService">
+		<wsdl:port name="NotificationProducerPort" binding="tns:NotificationProducerBinding">
+		<soap:address location="http://localhost:8889/foo/bar/Service" />
+		</wsdl:port>
+	</wsdl:service>
+	<wsdl:service name="SubscriptionManagerService">
+		<wsdl:port name="SubscriptionManagerPort" binding="tns:SubscriptionManagerBinding">
+		<soap:address location="http://localhost:8889/foo/bar/Service" />
+		</wsdl:port>
+	</wsdl:service>
+
+</wsdl:definitions>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://petals.ow2.org/wsdlExtensions"
+	elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:tns="http://petals.ow2.org/wsdlExtensions" xmlns:wsdl20="http://www.w3.org/ns/wsdl"
+	xmlns:wsdl11="http://schemas.xmlsoap.org/wsdl/">
+
+	<import namespace="http://www.w3.org/ns/wsdl" schemaLocation="http://www.w3.org/2007/06/wsdl/wsdl20.xsd">
+	</import>
+	<import namespace="http://schemas.xmlsoap.org/wsdl/"
+		schemaLocation="http://schemas.xmlsoap.org/wsdl/"></import>
+	<complexType name="ImportedDocuments">
+		<sequence>
+			<element name="document" type="tns:Document" maxOccurs="unbounded"
+				minOccurs="0"></element>
+		</sequence>
+	</complexType>
+
+	<element name="importedDocuments" type="tns:ImportedDocuments"></element>
+
+	<complexType name="Document">
+		<choice>
+			<element name="definition" type="wsdl11:tDefinitions"></element>
+			<element name="description" type="wsdl20:DescriptionType"></element>
+		</choice>
+		<attribute name="name" type="string"></attribute>
+	</complexType>
+</schema>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wstop:TopicSet xmlns:wstop="http://docs.oasis-open.org/wsn/t-1"
+	xmlns:petals="http://petals.ow2.org/topic" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<petals:component>
+		<cdk>
+			<producer>
+				<in wstop:topic="true" />
+				<out wstop:topic="true" />
+				<status wstop:topic="true" />
+				<fault wstop:topic="true" />
+			</producer>
+		</cdk>
+	</petals:component>
+</wstop:TopicSet>
