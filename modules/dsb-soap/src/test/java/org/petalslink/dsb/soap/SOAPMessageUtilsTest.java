@@ -11,6 +11,7 @@ import javax.xml.soap.SOAPMessage;
 
 import junit.framework.TestCase;
 
+import org.petalslink.dsb.saaj.utils.SOAPMessageUtils;
 import org.w3c.dom.Document;
 
 /**

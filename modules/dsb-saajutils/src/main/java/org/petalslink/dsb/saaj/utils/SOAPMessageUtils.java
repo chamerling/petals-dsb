@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.petalslink.dsb.soap;
+package org.petalslink.dsb.saaj.utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

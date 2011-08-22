@@ -16,6 +16,7 @@ import javax.xml.ws.WebServiceContext;
 import javax.xml.ws.WebServiceProvider;
 import javax.xml.ws.handler.MessageContext;
 
+import org.petalslink.dsb.saaj.utils.SOAPMessageUtils;
 import org.petalslink.dsb.soap.api.Service;
 import org.petalslink.dsb.soap.api.ServiceException;
 import org.petalslink.dsb.soap.api.SimpleExchange;

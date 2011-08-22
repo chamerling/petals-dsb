@@ -17,8 +17,8 @@ import javax.xml.soap.SOAPMessage;
 import junit.framework.TestCase;
 
 import org.petalslink.dsb.commons.service.api.Service;
+import org.petalslink.dsb.saaj.utils.SOAPMessageUtils;
 import org.petalslink.dsb.soap.CXFExposer;
-import org.petalslink.dsb.soap.SOAPMessageUtils;
 import org.petalslink.dsb.soap.api.Exposer;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
