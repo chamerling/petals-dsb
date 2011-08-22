@@ -87,16 +87,16 @@ public class LocalNotificationSenderTest extends TestCase {
                 System.out.println("Topic : " + topic);
                 System.out.println("Dialect : " + dialect);
                 System.out.println("SubscriptionID " + subscriptionId);
+                // this is where the message needs to be sent...
+                System.out.println("Consumer Endpoint : " + currentConsumerEdp.getAddress().getValue());
                 try {
                     System.out.println("--- NOTIFICATION RECEIVED ---");
                     Document n = Wsnb4ServUtils.getWsnbWriter().writeNotifyAsDOM(notify);
                     System.out.println(XMLHelper.createStringFromDOMDocument(n));
                     System.out.println("--- /NOTIFICATION RECEIVED ---");
                 } catch (WsnbException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 } catch (TransformerException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
                 calls.incrementAndGet();
