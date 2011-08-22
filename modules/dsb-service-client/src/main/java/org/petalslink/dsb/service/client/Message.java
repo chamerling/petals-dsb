@@ -42,10 +42,22 @@ public interface Message {
      */
     Map<String, Document> getHeaders();
 
+    /**
+     * Targert service
+     * @return
+     */
     QName getService();
 
+    /**
+     * Target interface
+     * @return
+     */
     QName getInterface();
 
+    /**
+     * Target endpoint
+     * @return
+     */
     String getEndpoint();
 
 }
