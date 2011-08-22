@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsnt:Subscribe
+	xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2" 
+	xmlns:wsa="http://www.w3.org/2005/08/addressing"
+	targetnamespace ="http://docs.oasis-open.org/wsn/b-2">
+	<wsnt:ConsumerReference>
+		<wsa:Address>http://petals.ow2.org/petals-se-wsnConsumer::NotificationConsumerService@NotificationConsumerEndpoint</wsa:Address>
+	</wsnt:ConsumerReference>
+	<wsnt:Filter>
+		<wsnt:TopicExpression Dialect="http://docs.oasis-open.org/wsn/t-1/TopicExpression/Full"
+		xmlns:tns2="http://petals.ow2.org/topicNamespace/MyOtherTopicNamespaceSample">tns2:rootTopic2/*/childChildTopic1[@wstop:topic='true']</wsnt:TopicExpression>		
+	</wsnt:Filter>
+	<wsnt:InitialTerminationTime>PT1H</wsnt:InitialTerminationTime>
+</wsnt:Subscribe>

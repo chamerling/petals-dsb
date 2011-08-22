@@ -6,8 +6,8 @@
 	</wsn:ConsumerReference>
 	<wsn:Filter>
 		<wsn:TopicExpression Dialect="http://www.w3.org/TR/1999/REC-xpath-19991116"
-			xmlns:mows-ev="http://docs.oasis-open.org/wsdm/2004/12/mows/wsdm-mows-events.xml">
-			mows-ev:MetricsCapability
+			xmlns:dsb="http://www.petalslink.org/dsb/topicsns/">
+			dsb:DSBTopic
 		     </wsn:TopicExpression>
 	</wsn:Filter>
 </wsn:Subscribe>

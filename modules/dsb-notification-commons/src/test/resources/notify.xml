@@ -1,1 +1,1 @@
-<foo>bar</foo>
+<dsb:foo xmlns:dsb="http://foo/bar">bar</dsb:foo>
