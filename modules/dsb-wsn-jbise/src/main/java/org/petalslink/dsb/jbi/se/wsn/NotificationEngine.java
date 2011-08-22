@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import javax.xml.namespace.QName;
+import javax.xml.transform.TransformerException;
 
 import org.ow2.easywsdl.wsdl.api.WSDLException;
 import org.ow2.petals.component.framework.AbstractComponent;
@@ -16,9 +17,13 @@ import org.ow2.petals.component.framework.api.Wsdl;
 import org.ow2.petals.component.framework.util.UtilFactory;
 import org.petalslink.dsb.notification.commons.NotificationManagerImpl;
 import org.petalslink.dsb.notification.commons.api.NotificationManager;
+import org.w3c.dom.Document;
 
+import com.ebmwebsourcing.easycommons.xml.XMLHelper;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Notify;
+import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.utils.WsnbException;
 import com.ebmwebsourcing.wsstar.wsnb.services.impl.engines.AbsNotificationConsumerEngine;
+import com.ebmwebsourcing.wsstar.wsnb.services.impl.util.Wsnb4ServUtils;
 
 /**
  * @author chamerling
@@ -66,8 +71,16 @@ public class NotificationEngine {
         this.notificationConsumerEngine = new AbsNotificationConsumerEngine(logger) {
 
             @Override
-            public void notify(Notify arg0) {
+            public void notify(Notify notify) {
                 System.out.println("Got a notify...");
+                try {
+                    Document doc = Wsnb4ServUtils.getWsnbWriter().writeNotifyAsDOM(notify);
+                    XMLHelper.writeDocument(doc, System.out);
+                } catch (WsnbException e) {
+                    e.printStackTrace();
+                } catch (TransformerException e) {
+                    e.printStackTrace();
+                }
                 System.out.println("TODO");
             }
         };
