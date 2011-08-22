@@ -126,6 +126,8 @@
 		
 		<!-- SOAP -->
 		<module>modules/dsb-soap</module>
+		<module>modules/dsb-service-saajclient</module>
+		<module>modules/dsb-saajutils</module>
 		
 		<!-- Notification -->
 		<module>modules/dsb-notification-commons</module>
@@ -133,6 +135,7 @@
 		<module>modules/dsb-notification-service</module>
 		<module>modules/dsb-kernel-pubsubservice</module>
 		<module>modules/dsb-kernel-notificationservice</module>
+		<module>modules/dsb-notification-httpclient</module>
 		<module>modules/dsb-wsn-jbise</module>
 		
 		<!-- Independant things, to be moved elsewhere -->
