@@ -1,0 +1,17 @@
+<b:Notify xmlns:b="http://docs.oasis-open.org/wsn/b-2"
+	xmlns:add="http://www.w3.org/2005/08/addressing">
+	<b:NotificationMessage>
+		<b:SubscriptionReference>
+			<add:Address>http://localhost:8080/fooo/bar</add:Address>
+		</b:SubscriptionReference>
+		<b:Topic Dialect="?">
+		</b:Topic>
+		<!--Optional: -->
+		<b:ProducerReference>
+			<add:Address>http://localhost:8084/foo/bar/Service</add:Address>
+		</b:ProducerReference>
+		<b:Message>
+			<foo>bar</foo>
+		</b:Message>
+	</b:NotificationMessage>
+</b:Notify>
