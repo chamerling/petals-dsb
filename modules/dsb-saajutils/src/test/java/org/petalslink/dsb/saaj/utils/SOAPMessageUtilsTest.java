@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.petalslink.dsb.soap;
+package org.petalslink.dsb.saaj.utils;
 
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
