@@ -22,7 +22,6 @@ import org.petalslink.dsb.service.client.MessageListener;
  */
 public class Client implements org.petalslink.dsb.service.client.Client {
 
-
     /**
      * 
      */
@@ -48,6 +47,7 @@ public class Client implements org.petalslink.dsb.service.client.Client {
      * .service.client.Message)
      */
     public Message sendReceive(Message message) throws ClientException {
+        MessageImpl result = null;
         if (message == null) {
             throw new ClientException("Message can not be null...");
         }
@@ -65,15 +65,16 @@ public class Client implements org.petalslink.dsb.service.client.Client {
             SOAPConnection connection = soapConnFactory.createConnection();
             SOAPMessage response = connection.call(request, message.getEndpoint());
 
-            MessageImpl responseMessage = new MessageImpl();
-            responseMessage.setPayload(SOAPMessageUtils.getBodyFromMessage(response));
+            result = new MessageImpl();
+            if (response != null) {
+                result.setPayload(SOAPMessageUtils.getBodyFromMessage(response));
+            }
         } catch (UnsupportedOperationException e) {
             throw new ClientException(e);
         } catch (SOAPException e) {
             throw new ClientException(e);
         }
-
-        return null;
+        return result;
     }
 
     /*
