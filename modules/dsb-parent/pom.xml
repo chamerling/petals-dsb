@@ -169,6 +169,30 @@
 				      </snapshots>
 				    </repository>
          </repositories>
+		<pluginRepositories>
+		    <pluginRepository>
+		      <id>petalslink-public.snapshot.plugin</id>
+		      <name>PetalsLink plugin Repository</name>
+		      <url>http://maven.petalslink.com/public-snapshot</url>
+		      <releases>
+		        <enabled>false</enabled>
+		      </releases>
+		      <snapshots>
+		        <enabled>true</enabled>
+		      </snapshots>
+		    </pluginRepository>
+			  <pluginRepository>
+			      <id>petalslink-public.release.plugin</id>
+			      <name>PetalsLink plugin release Repository</name>
+			      <url>http://maven.petalslink.com/public</url>
+			      <releases>
+			        <enabled>true</enabled>
+			      </releases>
+			      <snapshots>
+			        <enabled>false</enabled>
+			      </snapshots>
+			    </pluginRepository>
+		  </pluginRepositories>
 
 	<dependencies>
 		<dependency>
