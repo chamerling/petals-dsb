@@ -3,6 +3,7 @@
  */
 package org.petalslink.dsb.notification.client.http;
 
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.xml.namespace.QName;
@@ -68,7 +69,6 @@ public class HTTPNotificationConsumerTest extends TestCase {
                 "NotificationConsumerPort");
         // expose the service
         INotificationConsumer consumer = new INotificationConsumer() {
-
             public void notify(Notify notify) throws WsnbException {
                 System.out.println("Got a notify on HTTP service...");
                 i.incrementAndGet();
@@ -80,11 +80,18 @@ public class HTTPNotificationConsumerTest extends TestCase {
 
         Service server = null;
         try {
+            System.out.println("Create service to send message to...");
             server = exposer.expose(service);
             server.start();
 
             Notify notify = Wsnb4ServUtils.getWsnbReader().readNotify(document);
+            System.out.println("Let's notify");
             client.notify(notify);
+            // wait some time, it seems that response is not send at the right time...
+            System.out.println("Waiting...");
+            TimeUnit.SECONDS.sleep(2);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
         } finally {
             if (server != null) {
                 server.stop();
