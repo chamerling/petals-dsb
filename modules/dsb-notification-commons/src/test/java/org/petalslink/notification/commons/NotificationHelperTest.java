@@ -17,6 +17,7 @@ import org.w3c.dom.Document;
 import com.ebmwebsourcing.easycommons.xml.XMLHelper;
 import com.ebmwebsourcing.wsstar.basefaults.datatypes.impl.impl.WsrfbfModelFactoryImpl;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Notify;
+import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Subscribe;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.refinedabstraction.RefinedWsnbFactory;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.impl.impl.WsnbModelFactoryImpl;
 import com.ebmwebsourcing.wsstar.resource.datatypes.impl.impl.WsrfrModelFactoryImpl;
@@ -39,7 +40,8 @@ public class NotificationHelperTest extends TestCase {
     }
 
     /**
-     * Just test that we can create a Notify message...
+     * Just test that we can create a Notify message since I had problems with
+     * that point sometimes...
      */
     public void testAddPayload() {
         String producerAddress = "http://localhost:9998/foo/Producer";
@@ -54,8 +56,8 @@ public class NotificationHelperTest extends TestCase {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         dbf.setNamespaceAware(true);
         try {
-            notifPayload = dbf.newDocumentBuilder()
-                    .parse(NotificationHelperTest.class.getResourceAsStream("/notify.xml"));
+            notifPayload = dbf.newDocumentBuilder().parse(
+                    NotificationHelperTest.class.getResourceAsStream("/notify.xml"));
         } catch (Exception e) {
             fail(e.getMessage());
         }
@@ -76,5 +78,13 @@ public class NotificationHelperTest extends TestCase {
             e.printStackTrace();
             fail(e.getMessage());
         }
+    }
+
+    public void testCreateSubscribe() throws Exception {
+        String ep = "http://localhost/foo";
+        QName topic = new QName("http://foo/bar", "DSB", "dsb");
+        Subscribe s = NotificationHelper.createSubscribe(ep, topic);
+        Document d = RefinedWsnbFactory.getInstance().getWsnbWriter().writeSubscribeAsDOM(s);
+        System.out.println(XMLHelper.createStringFromDOMDocument(d));
     }
 }
