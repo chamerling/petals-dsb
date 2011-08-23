@@ -3,7 +3,6 @@
  */
 package org.petalslink.dsb.saaj.utils;
 
-import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.soap.MessageFactory;
@@ -11,7 +10,6 @@ import javax.xml.soap.SOAPMessage;
 
 import junit.framework.TestCase;
 
-import org.petalslink.dsb.saaj.utils.SOAPMessageUtils;
 import org.w3c.dom.Document;
 
 /**

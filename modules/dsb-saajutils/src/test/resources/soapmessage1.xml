@@ -1,0 +1,10 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:api="http://api.ws.dsb.petalslink.org/">
+	<soapenv:Header />
+	<soapenv:Body>
+		<api:sayHello>
+			<!--Optional: -->
+			<arg0>?</arg0>
+		</api:sayHello>
+	</soapenv:Body>
+</soapenv:Envelope>

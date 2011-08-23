@@ -74,6 +74,10 @@ public class SOAPMessageUtils {
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("SOAPMessage: \n " + getSOAPMessageAsString(message));
         }
+        
+        if (message == null) {
+            throw new SOAPException("Can not get body from null message...");
+        }
 
         if (containsFault(message)) {
             // throwFaultException(message);
