@@ -3,17 +3,22 @@
  */
 package org.petalslink.dsb.notification.commons;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.TransformerException;
 
 import org.petalslink.dsb.notification.commons.api.NotificationSender;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
+import com.ebmwebsourcing.easycommons.xml.XMLHelper;
 import com.ebmwebsourcing.wsaddressing10.api.type.EndpointReferenceType;
+import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.NotificationMessageHolderType;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Notify;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.TopicExpressionType;
 import com.ebmwebsourcing.wsstar.wsnb.services.impl.engines.NotificationProducerEngine;
@@ -34,12 +39,58 @@ public abstract class AbstractNotificationSender implements NotificationSender {
 
     private NotificationProducerEngine producer;
 
-    private DocumentBuilderFactory documentFactory = null;
+    private DocumentBuilderFactory documentFactory;
 
     public AbstractNotificationSender(final NotificationProducerEngine producer) {
         this.producer = producer;
         this.documentFactory = DocumentBuilderFactory.newInstance();
         this.documentFactory.setNamespaceAware(true);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.petalslink.dsb.notification.commons.api.NotificationSender#notify
+     * (com.
+     * ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Notify)
+     */
+    public void notify(Notify notify) throws NotificationException {
+        // go in all the messages and call #notify method
+        List<NotificationMessageHolderType> messages = notify.getNotificationMessage();
+        for (NotificationMessageHolderType notificationMessageHolderType : messages) {
+            TopicExpressionType topic = notificationMessageHolderType.getTopic();
+            String topicContent = topic.getContent();
+            // create a qname from the topic content
+            String prefix = null;
+            String localPart = null;
+            if (topicContent.contains(":")) {
+                prefix = topicContent.substring(0, topicContent.indexOf(":"));
+                localPart = topicContent.substring(topicContent.indexOf(":") + 1);
+            }
+            // get the NS for the prefix
+            String ns = null;
+            if (prefix != null && topic.getTopicNamespaces() != null) {
+                boolean found = false;
+                Iterator<QName> iter = topic.getTopicNamespaces().iterator();
+                while (iter.hasNext() && !found) {
+                    QName qname = iter.next();
+                    if (prefix.equals(qname.getLocalPart())) {
+                        ns = qname.getNamespaceURI();
+                        found = true;
+                    }
+                }
+            }
+
+            QName topicName = new QName(ns, localPart, prefix);
+            Element element = notificationMessageHolderType.getMessage().getAny();
+            Document dom = null;
+            if (element != null) {
+                dom = element.getOwnerDocument();
+            }
+            String dialect = topic.getDialect().toString();
+            this.notify(dom, topicName, dialect);
+        }
     }
 
     public void notify(Document payload, final QName topic, final String dialect)
@@ -104,8 +155,7 @@ public abstract class AbstractNotificationSender implements NotificationSender {
                                         doNotify(notify, producerAddress, currentConsumerEdp,
                                                 subscriptionId, topic, dialect);
                                     } catch (NotificationException e) {
-                                        // handle exception to aviod to break
-                                        // loop...
+                                        e.printStackTrace();
                                     }
                                 }
                             }
@@ -114,7 +164,7 @@ public abstract class AbstractNotificationSender implements NotificationSender {
                 }
             }
 
-            if (!setCurrentMessage) {
+            if (setCurrentMessage) {
                 String producerAddress = getProducerAddress();
                 Notify notify = NotificationHelper.createNotification(producerAddress, null, null,
                         topic, dialect, payload);
@@ -138,9 +188,10 @@ public abstract class AbstractNotificationSender implements NotificationSender {
             String dialect) throws NotificationException;
 
     /**
-     * Who am I?
+     * This will be used in the notification message to say who am I.
      * 
      * @return
      */
     protected abstract String getProducerAddress();
+
 }

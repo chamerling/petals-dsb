@@ -3,13 +3,14 @@
  */
 package org.petalslink.notification.commons;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import junit.framework.TestCase;
@@ -20,26 +21,30 @@ import org.petalslink.dsb.notification.commons.NotificationManagerImpl;
 import org.petalslink.dsb.notification.commons.api.NotificationManager;
 import org.petalslink.dsb.notification.commons.api.NotificationSender;
 import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 import com.ebmwebsourcing.easycommons.xml.XMLHelper;
 import com.ebmwebsourcing.wsaddressing10.api.type.EndpointReferenceType;
-import com.ebmwebsourcing.wsstar.basefaults.datatypes.impl.impl.WsrfbfModelFactoryImpl;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Notify;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Subscribe;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.SubscribeResponse;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.utils.WsnbException;
-import com.ebmwebsourcing.wsstar.basenotification.datatypes.impl.impl.WsnbModelFactoryImpl;
-import com.ebmwebsourcing.wsstar.resource.datatypes.impl.impl.WsrfrModelFactoryImpl;
-import com.ebmwebsourcing.wsstar.resourcelifetime.datatypes.impl.impl.WsrfrlModelFactoryImpl;
-import com.ebmwebsourcing.wsstar.resourceproperties.datatypes.impl.impl.WsrfrpModelFactoryImpl;
-import com.ebmwebsourcing.wsstar.topics.datatypes.impl.impl.WstopModelFactoryImpl;
 import com.ebmwebsourcing.wsstar.wsnb.services.impl.util.Wsnb4ServUtils;
+import com.ebmwebsourcing.wsstar.wsrfbf.services.faults.AbsWSStarFault;
 
 /**
  * @author chamerling
  * 
  */
-public class LocalNotificationSenderTest extends TestCase {
+public class AbstractNotificationSenderTest extends TestCase {
+
+    List<String> problems;
+
+    final String producer = "http://localhost:9998/foo/bar/LocalProducer";
+
+    QName topic = new QName("http://www.petalslink.org/dsb/topicsns/", "DSBTopic", "dsb");
+
+    String dialect = "http://www.w3.org/TR/1999/REC-xpath-19991116";
 
     /*
      * (non-Javadoc)
@@ -48,22 +53,62 @@ public class LocalNotificationSenderTest extends TestCase {
      */
     @Override
     protected void setUp() throws Exception {
-        Wsnb4ServUtils.initModelFactories(new WsrfbfModelFactoryImpl(),
-                new WsrfrModelFactoryImpl(), new WsrfrlModelFactoryImpl(),
-                new WsrfrpModelFactoryImpl(), new WstopModelFactoryImpl(),
-                new WsnbModelFactoryImpl());
+        this.problems = new ArrayList<String>();
+    }
+
+    public void testNotifyDocument() throws Exception {
+        NotificationSender sender = initializeEnv();
+
+        Document payload = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+                .parse(LocalNotificationSenderTest.class.getResourceAsStream("/notify.xml"));
+
+        System.out
+                .println("Let's Notify and see if the subscriber receives it with the right parameters...");
+
+        // first method...
+        sender.notify(payload, topic, dialect);
+        StringBuffer message = new StringBuffer();
+        for (String string : problems) {
+            message.append(string);
+            message.append("/n");
+        }
+        assertEquals(message.toString(), 0, problems.size());
+    }
+
+    public void testNotify() throws Exception {
+        NotificationSender sender = initializeEnv();
+
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        dbf.setNamespaceAware(true);
+        Document message = dbf.newDocumentBuilder().parse(
+                LocalNotificationSenderTest.class.getResourceAsStream("/notify-message.xml"));
+
+        Notify notify = Wsnb4ServUtils.getWsnbReader().readNotify(message);
+
+        System.out
+                .println("Let's Notify and see if the subscriber receives it with the right parameters...");
+
+        // first method...
+        sender.notify(notify);
+        StringBuffer sb = new StringBuffer();
+        for (String string : problems) {
+            sb.append(string);
+            sb.append("/n");
+        }
+        assertEquals(sb.toString(), 0, problems.size());
     }
 
     /**
-     * Checks that notification is really received when someone as subscribed...
-     * 
-     * @throws Exception
+     * @return
+     * @throws WsnbException
+     * @throws SAXException
+     * @throws IOException
+     * @throws ParserConfigurationException
+     * @throws AbsWSStarFault
+     * @throws TransformerException
      */
-    public void testNotifyLocal() throws Exception {
-        final AtomicInteger calls = new AtomicInteger(0);
-        QName topic = new QName("http://www.petalslink.org/dsb/topicsns/", "DSBTopic", "dsb");
-        String dialect = "http://www.w3.org/TR/1999/REC-xpath-19991116";
-
+    protected NotificationSender initializeEnv() throws WsnbException, SAXException, IOException,
+            ParserConfigurationException, AbsWSStarFault, TransformerException {
         URL topicNamespaces = LocalNotificationSenderTest.class.getResource("/topicNS.xml");
         List<String> supportedTopics = new ArrayList<String>();
         supportedTopics.add("DSBTopic");
@@ -81,7 +126,7 @@ public class LocalNotificationSenderTest extends TestCase {
 
             @Override
             protected String getProducerAddress() {
-                return "http://localhost:9998/foo/bar/Producer";
+                return producer;
             }
 
             @Override
@@ -105,16 +150,14 @@ public class LocalNotificationSenderTest extends TestCase {
                 } catch (TransformerException e) {
                     e.printStackTrace();
                 }
-                calls.incrementAndGet();
+
+                if (!producer.equals(producerAddress)) {
+                    problems.add(String.format(
+                            "Producer addess are not the same, expected is %s and received is %s",
+                            producer, producerAddress));
+                }
             }
         };
-
-        // assert that the sender is not called...
-        System.out.println("Notify but no subscribers...");
-        Document payload = DocumentBuilderFactory.newInstance().newDocumentBuilder()
-                .parse(LocalNotificationSenderTest.class.getResourceAsStream("/notify.xml"));
-        sender.notify(payload, topic, dialect);
-        assertEquals(0, calls.get());
 
         // now subscribe to be notified...
         System.out.println("Subscribe...");
@@ -131,10 +174,7 @@ public class LocalNotificationSenderTest extends TestCase {
         System.out.println("Subscribe Response : ");
         Document n = Wsnb4ServUtils.getWsnbWriter().writeSubscribeResponseAsDOM(response);
         System.out.println(XMLHelper.createStringFromDOMDocument(n));
-
-        System.out.println("Let's Notify and see if the subscriber receives it...");
-        sender.notify(payload, topic, dialect);
-
-        assertEquals(1, calls.get());
+        return sender;
     }
+
 }
