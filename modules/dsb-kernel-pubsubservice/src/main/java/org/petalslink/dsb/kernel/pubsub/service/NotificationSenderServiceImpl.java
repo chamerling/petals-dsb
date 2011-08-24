@@ -17,6 +17,8 @@ import org.petalslink.dsb.notification.commons.NotificationException;
 import org.petalslink.dsb.notification.commons.api.NotificationSender;
 import org.w3c.dom.Document;
 
+import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Notify;
+
 /**
  * Use this service to send notification to notification subscribers. This
  * service embeds the core engine which will get all the subscriptions. This
@@ -59,6 +61,13 @@ public class NotificationSenderServiceImpl implements NotificationSender {
                     "Sending a notification message to topic '%s' with dialect '%s'",
                     topic.toString(), dialect));
         }
+        System.out.println("Got a notify request, sending the message to the core engine...");
+    }
+
+    /* (non-Javadoc)
+     * @see org.petalslink.dsb.notification.commons.api.NotificationSender#notify(com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Notify)
+     */
+    public void notify(Notify notify) throws NotificationException {
         System.out.println("Got a notify request, sending the message to the core engine...");
     }
 
