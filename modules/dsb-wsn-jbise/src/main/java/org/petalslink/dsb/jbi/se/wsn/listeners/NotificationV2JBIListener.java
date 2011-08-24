@@ -9,41 +9,19 @@ import java.util.logging.Level;
 import javax.jbi.messaging.MessagingException;
 import javax.jbi.messaging.NormalizedMessage;
 import javax.xml.namespace.QName;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactoryConfigurationError;
-import javax.xml.xpath.XPathExpressionException;
 
-import org.ow2.easywsdl.wsdl.api.WSDLException;
-import org.ow2.petals.component.framework.api.Constants;
 import org.ow2.petals.component.framework.api.exception.PEtALSCDKException;
 import org.ow2.petals.component.framework.api.message.Exchange;
 import org.ow2.petals.component.framework.listener.AbstractJBIListener;
-import org.ow2.petals.component.framework.message.ExchangeImpl;
 import org.ow2.petals.component.framework.util.UtilFactory;
 import org.petalslink.dsb.jbi.se.wsn.Component;
 import org.petalslink.dsb.jbi.se.wsn.NotificationEngine;
 import org.w3c.dom.Document;
 
 import com.ebmwebsourcing.wsaddressing10.api.element.Address;
-import com.ebmwebsourcing.wsstar.addressing.definition.WSAddressingFactory;
-import com.ebmwebsourcing.wsstar.addressing.definition.api.EndpointReferenceType;
-import com.ebmwebsourcing.wsstar.addressing.definition.api.WSAddressingException;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.refinedabstraction.RefinedWsnbFactory;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.utils.WsnbException;
 import com.ebmwebsourcing.wsstar.notification.definition.basenotification.WsnbConstants;
-import com.ebmwebsourcing.wsstar.notification.definition.basenotification.api.NotificationMessageHolderType;
-import com.ebmwebsourcing.wsstar.notification.definition.basenotification.api.Notify;
-import com.ebmwebsourcing.wsstar.notification.definition.basenotification.api.Subscribe;
-import com.ebmwebsourcing.wsstar.notification.definition.basenotification.api.SubscribeResponse;
-import com.ebmwebsourcing.wsstar.notification.definition.basenotification.api.Unsubscribe;
-import com.ebmwebsourcing.wsstar.notification.definition.basenotification.api.UnsubscribeResponse;
-import com.ebmwebsourcing.wsstar.notification.definition.inout.WSNotificationReader;
-import com.ebmwebsourcing.wsstar.notification.definition.inout.WSNotificationWriter;
-import com.ebmwebsourcing.wsstar.notification.definition.utils.WSNotificationException;
-import com.ebmwebsourcing.wsstar.notification.extension.utils.WSNotificationExtensionException;
-import com.ebmwebsourcing.wsstar.notification.extension.utils.WsnSpecificTypeHelper;
-import com.ebmwebsourcing.wsstar.notification.service.fault.WSNotificationFault;
 import com.ebmwebsourcing.wsstar.wsrfbf.services.faults.AbsWSStarFault;
 
 /**
@@ -63,8 +41,9 @@ public abstract class NotificationV2JBIListener extends AbstractJBIListener {
     public boolean onNotificationMessage(Exchange exchange) {
 
         // bypass the old stuff and add new one...
-        System.out.println(String.format("We have a notification message with operation '%s'", exchange.getOperation()));
-        
+        System.out.println(String.format("We have a notification message with operation '%s'",
+                exchange.getOperation()));
+
         NotificationEngine engine = getNotificationEngine();
 
         boolean response = true;
@@ -104,7 +83,14 @@ public abstract class NotificationV2JBIListener extends AbstractJBIListener {
                     }
 
                 } else {
-                    
+                    // We have map between the consumer reference which may be
+                    // an external URL with an internal DSB endpoint which will
+                    // be used to notify this subscriber.
+
+                    // solution 1: change the subscriber address by adding the
+                    // source of the current message. By doing this, we will
+                    // need to use some WS-Addressing based stuff to send
+                    // notifications.
                     normalizedMessage = exchange.getInMessage();
                     
                     if (WsnbConstants.SUBSCRIBE_NAME.equals(exchange.getOperation().getLocalPart())) {
@@ -128,7 +114,8 @@ public abstract class NotificationV2JBIListener extends AbstractJBIListener {
                                 .createStreamSource(document));
                         exchange.setOutMessage(normalizedMessage);
 
-                    } else if (WsnbConstants.NOTIFY_NAME.equals(exchange.getOperation().getLocalPart())) {
+                    } else if (WsnbConstants.NOTIFY_NAME.equals(exchange.getOperation()
+                            .getLocalPart())) {
                         document = UtilFactory.getSourceUtil().createDocument(
                                 normalizedMessage.getContent());
 
@@ -148,7 +135,8 @@ public abstract class NotificationV2JBIListener extends AbstractJBIListener {
 
                         engine.getNotificationConsumerEngine().notify(notify);
 
-                    } else if (WsnbConstants.UNSUBSCRIBE_NAME.equals(exchange.getOperation().getLocalPart())) {
+                    } else if (WsnbConstants.UNSUBSCRIBE_NAME.equals(exchange.getOperation()
+                            .getLocalPart())) {
                         document = UtilFactory.getSourceUtil().createDocument(
                                 normalizedMessage.getContent());
 
@@ -168,7 +156,8 @@ public abstract class NotificationV2JBIListener extends AbstractJBIListener {
                     } else if (WsnbConstants.GET_CURRENT_MESSAGE_NAME.equals(exchange
                             .getOperation().getLocalPart())) {
                         System.out.println("TODO");
-                    } else if (WsnbConstants.RENEW_NAME.equals(exchange.getOperation().getLocalPart())) {
+                    } else if (WsnbConstants.RENEW_NAME.equals(exchange.getOperation()
+                            .getLocalPart())) {
                         System.out.println("TODO");
                     } else {
                         exchange.setError(new Exception(
