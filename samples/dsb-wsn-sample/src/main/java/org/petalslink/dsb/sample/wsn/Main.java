@@ -40,7 +40,7 @@ public class Main {
      * @param args
      */
     public static void main(String[] args) {
-        
+
         System.out.println("****** CREATING LOCAL SERVER ******");
 
         // local address which will receive notifications
@@ -116,14 +116,17 @@ public class Main {
         System.out.println("Sending a notification to the DSB...");
         INotificationConsumer consumerClient = new HTTPNotificationConsumerClient(dsbNotify);
         Notify notify = loadNotify();
-        try {
-            consumerClient.notify(notify);
-        } catch (WsnbException e) {
-            e.printStackTrace();
+        for (int i = 0; i < 10; i++) {
+            try {
+                consumerClient.notify(notify);
+            } catch (WsnbException e) {
+                e.printStackTrace();
+            }
         }
-        
+
         try {
             System.out.println("Waiting...");
+
             TimeUnit.SECONDS.sleep(10);
         } catch (InterruptedException e) {
         }
