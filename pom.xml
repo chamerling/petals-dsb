@@ -142,6 +142,9 @@
 		<module>modules/gms-core</module>
    		<module>modules/gms-prototype</module>
 
+		<!-- Utils -->
+		<module>modules/dsb-xmlutils</module>
+
 		<!-- samples -->
 		<module>samples/dsb-wsn-sample</module>
 		
