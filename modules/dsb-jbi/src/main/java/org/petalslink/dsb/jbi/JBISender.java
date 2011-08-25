@@ -256,7 +256,7 @@ public class JBISender implements Client {
                         if (source != null) {
                             try {
                                 return XMLHelper.createDocument(source, false);
-                            } catch (DSBException e) {
+                            } catch (Exception e) {
                                 throw new ClientException("Can not create Document from response",
                                         e);
                             }
