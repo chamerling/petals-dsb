@@ -132,10 +132,11 @@ public class ServiceClientPoolObjectFactory extends BasePoolableObjectFactory {
         final AxisService service = new AxisService(
                 PetalsAxisService.OUTGOING_SERVICE_CLIENT_PREFIX
                 + UtilFactory.getIdUtil().createId());
-        ClassLoader cl = soapContext.getProvidersManager().getServiceContext(provides)
-        .getClassloader();
-        service.setClassLoader(soapContext.getProvidersManager().getServiceContext(provides)
-                .getClassloader());
+        if (provides != null
+                && soapContext.getProvidersManager().getServiceContext(provides) != null) {
+            service.setClassLoader(soapContext.getProvidersManager().getServiceContext(provides)
+                    .getClassloader());
+        }
 
         final AxisOperation axisOperation;
         if (MEPConstants.IN_ONLY_PATTERN.equals(mep)) {
@@ -283,6 +284,10 @@ public class ServiceClientPoolObjectFactory extends BasePoolableObjectFactory {
      * @throws AxisFault
      */
     private void engageModules(final ServiceClient serviceClient) throws AxisFault {
+        if (provides == null) {
+            return;
+        }
+        
         List<String> modules = this.soapContext.getProvidersManager().getServiceContext(provides)
         .getModules();
         if (modules != null) {
@@ -315,6 +320,9 @@ public class ServiceClientPoolObjectFactory extends BasePoolableObjectFactory {
      * @param extensions
      */
     private void enableSSLSupport(final ConfigurationExtensions extensions) {
+        if (extensions == null) {
+            return;
+        }
         final String trustStore = extensions.get("ssl-trustStore");
         final String trustStorePassword = extensions.get("ssl-trustStorePassword");
         final String keyStore = extensions.get("ssl-keyStore");

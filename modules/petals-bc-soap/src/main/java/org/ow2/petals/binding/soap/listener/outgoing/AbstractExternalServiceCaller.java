@@ -152,6 +152,9 @@ public abstract class AbstractExternalServiceCaller implements ExternalServiceCa
      * @return
      */
     protected final static boolean retrieveAddRoot(final ConfigurationExtensions extensions) {
+        if (extensions == null) {
+            return false;
+        }
         final String result = extensions.get(ADD_ROOT);
         return Boolean.parseBoolean(result);
     }
@@ -163,8 +166,10 @@ public abstract class AbstractExternalServiceCaller implements ExternalServiceCa
      * @return
      */
     protected final static String retrieveDefaultSOAPAction(final ConfigurationExtensions extensions) {
-        final String soapAction =  extensions.get(SOAP_ACTION);
-        return soapAction;
+        if (extensions == null) {
+            return null;
+        }
+        return extensions.get(SOAP_ACTION);
     }
 
     /**
@@ -183,6 +188,9 @@ public abstract class AbstractExternalServiceCaller implements ExternalServiceCa
      */
     protected final static HttpTransportProperties.ProxyProperties retrieveProxySettings(
             final ConfigurationExtensions extensions) {
+        if (extensions == null) {
+            return null;
+        }
 
         HttpTransportProperties.ProxyProperties proxyProperties = null;
 
@@ -233,6 +241,9 @@ public abstract class AbstractExternalServiceCaller implements ExternalServiceCa
     protected final static String retrieveSOAPEnvelopeNamespaceURI(
             final ConfigurationExtensions extensions) {
         String soapEnvelopeNamespaceURI = SOAP11Constants.SOAP_ENVELOPE_NAMESPACE_URI;
+        if (extensions == null) {
+            return soapEnvelopeNamespaceURI;
+        }
         final String soapVersion = extensions.get(SOAP_VERSION);
 
         if (SOAP_VERSION_12.equals(soapVersion)) {
@@ -249,6 +260,9 @@ public abstract class AbstractExternalServiceCaller implements ExternalServiceCa
      * @return
      */
     protected final static boolean retrieveCleanupTransport(final ConfigurationExtensions extensions) {
+        if (extensions == null) {
+            return true;
+        }
         final String clean = extensions.get(CLEANUP_TRANSPORT);
         if( clean == null )
             return true;
@@ -263,6 +277,9 @@ public abstract class AbstractExternalServiceCaller implements ExternalServiceCa
      * @return
      */
     protected final static String retrieveChunkedMode(final ConfigurationExtensions extensions) {
+        if (extensions == null) {
+            return "false";
+        }
         return extensions.get(CHUNKED_MODE);
     }
 

@@ -156,12 +156,17 @@ public class SOAPCaller extends AbstractExternalServiceCaller {
                 try {
                     Element firstElement = null;
                     String endpointName= null;
-                    QName service = exchange.getEndpoint().getServiceName();
-
-                    firstElement = exchange.getInMessageContentAsDocument(true).getDocumentElement();
-                    endpointName = exchange.getEndpointName();
-                    soapAction = WsdlHelper.findSoapAction(firstElement, this.soapContext.getProvidersManager().getServiceContext(provides).getServiceDescription(), 
-                            endpointName, service);
+                    
+                    if (exchange.getEndpoint() != null
+                            && exchange.getEndpoint().getServiceName() != null) {
+                        QName service = exchange.getEndpoint().getServiceName();
+                        firstElement = exchange.getInMessageContentAsDocument(true)
+                                .getDocumentElement();
+                        endpointName = exchange.getEndpointName();
+                        soapAction = WsdlHelper.findSoapAction(firstElement, this.soapContext
+                                .getProvidersManager().getServiceContext(provides)
+                                .getServiceDescription(), endpointName, service);
+                    }
                 } catch (MessagingException e1) {
                     this.logger.warning("Error '" +e1+"' while trying to get elements to resolve soapAction.");
                 }catch (Exception e) {

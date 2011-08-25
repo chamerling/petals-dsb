@@ -75,6 +75,9 @@ public class SUPropertiesHelper {
      * @return
      */
     public final static long retrieveTimeout(final ConfigurationExtensions extensions) {
+        if (extensions == null) {
+            return -1L;
+        }
         return getLong(TIMEOUT, extensions);
     }
 
@@ -137,6 +140,9 @@ public class SUPropertiesHelper {
      */
     public static List<String> retrieveHeaderList(final ConfigurationExtensions extensions) {
         List<String> result = null;
+        if (extensions == null) {
+            return result;
+        }
         final String tmp = extensions.get(HEADERS_FILTER);
         if (tmp != null) {
             result = new ArrayList<String>();
@@ -155,6 +161,9 @@ public class SUPropertiesHelper {
      * @return
      */
     public static boolean retrieveInjectHeader(final ConfigurationExtensions extensions) {
+        if (extensions == null) {
+            return false;
+        }
         return getBoolean(INJECT_HEADERS, extensions);
     }
 
@@ -297,6 +306,9 @@ public class SUPropertiesHelper {
      */
     protected static final boolean checkPresent(final String parameterName,
             final ConfigurationExtensions extensions) {
+        if (extensions == null) {
+            return false;
+        }
         String tmp = extensions.get(parameterName);
         return ((tmp != null) && (tmp.trim().length() > 0));
     }
@@ -379,6 +391,9 @@ public class SUPropertiesHelper {
     protected static final boolean getBoolean(final String parameterName,
             final ConfigurationExtensions extensions) {
         boolean result = true;
+        if (extensions == null) {
+            return result;
+        }
         String tmp = extensions.get(parameterName);
         if (tmp != null) {
             result = Boolean.parseBoolean(tmp.trim());
@@ -388,6 +403,9 @@ public class SUPropertiesHelper {
 
     protected static final boolean getBoolean(final String parameterName,
             final ConfigurationExtensions extensions, boolean defaultValue) {
+        if (extensions == null) {
+            return defaultValue;
+        }
         boolean result = true;
         String tmp = extensions.get(parameterName);
         if (tmp == null) {
@@ -407,6 +425,9 @@ public class SUPropertiesHelper {
      */
     protected static final String getString(final String parameterName,
             final ConfigurationExtensions extensions) {
+        if (extensions == null) {
+            return null;
+        }
         String result = extensions.get(parameterName);
         if (result != null) {
             result = result.trim();
