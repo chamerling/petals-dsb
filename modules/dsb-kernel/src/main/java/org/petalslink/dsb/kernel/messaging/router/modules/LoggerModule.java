@@ -67,6 +67,8 @@ public class LoggerModule implements SenderModule {
             ComponentContext sourceComponentContext, MessageExchange exchange)
             throws RoutingException {
         if (this.log.isDebugEnabled()) {
+            this.log.debug("***************************** Endpoints Found *****************************");
+
             Iterator<ServiceEndpoint> iter = electedEndpoints.keySet().iterator();
             if (iter.hasNext()) {
                 this.log.debug("Endpoints found :");
@@ -86,8 +88,9 @@ public class LoggerModule implements SenderModule {
                     this.log.debug("Transport Context is null");
                 }
                 this.log.debug("*****************************");
-
             }
+            this.log.debug("***************************************************************************");
+
         }
     }
 
