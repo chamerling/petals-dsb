@@ -192,6 +192,17 @@
 			        <enabled>false</enabled>
 			      </snapshots>
 			    </pluginRepository>
+			  <pluginRepository>
+			      <id>petalslink-public.others.plugin</id>
+			      <name>PetalsLink plugin others Repository</name>
+			      <url>http://maven.petalslink.com/others</url>
+			      <releases>
+			        <enabled>true</enabled>
+			      </releases>
+			      <snapshots>
+			        <enabled>false</enabled>
+			      </snapshots>
+			    </pluginRepository>
 		  </pluginRepositories>
 
 	<dependencies>
