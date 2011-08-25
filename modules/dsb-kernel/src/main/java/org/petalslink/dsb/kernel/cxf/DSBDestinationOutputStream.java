@@ -30,8 +30,8 @@ import org.apache.cxf.common.logging.LogUtils;
 import org.apache.cxf.io.CachedOutputStream;
 import org.apache.cxf.message.Message;
 import org.ow2.petals.registry.api.util.XMLUtil;
-import org.petalslink.dsb.kernel.io.Adapter;
 import org.petalslink.dsb.service.client.MessageListener;
+import org.petalslink.dsb.xmlutils.XMLHelper;
 import org.w3c.dom.Document;
 
 public class DSBDestinationOutputStream extends CachedOutputStream {
@@ -73,7 +73,7 @@ public class DSBDestinationOutputStream extends CachedOutputStream {
             } else {
 
                 InputStream bais = getInputStream();
-                final Document doc = Adapter.createDocument(new StreamSource(bais), true);
+                final Document doc = XMLHelper.createDocument(new StreamSource(bais), true);
                 
                 if (LOG.isLoggable(Level.INFO)) {
                     LOG.info("On destination to be sent back to the client" + XMLUtil.createStringFromDOMDocument(doc));

@@ -18,8 +18,5 @@ public class Constants {
 
     public static final String ITF_NAME = Constants.class.getCanonicalName() + ".ITF_NAME";
 
-    public static final String CLEAN_ENDPOINT = Constants.class.getCanonicalName()
-            + ".CLEAN_ENDPOINT";
-
     public static String MESSAGE_TYPE = Constants.class.getCanonicalName() + ".MESSAGE_TYPE";
 }

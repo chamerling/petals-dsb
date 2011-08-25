@@ -26,6 +26,7 @@ import javax.jbi.JBIException;
 import javax.naming.InitialContext;
 
 import org.ow2.petals.component.framework.bc.AbstractBindingComponent;
+import org.petalslink.dsb.service.client.Client;
 
 /**
  * FIXME = This is not only for the binding component but for all the
@@ -40,6 +41,8 @@ public class PetalsBindingComponent extends AbstractBindingComponent implements
 	private final Map<Class<?>, Object> plugins;
 
 	private final Properties containerProperties;
+	
+	private Client client;
 
 	/**
 	 * 
@@ -123,6 +126,14 @@ public class PetalsBindingComponent extends AbstractBindingComponent implements
 		String finalPropertyName = this.getContext().getComponentName() + "."
 				+ propertyName;
 		return this.containerProperties.getProperty(finalPropertyName);
+	}
+	
+	public synchronized Client getJBIClient() {
+	    if (client == null) {
+	        client = new JBIClient(this.context);
+	    }
+        return client;
+	    
 	}
 
 }

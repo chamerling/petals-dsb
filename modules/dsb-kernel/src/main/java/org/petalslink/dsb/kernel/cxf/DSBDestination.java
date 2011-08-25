@@ -28,11 +28,11 @@ import org.apache.cxf.transport.Destination;
 import org.apache.cxf.transport.MessageObserver;
 import org.apache.cxf.ws.addressing.EndpointReferenceType;
 import org.apache.cxf.wsdl.EndpointReferenceUtils;
-import org.petalslink.dsb.kernel.io.Adapter;
 import org.petalslink.dsb.kernel.io.server.DSBServiceServer;
 import org.petalslink.dsb.kernel.io.server.DSBServiceServerFactory;
 import org.petalslink.dsb.kernel.io.server.ServerFactoryRegistry;
 import org.petalslink.dsb.service.client.MessageListener;
+import org.petalslink.dsb.xmlutils.XMLHelper;
 import org.w3c.dom.Document;
 
 /**
@@ -172,7 +172,7 @@ public class DSBDestination extends AbstractDestination implements MessageListen
             inMessage.put(org.petalslink.dsb.service.client.Message.class, message);
 
             Document doc = message.getPayload();
-            InputStream is = Adapter.getInputStream(doc);
+            InputStream is = XMLHelper.getInputStream(doc);
             if (doc != null) {
                 inMessage.setContent(InputStream.class, is);
             }

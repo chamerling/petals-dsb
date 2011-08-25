@@ -41,12 +41,12 @@ import org.apache.cxf.ws.addressing.EndpointReferenceType;
 import org.apache.cxf.wsdl.EndpointReferenceUtils;
 import org.ow2.petals.registry.api.util.XMLUtil;
 import org.petalslink.dsb.api.ServiceEndpoint;
-import org.petalslink.dsb.kernel.io.Adapter;
 import org.petalslink.dsb.kernel.io.Constants;
 import org.petalslink.dsb.kernel.io.client.ClientFactoryRegistry;
 import org.petalslink.dsb.kernel.service.EndpointHelper;
 import org.petalslink.dsb.service.client.Client;
 import org.petalslink.dsb.service.client.ClientFactory;
+import org.petalslink.dsb.xmlutils.XMLHelper;
 import org.w3c.dom.Document;
 
 /**
@@ -59,6 +59,8 @@ import org.w3c.dom.Document;
  * 
  */
 public class DSBConduitOutputStream extends CachedOutputStream {
+    
+    public static final String CLEAN_ENDPOINT = "jbi.client.CLEAN_ENDPOINT";
 
     private static final Logger LOG = LogUtils.getL7dLogger(DSBConduitOutputStream.class);
 
@@ -117,7 +119,7 @@ public class DSBConduitOutputStream extends CachedOutputStream {
                     .getEndpoint(
                             DSBConduitOutputStream.this.message.get(Message.ENDPOINT_ADDRESS)
                                     .toString());
-            final Document doc = Adapter.createDocument(new StreamSource(this.getInputStream()),
+            final Document doc = XMLHelper.createDocument(new StreamSource(this.getInputStream()),
                     true);
             org.petalslink.dsb.service.client.Message message = new org.petalslink.dsb.service.client.Message() {
 
@@ -163,7 +165,7 @@ public class DSBConduitOutputStream extends CachedOutputStream {
             message.getProperties().put(Constants.SERVICE_NAME, serviceName.toString());
             message.getProperties().put(Constants.ENDPOINT_NAME, endpointName.toString());
             message.getProperties().put(Constants.ITF_NAME, interfaceName.toString());
-            message.getProperties().put(Constants.CLEAN_ENDPOINT, Boolean.TRUE.toString());
+            message.getProperties().put(CLEAN_ENDPOINT, Boolean.TRUE.toString());
 
             if (LOG.isLoggable(Level.INFO))
                 LOG.info("Sending the message : " + XMLUtil.createStringFromDOMDocument(doc));
@@ -195,7 +197,7 @@ public class DSBConduitOutputStream extends CachedOutputStream {
                     LOG.info("RESPONSE from service : "
                             + XMLUtil.createStringFromDOMDocument(out.getPayload()));
 
-                InputStream ins = Adapter.getInputStream(out.getPayload());
+                InputStream ins = XMLHelper.getInputStream(out.getPayload());
                 if (ins == null) {
                     throw new IOException(new org.apache.cxf.common.i18n.Message(
                             "UNABLE.RETRIEVE.MESSAGE", LOG).toString());

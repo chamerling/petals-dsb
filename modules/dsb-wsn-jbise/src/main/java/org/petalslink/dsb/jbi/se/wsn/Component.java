@@ -113,7 +113,7 @@ public class Component extends PetalsBindingComponent {
 
         if (engine == null) {
             engine = new NotificationEngine(getLogger(), url, supportedTopics, serviceName,
-                    interfaceName, endpointName);
+                    interfaceName, endpointName, getJBIClient());
         }
         this.engine.init();
     }

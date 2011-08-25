@@ -13,7 +13,7 @@ import javax.jbi.messaging.ExchangeStatus;
 import javax.jbi.messaging.MessageExchange;
 import javax.jbi.messaging.MessagingException;
 
-import org.petalslink.dsb.kernel.io.Adapter;
+import org.petalslink.dsb.jbi.Adapter;
 import org.petalslink.dsb.service.client.Message;
 import org.petalslink.dsb.service.client.MessageListener;
 

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.petalslink.dsb.kernel.io.client;
+package org.petalslink.dsb.jbi;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,20 +24,23 @@ import javax.xml.transform.dom.DOMSource;
 import org.ow2.petals.kernel.api.service.Location;
 import org.petalslink.dsb.api.DSBException;
 import org.petalslink.dsb.api.ServiceEndpoint;
-import org.petalslink.dsb.kernel.io.Adapter;
-import org.petalslink.dsb.kernel.io.Constants;
 import org.petalslink.dsb.service.client.Client;
 import org.petalslink.dsb.service.client.ClientException;
 import org.petalslink.dsb.service.client.Message;
 import org.petalslink.dsb.service.client.MessageListener;
+import org.petalslink.dsb.xmlutils.XMLHelper;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentFragment;
 
 /**
+ * Send messages through JBI
+ * 
  * @author chamerling
  * 
  */
-public class DSBServiceClient implements Client {
+public class JBISender implements Client {
+
+    public static final String CLEAN_ENDPOINT = "jbi.client.CLEAN_ENDPOINT";
 
     private ComponentContext componentContext;
 
@@ -47,7 +50,7 @@ public class DSBServiceClient implements Client {
 
     private ServiceEndpoint serviceEndpoint;
 
-    public DSBServiceClient(ComponentContext componentContext, ServiceEndpoint endpoint) {
+    public JBISender(ComponentContext componentContext, ServiceEndpoint endpoint) {
         this.componentContext = componentContext;
         this.serviceEndpoint = endpoint;
         // TODO : initialize somewhere else
@@ -167,7 +170,7 @@ public class DSBServiceClient implements Client {
             // exception to handle
         }
 
-        if (!Boolean.parseBoolean(message.getProperties().get(Constants.CLEAN_ENDPOINT))) {
+        if (!Boolean.parseBoolean(message.getProperties().get(CLEAN_ENDPOINT))) {
             // do we need to set the endpoit or not? It is up to the caller to
             // set that; For example, the core kernel service client need to set
             // informaiton about the service he wants to call but it is not a
@@ -252,7 +255,7 @@ public class DSBServiceClient implements Client {
                         source = normalizedMessage.getContent();
                         if (source != null) {
                             try {
-                                return Adapter.createDocument(source, false);
+                                return XMLHelper.createDocument(source, false);
                             } catch (DSBException e) {
                                 throw new ClientException("Can not create Document from response",
                                         e);
@@ -296,4 +299,5 @@ public class DSBServiceClient implements Client {
         }
         return result;
     }
+
 }

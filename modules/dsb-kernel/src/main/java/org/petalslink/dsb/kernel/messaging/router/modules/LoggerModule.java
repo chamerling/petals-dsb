@@ -66,28 +66,54 @@ public class LoggerModule implements SenderModule {
     public void electEndpoints(Map<ServiceEndpoint, TransportSendContext> electedEndpoints,
             ComponentContext sourceComponentContext, MessageExchange exchange)
             throws RoutingException {
+        this.log.debug("******************************* Router logs *******************************");
+
         if (this.log.isDebugEnabled()) {
-            this.log.debug("***************************** Endpoints Found *****************************");
+            
+            log.debug("- Component context : ");
+            log.debug(sourceComponentContext.getAddress()); 
+            log.debug("");
+
+            log.debug("- Consumer endpoint : ");
+            if (exchange.getConsumerEndpoint() != null) {
+                log.debug("  - Endpoint name : " + exchange.getConsumerEndpoint().getEndpointName());
+                log.debug("  - Service name : " + exchange.getConsumerEndpoint().getServiceName());
+                log.debug("  - Location : " + exchange.getConsumerEndpoint().getLocation());
+                log.debug("  - Interfaces : " + exchange.getConsumerEndpoint().getInterfacesName());
+            } else {
+                log.debug("  - None");
+            }
+            log.debug("");
+
+            log.debug("- Exchange values : ");
+            log.debug("  - Endpoint name : " + exchange.getEndpoint());
+            log.debug("  - ID : " + exchange.getExchangeId());
+            log.debug("  - Interface name : " + exchange.getInterfaceName());
+            log.debug("  - Operation name : " + exchange.getOperation());
+            log.debug("  - Pattern : " + exchange.getPattern());
+            log.debug("  - Role : " + exchange.getRole());
+            log.debug("  - Service name : " + exchange.getService());
+            log.debug("  - Status : " + exchange.getStatus());
+            log.debug("");
 
             Iterator<ServiceEndpoint> iter = electedEndpoints.keySet().iterator();
             if (iter.hasNext()) {
-                this.log.debug("Endpoints found :");
+                this.log.debug("- Endpoints found :");
             } else {
                 this.log.debug("No endpoints found!");
             }
-            
+
             while (iter.hasNext()) {
                 ServiceEndpoint serviceEndpoint = iter.next();
-                this.log.debug("*****************************");
-                this.log.debug("Service Endpoint : " + serviceEndpoint);
+                this.log.debug("  - Service Endpoint : " + serviceEndpoint);
                 TransportSendContext context = electedEndpoints.get(serviceEndpoint);
                 if (context != null) {
-                    this.log.debug("Transport Context : " + context.transport + ", "
+                    this.log.debug("  - Transport Context : " + context.transport + ", "
                             + context.destination);
                 } else {
                     this.log.debug("Transport Context is null");
                 }
-                this.log.debug("*****************************");
+                this.log.debug("--");
             }
             this.log.debug("***************************************************************************");
 

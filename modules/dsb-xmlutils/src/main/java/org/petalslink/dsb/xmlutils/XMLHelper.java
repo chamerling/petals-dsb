@@ -1,19 +1,13 @@
 /**
  * 
  */
-package org.petalslink.dsb.kernel.io;
+package org.petalslink.dsb.xmlutils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
-import javax.jbi.messaging.MessagingException;
-import javax.jbi.messaging.NormalizedMessage;
-import javax.xml.namespace.QName;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -27,9 +21,6 @@ import org.ow2.petals.commons.stream.InputStreamForker;
 import org.ow2.petals.commons.stream.ReaderInputStream;
 import org.ow2.petals.commons.threadlocal.DocumentBuilders;
 import org.ow2.petals.commons.threadlocal.Transformers;
-import org.ow2.petals.jbi.messaging.exchange.NormalizedMessageImpl;
-import org.petalslink.dsb.api.DSBException;
-import org.petalslink.dsb.service.client.Message;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -37,75 +28,10 @@ import org.w3c.dom.Node;
  * @author chamerling
  * 
  */
-public class Adapter {
-
-    private Adapter() {
-    }
-
-    public static Message transform(final NormalizedMessage in) {
-        return new Message() {
-
-            public Document getPayload() {
-                try {
-                    return Adapter.createDocument(in.getContent(), true);
-                } catch (DSBException e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-
-            public QName getOperation() {
-                return null;
-            }
-
-            public Map<String, String> getProperties() {
-                Map<String, String> properties = new HashMap<String, String>();
-                Set keys = in.getPropertyNames();
-                for (Object key : keys) {
-                    properties.put(key.toString(), in.getProperty(key.toString()).toString());
-                }
-                return properties;
-            }
-
-            public Map<String, Document> getHeaders() {
-                return new HashMap<String, Document>();
-            }
-
-            public QName getService() {
-                return null;
-            }
-
-            public QName getInterface() {
-                return null;
-            }
-
-            public String getEndpoint() {
-                return null;
-            }
-
-        };
-    }
-
-    public static NormalizedMessage transform(final Message message) {
-
-        NormalizedMessageImpl result = new NormalizedMessageImpl();
-        try {
-            result.setContent(createStreamSource(message.getPayload()));
-        } catch (MessagingException e1) {
-            e1.printStackTrace();
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-        Set<String> keys = message.getProperties().keySet();
-        for (String key : keys) {
-            result.setProperty(key, message.getProperties().get(key));
-        }
-        return result;
-
-    }
+public class XMLHelper {
 
     public static Document createDocument(final Source source, final boolean forkSource)
-            throws DSBException {
+            throws Exception {
         Document document = null;
         try {
             if (source instanceof DOMSource) {
@@ -149,7 +75,7 @@ public class Adapter {
                 }
             }
         } catch (TransformerException e) {
-            throw new DSBException(e);
+            throw new Exception(e);
         }
         return document;
     }

@@ -20,6 +20,7 @@
 	<component definition="org.petalslink.dsb.kernel.messaging.router.modules.LoggerModule" name="LoggerModule" />
 	<component definition="org.petalslink.dsb.kernel.messaging.router.modules.UpdateRemoteTansportModule" name="UpdateRemoteTansportModule" />
 	<component definition="org.petalslink.dsb.kernel.messaging.FractalEndpointSearchEngineImpl" name="EndpointSearchEngineImpl" />
+	<component definition="org.petalslink.dsb.kernel.messaging.router.modules.SourceSetterModule" name="SourceSetterModule" />
 	
 	<binding client="UpdateRemoteTansportModule.dsbconfiguration" server="this.dsbconfiguration" />
 	
@@ -53,6 +54,7 @@
 	<binding client="RouterServiceImpl.sendermodule-600" server="EndpointResolverModule.service" />
 	<binding client="RouterServiceImpl.sendermodule-100" server="TransportResolverModule.service" />
 	<binding client="RouterServiceImpl.sendermodule-50" server="UpdateRemoteTansportModule.service" />
+	<binding client="RouterServiceImpl.sendermodule-30" server="SourceSetterModule.service"/>
 	<binding client="RouterServiceImpl.sendermodule-10" server="LoggerModule.service" />
 
 	<!-- Endpoint resolver -->

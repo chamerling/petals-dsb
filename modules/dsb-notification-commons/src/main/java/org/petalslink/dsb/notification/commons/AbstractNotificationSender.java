@@ -173,6 +173,7 @@ public abstract class AbstractNotificationSender implements NotificationSender {
                                 .getNotificationMessage().get(0).getMessage(), false);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             log.severe("Impossible to send notification to " + endpointNameAddress + " : "
                     + e.getMessage());
         }

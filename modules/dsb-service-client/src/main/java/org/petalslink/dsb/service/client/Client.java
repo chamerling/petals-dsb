@@ -15,7 +15,7 @@ import org.petalslink.dsb.api.DSBException;
 public interface Client {
 
     /**
-     * Invoke a service and do not wait for a response
+     * Invoke a service and do not wait for a response. May be done in an asynchronous way
      */
     void fireAndForget(Message message) throws ClientException;
     

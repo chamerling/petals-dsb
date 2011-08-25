@@ -34,6 +34,7 @@ import org.ow2.petals.kernel.configuration.ConfigurationService;
 import org.ow2.petals.service.ServiceEndpointImpl;
 import org.ow2.petals.util.LoggingUtil;
 import org.petalslink.dsb.api.ServiceEndpoint;
+import org.petalslink.dsb.jbi.JBISender;
 import org.petalslink.dsb.service.client.Client;
 import org.petalslink.dsb.service.client.ClientFactory;
 import org.w3c.dom.Document;
@@ -192,7 +193,7 @@ public class DSBClientFactoryImpl implements ClientFactory {
         // from
         // context : componentContext.getComponentName() 2. getLogger
         context = new FakeComponentContext(componentContextCommunication);
-        Client client = new DSBServiceClient(context, service);
+        Client client = new JBISender(context, service);
 
         // TODO
         // Need to call to create required listeners... Need to create a
