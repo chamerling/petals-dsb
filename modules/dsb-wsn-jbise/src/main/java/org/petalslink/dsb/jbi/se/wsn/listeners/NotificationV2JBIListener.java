@@ -3,25 +3,35 @@
  */
 package org.petalslink.dsb.jbi.se.wsn.listeners;
 
+import java.net.URI;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 
 import javax.jbi.messaging.MessagingException;
 import javax.jbi.messaging.NormalizedMessage;
 import javax.xml.namespace.QName;
+import javax.xml.transform.TransformerException;
 
 import org.ow2.petals.component.framework.api.exception.PEtALSCDKException;
 import org.ow2.petals.component.framework.api.message.Exchange;
 import org.ow2.petals.component.framework.listener.AbstractJBIListener;
 import org.ow2.petals.component.framework.util.UtilFactory;
+import org.petalslink.dsb.jbi.se.wsn.AddressingHelper;
 import org.petalslink.dsb.jbi.se.wsn.Component;
+import org.petalslink.dsb.jbi.se.wsn.Constants;
 import org.petalslink.dsb.jbi.se.wsn.NotificationEngine;
+import org.petalslink.dsb.notification.commons.SOAUtil;
+import org.petalslink.dsb.xmlutils.XMLHelper;
 import org.w3c.dom.Document;
 
 import com.ebmwebsourcing.wsaddressing10.api.element.Address;
+import com.ebmwebsourcing.wsaddressing10.api.element.ReferenceParameters;
+import com.ebmwebsourcing.wsaddressing10.api.type.EndpointReferenceType;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.refinedabstraction.RefinedWsnbFactory;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.utils.WsnbException;
 import com.ebmwebsourcing.wsstar.notification.definition.basenotification.WsnbConstants;
+import com.ebmwebsourcing.wsstar.wsnb.services.impl.util.Wsnb4ServUtils;
 import com.ebmwebsourcing.wsstar.wsrfbf.services.faults.AbsWSStarFault;
 
 /**
@@ -29,6 +39,13 @@ import com.ebmwebsourcing.wsstar.wsrfbf.services.faults.AbsWSStarFault;
  * 
  */
 public abstract class NotificationV2JBIListener extends AbstractJBIListener {
+
+    // TODO : put in a common project
+    static final String LOCATION_COMPONENT = "consumer.location.component";
+
+    static final String LOCATION_CONTAINER = "consumer.location.container";
+
+    static final String LOCATION_DOMAIN = "consumer.location.domain";
 
     /*
      * (non-Javadoc)
@@ -92,7 +109,7 @@ public abstract class NotificationV2JBIListener extends AbstractJBIListener {
                     // need to use some WS-Addressing based stuff to send
                     // notifications.
                     normalizedMessage = exchange.getInMessage();
-                    
+
                     if (WsnbConstants.SUBSCRIBE_NAME.equals(exchange.getOperation().getLocalPart())) {
                         document = UtilFactory.getSourceUtil().createDocument(
                                 normalizedMessage.getContent());
@@ -102,6 +119,49 @@ public abstract class NotificationV2JBIListener extends AbstractJBIListener {
 
                         // address =
                         // subscribe.getConsumerReference().getAddress();
+
+                        // modify the address if needed. We add the source
+                        // component if needed...
+                        Address consumerAddress = subscribe.getConsumerReference().getAddress();
+                        URI value = consumerAddress.getValue();
+                        getLogger()
+                                .log(Level.FINE, String.format("Initial address is '%s'", value));
+
+                        // get the source component. It can be used if needed...
+                        String component = exchange.getProperty(LOCATION_COMPONENT) != null ? exchange
+                                .getProperty(LOCATION_COMPONENT).toString() : null;
+                        String container = exchange.getProperty(LOCATION_CONTAINER) != null ? exchange
+                                .getProperty(LOCATION_CONTAINER).toString() : null;
+                        String domain = exchange.getProperty(LOCATION_DOMAIN) != null ? exchange
+                                .getProperty(LOCATION_DOMAIN).toString() : null;
+
+                        if (getLogger().isLoggable(Level.FINE)) {
+                            getLogger()
+                                    .log(Level.FINE,
+                                            String.format(
+                                                    "Source location is component='%s' container='%s' domain='%s'",
+                                                    component, container, domain));
+                        }
+
+                        addLocation(consumerAddress, component, container, domain);
+                        System.out.println("New location : " + consumerAddress.getValue());
+                        
+                        final EndpointReferenceType newReference = SOAUtil.getInstance().getXmlObjectFactory().create(EndpointReferenceType.class);
+                        Address newAddress = SOAUtil.getInstance().getXmlObjectFactory().create(Address.class);
+                        newAddress.setValue(consumerAddress.getValue());
+                        newReference.setAddress(newAddress);
+
+                        final ReferenceParameters ref = SOAUtil.getInstance().getXmlObjectFactory().create(ReferenceParameters.class);
+                        newReference.setReferenceParameters(ref);
+                        
+                        subscribe.setConsumerReference(newReference);
+                        
+                        Document dom = Wsnb4ServUtils.getWsnbWriter().writeSubscribeAsDOM(subscribe);
+                        try {
+                            System.out.println(com.ebmwebsourcing.easycommons.xml.XMLHelper.createStringFromDOMDocument(dom));
+                        } catch (TransformerException e) {
+                        }
+
                         // call the producer
                         final com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.SubscribeResponse subscribeResponse = engine
                                 .getNotificationManager().getNotificationProducerEngine()
@@ -183,7 +243,39 @@ public abstract class NotificationV2JBIListener extends AbstractJBIListener {
         return response;
     }
 
+    /**
+     * @param address
+     * @param component
+     * @param container
+     * @param domain
+     */
+    private void addLocation(Address address, String component, String container, String domain) {
+        if (address == null) {
+            return;
+        }
+
+        URI uri = address.getValue();
+        if (AddressingHelper.isInternalService(uri)) {
+            address.setValue(AddressingHelper.addLocation(uri, component, container, domain));
+        } else if (AddressingHelper.isExternalService(uri)) {
+            String tmp = uri.toString();
+            if (!tmp.startsWith(Constants.DSB_EXTERNAL_SERVICE_NS)) {
+                tmp = Constants.DSB_EXTERNAL_SERVICE_NS + "::" + uri.toString();
+            }
+            address.setValue(AddressingHelper.addLocation(URI.create(tmp), component, container,
+                    domain));
+        } else {
+            // NOP
+        }
+
+    }
+
     NotificationEngine getNotificationEngine() {
         return ((Component) getComponent()).getNotificationEngine();
+    }
+
+    public static void main(String[] args) {
+        URI uri = URI.create("dsb://container/component/domain::http://foo/bar::dsb://domain=");
+        System.out.println(uri);
     }
 }

@@ -3,6 +3,7 @@
  */
 package org.petalslink.dsb.jbi.se.wsn;
 
+import java.net.URI;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +20,6 @@ import org.ow2.petals.component.framework.WSAConstants;
 import org.ow2.petals.component.framework.api.Constants;
 import org.ow2.petals.component.framework.api.Wsdl;
 import org.ow2.petals.component.framework.util.UtilFactory;
-import org.ow2.petals.component.framework.util.WSAHelper;
 import org.petalslink.dsb.notification.commons.AbstractNotificationSender;
 import org.petalslink.dsb.notification.commons.NotificationException;
 import org.petalslink.dsb.notification.commons.NotificationManagerImpl;
@@ -109,16 +109,37 @@ public class NotificationEngine {
                 }
 
                 // we use a WSA endpoint to send the notification...
-                // TODO : get the component from the currentConsumerEdp
-                String componentName = "petals-bc-soap";
-                String ns = String.format(WSAConstants.NS_TEMPLATE, componentName);
-                final QName service = new QName(ns, WSAConstants.SERVICE_NAME);
-                final QName interfaceName = new QName(ns, WSAConstants.INTERFACE_NAME);
-                final String endpoint = WSAConstants.ENDPOINT_NAME;
+                // extract data from address
+                URI uri = currentConsumerEdp.getAddress().getValue();
+                String componentName = null;
+                String ns = null;
+                String serviceName = null;
+                String interfaceName = null;
+                String ep = null;
+                String address = null;
 
-                // set the address to send message to into the WS-Addressing
-                // property of the message
-                final String address = currentConsumerEdp.getAddress().getValue().toString();
+                if (AddressingHelper.isExternalService(uri)) {
+                    // use WSA
+                    componentName = AddressingHelper.getComponent(uri);
+                    ns = String.format(WSAConstants.NS_TEMPLATE, componentName);
+                    serviceName = WSAConstants.SERVICE_NAME;
+                    interfaceName = WSAConstants.INTERFACE_NAME;
+                    ep = WSAConstants.ENDPOINT_NAME;
+                    address = AddressingHelper.getInitialAddress(uri);
+                } else {
+                    // URI is service@endpoint
+                    componentName = AddressingHelper.getComponent(uri);
+                    ns = String.format(WSAConstants.NS_TEMPLATE, componentName);
+                    serviceName = AddressingHelper.getServiceName(uri);
+                    // interfaceName = AddressingHelper.getInterfaceName(uri);
+                    ep = AddressingHelper.getEndpointName(uri);
+                }
+
+                final QName service = new QName(ns, serviceName);
+                final QName interfaceQName = new QName(ns, interfaceName);
+                final String endpoint = ep;
+                final String to = address;
+
                 try {
                     final Document payload = Wsnb4ServUtils.getWsnbWriter()
                             .writeNotifyAsDOM(notify);
@@ -130,7 +151,8 @@ public class NotificationEngine {
 
                         public Map<String, String> getProperties() {
                             Map<String, String> result = new HashMap<String, String>(1);
-                            result.put(Constants.WSStar.Addressing.TO_QNAME.toString(), address);
+                            if (to != null)
+                                result.put(Constants.WSStar.Addressing.TO_QNAME.toString(), to);
                             return result;
                         }
 
@@ -143,7 +165,7 @@ public class NotificationEngine {
                         }
 
                         public QName getInterface() {
-                            return interfaceName;
+                            return interfaceQName;
                         }
 
                         public Map<String, Document> getHeaders() {
