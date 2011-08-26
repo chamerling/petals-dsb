@@ -131,7 +131,7 @@
 		
 		<!-- Notification -->
 		<module>modules/dsb-notification-commons</module>
-		<module>modules/dsb-notification-jaxws</module>
+		<!--<module>modules/dsb-notification-jaxws</module>-->
 		<module>modules/dsb-notification-service</module>
 		<module>modules/dsb-kernel-pubsubservice</module>
 		<module>modules/dsb-kernel-notificationservice</module>
