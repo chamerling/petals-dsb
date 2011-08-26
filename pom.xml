@@ -138,6 +138,10 @@
 		<module>modules/dsb-notification-httpclient</module>
 		<module>modules/dsb-wsn-jbise</module>
 		
+		<!-- Resources API and implementation -->
+		<module>modules/dsb-resources-api</module>
+		<module>modules/dsb-kernel-resourcesservice</module>
+		
 		<!-- Independant things, to be moved elsewhere -->
 		<module>modules/gms-core</module>
    		<module>modules/gms-prototype</module>
