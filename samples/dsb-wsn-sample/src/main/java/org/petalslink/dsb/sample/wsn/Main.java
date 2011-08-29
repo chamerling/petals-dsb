@@ -12,6 +12,7 @@ import javax.xml.transform.TransformerException;
 import org.petalslink.dsb.commons.service.api.Service;
 import org.petalslink.dsb.notification.client.http.HTTPNotificationConsumerClient;
 import org.petalslink.dsb.notification.client.http.HTTPNotificationProducerClient;
+import org.petalslink.dsb.notification.client.http.HTTPNotificationProducerRPClient;
 import org.petalslink.dsb.notification.service.NotificationConsumerService;
 import org.petalslink.dsb.soap.CXFExposer;
 import org.petalslink.dsb.soap.api.Exposer;
@@ -22,8 +23,10 @@ import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Noti
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Subscribe;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.SubscribeResponse;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.utils.WsnbException;
+import com.ebmwebsourcing.wsstar.topics.datatypes.api.WstopConstants;
 import com.ebmwebsourcing.wsstar.wsnb.services.INotificationConsumer;
 import com.ebmwebsourcing.wsstar.wsnb.services.INotificationProducer;
+import com.ebmwebsourcing.wsstar.wsnb.services.INotificationProducerRP;
 import com.ebmwebsourcing.wsstar.wsnb.services.impl.util.Wsnb4ServUtils;
 import com.ebmwebsourcing.wsstar.wsrfbf.services.faults.AbsWSStarFault;
 
@@ -116,7 +119,7 @@ public class Main {
         System.out.println("Sending a notification to the DSB...");
         INotificationConsumer consumerClient = new HTTPNotificationConsumerClient(dsbNotify);
         Notify notify = loadNotify();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 2; i++) {
             try {
                 consumerClient.notify(notify);
             } catch (WsnbException e) {
@@ -130,6 +133,23 @@ public class Main {
             TimeUnit.SECONDS.sleep(10);
         } catch (InterruptedException e) {
         }
+
+        System.out.println("****** GET RESOURCE PROPERTIES ******");
+
+        // getting resources
+        INotificationProducerRP resourceClient = new HTTPNotificationProducerRPClient(dsbSubscribe);
+        try {
+            QName qname = WstopConstants.TOPIC_SET_QNAME;
+            com.ebmwebsourcing.wsstar.resourceproperties.datatypes.api.abstraction.GetResourcePropertyResponse response = resourceClient
+                    .getResourceProperty(qname);
+            System.out.println("Get Resource response :");
+            Document dom = Wsnb4ServUtils.getWsrfrpWriter().writeGetResourcePropertyResponseAsDOM(
+                    response);
+            XMLHelper.writeDocument(dom, System.out);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         System.out.println("-Bye");
 
     }

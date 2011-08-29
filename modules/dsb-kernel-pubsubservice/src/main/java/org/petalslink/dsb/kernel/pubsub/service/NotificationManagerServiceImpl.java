@@ -3,6 +3,8 @@
  */
 package org.petalslink.dsb.kernel.pubsub.service;
 
+import java.util.List;
+
 import org.objectweb.fractal.fraclet.annotation.annotations.FractalComponent;
 import org.objectweb.fractal.fraclet.annotation.annotations.Interface;
 import org.objectweb.fractal.fraclet.annotation.annotations.LifeCycle;
@@ -54,6 +56,9 @@ public class NotificationManagerServiceImpl implements NotificationManager {
 
     @LifeCycleListener
     public void initialize() {
+        if (log.isDebugEnabled()) {
+            log.debug("Initializing notification manager...");
+        }
         this.manager = new NotificationManagerImpl(configuration.getTopicNamespaces(),
                 configuration.getSupportedTopics(), configuration.getServiceName(),
                 configuration.getInterfaceName(), configuration.getEndpointName());
@@ -68,6 +73,13 @@ public class NotificationManagerServiceImpl implements NotificationManager {
      */
     public TopicNamespaceType getTopicNamespace() {
         return manager.getTopicNamespace();
+    }
+    
+    /* (non-Javadoc)
+     * @see org.petalslink.dsb.notification.commons.api.NotificationManager#getSupportedTopics()
+     */
+    public List<String> getSupportedTopics() {
+        return manager.getSupportedTopics();
     }
 
     /*

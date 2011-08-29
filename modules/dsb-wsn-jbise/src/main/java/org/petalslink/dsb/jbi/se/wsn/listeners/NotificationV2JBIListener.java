@@ -4,7 +4,6 @@
 package org.petalslink.dsb.jbi.se.wsn.listeners;
 
 import java.net.URI;
-import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -22,7 +21,6 @@ import org.petalslink.dsb.jbi.se.wsn.Component;
 import org.petalslink.dsb.jbi.se.wsn.Constants;
 import org.petalslink.dsb.jbi.se.wsn.NotificationEngine;
 import org.petalslink.dsb.notification.commons.SOAUtil;
-import org.petalslink.dsb.xmlutils.XMLHelper;
 import org.w3c.dom.Document;
 
 import com.ebmwebsourcing.wsaddressing10.api.element.Address;
@@ -31,6 +29,8 @@ import com.ebmwebsourcing.wsaddressing10.api.type.EndpointReferenceType;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.refinedabstraction.RefinedWsnbFactory;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.utils.WsnbException;
 import com.ebmwebsourcing.wsstar.notification.definition.basenotification.WsnbConstants;
+import com.ebmwebsourcing.wsstar.resourceproperties.datatypes.api.refinedabstraction.RefinedWsrfrpFactory;
+import com.ebmwebsourcing.wsstar.resourceproperties.datatypes.api.utils.WsrfrpException;
 import com.ebmwebsourcing.wsstar.wsnb.services.impl.util.Wsnb4ServUtils;
 import com.ebmwebsourcing.wsstar.wsrfbf.services.faults.AbsWSStarFault;
 
@@ -145,20 +145,25 @@ public abstract class NotificationV2JBIListener extends AbstractJBIListener {
 
                         addLocation(consumerAddress, component, container, domain);
                         System.out.println("New location : " + consumerAddress.getValue());
-                        
-                        final EndpointReferenceType newReference = SOAUtil.getInstance().getXmlObjectFactory().create(EndpointReferenceType.class);
-                        Address newAddress = SOAUtil.getInstance().getXmlObjectFactory().create(Address.class);
+
+                        final EndpointReferenceType newReference = SOAUtil.getInstance()
+                                .getXmlObjectFactory().create(EndpointReferenceType.class);
+                        Address newAddress = SOAUtil.getInstance().getXmlObjectFactory()
+                                .create(Address.class);
                         newAddress.setValue(consumerAddress.getValue());
                         newReference.setAddress(newAddress);
 
-                        final ReferenceParameters ref = SOAUtil.getInstance().getXmlObjectFactory().create(ReferenceParameters.class);
+                        final ReferenceParameters ref = SOAUtil.getInstance().getXmlObjectFactory()
+                                .create(ReferenceParameters.class);
                         newReference.setReferenceParameters(ref);
-                        
+
                         subscribe.setConsumerReference(newReference);
-                        
-                        Document dom = Wsnb4ServUtils.getWsnbWriter().writeSubscribeAsDOM(subscribe);
+
+                        Document dom = Wsnb4ServUtils.getWsnbWriter()
+                                .writeSubscribeAsDOM(subscribe);
                         try {
-                            System.out.println(com.ebmwebsourcing.easycommons.xml.XMLHelper.createStringFromDOMDocument(dom));
+                            System.out.println(com.ebmwebsourcing.easycommons.xml.XMLHelper
+                                    .createStringFromDOMDocument(dom));
                         } catch (TransformerException e) {
                         }
 
@@ -219,9 +224,27 @@ public abstract class NotificationV2JBIListener extends AbstractJBIListener {
                     } else if (WsnbConstants.RENEW_NAME.equals(exchange.getOperation()
                             .getLocalPart())) {
                         System.out.println("TODO");
+                    } else if ("GetResourceProperty".equals(exchange.getOperation().getLocalPart())) {
+                        document = UtilFactory.getSourceUtil().createDocument(
+                                normalizedMessage.getContent());
+
+                        QName qname = RefinedWsrfrpFactory.getInstance().getWsrfrpReader()
+                                .readGetResourceProperty(document);
+                        com.ebmwebsourcing.wsstar.resourceproperties.datatypes.api.abstraction.GetResourcePropertyResponse res = engine
+                                .getNotificationManager().getNotificationProducerEngine()
+                                .getResourceProperty(qname);
+                        document = RefinedWsrfrpFactory.getInstance().getWsrfrpWriter()
+                                .writeGetResourcePropertyResponseAsDOM(res);
+
+                        normalizedMessage = exchange.getOutMessage();
+                        normalizedMessage.setContent(UtilFactory.getSourceUtil()
+                                .createStreamSource(document));
+                        exchange.setOutMessage(normalizedMessage);
                     } else {
                         exchange.setError(new Exception(
-                                "unable to identify an operation of the WS-Notification specifications"));
+                                String.format(
+                                        "unable to identify the operation %s of the WS-Notification specifications, or not implemented",
+                                        exchange.getOperation())));
                     }
                 }
             }
@@ -238,6 +261,8 @@ public abstract class NotificationV2JBIListener extends AbstractJBIListener {
         } catch (AbsWSStarFault e) {
             exchange.setError(new Exception(e));
         } catch (MessagingException e) {
+            exchange.setError(new Exception(e));
+        } catch (WsrfrpException e) {
             exchange.setError(new Exception(e));
         }
         return response;

@@ -23,7 +23,9 @@ import org.ow2.petals.component.framework.util.UtilFactory;
 import org.petalslink.dsb.notification.commons.AbstractNotificationSender;
 import org.petalslink.dsb.notification.commons.NotificationException;
 import org.petalslink.dsb.notification.commons.NotificationManagerImpl;
+import org.petalslink.dsb.notification.commons.NotificationProducerRP;
 import org.petalslink.dsb.notification.commons.api.NotificationManager;
+import org.petalslink.dsb.notification.service.NotificationProducerRPService;
 import org.petalslink.dsb.service.client.Client;
 import org.petalslink.dsb.service.client.ClientException;
 import org.petalslink.dsb.service.client.Message;
@@ -34,6 +36,7 @@ import com.ebmwebsourcing.wsaddressing10.api.type.EndpointReferenceType;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.WsnbConstants;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Notify;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.utils.WsnbException;
+import com.ebmwebsourcing.wsstar.resource.datatypes.api.WsrfrConstants;
 import com.ebmwebsourcing.wsstar.wsnb.services.impl.engines.AbsNotificationConsumerEngine;
 import com.ebmwebsourcing.wsstar.wsnb.services.impl.util.Wsnb4ServUtils;
 
@@ -69,6 +72,8 @@ public class NotificationEngine {
     Wsdl producerWSDL;
 
     private Client client;
+
+    private ServiceEngine serviceEngine;
 
     public NotificationEngine(Logger logger, URL topicNamespaces, List<String> supportedTopics,
             QName serviceName, QName interfaceName, String endpointName, Client client) {
@@ -216,6 +221,12 @@ public class NotificationEngine {
         };
         consumerWSDL = loadDocument("WS-NotificationConsumer.wsdl");
         producerWSDL = loadDocument("WS-NotificationProducer.wsdl");
+
+        this.serviceEngine = new ServiceEngine();
+        this.serviceEngine.addService(new NotificationProducerRPService(null, null, null, null,
+                null, this.getNotificationManager().getNotificationProducerEngine()), new QName[] {
+                new QName(WsrfrConstants.WS_RESOURCE_NAMESPACE_URI, "GetResourceProperty"),
+                new QName(WsrfrConstants.WS_RESOURCE_NAMESPACE_URI, "UpdateResourceProperties") });
     }
 
     /**
@@ -258,5 +269,9 @@ public class NotificationEngine {
      */
     public AbsNotificationConsumerEngine getNotificationConsumerEngine() {
         return this.notificationConsumerEngine;
+    }
+
+    public ServiceEngine getServiceEngine() {
+        return this.serviceEngine;
     }
 }

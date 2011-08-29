@@ -75,6 +75,8 @@ public class NotificationManagerImpl implements NotificationManager {
 
     private String endpointName;
 
+    private List<String> supportedTopics;
+
     static {
         Wsnb4ServUtils.initModelFactories(new WsrfbfModelFactoryImpl(),
                 new WsrfrModelFactoryImpl(), new WsrfrlModelFactoryImpl(),
@@ -95,7 +97,8 @@ public class NotificationManagerImpl implements NotificationManager {
         try {
             docTopicNs = SOAUtil.getInstance().getDocumentBuilderFactory().newDocumentBuilder()
                     .parse(topicNamespaces.openStream());
-
+            
+            this.supportedTopics = supportedTopics;
             this.topicNamespace = RefinedWstopFactory.getInstance().getWstopReader()
                     .readTopicNamespaceType(docTopicNs);
             this.topicSet = this.createTopicSetFromTopicNamespace(topicNamespace, supportedTopics);
@@ -344,6 +347,13 @@ public class NotificationManagerImpl implements NotificationManager {
      */
     public NotificationProducerEngine getNotificationProducerEngine() {
         return notificationProducerEngine;
+    }
+
+    /* (non-Javadoc)
+     * @see org.petalslink.dsb.notification.commons.api.NotificationManager#getSupportedTopics()
+     */
+    public List<String> getSupportedTopics() {
+        return this.supportedTopics;
     }
 
 }

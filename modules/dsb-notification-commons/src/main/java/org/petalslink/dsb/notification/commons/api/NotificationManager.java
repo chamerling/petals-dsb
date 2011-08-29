@@ -3,6 +3,8 @@
  */
 package org.petalslink.dsb.notification.commons.api;
 
+import java.util.List;
+
 import com.ebmwebsourcing.wsstar.topics.datatypes.api.abstraction.TopicNamespaceType;
 import com.ebmwebsourcing.wsstar.topics.datatypes.api.abstraction.TopicSetType;
 import com.ebmwebsourcing.wsstar.wsnb.services.impl.engines.NotificationProducerEngine;
@@ -27,6 +29,12 @@ public interface NotificationManager {
      * @return the topicSet
      */
     TopicSetType getTopicSet();
+    
+    /**
+     * Get the supported topics name
+     * @return
+     */
+    List<String> getSupportedTopics();
 
     /**
      * @return the topicsManagerEngine

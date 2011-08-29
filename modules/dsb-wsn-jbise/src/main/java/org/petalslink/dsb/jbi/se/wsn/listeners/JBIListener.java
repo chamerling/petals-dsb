@@ -18,7 +18,17 @@
 
 package org.petalslink.dsb.jbi.se.wsn.listeners;
 
+import java.util.logging.Level;
+
+import javax.jbi.messaging.NormalizedMessage;
+import javax.xml.namespace.QName;
+
+import org.ow2.petals.component.framework.api.exception.PEtALSCDKException;
 import org.ow2.petals.component.framework.api.message.Exchange;
+import org.ow2.petals.component.framework.util.UtilFactory;
+import org.petalslink.dsb.jbi.se.wsn.Component;
+import org.petalslink.dsb.jbi.se.wsn.NotificationEngine;
+import org.w3c.dom.Document;
 
 /**
  * @author
@@ -40,9 +50,56 @@ public class JBIListener extends NotificationV2JBIListener {
      * @see org.ow2.petals.component.framework.listener.AbstractJBIListener
      */
     public boolean onJBIMessage(final Exchange exchange) {
-        System.out
-                .println("Got a message, should not happen since we only process WSN notification...");
-        // set a fault...
-        return false;
+        NotificationEngine engine = getNotificationEngine();
+
+        try {
+            if (exchange.isActiveStatus()) {
+                if (exchange.getFault() != null) {
+
+                    if (this.getLogger().isLoggable(Level.WARNING)) {
+                        if (UtilFactory.getExchangeUtil().isPetalsException(exchange.getFault())) {
+                            this.getLogger().warning(
+                                    "notification technical fault message content: "
+                                            + UtilFactory.getSourceUtil().createString(
+                                                    exchange.getFault().getContent()));
+                        } else {
+                            this.getLogger().warning(
+                                    "notification business fault message content: "
+                                            + UtilFactory.getSourceUtil().createString(
+                                                    exchange.getFault().getContent()));
+                        }
+                    }
+
+                } else {
+                    System.out.println("Got a message = " + exchange.getOperationName());
+                    NormalizedMessage normalizedMessage = exchange.getInMessage();
+                    Document document = UtilFactory.getSourceUtil().createDocument(
+                            normalizedMessage.getContent());
+                    org.petalslink.dsb.soap.Exchange e = new org.petalslink.dsb.soap.Exchange();
+                    e.setIn(document);
+                    engine.getServiceEngine().invoke(e);
+                    if (e.getOut() != null) {
+                        normalizedMessage = exchange.getOutMessage();
+                        normalizedMessage.setContent(UtilFactory.getSourceUtil()
+                                .createStreamSource(document));
+                        exchange.setOutMessage(normalizedMessage);
+                    }
+                    if (e.getFault() != null) {
+                        // TODO
+                    }
+                }
+            }
+        } catch (final PEtALSCDKException e) {
+            exchange.setError(new Exception(e));
+        } catch (Exception e) {
+            exchange.setError(new Exception(e));
+        }
+        // manager resource properties related stuff...
+        return true;
     }
+
+    NotificationEngine getNotificationEngine() {
+        return ((Component) getComponent()).getNotificationEngine();
+    }
+
 }

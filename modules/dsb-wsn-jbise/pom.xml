@@ -44,7 +44,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.petalslink.dsb</groupId>
-			<artifactId>dsb-notification-commons</artifactId>
+			<artifactId>dsb-notification-service</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
