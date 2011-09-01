@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.ow2.petals.component.framework;
+package org.petalslink.dsb.api;
 
 /**
  * WSA Constants which are commmon to all components. A component may activate a
@@ -21,7 +21,7 @@ public interface WSAConstants {
     static final String SERVICE_NAME = "WSAService";
 
     /**
-     * NS Template where %s is the component name...
+     * NS Template where %s is the component name or the protocol...
      */
     static final String NS_TEMPLATE = "http://petals.ow2.org/wsa/%s/";
 
