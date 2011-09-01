@@ -143,6 +143,7 @@ public abstract class NotificationV2JBIListener extends AbstractJBIListener {
                                                     component, container, domain));
                         }
 
+                        /*
                         addLocation(consumerAddress, component, container, domain);
                         System.out.println("New location : " + consumerAddress.getValue());
 
@@ -158,7 +159,8 @@ public abstract class NotificationV2JBIListener extends AbstractJBIListener {
                         newReference.setReferenceParameters(ref);
 
                         subscribe.setConsumerReference(newReference);
-
+                         */
+                        
                         Document dom = Wsnb4ServUtils.getWsnbWriter()
                                 .writeSubscribeAsDOM(subscribe);
                         try {

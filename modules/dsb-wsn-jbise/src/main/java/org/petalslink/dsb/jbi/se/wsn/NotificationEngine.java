@@ -117,7 +117,6 @@ public class NotificationEngine {
                 // we use a WSA endpoint to send the notification...
                 // extract data from address
                 URI uri = currentConsumerEdp.getAddress().getValue();
-                String componentName = null;
                 String ns = null;
                 String serviceName = null;
                 String interfaceName = null;
@@ -126,19 +125,23 @@ public class NotificationEngine {
 
                 if (AddressingHelper.isExternalService(uri)) {
                     // use WSA
-                    componentName = AddressingHelper.getComponent(uri);
-                    ns = String.format(WSAConstants.NS_TEMPLATE, componentName);
+                    ns = String.format(WSAConstants.NS_TEMPLATE, uri.getScheme());
                     serviceName = WSAConstants.SERVICE_NAME;
                     interfaceName = WSAConstants.INTERFACE_NAME;
                     ep = WSAConstants.ENDPOINT_NAME;
-                    address = AddressingHelper.getInitialAddress(uri);
+                    //address = AddressingHelper.getInitialAddress(uri);
+                    address = uri.toString();
                 } else {
+                    System.out.println("Internal service : TODO NotificationEngine class!");
+                    return;
                     // URI is service@endpoint
+                    /*
                     componentName = AddressingHelper.getComponent(uri);
                     ns = String.format(WSAConstants.NS_TEMPLATE, componentName);
                     serviceName = AddressingHelper.getServiceName(uri);
-                    // interfaceName = AddressingHelper.getInterfaceName(uri);
                     ep = AddressingHelper.getEndpointName(uri);
+                    */
+                    // TODO how to define internal addresses???
                 }
 
                 final QName service = new QName(ns, serviceName);
