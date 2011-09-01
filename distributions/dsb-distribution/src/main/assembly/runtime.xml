@@ -28,6 +28,8 @@
 					org.petalslink.dsb:dsb-webapp
 				</exclude>
 				<exclude>org.petalslink.dsb:dsb-bundle-bpelgenerator</exclude>
+				<exclude>xml-apis:xml-apis</exclude>
+				<exclude>xerces:xmlParserAPIs</exclude>				
 			</excludes>
 			<!-- force lib names, to avoid "artifact-version-date.jar" name for snapshot libraries -->
 			<outputFileNameMapping>${artifact.artifactId}-${artifact.baseVersion}.${artifact.extension}</outputFileNameMapping>
