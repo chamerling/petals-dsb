@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions name="component" targetNamespace="http://petals.ow2.org/wsa/petals-bc-soap/"
-	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://petals.ow2.org/wsa/petals-bc-soap/"
+<wsdl:definitions name="component" targetNamespace="http://petals.ow2.org/wsa/http/"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://petals.ow2.org/wsa/http/"
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
 	<wsdl:types>
 		<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
