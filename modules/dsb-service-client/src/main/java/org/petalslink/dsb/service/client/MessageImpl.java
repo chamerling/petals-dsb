@@ -3,6 +3,7 @@
  */
 package org.petalslink.dsb.service.client;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.xml.namespace.QName;
@@ -28,6 +29,34 @@ public class MessageImpl implements Message {
     Map<String, Document> headers;
 
     Map<String, String> properties;
+
+    /**
+     * 
+     */
+    public MessageImpl() {
+        this.headers = new HashMap<String, Document>();
+        this.properties = new HashMap<String, String>();
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.petalslink.dsb.service.client.Message#setProperty(java.lang.String,
+     * java.lang.String)
+     */
+    public void setProperty(String name, String value) {
+        this.properties.put(name, value);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.petalslink.dsb.service.client.Message#getProperty()
+     */
+    public String getProperty(String name) {
+        return this.properties.get(name);
+    }
 
     /**
      * @return the payload

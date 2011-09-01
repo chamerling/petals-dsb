@@ -36,5 +36,11 @@ public interface Client {
      * @throws ClientException
      */
     void sendAsync(Message message, MessageListener listener) throws ClientException;
+    
+    /**
+     * The client ID
+     * @return
+     */
+    String getName();
 
 }

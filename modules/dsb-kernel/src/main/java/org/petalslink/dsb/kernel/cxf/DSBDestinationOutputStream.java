@@ -113,6 +113,16 @@ public class DSBDestinationOutputStream extends CachedOutputStream {
                     public String getEndpoint() {
                         return null;
                     }
+
+                    public String getProperty(String name) {
+                        // TODO Auto-generated method stub
+                        return null;
+                    }
+
+                    public void setProperty(String name, String value) {
+                        // TODO Auto-generated method stub
+                        
+                    }
                 };
                 
                 // notify incoming listener that the response is available...

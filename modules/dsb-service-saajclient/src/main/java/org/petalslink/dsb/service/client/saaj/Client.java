@@ -89,5 +89,12 @@ public class Client implements org.petalslink.dsb.service.client.Client {
         throw new ClientException("Not implemented");
 
     }
+    
+    /* (non-Javadoc)
+     * @see org.petalslink.dsb.service.client.Client#getName()
+     */
+    public String getName() {
+        return "SAAJClient";
+    }
 
 }

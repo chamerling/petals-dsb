@@ -24,7 +24,6 @@ import org.petalslink.dsb.service.client.ClientException;
 import org.petalslink.dsb.service.client.Message;
 import org.petalslink.dsb.service.client.MessageListener;
 import org.w3c.dom.Document;
-import org.w3c.dom.DocumentFragment;
 
 /**
  * @author chamerling
@@ -55,6 +54,13 @@ public class JBIClient implements Client {
         } catch (JBIException e) {
             e.printStackTrace();
         }
+    }
+    
+    /* (non-Javadoc)
+     * @see org.petalslink.dsb.service.client.Client#getName()
+     */
+    public String getName() {
+        return "client-" + componentContext.getComponentName();
     }
 
     public void fireAndForget(Message message) throws ClientException {
@@ -122,6 +128,16 @@ public class JBIClient implements Client {
 
             public String getEndpoint() {
                 return null;
+            }
+
+            public String getProperty(String name) {
+                // TODO Auto-generated method stub
+                return null;
+            }
+
+            public void setProperty(String name, String value) {
+                // TODO Auto-generated method stub
+                
             }
         };
     }

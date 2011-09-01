@@ -38,7 +38,7 @@
 			<artifactId>dsb-service-client</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.petalslink.dsb</groupId>
 			<artifactId>dsb-xmlutils</artifactId>
@@ -49,6 +49,12 @@
 			<groupId>org.ow2.petals</groupId>
 			<artifactId>petals-kernel</artifactId>
 			<scope>provided</scope>
+			<exclusions>
+				<exclusion>
+					<artifactId>xml-apis</artifactId>
+					<groupId>xml-apis</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 	</dependencies>
 </project>

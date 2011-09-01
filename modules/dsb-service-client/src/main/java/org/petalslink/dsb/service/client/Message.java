@@ -36,6 +36,17 @@ public interface Message {
     Map<String, String> getProperties();
 
     /**
+     * 
+     * @return
+     */
+    String getProperty(String name);
+
+    /**
+     * 
+     */
+    void setProperty(String name, String value);
+
+    /**
      * The message headers
      * 
      * @return
@@ -44,18 +55,21 @@ public interface Message {
 
     /**
      * Targert service
+     * 
      * @return
      */
     QName getService();
 
     /**
      * Target interface
+     * 
      * @return
      */
     QName getInterface();
 
     /**
      * Target endpoint
+     * 
      * @return
      */
     String getEndpoint();

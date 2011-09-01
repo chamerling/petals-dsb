@@ -59,8 +59,6 @@ import org.w3c.dom.Document;
  * 
  */
 public class DSBConduitOutputStream extends CachedOutputStream {
-    
-    public static final String CLEAN_ENDPOINT = "jbi.client.CLEAN_ENDPOINT";
 
     private static final Logger LOG = LogUtils.getL7dLogger(DSBConduitOutputStream.class);
 
@@ -72,8 +70,7 @@ public class DSBConduitOutputStream extends CachedOutputStream {
 
     private EndpointReferenceType target;
 
-    public DSBConduitOutputStream(Message m, EndpointReferenceType target,
-            DSBConduit conduit) {
+    public DSBConduitOutputStream(Message m, EndpointReferenceType target, DSBConduit conduit) {
         message = m;
         this.conduit = conduit;
         this.target = target;
@@ -115,10 +112,8 @@ public class DSBConduitOutputStream extends CachedOutputStream {
             }
 
             final QName service = serviceName;
-            final String endpointName = EndpointHelper.getInstance()
-                    .getEndpoint(
-                            DSBConduitOutputStream.this.message.get(Message.ENDPOINT_ADDRESS)
-                                    .toString());
+            final String endpointName = EndpointHelper.getInstance().getEndpoint(
+                    DSBConduitOutputStream.this.message.get(Message.ENDPOINT_ADDRESS).toString());
             final Document doc = XMLHelper.createDocument(new StreamSource(this.getInputStream()),
                     true);
             org.petalslink.dsb.service.client.Message message = new org.petalslink.dsb.service.client.Message() {
@@ -152,6 +147,13 @@ public class DSBConduitOutputStream extends CachedOutputStream {
                 public String getEndpoint() {
                     return endpointName;
                 }
+
+                public String getProperty(String name) {
+                    return null;
+                }
+
+                public void setProperty(String name, String value) {
+                }
             };
 
             message.getProperties().put(Constants.MESSAGE_TYPE, Constants.DSB_INVOKE);
@@ -165,7 +167,9 @@ public class DSBConduitOutputStream extends CachedOutputStream {
             message.getProperties().put(Constants.SERVICE_NAME, serviceName.toString());
             message.getProperties().put(Constants.ENDPOINT_NAME, endpointName.toString());
             message.getProperties().put(Constants.ITF_NAME, interfaceName.toString());
-            message.getProperties().put(CLEAN_ENDPOINT, Boolean.TRUE.toString());
+            message.getProperties().put(
+                    org.petalslink.dsb.service.client.Constants.CLIENT_CLEAN_ENDPOINT,
+                    Boolean.TRUE.toString());
 
             if (LOG.isLoggable(Level.INFO))
                 LOG.info("Sending the message : " + XMLUtil.createStringFromDOMDocument(doc));
@@ -175,7 +179,7 @@ public class DSBConduitOutputStream extends CachedOutputStream {
             serviceEndpoint.setEndpointName(endpointName);
             serviceEndpoint.setServiceName(serviceName);
             serviceEndpoint.setInterfaces(new QName[] { interfaceName });
-            
+
             // try to get a clienty from the factory
             ClientFactory clientFactory = ClientFactoryRegistry.getFactory();
             if (clientFactory == null) {

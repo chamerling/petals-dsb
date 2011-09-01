@@ -46,63 +46,88 @@ public class ClientTestServiceImpl implements ClientTestService {
 
     }
 
-    public boolean invoke(String endpointName) {
-        System.out.println("Invoke");
+    public boolean invoke(int times) {
+        if (times <= 0) {
+            return false;
+        }
+        
         ServiceEndpoint service = new ServiceEndpoint();
         service.setEndpointName("HelloServicePort");
         service.setServiceName(new QName("http://api.ws.dsb.petalslink.org/", "HelloServiceService"));
         QName itf = new QName("http://api.ws.dsb.petalslink.org/", "HelloService");
         service.setInterfaces(new QName[] { itf });
-        Client client = ClientFactoryRegistry.getFactory().getClient(service);
-        Message message = new Message() {
 
-            public Document getPayload() {
-                return XMLUtil
-                        .createDocumentFromString("<api:sayHello xmlns:api=\"http://api.ws.dsb.petalslink.org/\"><arg0>HEY!</arg0></api:sayHello>");
-            }
-
-            public QName getOperation() {
-                return new QName("http://api.ws.dsb.petalslink.org/", "sayHello");
-            }
-
-            public Map<String, String> getProperties() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            public Map<String, Document> getHeaders() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            public QName getService() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            public QName getInterface() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            public String getEndpoint() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-        };
+        Client client = null;
         try {
-            Message response = client.sendReceive(message);
+            client = ClientFactoryRegistry.getFactory().getClient(service);
+            for (int i = 0; i < times; i++) {
+                final int j = i;
+                Message message = new Message() {
+
+                    public Document getPayload() {
+                        return XMLUtil
+                                .createDocumentFromString("<api:sayHello xmlns:api=\"http://api.ws.dsb.petalslink.org/\"><arg0>Call "
+                                        + j + "</arg0></api:sayHello>");
+                    }
+
+                    public QName getOperation() {
+                        return new QName("http://api.ws.dsb.petalslink.org/", "sayHello");
+                    }
+
+                    public Map<String, String> getProperties() {
+                        // TODO Auto-generated method stub
+                        return null;
+                    }
+
+                    public Map<String, Document> getHeaders() {
+                        // TODO Auto-generated method stub
+                        return null;
+                    }
+
+                    public QName getService() {
+                        // TODO Auto-generated method stub
+                        return null;
+                    }
+
+                    public QName getInterface() {
+                        // TODO Auto-generated method stub
+                        return null;
+                    }
+
+                    public String getEndpoint() {
+                        // TODO Auto-generated method stub
+                        return null;
+                    }
+
+                    public String getProperty(String name) {
+                        // TODO Auto-generated method stub
+                        return null;
+                    }
+
+                    public void setProperty(String name, String value) {
+                        // TODO Auto-generated method stub
+
+                    }
+                };
+
+                System.out.println("Sending message to client");
+                Message response = client.sendReceive(message);
+                try {
+                    System.out.println("Got response on DSB service client for call " + i + " : "
+                            + XMLUtil.createStringFromDOMDocument(response.getPayload()));
+                } catch (TransformerException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        } catch (ClientException e) {
+            e.printStackTrace();
+        } finally {
             try {
-                System.out.println("Got response on DSB service client : "
-                        + XMLUtil.createStringFromDOMDocument(response.getPayload()));
-            } catch (TransformerException e) {
-                // TODO Auto-generated catch block
+                ClientFactoryRegistry.getFactory().release(client);
+            } catch (ClientException e) {
                 e.printStackTrace();
             }
-
-        } catch (ClientException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         }
         return true;
     }

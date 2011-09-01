@@ -91,7 +91,7 @@ public class NotificationHelper {
                 msg.setTopic(notifyTopicExpr);
             }
 
-            if (endpointAddress != null && uuid != null) {
+            if (endpointAddress != null) {// && uuid != null) {
                 final EndpointReferenceType registrationRef = SOAUtil.getInstance()
                         .getXmlObjectFactory().create(EndpointReferenceType.class);
                 Address address = SOAUtil.getInstance().getXmlObjectFactory().create(Address.class);
@@ -110,13 +110,16 @@ public class NotificationHelper {
 
                 msg.setSubscriptionReference(registrationRef);
             }
-            final EndpointReferenceType producerRef = SOAUtil.getInstance().getXmlObjectFactory()
-                    .create(EndpointReferenceType.class);
-            Address address = SOAUtil.getInstance().getXmlObjectFactory().create(Address.class);
-            address.setValue(URI.create(producerAddress));
-            producerRef.setAddress(address);
-            msg.setProducerReference(producerRef);
 
+            if (producerAddress != null) {
+                final EndpointReferenceType producerRef = SOAUtil.getInstance()
+                        .getXmlObjectFactory().create(EndpointReferenceType.class);
+                Address address = SOAUtil.getInstance().getXmlObjectFactory().create(Address.class);
+                address.setValue(URI.create(producerAddress));
+                producerRef.setAddress(address);
+                msg.setProducerReference(producerRef);
+            }
+            
             notifyPayload.addNotificationMessage(msg);
 
         } catch (WsnbException e) {
@@ -127,10 +130,11 @@ public class NotificationHelper {
 
     /**
      * @param producerAddress
-     * @throws NotificationException 
+     * @throws NotificationException
      * 
      */
-    public static Subscribe createSubscribe(String consumerReference, QName topic) throws NotificationException {
+    public static Subscribe createSubscribe(String consumerReference, QName topic)
+            throws NotificationException {
         Subscribe result = null;
         final EndpointReferenceType consumerRef = SOAUtil.getInstance().getXmlObjectFactory()
                 .create(EndpointReferenceType.class);

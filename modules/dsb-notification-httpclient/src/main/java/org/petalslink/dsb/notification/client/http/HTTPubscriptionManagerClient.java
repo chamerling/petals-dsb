@@ -93,6 +93,16 @@ public class HTTPubscriptionManagerClient implements ISubscriptionManager {
                 public String getEndpoint() {
                     return endpoint;
                 }
+
+                public String getProperty(String name) {
+                    // TODO Auto-generated method stub
+                    return null;
+                }
+
+                public void setProperty(String name, String value) {
+                    // TODO Auto-generated method stub
+                    
+                }
             });
         } catch (ClientException e) {
             e.printStackTrace();
@@ -164,6 +174,16 @@ public class HTTPubscriptionManagerClient implements ISubscriptionManager {
 
                 public String getEndpoint() {
                     return endpoint;
+                }
+
+                public String getProperty(String name) {
+                    // TODO Auto-generated method stub
+                    return null;
+                }
+
+                public void setProperty(String name, String value) {
+                    // TODO Auto-generated method stub
+                    
                 }
             });
         } catch (ClientException e) {

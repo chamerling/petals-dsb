@@ -29,6 +29,7 @@ import org.petalslink.dsb.notification.service.NotificationProducerRPService;
 import org.petalslink.dsb.service.client.Client;
 import org.petalslink.dsb.service.client.ClientException;
 import org.petalslink.dsb.service.client.Message;
+import org.petalslink.dsb.service.client.MessageImpl;
 import org.w3c.dom.Document;
 
 import com.ebmwebsourcing.easycommons.xml.XMLHelper;
@@ -149,38 +150,15 @@ public class NotificationEngine {
                     final Document payload = Wsnb4ServUtils.getWsnbWriter()
                             .writeNotifyAsDOM(notify);
 
-                    client.fireAndForget(new Message() {
-                        public QName getService() {
-                            return service;
-                        }
+                    MessageImpl message = new MessageImpl();
+                    message.setService(service);
+                    message.setPayload(payload);
+                    message.setEndpoint(endpoint);
+                    message.setInterface(interfaceQName);
+                    message.setOperation(WsnbConstants.NOTIFY_QNAME);
+                    message.setProperty(Constants.WSStar.Addressing.TO_QNAME.toString(), to);
 
-                        public Map<String, String> getProperties() {
-                            Map<String, String> result = new HashMap<String, String>(1);
-                            if (to != null)
-                                result.put(Constants.WSStar.Addressing.TO_QNAME.toString(), to);
-                            return result;
-                        }
-
-                        public Document getPayload() {
-                            return payload;
-                        }
-
-                        public QName getOperation() {
-                            return WsnbConstants.NOTIFY_QNAME;
-                        }
-
-                        public QName getInterface() {
-                            return interfaceQName;
-                        }
-
-                        public Map<String, Document> getHeaders() {
-                            return null;
-                        }
-
-                        public String getEndpoint() {
-                            return endpoint;
-                        }
-                    });
+                    client.fireAndForget(message);
                 } catch (ClientException e) {
                     e.printStackTrace();
                 } catch (WsnbException e) {

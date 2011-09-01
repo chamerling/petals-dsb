@@ -42,4 +42,11 @@ public class IOImpl implements IO {
         this.client.sendAsync(message, listener);
     }
 
+    /* (non-Javadoc)
+     * @see org.petalslink.dsb.service.client.Client#getName()
+     */
+    public String getName() {
+        return this.client.getName();
+    }
+
 }

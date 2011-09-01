@@ -4,7 +4,9 @@
 package org.petalslink.dsb.kernel.io.client;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 import javax.naming.InitialContext;
@@ -36,6 +38,7 @@ import org.ow2.petals.util.LoggingUtil;
 import org.petalslink.dsb.api.ServiceEndpoint;
 import org.petalslink.dsb.jbi.JBISender;
 import org.petalslink.dsb.service.client.Client;
+import org.petalslink.dsb.service.client.ClientException;
 import org.petalslink.dsb.service.client.ClientFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentFragment;
@@ -61,9 +64,11 @@ public class DSBClientFactoryImpl implements ClientFactory {
     private static final String COMPONENT_NAME_PREFIX = "internalclient-";
 
     /**
-     * Local context for the client
+     * FIXME : be careful about asynchronous calls... Maybe it is better to
+     * create a new client for each call even if it consumes memory and threads
+     * at the router level...
      */
-    private ComponentContext context;
+    private Map<String, JBISender> cache;
 
     @Requires(name = "configuration", signature = ConfigurationService.class)
     private ConfigurationService configurationService;
@@ -74,6 +79,7 @@ public class DSBClientFactoryImpl implements ClientFactory {
     @LifeCycle(on = LifeCycleType.START)
     public void start() {
         log = new LoggingUtil(logger);
+        this.cache = new HashMap<String, JBISender>();
         ClientFactoryRegistry.setFactory(this);
         log.start();
     }
@@ -81,24 +87,49 @@ public class DSBClientFactoryImpl implements ClientFactory {
     @LifeCycle(on = LifeCycleType.STOP)
     public void stop() {
         log.end();
+        this.cache = null;
     }
 
-    public Client getClient(ServiceEndpoint service) {
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.petalslink.dsb.service.client.ClientFactory#getClient(org.petalslink
+     * .dsb.api.ServiceEndpoint)
+     */
+    public Client getClient(ServiceEndpoint service) throws ClientException {
         if (log.isDebugEnabled()) {
             log.debug("Getting a client for service " + service);
         }
+
+        // look for old client if any to save some resources
+        Client client = getOldClient(service);
+        if (client != null) {
+            return client;
+        }
+        return createClient(service);
+    }
+
+    /**
+     * @param service
+     * @return
+     * @throws ClientException
+     */
+    protected Client createClient(ServiceEndpoint service) throws ClientException {
         // create a fake component context with some information so that we can
         // get responses from invocations...
+
+        final String componentName = getClientId(service);
         final ServiceEndpointImpl clientServiceEndpoint = new ServiceEndpointImpl();
         clientServiceEndpoint.setType(EndpointType.INTERNAL);
-        ServiceEndpoint clientEndpoint = getClientName(service);
+        ServiceEndpoint clientEndpoint = getServiceEndpointClient(service);
         if (clientEndpoint.getEndpointName() != null)
             clientServiceEndpoint.setEndpointName(clientEndpoint.getEndpointName());
         if (clientEndpoint.getInterfaces() != null)
             clientServiceEndpoint.setInterfacesName(Arrays.asList(clientEndpoint.getInterfaces()));
         if (clientEndpoint.getServiceName() != null)
             clientServiceEndpoint.setServiceName(clientEndpoint.getServiceName());
-        clientServiceEndpoint.setLocation(getLocation());
+        clientServiceEndpoint.setLocation(getLocation(componentName));
         ComponentContextCommunication componentContextCommunication = new ComponentContextCommunication() {
 
             public String getWorkspaceRoot() {
@@ -189,11 +220,9 @@ public class DSBClientFactoryImpl implements ClientFactory {
             }
         };
 
-        // TODO : Need to fill data 1. to be able to get fake component name
-        // from
-        // context : componentContext.getComponentName() 2. getLogger
-        context = new FakeComponentContext(componentContextCommunication);
-        Client client = new JBISender(context, service);
+        ComponentContext context = new FakeComponentContext(componentContextCommunication,
+                componentName);
+        JBISender jbiClient = new JBISender(context, service);
 
         // TODO
         // Need to call to create required listeners... Need to create a
@@ -206,34 +235,85 @@ public class DSBClientFactoryImpl implements ClientFactory {
         try {
             this.router.addComponent(context);
         } catch (RoutingException e) {
-            e.printStackTrace();
+            throw new ClientException("Can not create client", e);
         }
 
-        return client;
+        // cache it...
+        this.cache.put(componentName, jbiClient);
+
+        return jbiClient;
     }
 
-    private Location getLocation() {
+    /**
+     * @param service
+     * @return
+     */
+    private Client getOldClient(ServiceEndpoint service) {
+        String id = getClientId(service);
+        return this.cache.get(id);
+    }
+
+    /**
+     * @param service
+     * @return
+     */
+    private String getClientId(ServiceEndpoint service) {
+        StringBuffer sb = new StringBuffer(COMPONENT_NAME_PREFIX);
+        if (service != null) {
+            if (service.getEndpointName() != null) {
+                sb.append("ep=");
+                sb.append(service.getEndpointName());
+                sb.append(";");
+            }
+
+            if (service.getServiceName() != null) {
+                sb.append("srv=");
+                sb.append(service.getServiceName().toString());
+                sb.append(";");
+            }
+
+            if (service.getInterfaces() != null && service.getInterfaces().length > 0) {
+                sb.append("itf=");
+                sb.append(service.getInterfaces()[0].toString());
+                sb.append(";");
+            }
+        }
+        return sb.toString();
+    }
+
+    private Location getLocation(String componentName) {
         return new Location(configurationService.getContainerConfiguration().getSubdomainName(),
-                configurationService.getContainerConfiguration().getName(), COMPONENT_NAME_PREFIX
-                        + "" + configurationService.getContainerConfiguration().getName());
+                configurationService.getContainerConfiguration().getName(), componentName);
     }
 
-    public void release(Client client) {
+    public void release(Client client) throws ClientException {
+        // get the client from the cache and retrieve its context...
+        if (client == null) {
+            return;
+        }
+
         try {
-            this.router.removeComponent(context);
+            JBISender sender = cache.get(client.getName());
+            if (sender != null) {
+                this.router.removeComponent(sender.getComponentContext());
+            }
         } catch (RoutingException e) {
+            throw new ClientException(e);
         }
     }
 
-    private ServiceEndpoint getClientName(ServiceEndpoint serviceEndpoint) {
+    private ServiceEndpoint getServiceEndpointClient(ServiceEndpoint serviceEndpoint) {
         ServiceEndpoint result = new ServiceEndpoint();
         long id = counter.incrementAndGet();
-        result.setComponentLocation(COMPONENT_NAME_PREFIX + ""
-                + configurationService.getContainerConfiguration().getName());
-        result.setContainerLocation(configurationService.getContainerConfiguration().getName());
-        result.setSubdomainLocation(configurationService.getContainerConfiguration()
-                .getSubdomainName());
-
+        /*
+         * result.setComponentLocation(COMPONENT_NAME_PREFIX + "" +
+         * configurationService.getContainerConfiguration().getName());
+         * result.setContainerLocation
+         * (configurationService.getContainerConfiguration().getName());
+         * result.setSubdomainLocation
+         * (configurationService.getContainerConfiguration()
+         * .getSubdomainName());
+         */
         if (serviceEndpoint.getEndpointName() != null) {
             result.setEndpointName(serviceEndpoint.getEndpointName() + "-" + id);
         }
@@ -249,14 +329,17 @@ public class DSBClientFactoryImpl implements ClientFactory {
 
     class FakeComponentContext extends ComponentContextImpl {
 
-        public FakeComponentContext(ComponentContextCommunication componentContextCommunication) {
+        String componentName;
+
+        public FakeComponentContext(ComponentContextCommunication componentContextCommunication,
+                String id) {
             super(componentContextCommunication);
+            this.componentName = id;
         }
 
         @Override
         public String getComponentName() {
-            return COMPONENT_NAME_PREFIX + ""
-                    + configurationService.getContainerConfiguration().getName();
+            return componentName;
         }
     }
 

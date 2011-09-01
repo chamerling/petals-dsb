@@ -62,10 +62,13 @@ public class SourceSetterModule implements SenderModule {
     public void electEndpoints(Map<ServiceEndpoint, TransportSendContext> electedEndpoints,
             ComponentContext sourceComponentContext, MessageExchange exchange)
             throws RoutingException {
+        
+        if (log.isDebugEnabled()) {
+            log.debug("Setting the source component location information into the exchange");
+        }
 
         if (exchange.getConsumerEndpoint() != null
                 && exchange.getConsumerEndpoint().getLocation() != null) {
-            System.out.println("++++ Setting location");
             exchange.setProperty(LOCATION_COMPONENT, exchange.getConsumerEndpoint().getLocation()
                     .getComponentName());
             exchange.setProperty(LOCATION_CONTAINER, exchange.getConsumerEndpoint().getLocation()

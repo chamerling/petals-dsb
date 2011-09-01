@@ -150,6 +150,13 @@ public class PetalsTransportTest extends TestCase {
             public void fireAndForget(Message message) throws ClientException {
                 System.out.println("F&F");
             }
+            
+            /* (non-Javadoc)
+             * @see org.petalslink.dsb.service.client.Client#getName()
+             */
+            public String getName() {
+                return "ClientTest";
+            }
         };
     }
 

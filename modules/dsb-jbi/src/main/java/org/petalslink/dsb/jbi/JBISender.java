@@ -5,30 +5,26 @@ package org.petalslink.dsb.jbi;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.jbi.JBIException;
-import javax.jbi.component.ComponentContext;
 import javax.jbi.messaging.ExchangeStatus;
 import javax.jbi.messaging.MessageExchange;
 import javax.jbi.messaging.MessageExchangeFactory;
 import javax.jbi.messaging.MessagingException;
 import javax.jbi.messaging.NormalizedMessage;
 import javax.xml.namespace.QName;
-import javax.xml.transform.Source;
-import javax.xml.transform.dom.DOMSource;
 
+import org.ow2.petals.jbi.component.context.ComponentContext;
 import org.ow2.petals.kernel.api.service.Location;
-import org.petalslink.dsb.api.DSBException;
 import org.petalslink.dsb.api.ServiceEndpoint;
 import org.petalslink.dsb.service.client.Client;
 import org.petalslink.dsb.service.client.ClientException;
+import org.petalslink.dsb.service.client.Constants;
 import org.petalslink.dsb.service.client.Message;
 import org.petalslink.dsb.service.client.MessageListener;
-import org.petalslink.dsb.xmlutils.XMLHelper;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentFragment;
 
@@ -40,8 +36,6 @@ import org.w3c.dom.DocumentFragment;
  */
 public class JBISender implements Client {
 
-    public static final String CLEAN_ENDPOINT = "jbi.client.CLEAN_ENDPOINT";
-
     private ComponentContext componentContext;
 
     private Logger logger;
@@ -49,10 +43,18 @@ public class JBISender implements Client {
     private MessageExchangeFactory messageExchangeFactory;
 
     private ServiceEndpoint serviceEndpoint;
+    
+    private String name;
 
+    /**
+     * 
+     * @param componentContext
+     * @param endpoint
+     */
     public JBISender(ComponentContext componentContext, ServiceEndpoint endpoint) {
         this.componentContext = componentContext;
         this.serviceEndpoint = endpoint;
+        this.name = this.componentContext.getComponentName();
         // TODO : initialize somewhere else
         try {
             this.messageExchangeFactory = this.componentContext.getDeliveryChannel()
@@ -71,8 +73,6 @@ public class JBISender implements Client {
     }
 
     public void fireAndForget(Message message) throws ClientException {
-        // create a internal message from the given one...
-        // this is a send operation
         try {
             MessageExchange messageExchange = this.messageExchangeFactory
                     .createInOptionalOutExchange();
@@ -83,6 +83,7 @@ public class JBISender implements Client {
     }
 
     public Message sendReceive(Message message) throws ClientException {
+        System.out.println("Send Receive");
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("SendReceive message");
         }
@@ -90,51 +91,15 @@ public class JBISender implements Client {
         // create a internal message from the given one...
         try {
             MessageExchange messageExchange = this.messageExchangeFactory.createInOutExchange();
-            Document out = this.send(message, messageExchange, message.getOperation(), true);
+            result = this.send(message, messageExchange, message.getOperation(), true);
             if (logger.isLoggable(Level.FINE)) {
                 logger.fine("Messager has been sent, we have a response");
-            }
-            result = createOutMessage(out);
-            if (logger.isLoggable(Level.FINE)) {
                 logger.fine("Out message is " + result);
             }
         } catch (MessagingException e) {
             throw new ClientException(e);
         }
         return result;
-    }
-
-    protected Message createOutMessage(final Document out) {
-        return new Message() {
-
-            public Document getPayload() {
-                return out;
-            }
-
-            public QName getOperation() {
-                return null;
-            }
-
-            public Map<String, String> getProperties() {
-                return null;
-            }
-
-            public Map<String, Document> getHeaders() {
-                return null;
-            }
-
-            public QName getService() {
-                return null;
-            }
-
-            public QName getInterface() {
-                return null;
-            }
-
-            public String getEndpoint() {
-                return null;
-            }
-        };
     }
 
     /**
@@ -147,19 +112,10 @@ public class JBISender implements Client {
      * @return
      * @throws MessagingException
      */
-    private Document send(final Message message, final MessageExchange messageExchange,
+    private Message send(final Message message, final MessageExchange messageExchange,
             final QName operation, final boolean synchronous) throws MessagingException,
             ClientException {
-        NormalizedMessage normalizedMessage = messageExchange.createMessage();
-        Document payload = message.getPayload();
-        payload.normalizeDocument();
-        Source source = new DOMSource(payload);
-        normalizedMessage.setContent(source);
-        Map<String, String> props = message.getProperties();
-        for (String key : props.keySet()) {
-            normalizedMessage.setProperty(key, props.get(key));
-        }
-
+        NormalizedMessage normalizedMessage = Adapter.transform(message);
         messageExchange.setMessage(normalizedMessage, "in");
         messageExchange.setOperation(operation);
 
@@ -169,8 +125,11 @@ public class JBISender implements Client {
         } else {
             // exception to handle
         }
-
-        if (!Boolean.parseBoolean(message.getProperties().get(CLEAN_ENDPOINT))) {
+        
+        // FIXME : Check that null check!!!
+        // if cleanendpoint is set to true, ask the dsb to check the registry to
+        // fiind the endpoint, else set the current one... We also need to set the location...
+        if (!Boolean.parseBoolean(message.getProperty(Constants.CLIENT_CLEAN_ENDPOINT))) {
             // do we need to set the endpoit or not? It is up to the caller to
             // set that; For example, the core kernel service client need to set
             // informaiton about the service he wants to call but it is not a
@@ -196,7 +155,7 @@ public class JBISender implements Client {
                         }
 
                         public EndpointType getType() {
-                            return EndpointType.INTERNAL;
+                            return EndpointType.EXTERNAL;
                         }
 
                         public void setType(EndpointType type) {
@@ -246,23 +205,15 @@ public class JBISender implements Client {
                         normalizedMessage = messageExchange.getMessage("out");
                     } else {
                         // fault
-
+                        // TODO
                     }
                     // close the sent exchange
                     messageExchange.setStatus(ExchangeStatus.DONE);
                     this.componentContext.getDeliveryChannel().send(messageExchange);
+                    
+                    // create the response
                     if (normalizedMessage != null) {
-                        source = normalizedMessage.getContent();
-                        if (source != null) {
-                            try {
-                                return XMLHelper.createDocument(source, false);
-                            } catch (Exception e) {
-                                throw new ClientException("Can not create Document from response",
-                                        e);
-                            }
-                        } else {
-                            // TODO
-                        }
+                        return Adapter.transform(normalizedMessage);
                     } else {
                     }
                 }
@@ -282,6 +233,13 @@ public class JBISender implements Client {
         }
 
     }
+    
+    /* (non-Javadoc)
+     * @see org.petalslink.dsb.service.client.Client#getName()
+     */
+    public String getName() {
+        return this.name;
+    }
 
     protected ClientException createFromOutMessage(MessageExchange messageExchange) {
         ClientException result = null;
@@ -298,6 +256,10 @@ public class JBISender implements Client {
             result = new ClientException(message);
         }
         return result;
+    }
+    
+    public ComponentContext getComponentContext() {
+        return this.componentContext;
     }
 
 }

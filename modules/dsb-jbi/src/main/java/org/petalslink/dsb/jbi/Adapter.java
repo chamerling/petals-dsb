@@ -3,16 +3,14 @@
  */
 package org.petalslink.dsb.jbi;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.jbi.messaging.MessagingException;
 import javax.jbi.messaging.NormalizedMessage;
 import javax.xml.namespace.QName;
+import javax.xml.transform.dom.DOMSource;
 
 import org.ow2.petals.jbi.messaging.endpoint.JBIServiceEndpointImpl;
 import org.ow2.petals.jbi.messaging.exchange.NormalizedMessageImpl;
@@ -23,10 +21,10 @@ import org.w3c.dom.Document;
 
 /**
  * @author chamerling
- *
+ * 
  */
 public class Adapter {
-    
+
     public static org.petalslink.dsb.api.ServiceEndpoint createServiceEndpoint(
             org.ow2.petals.kernel.api.service.ServiceEndpoint serviceEndpoint) {
         if (serviceEndpoint == null) {
@@ -38,7 +36,7 @@ public class Adapter {
             se.setSubdomainLocation(serviceEndpoint.getLocation().getSubdomainName());
             se.setContainerLocation(serviceEndpoint.getLocation().getContainerName());
         }
-        
+
         if (serviceEndpoint.getType() != null) {
             se.setType(serviceEndpoint.getType().toString());
         }
@@ -78,64 +76,43 @@ public class Adapter {
         }
         return se;
     }
-    
+
     public static Message transform(final NormalizedMessage in) {
-        return new Message() {
-
-            public Document getPayload() {
-                try {
-                    return XMLHelper.createDocument(in.getContent(), true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-
-            public QName getOperation() {
-                return null;
-            }
-
-            public Map<String, String> getProperties() {
-                Map<String, String> properties = new HashMap<String, String>();
-                Set keys = in.getPropertyNames();
-                for (Object key : keys) {
-                    properties.put(key.toString(), in.getProperty(key.toString()).toString());
-                }
-                return properties;
-            }
-
-            public Map<String, Document> getHeaders() {
-                return new HashMap<String, Document>();
-            }
-
-            public QName getService() {
-                return null;
-            }
-
-            public QName getInterface() {
-                return null;
-            }
-
-            public String getEndpoint() {
-                return null;
-            }
-
-        };
+        org.petalslink.dsb.service.client.MessageImpl result = new org.petalslink.dsb.service.client.MessageImpl();
+        try {
+            result.setPayload(XMLHelper.createDocument(in.getContent(), true));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        @SuppressWarnings("rawtypes")
+        Set keys = in.getPropertyNames();
+        for (Object key : keys) {
+            result.setProperty(key.toString(), in.getProperty(key.toString()).toString());
+        }
+        return result;
     }
 
     public static NormalizedMessage transform(final Message message) {
 
         NormalizedMessageImpl result = new NormalizedMessageImpl();
         try {
-            result.setContent(XMLHelper.createStreamSource(message.getPayload()));
+            Document doc = message.getPayload();
+            if (doc != null) {
+                doc.normalizeDocument();
+                result.setContent(new DOMSource(doc));
+            }
         } catch (MessagingException e1) {
             e1.printStackTrace();
-        } catch (IOException e1) {
-            e1.printStackTrace();
         }
-        Set<String> keys = message.getProperties().keySet();
-        for (String key : keys) {
-            result.setProperty(key, message.getProperties().get(key));
+        if (message.getProperties() != null) {
+            Set<String> keys = message.getProperties().keySet();
+            for (String key : keys) {
+                result.setProperty(key, message.getProperties().get(key));
+            }
+        }
+
+        if (message.getHeaders() != null) {
+            // TODO
         }
         return result;
 

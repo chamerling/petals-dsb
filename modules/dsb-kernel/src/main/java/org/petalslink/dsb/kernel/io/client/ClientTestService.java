@@ -15,9 +15,9 @@ public interface ClientTestService {
 
     /**
      * 
-     * @param endpointName
+     * @param times
      * @return
      */
     @WebMethod
-    boolean invoke(String endpointName);    
+    boolean invoke(int times);    
 }

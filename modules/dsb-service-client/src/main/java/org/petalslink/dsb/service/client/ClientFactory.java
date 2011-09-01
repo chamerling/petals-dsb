@@ -22,13 +22,13 @@ public interface ClientFactory {
      * @param service
      * @return
      */
-    Client getClient(ServiceEndpoint service);
+    Client getClient(ServiceEndpoint service) throws ClientException;
     
     /**
      * Release a client ie free it!
      * 
      * @param client
      */
-    void release(Client client);
+    void release(Client client) throws ClientException;
 
 }
