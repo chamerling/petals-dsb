@@ -146,7 +146,7 @@ public class NotificationHelper {
 
             FilterType filter = RefinedWsnbFactory.getInstance().createFilterType();
             TopicExpressionType topicExpression = createTopicExpression(topic,
-                    "http://www.w3.org/TR/1999/REC-xpath-19991116");
+                    NotificationConstants.DIALECT_CONCRETE);
             filter.addTopicExpression(topicExpression);
             result.setFilter(filter);
         } catch (WsnbException e) {
