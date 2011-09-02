@@ -3,6 +3,9 @@
  */
 package org.petalslink.dsb.service.poller.api;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.w3c.dom.Document;
 
 /**
@@ -42,6 +45,15 @@ public class PollingContext {
      * from a repository.
      */
     Document inputMessage;
+
+    Map<String, String> extensions;
+
+    /**
+     * 
+     */
+    public PollingContext() {
+        this.extensions = new HashMap<String, String>();
+    }
 
     public String getCron() {
         return cron;
@@ -89,5 +101,19 @@ public class PollingContext {
 
     public void setTransport(PollingTransport transport) {
         this.transport = transport;
+    }
+
+    /**
+     * @return the extensions
+     */
+    public Map<String, String> getExtensions() {
+        return extensions;
+    }
+
+    /**
+     * @param extensions the extensions to set
+     */
+    public void setExtensions(Map<String, String> extensions) {
+        this.extensions = extensions;
     }
 }

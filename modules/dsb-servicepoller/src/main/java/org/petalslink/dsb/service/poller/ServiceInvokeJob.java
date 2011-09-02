@@ -13,6 +13,8 @@ import org.petalslink.dsb.service.poller.api.ServiceInformation;
 import org.w3c.dom.Document;
 
 /**
+ * The default service invokation, just get the response from the service and send it to the target one.
+ * 
  * @author chamerling
  * 
  */
