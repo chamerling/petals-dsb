@@ -29,9 +29,11 @@ public class AddressingHelper {
         if (address == null) {
             return result;
         }
+        
+        return address.getScheme() != null;
 
-        return address.toString().startsWith(Constants.DSB_EXTERNAL_SERVICE_NS)
-                || !address.toString().startsWith(Constants.DSB_INTERNAL_SERVICE_NS);
+        //return address.toString().startsWith(Constants.DSB_EXTERNAL_SERVICE_NS)
+          //      || !address.toString().startsWith(Constants.DSB_INTERNAL_SERVICE_NS);
     }
 
     public static final URI addLocation(URI uri, String component, String container, String domain) {
@@ -188,5 +190,4 @@ public class AddressingHelper {
         }
         return result;
     }
-
 }
