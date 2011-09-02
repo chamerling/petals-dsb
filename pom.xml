@@ -46,11 +46,6 @@
 		<module>modules/dsb-annotations</module>
 		<module>modules/dsb-api</module>
 		<module>modules/dsb-client-servicebinder</module>
-		<module>modules/dsb-federation-api</module>
-		<module>modules/dsb-federation-core</module>
-		<module>modules/dsb-federation-webserver</module>
-		<module>modules/dsb-federation-xmpp</module>
-		<module>modules/dsb-federation-xmppwebserver</module>
 		<module>modules/dsb-kernel-wsapi</module>
 		<module>modules/dsb-kernel-api</module>
 		<module>modules/dsb-kernel</module>
@@ -63,7 +58,6 @@
    		<module>modules/dsb-transport-soap</module>
    		<module>modules/dsb-transport-cxf</module>
    		<module>modules/dsb-transport-xmpp</module>
-   		<!--<module>modules/dsb-kernel-federationservice</module>-->
 		<module>modules/dsb-jbi</module>
 		
 		<module>modules/dsb-router</module>
@@ -156,8 +150,20 @@
   </modules>
 
 	<profiles>
-		<!-- This have a long lifecycle ie not modified for now, compile it by activing the profile if needed -->
 		<profile>
+			<!-- Need to work on this stuff.... -->
+			<id>federation</id>
+			<modules>
+					<module>modules/dsb-federation-api</module>
+					<module>modules/dsb-federation-core</module>
+					<module>modules/dsb-federation-webserver</module>
+					<module>modules/dsb-federation-xmpp</module>
+					<module>modules/dsb-federation-xmppwebserver</module>
+					<!--<module>modules/dsb-kernel-federationservice</module>-->
+			</modules>
+		</profile>
+		<profile>
+		<!-- Deprecated, to be deleted after BSM implementation -->
 			<id>fork</id>
 			<modules>
 				<module>forks/wsdm-monitoring</module>
