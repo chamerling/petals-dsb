@@ -103,7 +103,7 @@ public class EmbeddedComponentServiceImpl implements EmbeddedComponentService {
                     boolean tmp = this.componentInstallationService.install(this
                             .getComponentURL(componentName));
 
-                    if (tmp && this.log.isDebugEnabled()) {
+                    if (tmp) {
                         this.log.debug("Component '" + componentName
                                 + "' has been successfully installed!");
                     } else {
