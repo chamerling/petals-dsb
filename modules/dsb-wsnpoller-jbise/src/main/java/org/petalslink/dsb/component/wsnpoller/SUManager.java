@@ -93,10 +93,10 @@ public class SUManager extends AbstractServiceUnitManager {
             context.setResponseTo(responseTo);
             context.setToPoll(toPoll);
             context.setTransport(this.transport);
-            context.getExtensions().put("topic", extensions.get("topic"));
-
-            System.out.println("TOpic = " + extensions.get("topic"));
-            System.out.println("Context is " + context);
+            
+            context.getExtensions().put("topicName", extensions.get("topicName"));
+            context.getExtensions().put("topicURI", extensions.get("topicURI"));
+            context.getExtensions().put("topicPrefix", extensions.get("topicPrefix"));
         }
         return context;
     }

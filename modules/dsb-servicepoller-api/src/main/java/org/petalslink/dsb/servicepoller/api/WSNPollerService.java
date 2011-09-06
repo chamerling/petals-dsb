@@ -8,7 +8,6 @@ import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.xml.namespace.QName;
 
-
 /**
  * @author chamerling
  * 
@@ -21,7 +20,9 @@ public interface WSNPollerService {
             @WebParam(name = "inputMessage") DocumentHandler inputMessage,
             @WebParam(name = "cronExpression") String cronExpression,
             @WebParam(name = "sendReplyTo") ServicePollerInformation replyTo,
-            @WebParam(name = "topic") QName topic) throws ServicePollerException;
+            @WebParam(name = "topicName") String topicName,
+            @WebParam(name = "topicURI") String topicURI,
+            @WebParam(name = "topicPrefix") String topicPrefix) throws ServicePollerException;
 
     /**
      * 

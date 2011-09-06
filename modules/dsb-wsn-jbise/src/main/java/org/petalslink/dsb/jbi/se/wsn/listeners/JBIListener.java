@@ -21,7 +21,6 @@ package org.petalslink.dsb.jbi.se.wsn.listeners;
 import java.util.logging.Level;
 
 import javax.jbi.messaging.NormalizedMessage;
-import javax.xml.namespace.QName;
 
 import org.ow2.petals.component.framework.api.exception.PEtALSCDKException;
 import org.ow2.petals.component.framework.api.message.Exchange;

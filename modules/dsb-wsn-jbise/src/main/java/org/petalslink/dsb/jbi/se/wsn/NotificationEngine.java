@@ -5,9 +5,8 @@ package org.petalslink.dsb.jbi.se.wsn;
 
 import java.net.URI;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.xml.namespace.QName;
@@ -23,12 +22,10 @@ import org.petalslink.dsb.api.WSAConstants;
 import org.petalslink.dsb.notification.commons.AbstractNotificationSender;
 import org.petalslink.dsb.notification.commons.NotificationException;
 import org.petalslink.dsb.notification.commons.NotificationManagerImpl;
-import org.petalslink.dsb.notification.commons.NotificationProducerRP;
 import org.petalslink.dsb.notification.commons.api.NotificationManager;
 import org.petalslink.dsb.notification.service.NotificationProducerRPService;
 import org.petalslink.dsb.service.client.Client;
 import org.petalslink.dsb.service.client.ClientException;
-import org.petalslink.dsb.service.client.Message;
 import org.petalslink.dsb.service.client.MessageImpl;
 import org.w3c.dom.Document;
 
@@ -79,6 +76,7 @@ public class NotificationEngine {
     public NotificationEngine(Logger logger, URL topicNamespaces, List<String> supportedTopics,
             QName serviceName, QName interfaceName, String endpointName, Client client) {
         super();
+        this.logger = logger;
         this.topicNamespaces = topicNamespaces;
         this.supportedTopics = supportedTopics;
         this.serviceName = serviceName;
@@ -105,8 +103,10 @@ public class NotificationEngine {
             protected void doNotify(Notify notify, String producerAddress,
                     EndpointReferenceType currentConsumerEdp, String subscriptionId, QName topic,
                     String dialect) throws NotificationException {
-                System.out.println("Need to send the message to a subscriber which is : "
-                        + currentConsumerEdp.getAddress().getValue());
+                if (logger.isLoggable(Level.FINE)) {
+                    logger.fine("Need to send the message to a subscriber which is : "
+                            + currentConsumerEdp.getAddress().getValue());
+                }
 
                 if (currentConsumerEdp == null || currentConsumerEdp.getAddress() == null
                         || currentConsumerEdp.getAddress().getValue() == null) {
@@ -129,18 +129,18 @@ public class NotificationEngine {
                     serviceName = WSAConstants.SERVICE_NAME;
                     interfaceName = WSAConstants.INTERFACE_NAME;
                     ep = WSAConstants.ENDPOINT_NAME;
-                    //address = AddressingHelper.getInitialAddress(uri);
+                    // address = AddressingHelper.getInitialAddress(uri);
                     address = uri.toString();
                 } else {
                     System.out.println("Internal service : TODO NotificationEngine class!");
                     return;
                     // URI is service@endpoint
                     /*
-                    componentName = AddressingHelper.getComponent(uri);
-                    ns = String.format(WSAConstants.NS_TEMPLATE, componentName);
-                    serviceName = AddressingHelper.getServiceName(uri);
-                    ep = AddressingHelper.getEndpointName(uri);
-                    */
+                     * componentName = AddressingHelper.getComponent(uri); ns =
+                     * String.format(WSAConstants.NS_TEMPLATE, componentName);
+                     * serviceName = AddressingHelper.getServiceName(uri); ep =
+                     * AddressingHelper.getEndpointName(uri);
+                     */
                     // TODO how to define internal addresses???
                 }
 
@@ -182,16 +182,20 @@ public class NotificationEngine {
                 // to the notification engine so that it is up to the
                 // notification engine to forward the notification to all the
                 // interested parties.
-                System.out.println("--- Got a notify, forward to internal engine ---");
-                try {
-                    Document doc = Wsnb4ServUtils.getWsnbWriter().writeNotifyAsDOM(notify);
-                    XMLHelper.writeDocument(doc, System.out);
-                } catch (WsnbException e) {
-                    e.printStackTrace();
-                } catch (TransformerException e) {
-                    e.printStackTrace();
+                if (logger.isLoggable(Level.FINE)) {
+
+                    logger.fine("--- Got a notify, forward to internal engine ---");
+                    try {
+                        Document doc = Wsnb4ServUtils.getWsnbWriter().writeNotifyAsDOM(notify);
+                        logger.fine(XMLHelper.createStringFromDOMDocument(doc));
+                    } catch (WsnbException e) {
+                        e.printStackTrace();
+                    } catch (TransformerException e) {
+                        e.printStackTrace();
+                    }
+                    logger.fine("-------------------------");
                 }
-                System.out.println("-------------------------");
+                
                 try {
                     internalNotificationSender.notify(notify);
                 } catch (NotificationException e) {

@@ -85,7 +85,6 @@ public class NotificationConsumerService extends AbstractService {
                         .readNotify(exchange.getIn());
                 this.consumer.notify(notify);
             } catch (WsnbException e) {
-                e.printStackTrace();
                 throw new ServiceException(e);
             }
         } else {

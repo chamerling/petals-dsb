@@ -6,6 +6,7 @@ package org.petalslink.dsb.servicepoller.api;
 import java.io.ByteArrayOutputStream;
 
 import javax.activation.DataHandler;
+import javax.xml.namespace.QName;
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -39,5 +40,4 @@ public class Utils {
         data.setDom(new DataHandler(new ByteDataSource(outputStream.toByteArray())));
         return data;
     }
-
 }

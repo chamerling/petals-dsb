@@ -179,28 +179,36 @@ public class Poller2Jbi implements JBIGenerationEngine {
         options.put(Creator.OPERATION, this.operation.getLocalPart());
         // specific elements
         if (responseEndpointName != null) {
-            options.put(org.petalslink.dsb.tools.generator.wsnpoller2jbi.Constants.RESPONSE_ENDPOINT,
+            options.put(
+                    org.petalslink.dsb.tools.generator.wsnpoller2jbi.Constants.RESPONSE_ENDPOINT,
                     responseEndpointName);
         }
         if (responseInterfaceName != null) {
-            options.put(org.petalslink.dsb.tools.generator.wsnpoller2jbi.Constants.RESPONSE_INTERFACE,
+            options.put(
+                    org.petalslink.dsb.tools.generator.wsnpoller2jbi.Constants.RESPONSE_INTERFACE,
                     responseInterfaceName.toString());
         }
         if (responseServiceName != null) {
-            options.put(org.petalslink.dsb.tools.generator.wsnpoller2jbi.Constants.RESPONSE_SERVICE,
+            options.put(
+                    org.petalslink.dsb.tools.generator.wsnpoller2jbi.Constants.RESPONSE_SERVICE,
                     responseServiceName.toString());
         }
         if (responseOperation != null) {
-            options.put(org.petalslink.dsb.tools.generator.wsnpoller2jbi.Constants.RESPONSE_OPERATION,
+            options.put(
+                    org.petalslink.dsb.tools.generator.wsnpoller2jbi.Constants.RESPONSE_OPERATION,
                     responseOperation.getLocalPart());
         }
         if (topic != null) {
-            options.put(org.petalslink.dsb.tools.generator.wsnpoller2jbi.Constants.TOPIC,
-                    topic.toString());
+            options.put(org.petalslink.dsb.tools.generator.wsnpoller2jbi.Constants.TOPIC_PREFIX,
+                    topic.getPrefix());
+            options.put(org.petalslink.dsb.tools.generator.wsnpoller2jbi.Constants.TOPIC_NAME,
+                    topic.getLocalPart());
+            options.put(org.petalslink.dsb.tools.generator.wsnpoller2jbi.Constants.TOPIC_URI,
+                    topic.getNamespaceURI());
         }
         options.put(org.petalslink.dsb.tools.generator.wsnpoller2jbi.Constants.CRON_EXPRESSION,
                 cronExpression);
-        
+
         options.put(org.petalslink.dsb.tools.generator.wsnpoller2jbi.Constants.INPUT_FILE,
                 inputFile.getName());
 

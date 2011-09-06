@@ -92,10 +92,24 @@ public class Creator1 extends AbstractCreator {
             componentElementsConsumer.add(element);
         }
 
-        if (suElements.get(Constants.TOPIC) != null) {
+        if (suElements.get(Constants.TOPIC_NAME) != null) {
             element = new XmlElement();
-            element.setName(COMPONENT_NS + ":topic");
-            element.setValue(suElements.get(Constants.TOPIC));
+            element.setName(COMPONENT_NS + ":" + Constants.TOPIC_NAME);
+            element.setValue(suElements.get(Constants.TOPIC_NAME));
+            componentElementsConsumer.add(element);
+        }
+        
+        if (suElements.get(Constants.TOPIC_PREFIX) != null) {
+            element = new XmlElement();
+            element.setName(COMPONENT_NS + ":" + Constants.TOPIC_PREFIX);
+            element.setValue(suElements.get(Constants.TOPIC_PREFIX));
+            componentElementsConsumer.add(element);
+        }
+        
+        if (suElements.get(Constants.TOPIC_URI) != null) {
+            element = new XmlElement();
+            element.setName(COMPONENT_NS + ":" + Constants.TOPIC_URI);
+            element.setValue(suElements.get(Constants.TOPIC_URI));
             componentElementsConsumer.add(element);
         }
 

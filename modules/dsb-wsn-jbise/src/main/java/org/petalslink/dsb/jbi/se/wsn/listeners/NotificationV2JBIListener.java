@@ -20,12 +20,9 @@ import org.petalslink.dsb.jbi.se.wsn.AddressingHelper;
 import org.petalslink.dsb.jbi.se.wsn.Component;
 import org.petalslink.dsb.jbi.se.wsn.Constants;
 import org.petalslink.dsb.jbi.se.wsn.NotificationEngine;
-import org.petalslink.dsb.notification.commons.SOAUtil;
 import org.w3c.dom.Document;
 
 import com.ebmwebsourcing.wsaddressing10.api.element.Address;
-import com.ebmwebsourcing.wsaddressing10.api.element.ReferenceParameters;
-import com.ebmwebsourcing.wsaddressing10.api.type.EndpointReferenceType;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.refinedabstraction.RefinedWsnbFactory;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.utils.WsnbException;
 import com.ebmwebsourcing.wsstar.notification.definition.basenotification.WsnbConstants;
@@ -58,8 +55,10 @@ public abstract class NotificationV2JBIListener extends AbstractJBIListener {
     public boolean onNotificationMessage(Exchange exchange) {
 
         // bypass the old stuff and add new one...
-        System.out.println(String.format("We have a notification message with operation '%s'",
-                exchange.getOperation()));
+        if (getLogger().isLoggable(Level.FINE)) {
+            getLogger().fine(String.format("We have a notification message with operation '%s'",
+                    exchange.getOperation()));
+        }
 
         NotificationEngine engine = getNotificationEngine();
 
@@ -144,29 +143,36 @@ public abstract class NotificationV2JBIListener extends AbstractJBIListener {
                         }
 
                         /*
-                        addLocation(consumerAddress, component, container, domain);
-                        System.out.println("New location : " + consumerAddress.getValue());
-
-                        final EndpointReferenceType newReference = SOAUtil.getInstance()
-                                .getXmlObjectFactory().create(EndpointReferenceType.class);
-                        Address newAddress = SOAUtil.getInstance().getXmlObjectFactory()
-                                .create(Address.class);
-                        newAddress.setValue(consumerAddress.getValue());
-                        newReference.setAddress(newAddress);
-
-                        final ReferenceParameters ref = SOAUtil.getInstance().getXmlObjectFactory()
-                                .create(ReferenceParameters.class);
-                        newReference.setReferenceParameters(ref);
-
-                        subscribe.setConsumerReference(newReference);
+                         * addLocation(consumerAddress, component, container,
+                         * domain); System.out.println("New location : " +
+                         * consumerAddress.getValue());
+                         * 
+                         * final EndpointReferenceType newReference =
+                         * SOAUtil.getInstance()
+                         * .getXmlObjectFactory().create(EndpointReferenceType
+                         * .class); Address newAddress =
+                         * SOAUtil.getInstance().getXmlObjectFactory()
+                         * .create(Address.class);
+                         * newAddress.setValue(consumerAddress.getValue());
+                         * newReference.setAddress(newAddress);
+                         * 
+                         * final ReferenceParameters ref =
+                         * SOAUtil.getInstance().getXmlObjectFactory()
+                         * .create(ReferenceParameters.class);
+                         * newReference.setReferenceParameters(ref);
+                         * 
+                         * subscribe.setConsumerReference(newReference);
                          */
-                        
-                        Document dom = Wsnb4ServUtils.getWsnbWriter()
-                                .writeSubscribeAsDOM(subscribe);
-                        try {
-                            System.out.println(com.ebmwebsourcing.easycommons.xml.XMLHelper
-                                    .createStringFromDOMDocument(dom));
-                        } catch (TransformerException e) {
+
+                        if (getLogger().isLoggable(Level.FINE)) {
+                            Document dom = Wsnb4ServUtils.getWsnbWriter().writeSubscribeAsDOM(
+                                    subscribe);
+                            try {
+                                getLogger().fine(
+                                        com.ebmwebsourcing.easycommons.xml.XMLHelper
+                                                .createStringFromDOMDocument(dom));
+                            } catch (TransformerException e) {
+                            }
                         }
 
                         // call the producer
@@ -299,10 +305,5 @@ public abstract class NotificationV2JBIListener extends AbstractJBIListener {
 
     NotificationEngine getNotificationEngine() {
         return ((Component) getComponent()).getNotificationEngine();
-    }
-
-    public static void main(String[] args) {
-        URI uri = URI.create("dsb://container/component/domain::http://foo/bar::dsb://domain=");
-        System.out.println(uri);
     }
 }

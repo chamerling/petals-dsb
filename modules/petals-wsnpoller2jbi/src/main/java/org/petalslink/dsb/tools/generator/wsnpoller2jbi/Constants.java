@@ -21,6 +21,9 @@ public interface Constants {
 
     String INPUT_FILE = "input-file";
 
-    String TOPIC = "topic";
+    String TOPIC_NAME = "topicName";
 
+    String TOPIC_URI = "topicURI";
+
+    String TOPIC_PREFIX = "topicPrefix";
 }
