@@ -43,7 +43,8 @@ public class WSNPollerClient implements WSNPoller {
             String cronExpression, ServicePollerInformation replyTo, QName topic)
             throws ServicePollerException {
         DocumentHandler data = Utils.toDataHandler(inputMessage);
-        return getWSClient().start(toPoll, data, cronExpression, replyTo, topic);
+        return getWSClient().start(toPoll, data, cronExpression, replyTo, topic.getLocalPart(),
+                topic.getNamespaceURI(), topic.getPrefix());
     }
 
     /*

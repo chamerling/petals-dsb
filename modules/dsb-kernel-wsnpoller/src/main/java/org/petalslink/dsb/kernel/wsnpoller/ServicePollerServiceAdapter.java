@@ -39,8 +39,8 @@ public class ServicePollerServiceAdapter implements WSNPollerService {
      * org.petalslink.dsb.servicepoller.api.DocumentHandler)
      */
     public String start(ServicePollerInformation toPoll, DocumentHandler inputMessage,
-            String cronExpression, ServicePollerInformation replyTo, QName topic)
-            throws ServicePollerException {
+            String cronExpression, ServicePollerInformation replyTo, String topicName,
+            String topicURI, String topicPrefix) throws ServicePollerException {
         if (bean == null) {
             throw new ServicePollerException("Can not find any inner poller service implementation");
         }
@@ -58,7 +58,7 @@ public class ServicePollerServiceAdapter implements WSNPollerService {
 
             }
         }
-        return bean.start(toPoll, document, cronExpression, replyTo, topic);
+        return bean.start(toPoll, document, cronExpression, replyTo, new QName(topicURI, topicName, topicPrefix));
     }
 
     /*

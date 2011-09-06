@@ -110,15 +110,16 @@ public class ServicePollerServiceImpl implements WSNPollerService {
      * javax.xml.namespace.QName)
      */
     public String start(ServicePollerInformation toPoll, DocumentHandler inputMessage,
-            String cronExpression, ServicePollerInformation replyTo, QName topic)
-            throws ServicePollerException {
+            String cronExpression, ServicePollerInformation replyTo, String topicName,
+            String topicURI, String topicPrefix) throws ServicePollerException {
         try {
             CronExpressionValidator.validateExpression(cronExpression);
         } catch (ParseException e) {
             throw new ServicePollerException(String.format("Invalid CronExpression %s",
                     cronExpression), e);
         }
-        return this.getAdapter().start(toPoll, inputMessage, cronExpression, replyTo, topic);
+        return this.getAdapter().start(toPoll, inputMessage, cronExpression, replyTo, topicName,
+                topicURI, topicPrefix);
     }
 
 }

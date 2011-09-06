@@ -45,7 +45,11 @@ public class ConfigurationLoader {
 
     public static final String REPLYSERVICE = "replyservice";
 
-    public static final String TOPIC = "topic";
+    public static final String TOPIC_NAME = "topicName";
+
+    public static final String TOPIC_URI = "topicURI";
+
+    public static final String TOPIC_PREFIX = "topicPrefix";
 
     public static final List<Configuration> load(File configuration) {
         List<Configuration> result = new ArrayList<Configuration>();
@@ -162,7 +166,8 @@ public class ConfigurationLoader {
             result.replyTo.setServiceName(serviceName);
         }
 
-        QName topic = values.get(TOPIC) != null ? QName.valueOf(values.get(TOPIC)) : null;
+        QName topic = new QName(values.get(TOPIC_URI), values.get(TOPIC_NAME),
+                values.get(TOPIC_PREFIX));
         result.topic = topic;
 
         return result;
