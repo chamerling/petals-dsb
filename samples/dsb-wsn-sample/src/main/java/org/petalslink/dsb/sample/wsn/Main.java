@@ -119,7 +119,7 @@ public class Main {
         System.out.println("Sending a notification to the DSB...");
         INotificationConsumer consumerClient = new HTTPNotificationConsumerClient(dsbNotify);
         Notify notify = loadNotify();
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 10; i++) {
             try {
                 consumerClient.notify(notify);
             } catch (WsnbException e) {
