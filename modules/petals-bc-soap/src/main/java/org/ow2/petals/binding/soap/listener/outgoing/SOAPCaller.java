@@ -167,10 +167,8 @@ public class SOAPCaller extends AbstractExternalServiceCaller {
                                 .getProvidersManager().getServiceContext(provides)
                                 .getServiceDescription(), endpointName, service);
                     }
-                } catch (MessagingException e1) {
-                    this.logger.warning("Error '" +e1+"' while trying to get elements to resolve soapAction.");
-                }catch (Exception e) {
-                    this.logger.warning("Error '" +e+"' while trying to get elements to resolve soapAction.");
+                } catch (Exception e) {
+                    this.logger.fine("Error '" +e+"' while trying to get elements to resolve soapAction.");
                 }
             }
 
