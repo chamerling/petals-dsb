@@ -45,7 +45,6 @@ import org.apache.axis2.engine.AxisConfiguration;
 import org.apache.axis2.phaseresolver.PhaseException;
 import org.apache.axis2.phaseresolver.PhaseHolder;
 import org.apache.axis2.phaseresolver.PhaseMetadata;
-import org.apache.axis2.transport.jms.AxisJMSException;
 import org.apache.axis2.transport.jms.JMSConstants;
 import org.apache.axis2.transport.jms.JMSListener;
 import org.ow2.petals.binding.soap.Constants.Notification;
@@ -96,6 +95,7 @@ public class SoapComponent extends PetalsBindingComponent {
             this.externalListenerManager.start();
 
             // Start the JMS transport layer
+            /*
             try {
                 this.soapContext.getAxis2ConfigurationContext().getAxisConfiguration()
                         .getTransportIn(Constants.TRANSPORT_JMS).getReceiver().start();
@@ -106,6 +106,7 @@ public class SoapComponent extends PetalsBindingComponent {
                         "Unable to start the JMS Transport (" + e.getMessage()
                                 + "). SOAP over JMS is not available.", e);
             }
+            */
 
         } catch (final AxisFault e) {
             this.getLogger().severe(e.getMessage());
@@ -124,9 +125,10 @@ public class SoapComponent extends PetalsBindingComponent {
             this.externalListenerManager.stop();
 
             // Stop the JMS transport layer
+            /*
             this.soapContext.getAxis2ConfigurationContext().getAxisConfiguration().getTransportIn(
                     Constants.TRANSPORT_JMS).getReceiver().stop();
-
+*/
         } catch (final AxisFault e) {
             this.getLogger().severe(e.getMessage());
             throw new JBIException(e);
