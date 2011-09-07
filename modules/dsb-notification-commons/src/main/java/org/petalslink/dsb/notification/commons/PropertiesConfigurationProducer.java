@@ -87,7 +87,7 @@ public class PropertiesConfigurationProducer implements ConfigurationProducer {
     private Subscribe load(Map<String, String> map) {
         Subscribe result = null;
         String url = map.get("subscriber");
-        String topic = map.get("tropicName");
+        String topic = map.get("topicName");
         String topicPrefix = map.get("topicPrefix");
         String topicURI = map.get("topicURI");
 
@@ -96,6 +96,7 @@ public class PropertiesConfigurationProducer implements ConfigurationProducer {
             try {
                 result = NotificationHelper.createSubscribe(url, topicName);
             } catch (NotificationException e) {
+                e.printStackTrace();
             }
         }
         return result;
