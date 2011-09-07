@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
 
 import javax.jbi.JBIException;
 import javax.jbi.servicedesc.ServiceEndpoint;
@@ -37,7 +38,15 @@ import org.ow2.petals.component.framework.PetalsBindingComponent;
 import org.ow2.petals.component.framework.api.Wsdl;
 import org.ow2.petals.component.framework.util.ServiceEndpointKey;
 import org.ow2.petals.component.framework.util.UtilFactory;
+import org.ow2.petals.component.framework.util.XMLUtil;
+import org.petalslink.dsb.notification.commons.PropertiesConfigurationProducer;
+import org.petalslink.dsb.notification.commons.api.ConfigurationProducer;
 import org.w3c.dom.Document;
+
+import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Subscribe;
+import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.utils.WsnbException;
+import com.ebmwebsourcing.wsstar.wsnb.services.impl.util.Wsnb4ServUtils;
+import com.ebmwebsourcing.wsstar.wsrfbf.services.faults.AbsWSStarFault;
 
 /**
  * The dsb-wsn-jbise Binding Component.
@@ -126,6 +135,50 @@ public class Component extends PetalsBindingComponent {
     @Override
     protected void doStart() throws JBIException {
         activateWSNEndpoints();
+
+        // create default subscribers...
+
+        // look if we have some configuration about subscribers...
+        URL subscribers = Component.class.getClassLoader().getResource("subscribers.cfg");
+
+        Properties subscriberProps = null;
+        if (subscribers != null) {
+            subscriberProps = new Properties();
+            try {
+                subscriberProps.load(Component.class.getClassLoader().getResourceAsStream(
+                        "subscribers.cfg"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (subscriberProps != null) {
+            ConfigurationProducer producers = new PropertiesConfigurationProducer(subscriberProps);
+            List<Subscribe> toSubscribe = producers.getSubscribe();
+            for (Subscribe subscribe : toSubscribe) {
+                // let's subscribe...
+                try {
+                    final com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.SubscribeResponse subscribeResponse = getNotificationEngine()
+                            .getNotificationManager().getNotificationProducerEngine()
+                            .subscribe(subscribe);
+
+                    if (getLogger().isLoggable(Level.INFO)) {
+                        getLogger().info("Subscribe response");
+                        if (subscribeResponse != null) {
+                            Document doc = Wsnb4ServUtils.getWsnbWriter()
+                                    .writeSubscribeResponseAsDOM(subscribeResponse);
+                            getLogger().info(XMLUtil.createStringFromDOMDocument(doc));
+                        } else {
+                            getLogger().info("None...");
+                        }
+                    }
+                } catch (Exception e) {
+                    if (getLogger().isLoggable(Level.FINE)) {
+                        getLogger().log(Level.INFO, "Problem while subscribing", e);
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -182,7 +235,8 @@ public class Component extends PetalsBindingComponent {
      */
     private void activateWSNEndpoint(final QName serviceName, final String endpointName, Wsdl wsdl)
             throws JBIException {
-        // add it before since activate endpoint will call getDescription locally
+        // add it before since activate endpoint will call getDescription
+        // locally
         this.WSNEP.put(new ServiceEndpointKey(serviceName, endpointName), wsdl);
         ServiceEndpoint se = null;
         try {
