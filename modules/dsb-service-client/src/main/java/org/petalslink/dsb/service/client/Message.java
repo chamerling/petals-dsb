@@ -74,4 +74,19 @@ public interface Message {
      */
     String getEndpoint();
 
+    /**
+     * @param endpoint
+     */
+    void setEndpoint(String endpoint);
+
+    /**
+     * @param interfaceQName
+     */
+    void setInterface(QName interfaceQName);
+
+    /**
+     * @param service
+     */
+    void setService(QName service);
+
 }
