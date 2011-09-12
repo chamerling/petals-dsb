@@ -4,7 +4,6 @@
 package org.petalslink.dsb.service.client;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 
 import javax.xml.namespace.QName;
 

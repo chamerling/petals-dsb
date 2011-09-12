@@ -93,5 +93,11 @@ public interface Message {
      * @param out
      */
     void setPayload(Document payload);
+    
+    /**
+     * 
+     * @param operation
+     */
+    void setOperation(QName operation);
 
 }

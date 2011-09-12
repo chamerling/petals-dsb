@@ -40,7 +40,7 @@ public abstract class WSAClient implements Client {
      * org.petalslink.dsb.service.client.Client#fireAndForget(org.petalslink
      * .dsb.service.client.Message)
      */
-    public void fireAndForget(Message message) throws ClientException {
+    public final void fireAndForget(Message message) throws ClientException {
         updateMessage(message);
         doFireAndForget(message);
     }
@@ -57,7 +57,7 @@ public abstract class WSAClient implements Client {
      * org.petalslink.dsb.service.client.Client#sendReceive(org.petalslink.dsb
      * .service.client.Message)
      */
-    public Message sendReceive(Message message) throws ClientException {
+    public final Message sendReceive(Message message) throws ClientException {
         updateMessage(message);
         return doSendReceive(message);
     }
@@ -76,7 +76,7 @@ public abstract class WSAClient implements Client {
      * .service.client.Message,
      * org.petalslink.dsb.service.client.MessageListener)
      */
-    public void sendAsync(Message message, MessageListener listener) throws ClientException {
+    public final void sendAsync(Message message, MessageListener listener) throws ClientException {
         updateMessage(message);
         doSendAsync(message, listener);
     }
