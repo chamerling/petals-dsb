@@ -75,38 +75,57 @@ public class ClientTestServiceImpl implements ClientTestService {
                     }
 
                     public Map<String, String> getProperties() {
-                        // TODO Auto-generated method stub
                         return null;
                     }
 
                     public Map<String, Document> getHeaders() {
-                        // TODO Auto-generated method stub
                         return null;
                     }
 
                     public QName getService() {
-                        // TODO Auto-generated method stub
                         return null;
                     }
 
                     public QName getInterface() {
-                        // TODO Auto-generated method stub
                         return null;
                     }
 
                     public String getEndpoint() {
-                        // TODO Auto-generated method stub
                         return null;
                     }
 
                     public String getProperty(String name) {
-                        // TODO Auto-generated method stub
                         return null;
                     }
 
                     public void setProperty(String name, String value) {
                         // TODO Auto-generated method stub
 
+                    }
+
+                    public void setEndpoint(String endpoint) {
+                        // TODO Auto-generated method stub
+                        
+                    }
+
+                    public void setInterface(QName interfaceQName) {
+                        // TODO Auto-generated method stub
+                        
+                    }
+
+                    public void setService(QName service) {
+                        // TODO Auto-generated method stub
+                        
+                    }
+
+                    public void setPayload(Document payload) {
+                        // TODO Auto-generated method stub
+                        
+                    }
+
+                    public void setOperation(QName operation) {
+                        // TODO Auto-generated method stub
+                        
                     }
                 };
 
@@ -116,7 +135,6 @@ public class ClientTestServiceImpl implements ClientTestService {
                     System.out.println("Got response on DSB service client for call " + i + " : "
                             + XMLUtil.createStringFromDOMDocument(response.getPayload()));
                 } catch (TransformerException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             }
@@ -131,5 +149,4 @@ public class ClientTestServiceImpl implements ClientTestService {
         }
         return true;
     }
-
 }

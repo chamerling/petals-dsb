@@ -21,8 +21,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -116,45 +114,11 @@ public class DSBConduitOutputStream extends CachedOutputStream {
                     DSBConduitOutputStream.this.message.get(Message.ENDPOINT_ADDRESS).toString());
             final Document doc = XMLHelper.createDocument(new StreamSource(this.getInputStream()),
                     true);
-            org.petalslink.dsb.service.client.Message message = new org.petalslink.dsb.service.client.Message() {
-
-                private Map<String, String> properties = new HashMap<String, String>();
-
-                public QName getService() {
-                    return service;
-                }
-
-                public Map<String, String> getProperties() {
-                    return properties;
-                }
-
-                public Document getPayload() {
-                    return doc;
-                }
-
-                public QName getOperation() {
-                    return bop.getName();
-                }
-
-                public QName getInterface() {
-                    return interfaceName;
-                }
-
-                public Map<String, Document> getHeaders() {
-                    return new HashMap<String, Document>();
-                }
-
-                public String getEndpoint() {
-                    return endpointName;
-                }
-
-                public String getProperty(String name) {
-                    return null;
-                }
-
-                public void setProperty(String name, String value) {
-                }
-            };
+            org.petalslink.dsb.service.client.Message message = new org.petalslink.dsb.service.client.MessageImpl();
+            message.setService(service);
+            message.setInterface(interfaceName);
+            message.setEndpoint(endpointName);
+            message.setOperation(bop.getName());
 
             message.getProperties().put(Constants.MESSAGE_TYPE, Constants.DSB_INVOKE);
             message.getProperties().put(

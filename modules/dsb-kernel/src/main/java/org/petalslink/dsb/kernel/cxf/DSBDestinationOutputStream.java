@@ -19,11 +19,9 @@ package org.petalslink.dsb.kernel.cxf;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.xml.namespace.QName;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.cxf.common.logging.LogUtils;
@@ -41,7 +39,7 @@ public class DSBDestinationOutputStream extends CachedOutputStream {
     private Message inMessage;
 
     private Message outMessage;
-    
+
     private MessageListener responseListener;
 
     public DSBDestinationOutputStream(Message m, Message outM, MessageListener responseListener) {
@@ -74,60 +72,21 @@ public class DSBDestinationOutputStream extends CachedOutputStream {
 
                 InputStream bais = getInputStream();
                 final Document doc = XMLHelper.createDocument(new StreamSource(bais), true);
-                
+
                 if (LOG.isLoggable(Level.INFO)) {
-                    LOG.info("On destination to be sent back to the client" + XMLUtil.createStringFromDOMDocument(doc));
+                    LOG.info("On destination to be sent back to the client"
+                            + XMLUtil.createStringFromDOMDocument(doc));
                 }
                 bais.close();
 
-                org.petalslink.dsb.service.client.Message out = new org.petalslink.dsb.service.client.Message() {
-
-                    public QName getService() {
-                        return null;
-                    }
-
-                    public Map<String, String> getProperties() {
-                        Map<String, String> props = new java.util.HashMap<String, String>();
-                        if (inMessage.get(DSBDestination.CORRELATION) != null) {
-                            props.put(DSBDestination.CORRELATION, inMessage.get(DSBDestination.CORRELATION).toString());
-                        }
-                        return props;
-                    }
-
-                    public Document getPayload() {
-                        return doc;
-                    }
-
-                    public QName getOperation() {
-                        return null;
-                    }
-
-                    public QName getInterface() {
-                        return null;
-                    }
-
-                    public Map<String, Document> getHeaders() {
-                        return null;
-                    }
-
-                    public String getEndpoint() {
-                        return null;
-                    }
-
-                    public String getProperty(String name) {
-                        // TODO Auto-generated method stub
-                        return null;
-                    }
-
-                    public void setProperty(String name, String value) {
-                        // TODO Auto-generated method stub
-                        
-                    }
-                };
-                
+                org.petalslink.dsb.service.client.Message out = new org.petalslink.dsb.service.client.MessageImpl();
+                if (inMessage.get(DSBDestination.CORRELATION) != null) {
+                    out.getProperties().put(DSBDestination.CORRELATION,
+                            inMessage.get(DSBDestination.CORRELATION).toString());
+                }
                 // notify incoming listener that the response is available...
                 responseListener.onMessage(out);
-                
+
             }
         } catch (Exception ex) {
             ex.printStackTrace();
