@@ -89,4 +89,9 @@ public interface Message {
      */
     void setService(QName service);
 
+    /**
+     * @param out
+     */
+    void setPayload(Document payload);
+
 }
