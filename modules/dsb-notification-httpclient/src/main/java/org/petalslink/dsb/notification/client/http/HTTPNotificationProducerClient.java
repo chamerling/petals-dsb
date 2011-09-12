@@ -106,6 +106,31 @@ public class HTTPNotificationProducerClient implements INotificationProducer {
                     // TODO Auto-generated method stub
                     
                 }
+
+                public void setEndpoint(String endpoint) {
+                    // TODO Auto-generated method stub
+                    
+                }
+
+                public void setInterface(QName interfaceQName) {
+                    // TODO Auto-generated method stub
+                    
+                }
+
+                public void setService(QName service) {
+                    // TODO Auto-generated method stub
+                    
+                }
+
+                public void setPayload(Document payload) {
+                    // TODO Auto-generated method stub
+                    
+                }
+
+                public void setOperation(QName operation) {
+                    // TODO Auto-generated method stub
+                    
+                }
             });
         } catch (ClientException e) {
             e.printStackTrace();
@@ -184,6 +209,31 @@ public class HTTPNotificationProducerClient implements INotificationProducer {
                 }
 
                 public void setProperty(String name, String value) {
+                    // TODO Auto-generated method stub
+                    
+                }
+
+                public void setEndpoint(String endpoint) {
+                    // TODO Auto-generated method stub
+                    
+                }
+
+                public void setInterface(QName interfaceQName) {
+                    // TODO Auto-generated method stub
+                    
+                }
+
+                public void setService(QName service) {
+                    // TODO Auto-generated method stub
+                    
+                }
+
+                public void setPayload(Document payload) {
+                    // TODO Auto-generated method stub
+                    
+                }
+
+                public void setOperation(QName operation) {
                     // TODO Auto-generated method stub
                     
                 }
