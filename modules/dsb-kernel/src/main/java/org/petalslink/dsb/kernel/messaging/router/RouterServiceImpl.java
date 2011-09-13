@@ -260,7 +260,7 @@ public class RouterServiceImpl implements RouterService, TransportListener, Rout
             }
         }
 
-        if (componentName != null) {
+        if (componentName != null && this.exchangeQueues.get(componentName) != null) {
             this.exchangeQueues.get(componentName).add(exchange);
         }
 
