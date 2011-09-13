@@ -120,7 +120,7 @@ public class NotificationHelper {
                 msg.setProducerReference(producerRef);
             }
             
-            notifyPayload.addNotificationMessage(msg);
+            //notifyPayload.addNotificationMessage(msg);
 
         } catch (WsnbException e) {
             throw new NotificationException(e);
