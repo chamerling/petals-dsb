@@ -4,7 +4,9 @@
 package org.petalslink.dsb.jbi;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,7 +18,9 @@ import javax.jbi.messaging.MessageExchangeFactory;
 import javax.jbi.messaging.MessagingException;
 import javax.jbi.messaging.NormalizedMessage;
 import javax.xml.namespace.QName;
+import javax.xml.parsers.DocumentBuilder;
 
+import org.ow2.petals.commons.threadlocal.DocumentBuilders;
 import org.ow2.petals.jbi.component.context.ComponentContext;
 import org.ow2.petals.kernel.api.service.Location;
 import org.petalslink.dsb.api.ServiceEndpoint;
@@ -27,6 +31,7 @@ import org.petalslink.dsb.service.client.Message;
 import org.petalslink.dsb.service.client.MessageListener;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentFragment;
+import org.w3c.dom.Element;
 
 /**
  * Send messages through JBI
@@ -36,6 +41,16 @@ import org.w3c.dom.DocumentFragment;
  */
 public class JBISender implements Client {
 
+    public static final String PROTOCOL_HEADERS = "javax.jbi.messaging.protocol.headers";
+
+    public static final String NAMESPACE_URI = "http://www.w3.org/2005/08/addressing";
+
+    public static final String PREFIX = "wsa";
+
+    public static final QName TO_QNAME = new QName(NAMESPACE_URI, "To", PREFIX);
+    
+    public static final QName ADDRESS_QNAME = new QName(NAMESPACE_URI, "Address", PREFIX);
+
     private ComponentContext componentContext;
 
     private Logger logger;
@@ -43,7 +58,7 @@ public class JBISender implements Client {
     private MessageExchangeFactory messageExchangeFactory;
 
     private ServiceEndpoint serviceEndpoint;
-    
+
     private String name;
 
     /**
@@ -125,10 +140,17 @@ public class JBISender implements Client {
         } else {
             // exception to handle
         }
-        
+
+        // set the addressing stuff
+        Map<QName, String> addressing = getAddressing(message);
+        if (addressing.size() > 0) {
+            setInAddressing(normalizedMessage, addressing);
+        }
+
         // FIXME : Check that null check!!!
         // if cleanendpoint is set to true, ask the dsb to check the registry to
-        // fiind the endpoint, else set the current one... We also need to set the location...
+        // fiind the endpoint, else set the current one... We also need to set
+        // the location...
         if (!Boolean.parseBoolean(message.getProperty(Constants.CLIENT_CLEAN_ENDPOINT))) {
             // do we need to set the endpoit or not? It is up to the caller to
             // set that; For example, the core kernel service client need to set
@@ -210,7 +232,7 @@ public class JBISender implements Client {
                     // close the sent exchange
                     messageExchange.setStatus(ExchangeStatus.DONE);
                     this.componentContext.getDeliveryChannel().send(messageExchange);
-                    
+
                     // create the response
                     if (normalizedMessage != null) {
                         return Adapter.transform(normalizedMessage);
@@ -233,8 +255,10 @@ public class JBISender implements Client {
         }
 
     }
-    
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.petalslink.dsb.service.client.Client#getName()
      */
     public String getName() {
@@ -257,9 +281,123 @@ public class JBISender implements Client {
         }
         return result;
     }
-    
+
     public ComponentContext getComponentContext() {
         return this.componentContext;
+    }
+
+    protected Map<QName, String> getAddressing(Message message) {
+        Map<QName, String> result = new HashMap<QName, String>();
+        if (message != null && message.getProperties() != null) {
+            // get all the addressing parameters from the message properties...
+            Map<String, String> props = message.getProperties();
+            if (props.get(TO_QNAME.toString()) != null) {
+                result.put(TO_QNAME, props.get(TO_QNAME.toString()));
+            }
+        }
+        return result;
+    }
+
+    /**
+     * @param addressing
+     * 
+     */
+    private void setInAddressing(NormalizedMessage message, Map<QName, String> addressing) {
+        // get the protocol headers map
+        final Object o = message.getProperty(PROTOCOL_HEADERS);
+
+        // clone: The constructor HashMap(Map) clones each element
+        final Map<QName, String> remains = new HashMap<QName, String>(addressing);
+
+        Map<String, DocumentFragment> headers = null;
+        // replace data from existing map
+        if (o != null && o instanceof Map) {
+            headers = (Map<String, DocumentFragment>) o;
+            // get the addressing Document Fragment and replace things if
+            // exists, else create new fragment and insert...
+            for (final Map.Entry<QName, String> entry : addressing.entrySet()) {
+                final QName key = entry.getKey();
+                final DocumentFragment destFrag = headers.get(key.toString());
+                if (destFrag != null && destFrag.getFirstChild() != null
+                        && destFrag.getFirstChild() instanceof Element) {
+                    destFrag.getFirstChild().setTextContent(entry.getValue());
+                    remains.remove(key);
+                }
+            }
+        } else {
+            // create map
+            headers = new HashMap<String, DocumentFragment>(remains.size());
+        }
+
+        // fill map with remaining data
+        for (final Map.Entry<QName, String> entry : remains.entrySet()) {
+            final QName key = entry.getKey();
+            final DocumentFragment df = getElement(key, entry.getValue());
+            if (df != null) {
+                headers.put(key.toString(), df);
+            }
+        }
+
+        // fill property
+        message.setProperty(PROTOCOL_HEADERS, headers);
+    }
+    
+    // FIXME : MUST BE IN A JBI COMMONS PROHECT
+
+    public static final DocumentFragment getElement(QName qname, String text) {
+        DocumentFragment result = null;
+        if (qname.equals(TO_QNAME)) {
+            result = getToFragment(text);
+        } else {
+            // TODO : To be continued
+        }
+        return result;
+    }
+
+    /**
+     * 
+     * @param text
+     * @return
+     */
+    public static final DocumentFragment getToFragment(String text) {
+        DocumentFragment result = createDocumentFragment(TO_QNAME);
+        result.getFirstChild().setTextContent(text);
+        result.normalize();
+        return result;
+    }
+
+    /**
+     * 
+     * @param content
+     * @return
+     */
+    protected static final Element createAddressElement(String content) {
+        final DocumentBuilder docBuilder = DocumentBuilders.getJvmDocumentBuilder();
+        final Document doc = docBuilder.newDocument();
+        QName address = ADDRESS_QNAME;
+        Element e = doc.createElementNS(address.getNamespaceURI(), address.getLocalPart());
+        e.setPrefix(address.getPrefix());
+        e.setTextContent(content);
+        e.normalize();
+        return e;
+    }
+
+    /**
+     * 
+     * @param documentName
+     * @return
+     */
+    protected static final DocumentFragment createDocumentFragment(QName documentName) {
+        DocumentFragment result = null;
+        final DocumentBuilder docBuilder = DocumentBuilders.getJvmDocumentBuilder();
+        final Document doc = docBuilder.newDocument();
+        final Element elt = doc.createElementNS(documentName.getNamespaceURI(),
+                documentName.getLocalPart());
+        elt.setPrefix(documentName.getPrefix());
+        result = doc.createDocumentFragment();
+        result.appendChild(doc.importNode(elt, true));
+        result.normalize();
+        return result;
     }
 
 }
