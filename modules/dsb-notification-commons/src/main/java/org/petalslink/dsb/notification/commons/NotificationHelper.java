@@ -149,6 +149,7 @@ public class NotificationHelper {
                     NotificationConstants.DIALECT_CONCRETE);
             filter.addTopicExpression(topicExpression);
             result.setFilter(filter);
+            
         } catch (WsnbException e) {
             throw new NotificationException(e);
         }

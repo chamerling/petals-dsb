@@ -40,8 +40,8 @@ public class PropertiesConfigurationProducer implements ConfigurationProducer {
      * @see org.petalslink.dsb.notification.commons.api.ConfigurationProducer#
      * getSubscribe()
      */
-    public List<Subscribe> getSubscribe() {
-        List<Subscribe> result = new ArrayList<Subscribe>();
+    public Map<String, Subscribe> getSubscribe() {
+        Map<String, Subscribe> result = new HashMap<String, Subscribe>();
 
         // get all the names
         if (properties == null) {
@@ -52,7 +52,7 @@ public class PropertiesConfigurationProducer implements ConfigurationProducer {
         for (String string : keys) {
             Subscribe subscribe = load(properties, string);
             if (subscribe != null) {
-                result.add(subscribe);
+                result.put(string, subscribe);
             }
         }
 
@@ -86,7 +86,7 @@ public class PropertiesConfigurationProducer implements ConfigurationProducer {
      */
     private Subscribe load(Map<String, String> map) {
         Subscribe result = null;
-        String url = map.get("subscriber");
+        String url = map.get("consumerReference");
         String topic = map.get("topicName");
         String topicPrefix = map.get("topicPrefix");
         String topicURI = map.get("topicURI");
@@ -118,6 +118,10 @@ public class PropertiesConfigurationProducer implements ConfigurationProducer {
             }
         }
         return result;
+    }
+
+    public String getProperty(String key, String name) {
+        return properties.getProperty(key + "." + name);
     }
 
 }

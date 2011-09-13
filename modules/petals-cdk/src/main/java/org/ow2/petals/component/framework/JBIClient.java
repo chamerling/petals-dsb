@@ -22,6 +22,7 @@ import org.ow2.petals.component.framework.message.ExchangeImpl;
 import org.petalslink.dsb.service.client.Client;
 import org.petalslink.dsb.service.client.ClientException;
 import org.petalslink.dsb.service.client.Message;
+import org.petalslink.dsb.service.client.MessageImpl;
 import org.petalslink.dsb.service.client.MessageListener;
 import org.w3c.dom.Document;
 
@@ -100,46 +101,9 @@ public class JBIClient implements Client {
     }
 
     protected Message createOutMessage(final Document out) {
-        return new Message() {
-
-            public Document getPayload() {
-                return out;
-            }
-
-            public QName getOperation() {
-                return null;
-            }
-
-            public Map<String, String> getProperties() {
-                return null;
-            }
-
-            public Map<String, Document> getHeaders() {
-                return null;
-            }
-
-            public QName getService() {
-                return null;
-            }
-
-            public QName getInterface() {
-                return null;
-            }
-
-            public String getEndpoint() {
-                return null;
-            }
-
-            public String getProperty(String name) {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            public void setProperty(String name, String value) {
-                // TODO Auto-generated method stub
-                
-            }
-        };
+        Message message = new MessageImpl();
+        message.setPayload(out);
+        return message;
     }
 
     /**

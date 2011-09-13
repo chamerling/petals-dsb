@@ -41,12 +41,13 @@ import org.ow2.petals.component.framework.util.UtilFactory;
 import org.ow2.petals.component.framework.util.XMLUtil;
 import org.petalslink.dsb.notification.commons.PropertiesConfigurationProducer;
 import org.petalslink.dsb.notification.commons.api.ConfigurationProducer;
+import org.petalslink.dsb.service.client.Message;
+import org.petalslink.dsb.service.client.WSAMessageImpl;
 import org.w3c.dom.Document;
 
+import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.WsnbConstants;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Subscribe;
-import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.utils.WsnbException;
 import com.ebmwebsourcing.wsstar.wsnb.services.impl.util.Wsnb4ServUtils;
-import com.ebmwebsourcing.wsstar.wsrfbf.services.faults.AbsWSStarFault;
 
 /**
  * The dsb-wsn-jbise Binding Component.
@@ -136,8 +137,15 @@ public class Component extends PetalsBindingComponent {
     protected void doStart() throws JBIException {
         activateWSNEndpoints();
 
-        // create default subscribers...
+        createSubscribers();
+    }
 
+    /**
+     * 
+     */
+    protected void createSubscribers() {
+        // create default subscribers, ie automatically subscribe to myself for
+        // others...
         // look if we have some configuration about subscribers...
         URL subscribers = Component.class.getClassLoader().getResource("subscribers.cfg");
 
@@ -154,13 +162,13 @@ public class Component extends PetalsBindingComponent {
 
         if (subscriberProps != null) {
             ConfigurationProducer producers = new PropertiesConfigurationProducer(subscriberProps);
-            List<Subscribe> toSubscribe = producers.getSubscribe();
-            for (Subscribe subscribe : toSubscribe) {
+            Map<String, Subscribe> toSubscribe = producers.getSubscribe();
+            for (String key : toSubscribe.keySet()) {
                 // let's subscribe...
                 try {
                     final com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.SubscribeResponse subscribeResponse = getNotificationEngine()
                             .getNotificationManager().getNotificationProducerEngine()
-                            .subscribe(subscribe);
+                            .subscribe(toSubscribe.get(key));
 
                     if (getLogger().isLoggable(Level.INFO)) {
                         getLogger().info("Subscribe response");

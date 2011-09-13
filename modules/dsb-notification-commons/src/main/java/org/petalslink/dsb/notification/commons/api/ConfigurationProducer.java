@@ -3,7 +3,7 @@
  */
 package org.petalslink.dsb.notification.commons.api;
 
-import java.util.List;
+import java.util.Map;
 
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Subscribe;
 
@@ -16,6 +16,6 @@ import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Subs
  */
 public interface ConfigurationProducer {
 
-    List<Subscribe> getSubscribe();
+    Map<String, Subscribe> getSubscribe();
 
 }

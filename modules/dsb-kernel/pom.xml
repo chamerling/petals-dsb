@@ -72,6 +72,13 @@
 			<version>${project.version}</version>
 		</dependency>
 		
+		<!--  Notification -->
+		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>dsb-notification-commons</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
 		<!-- For GMS -->
 		<dependency>
 			<groupId>org.petalslink.gms</groupId>
