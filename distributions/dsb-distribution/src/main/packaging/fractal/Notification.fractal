@@ -25,6 +25,9 @@
 	<component name="NotificationManagerService" definition="org.petalslink.dsb.kernel.pubsub.service.NotificationManagerServiceImpl"/>
 	<component name="NotificationConfiguration" definition="org.petalslink.dsb.kernel.pubsub.service.FileNotificationConfigurationImpl"/>
 	
+	<!-- Bootstrap -->
+	<component name="NotificationBootstrap" definition="org.petalslink.dsb.kernel.wsn.NotificationBootstrapImpl"/>
+	
 	<!-- bindings -->
 	<!-- internal -->
 	<binding client="NotificationConfiguration.configuration" server="this.configuration"/>
