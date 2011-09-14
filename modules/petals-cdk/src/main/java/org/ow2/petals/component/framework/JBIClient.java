@@ -68,8 +68,10 @@ public class JBIClient implements Client {
         // create a internal message from the given one...
         // this is a send operation
         try {
+            
+            // assume that this is a inonly message...
             MessageExchange messageExchange = this.messageExchangeFactory
-                    .createInOptionalOutExchange();
+                    .createInOnlyExchange();
             this.send(message, new ExchangeImpl(messageExchange), message.getOperation(), false);
         } catch (MessagingException e) {
             throw new ClientException(e);

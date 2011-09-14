@@ -22,4 +22,13 @@ public interface PollingTransport {
      */
     Document send(Document inputMessage, ServiceInformation service) throws PollerException;
 
+    /**
+     * Send a InOnly message
+     * 
+     * @param inputMessage
+     * @param service
+     * @throws PollerException
+     */
+    void fireAndForget(Document inputMessage, ServiceInformation service) throws PollerException;
+
 }

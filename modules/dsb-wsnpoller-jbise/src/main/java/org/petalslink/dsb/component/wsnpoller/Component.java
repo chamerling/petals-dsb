@@ -86,7 +86,7 @@ public class Component extends PetalsBindingComponent implements PollingTranspor
 
         Exchange exchange = null;
         try {
-            exchange = this.createMessageExchange();
+            exchange = this.createMessageExchange(MEPConstants.IN_OUT_PATTERN);
             exchange.setInMessageContent(inputMessage);
             exchange.setOperation(service.operation);
             exchange.setService(service.service);
@@ -121,12 +121,70 @@ public class Component extends PetalsBindingComponent implements PollingTranspor
 
         return this.processResponse(exchange);
     }
+    
+    /* (non-Javadoc)
+     * @see org.petalslink.dsb.service.poller.api.PollingTransport#fireAndForget(org.w3c.dom.Document, org.petalslink.dsb.service.poller.api.ServiceInformation)
+     */
+    public void fireAndForget(Document inputMessage, ServiceInformation service)
+            throws PollerException {
+        if (this.getLogger().isLoggable(Level.FINE)) {
+            this.getLogger().fine("Sending a message through the JBI channel...");
+            this.getLogger().fine("Destination is " + service);
+            try {
+                Source source = new javax.xml.transform.dom.DOMSource(inputMessage);
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                TransformerFactory.newInstance().newTransformer()
+                        .transform(source, new StreamResult(outputStream));
+                this.getLogger().fine("Input message is : " + outputStream.toString());
+            } catch (Exception e) {
+                this.getLogger()
+                        .log(Level.FINE, "Error while creating DOM as String", e.getCause());
+            }
+        }
 
-    protected org.ow2.petals.component.framework.api.message.Exchange createMessageExchange()
+        Exchange exchange = null;
+        try {
+            exchange = this.createMessageExchange(MEPConstants.IN_ONLY_PATTERN);
+            exchange.setInMessageContent(inputMessage);
+            exchange.setOperation(service.operation);
+            exchange.setService(service.service);
+            exchange.setInterfaceName(service.itf);
+
+        } catch (final Exception e) {
+            final String errorMsg = "Error while transforming request to JBI MessageExchange";
+            if (this.getLogger().isLoggable(Level.FINE)) {
+                this.getLogger().log(Level.FINE, errorMsg, e);
+            }
+            throw new PollerException(errorMsg, e);
+        }
+
+        boolean sent = false;
+        try {
+            sent = this.getChannel().sendSync(((ExchangeImpl) exchange).getMessageExchange());
+        } catch (final MessagingException e) {
+            final String errorMsg = "Error while sending message through JBI NMR.";
+            if (this.getLogger().isLoggable(Level.FINE)) {
+                this.getLogger().log(Level.FINE, errorMsg, e);
+            }
+            throw new PollerException(errorMsg, e);
+        }
+
+        if (!sent) {
+            String errorMsg = "A timeout occurs calling the consumed service.";
+            if (this.getLogger().isLoggable(Level.FINE)) {
+                this.getLogger().log(Level.FINE, errorMsg);
+            }
+            throw new PollerException(errorMsg);
+        }
+
+        this.processResponse(exchange);
+    }
+
+    protected org.ow2.petals.component.framework.api.message.Exchange createMessageExchange(MEPConstants mep)
             throws MessagingException {
         MessageExchangeFactory factory = this.getChannel().createExchangeFactory();
         final MessageExchange exchange = factory
-                .createExchange(MEPConstants.IN_OUT_PATTERN.value());
+                .createExchange(mep.value());
         return new ExchangeImpl(exchange);
     }
 
@@ -163,7 +221,8 @@ public class Component extends PetalsBindingComponent implements PollingTranspor
                         try {
                             result = exchange.getOutMessageContentAsDocument();
                         } catch (MessagingException e) {
-                            throw new PollerException(e.getMessage());
+                            // the message can be null if it is inonly message...
+                            // throw new PollerException(e.getMessage());
                         }
                     }
                 } else if (exchange.getFault() != null) {

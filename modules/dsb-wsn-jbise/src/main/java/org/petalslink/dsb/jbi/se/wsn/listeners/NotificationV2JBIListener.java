@@ -16,6 +16,7 @@ import org.ow2.petals.component.framework.api.exception.PEtALSCDKException;
 import org.ow2.petals.component.framework.api.message.Exchange;
 import org.ow2.petals.component.framework.listener.AbstractJBIListener;
 import org.ow2.petals.component.framework.util.UtilFactory;
+import org.ow2.petals.component.framework.util.XMLUtil;
 import org.petalslink.dsb.jbi.se.wsn.AddressingHelper;
 import org.petalslink.dsb.jbi.se.wsn.Component;
 import org.petalslink.dsb.jbi.se.wsn.Constants;
@@ -56,8 +57,9 @@ public abstract class NotificationV2JBIListener extends AbstractJBIListener {
 
         // bypass the old stuff and add new one...
         if (getLogger().isLoggable(Level.FINE)) {
-            getLogger().fine(String.format("We have a notification message with operation '%s'",
-                    exchange.getOperation()));
+            getLogger().fine(
+                    String.format("We have a notification message with operation '%s'",
+                            exchange.getOperation()));
         }
 
         NotificationEngine engine = getNotificationEngine();
@@ -108,6 +110,18 @@ public abstract class NotificationV2JBIListener extends AbstractJBIListener {
                     // need to use some WS-Addressing based stuff to send
                     // notifications.
                     normalizedMessage = exchange.getInMessage();
+                    document = UtilFactory.getSourceUtil().createDocument(
+                            normalizedMessage.getContent());
+
+                    if (getLogger().isLoggable(Level.FINE)) {
+                        try {
+                            getLogger().fine(
+                                    "Input message : " + com.ebmwebsourcing.easycommons.xml.XMLHelper
+                                    .createStringFromDOMDocument(document));
+                        } catch (TransformerException e) {
+                            e.printStackTrace();
+                        }
+                    }
 
                     if (WsnbConstants.SUBSCRIBE_NAME.equals(exchange.getOperation().getLocalPart())) {
                         document = UtilFactory.getSourceUtil().createDocument(
@@ -189,25 +203,20 @@ public abstract class NotificationV2JBIListener extends AbstractJBIListener {
 
                     } else if (WsnbConstants.NOTIFY_NAME.equals(exchange.getOperation()
                             .getLocalPart())) {
-                        document = UtilFactory.getSourceUtil().createDocument(
-                                normalizedMessage.getContent());
-
+                        
                         com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Notify notify = RefinedWsnbFactory
                                 .getInstance().getWsnbReader().readNotify(document);
-
+                        
                         final List<com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.NotificationMessageHolderType> notificationMessageList = notify
                                 .getNotificationMessage();
-
+                        
                         if (notificationMessageList == null || notificationMessageList.size() != 1) {
                             exchange.setError(new Exception(
                                     "The CDK need one and only one notification message"));
-                        } else if (notificationMessageList.get(0).getSubscriptionReference() != null) {
-                            address = notificationMessageList.get(0).getSubscriptionReference()
-                                    .getAddress();
                         }
-
+                        
                         engine.getNotificationConsumerEngine().notify(notify);
-
+                        
                     } else if (WsnbConstants.UNSUBSCRIBE_NAME.equals(exchange.getOperation()
                             .getLocalPart())) {
                         document = UtilFactory.getSourceUtil().createDocument(

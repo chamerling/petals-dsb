@@ -121,6 +121,13 @@ public class Component extends PetalsBindingComponent implements PollingTranspor
 
         return this.processResponse(exchange);
     }
+    
+    /* (non-Javadoc)
+     * @see org.petalslink.dsb.service.poller.api.PollingTransport#fireAndForget(org.w3c.dom.Document, org.petalslink.dsb.service.poller.api.ServiceInformation)
+     */
+    public void fireAndForget(Document inputMessage, ServiceInformation service)
+            throws PollerException {
+    }
 
     protected org.ow2.petals.component.framework.api.message.Exchange createMessageExchange()
             throws MessagingException {

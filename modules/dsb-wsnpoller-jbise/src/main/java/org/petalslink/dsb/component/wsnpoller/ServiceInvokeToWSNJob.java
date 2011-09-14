@@ -62,6 +62,7 @@ public class ServiceInvokeToWSNJob implements Job {
             throw new PollerException("Can not find a message transport in the context");
         }
 
+        // send the initial message to the service to poll...
         Document result = transport.send(context.getInputMessage(), serviceInformation);
 
         if (logger.isDebugEnabled()) {
@@ -101,7 +102,8 @@ public class ServiceInvokeToWSNJob implements Job {
                     }
                 }
 
-                transport.send(doc, context.getResponseTo());
+                // send the message to a notify, no response needed...
+                transport.fireAndForget(doc, context.getResponseTo());
 
             } catch (Exception e) {
                 if (logger.isWarnEnabled()) {

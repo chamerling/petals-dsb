@@ -15,10 +15,8 @@ import javax.xml.transform.TransformerException;
 import org.ow2.easywsdl.wsdl.api.WSDLException;
 import org.ow2.petals.component.framework.AbstractComponent;
 import org.ow2.petals.component.framework.ComponentWsdl;
-import org.ow2.petals.component.framework.api.Constants;
 import org.ow2.petals.component.framework.api.Wsdl;
 import org.ow2.petals.component.framework.util.UtilFactory;
-import org.petalslink.dsb.api.WSAConstants;
 import org.petalslink.dsb.notification.commons.AbstractNotificationSender;
 import org.petalslink.dsb.notification.commons.NotificationException;
 import org.petalslink.dsb.notification.commons.NotificationManagerImpl;
@@ -26,7 +24,8 @@ import org.petalslink.dsb.notification.commons.api.NotificationManager;
 import org.petalslink.dsb.notification.service.NotificationProducerRPService;
 import org.petalslink.dsb.service.client.Client;
 import org.petalslink.dsb.service.client.ClientException;
-import org.petalslink.dsb.service.client.MessageImpl;
+import org.petalslink.dsb.service.client.Message;
+import org.petalslink.dsb.service.client.WSAMessageImpl;
 import org.w3c.dom.Document;
 
 import com.ebmwebsourcing.easycommons.xml.XMLHelper;
@@ -103,34 +102,26 @@ public class NotificationEngine {
             protected void doNotify(Notify notify, String producerAddress,
                     EndpointReferenceType currentConsumerEdp, String subscriptionId, QName topic,
                     String dialect) throws NotificationException {
+
+                if (currentConsumerEdp == null || currentConsumerEdp.getAddress() == null
+                        || currentConsumerEdp.getAddress().getValue() == null) {
+                    // no address found...
+                    logger.fine("No address found, do not send notification");
+                    return;
+                }
+                
                 if (logger.isLoggable(Level.FINE)) {
                     logger.fine("Need to send the message to a subscriber which is : "
                             + currentConsumerEdp.getAddress().getValue());
                 }
 
-                if (currentConsumerEdp == null || currentConsumerEdp.getAddress() == null
-                        || currentConsumerEdp.getAddress().getValue() == null) {
-                    // no address found...
-                    return;
-                }
-
                 // we use a WSA endpoint to send the notification...
                 // extract data from address
                 URI uri = currentConsumerEdp.getAddress().getValue();
-                String ns = null;
-                String serviceName = null;
-                String interfaceName = null;
-                String ep = null;
-                String address = null;
+                Message message = null;
 
                 if (AddressingHelper.isExternalService(uri)) {
-                    // use WSA
-                    ns = String.format(WSAConstants.NS_TEMPLATE, uri.getScheme());
-                    serviceName = WSAConstants.SERVICE_NAME;
-                    interfaceName = WSAConstants.INTERFACE_NAME;
-                    ep = WSAConstants.ENDPOINT_NAME;
-                    // address = AddressingHelper.getInitialAddress(uri);
-                    address = uri.toString();
+                    message = new WSAMessageImpl(uri.toString());
                 } else {
                     System.out.println("Internal service : TODO NotificationEngine class!");
                     return;
@@ -144,23 +135,12 @@ public class NotificationEngine {
                     // TODO how to define internal addresses???
                 }
 
-                final QName service = new QName(ns, serviceName);
-                final QName interfaceQName = new QName(ns, interfaceName);
-                final String endpoint = ep;
-                final String to = address;
-
                 try {
                     final Document payload = Wsnb4ServUtils.getWsnbWriter()
                             .writeNotifyAsDOM(notify);
 
-                    MessageImpl message = new MessageImpl();
-                    message.setService(service);
                     message.setPayload(payload);
-                    message.setEndpoint(endpoint);
-                    message.setInterface(interfaceQName);
                     message.setOperation(WsnbConstants.NOTIFY_QNAME);
-                    message.setProperty(Constants.WSStar.Addressing.TO_QNAME.toString(), to);
-
                     client.fireAndForget(message);
                 } catch (ClientException e) {
                     e.printStackTrace();
