@@ -4,8 +4,7 @@
 package org.petalslink.dsb.kernel.wsnpoller;
 
 import java.text.ParseException;
-
-import javax.xml.namespace.QName;
+import java.util.List;
 
 import org.objectweb.fractal.fraclet.annotation.annotations.FractalComponent;
 import org.objectweb.fractal.fraclet.annotation.annotations.Interface;
@@ -22,6 +21,7 @@ import org.petalslink.dsb.servicepoller.api.ServicePollerException;
 import org.petalslink.dsb.servicepoller.api.ServicePollerInformation;
 import org.petalslink.dsb.servicepoller.api.WSNPoller;
 import org.petalslink.dsb.servicepoller.api.WSNPollerService;
+import org.petalslink.dsb.servicepoller.api.WSNPollerServiceInformation;
 
 /**
  * This is the exposed service for polling external services and sending WSN
@@ -120,6 +120,13 @@ public class ServicePollerServiceImpl implements WSNPollerService {
         }
         return this.getAdapter().start(toPoll, inputMessage, cronExpression, replyTo, topicName,
                 topicURI, topicPrefix);
+    }
+    
+    /* (non-Javadoc)
+     * @see org.petalslink.dsb.servicepoller.api.WSNPollerService#getInformation()
+     */
+    public List<WSNPollerServiceInformation> getInformation() {
+        return this.getAdapter().getInformation();
     }
 
 }

@@ -3,6 +3,8 @@
  */
 package org.petalslink.dsb.kernel.wsnpoller;
 
+import java.util.List;
+
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -12,6 +14,7 @@ import org.petalslink.dsb.servicepoller.api.ServicePollerException;
 import org.petalslink.dsb.servicepoller.api.ServicePollerInformation;
 import org.petalslink.dsb.servicepoller.api.WSNPoller;
 import org.petalslink.dsb.servicepoller.api.WSNPollerService;
+import org.petalslink.dsb.servicepoller.api.WSNPollerServiceInformation;
 import org.w3c.dom.Document;
 
 /**
@@ -101,5 +104,12 @@ public class ServicePollerServiceAdapter implements WSNPollerService {
             throw new ServicePollerException("ID can not be null");
         }
         return bean.resume(id);
+    }
+    
+    /* (non-Javadoc)
+     * @see org.petalslink.dsb.servicepoller.api.WSNPollerService#getInformation()
+     */
+    public List<WSNPollerServiceInformation> getInformation() {
+        return bean.getInformation();
     }
 }

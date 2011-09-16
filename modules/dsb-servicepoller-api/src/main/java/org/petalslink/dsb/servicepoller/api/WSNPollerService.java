@@ -3,10 +3,11 @@
  */
 package org.petalslink.dsb.servicepoller.api;
 
+import java.util.List;
+
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
-import javax.xml.namespace.QName;
 
 /**
  * @author chamerling
@@ -23,7 +24,10 @@ public interface WSNPollerService {
             @WebParam(name = "topicName") String topicName,
             @WebParam(name = "topicURI") String topicURI,
             @WebParam(name = "topicPrefix") String topicPrefix) throws ServicePollerException;
-
+    
+    @WebMethod
+    List<WSNPollerServiceInformation> getInformation();
+    
     /**
      * 
      * @param id

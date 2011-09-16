@@ -6,7 +6,9 @@ package org.petalslink.dsb.kernel.wsnpoller;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -29,9 +31,11 @@ import org.ow2.petals.kernel.api.server.PetalsException;
 import org.ow2.petals.tools.generator.commons.Constants;
 import org.ow2.petals.tools.generator.jbi.api.JBIGenerationException;
 import org.ow2.petals.util.LoggingUtil;
+import org.ow2.petals.util.XMLUtil;
 import org.petalslink.dsb.servicepoller.api.ServicePollerException;
 import org.petalslink.dsb.servicepoller.api.ServicePollerInformation;
 import org.petalslink.dsb.servicepoller.api.WSNPoller;
+import org.petalslink.dsb.servicepoller.api.WSNPollerServiceInformation;
 import org.petalslink.dsb.tools.generator.wsnpoller2jbi.Poller2Jbi;
 import org.w3c.dom.Document;
 
@@ -262,6 +266,36 @@ public class ServicePollerManagerImpl implements WSNPoller {
         ServicePollerInformation replyTo;
 
         QName topic;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.petalslink.dsb.servicepoller.api.WSNPoller#getInformation()
+     */
+    public List<WSNPollerServiceInformation> getInformation() {
+        List<WSNPollerServiceInformation> result = new ArrayList<WSNPollerServiceInformation>(
+                cache.size());
+        for (String key : cache.keySet()) {
+            PollerInformation pollerInformation = this.cache.get(key);
+            WSNPollerServiceInformation info = new WSNPollerServiceInformation();
+            info.setCronExpression(pollerInformation.cronExpression);
+            try {
+                info.setInputMessage(XMLUtil
+                        .createStringFromDOMDocument(pollerInformation.inputMessage));
+            } catch (Exception e) {
+            }
+            info.setReplyTo(pollerInformation.replyTo);
+            if (pollerInformation.topic != null) {
+                info.setTopicName(pollerInformation.topic.getLocalPart());
+                info.setTopicPrefix(pollerInformation.topic.getPrefix());
+                info.setTopicURI(pollerInformation.topic.getNamespaceURI());
+                info.setToPoll(pollerInformation.toPoll);
+            }
+            info.setId(key);
+            result.add(info);
+        }
+        return result;
     }
 
 }

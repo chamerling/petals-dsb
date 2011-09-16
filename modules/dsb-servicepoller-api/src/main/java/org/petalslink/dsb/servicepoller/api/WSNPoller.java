@@ -3,6 +3,8 @@
  */
 package org.petalslink.dsb.servicepoller.api;
 
+import java.util.List;
+
 import javax.xml.namespace.QName;
 
 import org.w3c.dom.Document;
@@ -30,6 +32,12 @@ public interface WSNPoller {
      */
     String start(ServicePollerInformation toPoll, Document inputMessage, String cronExpression,
             ServicePollerInformation replyTo, QName topic) throws ServicePollerException;
+    
+    /**
+     * 
+     * @return
+     */
+    List<WSNPollerServiceInformation> getInformation();
 
     /**
      * 
