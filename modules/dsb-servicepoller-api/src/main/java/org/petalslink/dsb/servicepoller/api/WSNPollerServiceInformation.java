@@ -3,13 +3,17 @@
  */
 package org.petalslink.dsb.servicepoller.api;
 
-import javax.jws.WebParam;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  * @author chamerling
  * 
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType
 public class WSNPollerServiceInformation {
 
     @XmlElement(name = "toPoll")
