@@ -3,6 +3,8 @@
  */
 package org.petalslink.dsb.servicepoller.client;
 
+import java.util.List;
+
 import javax.xml.namespace.QName;
 
 import org.petalslink.dsb.cxf.CXFHelper;
@@ -12,6 +14,7 @@ import org.petalslink.dsb.servicepoller.api.ServicePollerInformation;
 import org.petalslink.dsb.servicepoller.api.Utils;
 import org.petalslink.dsb.servicepoller.api.WSNPoller;
 import org.petalslink.dsb.servicepoller.api.WSNPollerService;
+import org.petalslink.dsb.servicepoller.api.WSNPollerServiceInformation;
 import org.w3c.dom.Document;
 
 /**
@@ -86,5 +89,12 @@ public class WSNPollerClient implements WSNPoller {
             client = CXFHelper.getClient(address, WSNPollerService.class);
         }
         return this.client;
+    }
+
+    /* (non-Javadoc)
+     * @see org.petalslink.dsb.servicepoller.api.WSNPoller#getInformation()
+     */
+    public List<WSNPollerServiceInformation> getInformation() {
+        return getWSClient().getInformation();
     }
 }
