@@ -41,13 +41,15 @@ import org.ow2.petals.jbi.messaging.registry.RegistryException;
 import org.ow2.petals.kernel.api.service.ServiceEndpoint;
 import org.ow2.petals.util.LoggingUtil;
 import org.petalslink.dsb.kernel.Constants;
+import org.petalslink.dsb.kernel.api.DSBConfigurationService;
 import org.petalslink.dsb.kernel.api.management.binder.BinderException;
 import org.petalslink.dsb.kernel.api.management.binder.NewServiceExposer;
 import org.petalslink.dsb.kernel.api.management.binder.ServiceExposer;
 import org.petalslink.dsb.kernel.api.management.binder.ServiceExposerRegistry;
 
-
 /**
+ * Exposes all the new endpoints as SOAP services.
+ * 
  * @author chamerling - eBM WebSourcing
  * 
  */
@@ -68,9 +70,12 @@ public class NewServiceExposerImpl implements NewServiceExposer {
 
     @Requires(name = "adminService", signature = AdminService.class)
     private AdminService adminService;
+    
+    @Requires(name = "dsbconfiguration", signature = DSBConfigurationService.class)
+    protected DSBConfigurationService configuration;
 
     private Map<String, ServiceEndpoint> exposedEndpoints;
-    
+
     private AtomicLong nbCalls = new AtomicLong(0);
 
     private final Object object = new Object();
@@ -93,16 +98,18 @@ public class NewServiceExposerImpl implements NewServiceExposer {
     public void expose() {
         long current = nbCalls.incrementAndGet();
         this.log.debug("Got a #expose call, waiting previous call to complete...");
-        this.log.debug("Waiting previous expose to complete (current call is '"+current+"')...");
+        this.log.debug("Waiting previous expose to complete (current call is '" + current + "')...");
         synchronized (this.object) {
-            this.log.debug("Seems that all previous tasks are complete (current call is '"+current+"'), let's go...");
-            this.log.debug("Let's expose new endpoints (current call is '"+current+"')!");
+            this.log.debug("Seems that all previous tasks are complete (current call is '"
+                    + current + "'), let's go...");
+            this.log.debug("Let's expose new endpoints (current call is '" + current + "')!");
             // wait if another thread is already calling this...
             try {
 
                 // TODO : Do not get all the endpoints but just endpoints which
                 // have been exposed with management API
-                List<org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint> endpoints = this.endpointRegistry.getEndpoints();
+                List<org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint> endpoints = this.endpointRegistry
+                        .getEndpoints();
 
                 for (org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint serviceEndpoint : endpoints) {
                     if (this.isNew(serviceEndpoint) && this.isPlatformService(serviceEndpoint)) {
@@ -147,7 +154,10 @@ public class NewServiceExposerImpl implements NewServiceExposer {
         if (!inCache) {
             // look at the service unit life cycles and to the consumes to see
             // if
-            // the service endpoint has already been exposed...
+            // the service endpoint has already been exposed by target given
+            // component...
+            String protocolName = getProtocolName(serviceEndpoint);
+            String targetComponent = configuration.getProtocolToComponentMapping().get(protocolName);
             Map<String, ServiceAssemblyLifeCycle> saLc = this.adminService.getServiceAssemblies();
             for (ServiceAssemblyLifeCycle serviceAssemblyLifeCycle : saLc.values()) {
                 List<ServiceUnitLifeCycle> sus = serviceAssemblyLifeCycle
@@ -169,12 +179,16 @@ public class NewServiceExposerImpl implements NewServiceExposer {
                             found = consumesDescriptor.getEndpointName().equals(
                                     serviceEndpoint.getEndpointName())
                                     && consumesDescriptor.getServiceName().equals(
-                                            serviceEndpoint.getServiceName());
+                                            serviceEndpoint.getServiceName())
+                                    && su.getTargetComponentName().equals(targetComponent);
                         }
                     }
                 }
 
                 if (found) {
+                    log.debug(String
+                            .format("Service endpoint %s has been found in the container, so this endpoint is not new",
+                                    this.getKey(serviceEndpoint)));
                     this.exposedEndpoints.put(this.getKey(serviceEndpoint), serviceEndpoint);
                     result = false;
                 }
@@ -232,10 +246,8 @@ public class NewServiceExposerImpl implements NewServiceExposer {
 
         if (protocolName == null) {
             if (this.log.isDebugEnabled()) {
-                this.log
-                        .debug("This endpoint '"
-                                + serviceEndpoint.getEndpointName()
-                                + "' can not be exposed since it has not be recognized as platform service");
+                this.log.debug("This endpoint '" + serviceEndpoint.getEndpointName()
+                        + "' can not be exposed since it has not be recognized as platform service");
             }
             return;
         }
@@ -246,7 +258,8 @@ public class NewServiceExposerImpl implements NewServiceExposer {
             try {
                 org.petalslink.dsb.ws.api.ServiceEndpoint ep = new org.petalslink.dsb.ws.api.ServiceEndpoint();
                 ep.setEndpoint(serviceEndpoint.getEndpointName());
-                if (serviceEndpoint.getInterfacesName() != null && serviceEndpoint.getInterfacesName().size() > 0) {
+                if (serviceEndpoint.getInterfacesName() != null
+                        && serviceEndpoint.getInterfacesName().size() > 0) {
                     ep.setItf(serviceEndpoint.getInterfacesName().get(0));
                 }
                 ep.setService(serviceEndpoint.getServiceName());
@@ -264,4 +277,13 @@ public class NewServiceExposerImpl implements NewServiceExposer {
         }
     }
 
+    public String getProtocolName(ServiceEndpoint serviceEndpoint) {
+        String protocolName = Constants.SOAP_SERVICE_EXPOSER;
+        if ((serviceEndpoint.getEndpointName() != null)
+                && serviceEndpoint.getEndpointName().startsWith(
+                        Constants.REST_PLATFORM_ENDPOINT_PREFIX)) {
+            protocolName = Constants.REST_SERVICE_EXPOSER;
+        }
+        return protocolName;
+    }
 }

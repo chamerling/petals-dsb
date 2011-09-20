@@ -88,6 +88,7 @@
 	<binding client="NewServiceExposer.registry" server="this.registry" />
 	<binding client="NewServiceExposer.exposer-registry" server="ServiceExposerRegistry.service" />
 	<binding client="NewServiceExposer.adminService" server="this.adminService" />
+	<binding client="NewServiceExposer.dsbconfiguration" server="DSBConfiguration.service" />
 
 	<binding client="ServicePoller.dsb-configuration" server="DSBConfiguration.service" />
 	<binding client="ServicePoller.new-service-exposer" server="NewServiceExposer.service" />
