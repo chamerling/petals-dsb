@@ -60,7 +60,9 @@ public class NotificationProducerServiceImpl implements INotificationProducer {
      */
     public GetCurrentMessageResponse getCurrentMessage(GetCurrentMessage getCurrentMessage)
             throws WsnbException, AbsWSStarFault {
-        System.out.println("Got a getCurrentMessage!");
+        if (log.isDebugEnabled()) {
+            log.debug("Got a getCurrentMessage message");
+        }
         return getINotificationProducer().getCurrentMessage(getCurrentMessage);
     }
 
@@ -74,7 +76,9 @@ public class NotificationProducerServiceImpl implements INotificationProducer {
      * )
      */
     public SubscribeResponse subscribe(Subscribe subscribe) throws WsnbException, AbsWSStarFault {
-        System.out.println("Got a subscribe!");
+        if (log.isDebugEnabled()) {
+            log.debug("Got a subscribe message");
+        }
         return getINotificationProducer().subscribe(subscribe);
     }
 

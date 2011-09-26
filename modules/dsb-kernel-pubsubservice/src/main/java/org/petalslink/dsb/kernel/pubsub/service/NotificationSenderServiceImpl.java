@@ -20,10 +20,17 @@ import org.w3c.dom.Document;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Notify;
 
 /**
- * Use this service to send notification to notification subscribers. This
- * service embeds the core engine which will get all the subscriptions. This
- * service is an internal one to be used by other DSB kernel services through
- * the NotificationCenter.
+ * Note : This is just a service if some need to use it with fractal. If not
+ * just get it from the Notification Center.
+ * 
+ * Use this service to send notification to notification subscribers from any
+ * kernel service. This service embeds the core engine which will get all the
+ * subscriptions. This service is an internal one to be used by other DSB kernel
+ * services through the NotificationCenter.<br>
+ * Usage :<br>
+ * <code>
+ * NotificationCenter.get().getSender();
+ * </code>
  * 
  * @author chamerling
  * 
@@ -39,9 +46,7 @@ public class NotificationSenderServiceImpl implements NotificationSender {
 
     @LifeCycle(on = LifeCycleType.START)
     protected void start() {
-        // set the notification sender in the notification center
         this.log = new LoggingUtil(this.logger);
-        NotificationCenter.get().setNotifificationSender(this);
     }
 
     @LifeCycle(on = LifeCycleType.STOP)
@@ -61,14 +66,32 @@ public class NotificationSenderServiceImpl implements NotificationSender {
                     "Sending a notification message to topic '%s' with dialect '%s'",
                     topic.toString(), dialect));
         }
-        System.out.println("Got a notify request, sending the message to the core engine...");
+        NotificationSender sender = NotificationCenter.get().getSender();
+        if (sender == null) {
+            throw new NotificationException(
+                    "Can not find the sender from the notification center, please check your configuration");
+        }
+        sender.notify(payload, topic, dialect);
     }
 
-    /* (non-Javadoc)
-     * @see org.petalslink.dsb.notification.commons.api.NotificationSender#notify(com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Notify)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.petalslink.dsb.notification.commons.api.NotificationSender#notify
+     * (com.
+     * ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Notify)
      */
     public void notify(Notify notify) throws NotificationException {
-        System.out.println("Got a notify request, sending the message to the core engine...");
+        if (log.isDebugEnabled()) {
+            log.debug(String
+                    .format("Got a notify request, sending the message to the core engine..."));
+        }
+        NotificationSender sender = NotificationCenter.get().getSender();
+        if (sender == null) {
+            throw new NotificationException(
+                    "Can not find the sender from the notification center, please check your configuration");
+        }
+        sender.notify(notify);
     }
-
 }

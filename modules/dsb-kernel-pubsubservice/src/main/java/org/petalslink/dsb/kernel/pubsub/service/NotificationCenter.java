@@ -32,12 +32,20 @@ public class NotificationCenter {
     protected void setNotifificationSender(NotificationSender sender) {
         this.sender = sender;
     }
+    
+    protected void setNotificationManager(NotificationManager manager) {
+        this.manager = manager;
+    }
 
     /**
      * @return the sender
      */
     public NotificationSender getSender() {
         return sender;
+    }
+    
+    public NotificationManager getManager() {
+        return this.manager;
     }
 
 }
