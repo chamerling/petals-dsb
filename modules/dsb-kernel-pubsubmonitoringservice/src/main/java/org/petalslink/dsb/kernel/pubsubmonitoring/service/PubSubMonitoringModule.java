@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
@@ -42,17 +43,23 @@ import org.petalslink.dsb.monitoring.api.ReportBean;
 import org.petalslink.dsb.monitoring.api.ReportListBean;
 import org.petalslink.dsb.notification.commons.NotificationException;
 import org.petalslink.dsb.notification.commons.api.NotificationSender;
+import org.petalslink.dsb.ws.api.PubSubMonitoringManager;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
 /**
+ * A routing module which allows to send notifications to the internal engines
+ * on different exchange steps with monitoring data inside...
+ * 
  * @author chamerling
  * 
  */
 @FractalComponent
 @Provides(interfaces = { @Interface(name = "monitoringSender", signature = SenderModule.class),
-        @Interface(name = "monitoringReceiver", signature = ReceiverModule.class) })
-public class PubSubMonitoringModule implements SenderModule, ReceiverModule {
+        @Interface(name = "monitoringReceiver", signature = ReceiverModule.class),
+        @Interface(name = "webservice", signature = PubSubMonitoringManager.class) })
+public class PubSubMonitoringModule implements SenderModule, ReceiverModule,
+        PubSubMonitoringManager {
 
     @Monolog(name = "logger")
     private Logger logger;
@@ -61,11 +68,10 @@ public class PubSubMonitoringModule implements SenderModule, ReceiverModule {
 
     private MonitoringNotificationSender sender;
 
-    static QName topic = new QName("http://www.petalslink.org/dsb/topicsns/", "MonitoringTopic",
-            "dsb");
-
     private final Map<String, Integer> map = Collections
             .synchronizedMap(new HashMap<String, Integer>());
+
+    private AtomicBoolean state = new AtomicBoolean(true);
 
     @LifeCycle(on = LifeCycleType.START)
     protected void start() {
@@ -81,6 +87,10 @@ public class PubSubMonitoringModule implements SenderModule, ReceiverModule {
             ComponentContext sourceComponentContext, MessageExchange exchange)
             throws RoutingException {
         this.log.call();
+
+        if (!state.get()) {
+            return;
+        }
 
         if (exchange.getMessage("in") != null
                 && exchange.getMessage("in").getProperty(Constants.MESSAGE_SKIP_MONITORING) != null) {
@@ -104,6 +114,10 @@ public class PubSubMonitoringModule implements SenderModule, ReceiverModule {
     public boolean receiveExchange(MessageExchange exchange, ComponentContext arg1)
             throws RoutingException {
 
+        if (!state.get()) {
+            return true;
+        }
+
         if (exchange.getMessage("in") != null
                 && exchange.getMessage("in").getProperty(Constants.MESSAGE_SKIP_MONITORING) != null) {
             return true;
@@ -126,13 +140,15 @@ public class PubSubMonitoringModule implements SenderModule, ReceiverModule {
     }
 
     private void sendReport(ReportListBean reports) throws Exception {
-        
+
+        // TODO : Another thread can do this asynchronously...
+
         // direct marshall to payload...
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         JAXBHelper.marshall(reports, bos);
         InputStream input = new ByteArrayInputStream(bos.toByteArray());
         DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        
+
         Document doc = builder.parse(input);
 
         NotificationSender sender = getMonitoringNotificationSender();
@@ -140,7 +156,10 @@ public class PubSubMonitoringModule implements SenderModule, ReceiverModule {
             log.error("Can not get notification sender...");
         } else {
             try {
-                sender.notify(doc, topic, "http://www.w3.org/TR/1999/REC-xpath-19991116");
+                sender.notify(
+                        doc,
+                        org.petalslink.dsb.kernel.pubsubmonitoring.service.Constants.MONITORING_TOPIC,
+                        "http://www.w3.org/TR/1999/REC-xpath-19991116");
             } catch (NotificationException e) {
                 e.printStackTrace();
             }
@@ -367,5 +386,36 @@ public class PubSubMonitoringModule implements SenderModule, ReceiverModule {
                     .getNotificationProducerEngine());
         }
         return sender;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.petalslink.dsb.kernel.pubsubmonitoring.service.Manager#getTopic()
+     */
+    public QName getTopic() {
+        return org.petalslink.dsb.kernel.pubsubmonitoring.service.Constants.MONITORING_TOPIC;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.petalslink.dsb.kernel.pubsubmonitoring.service.Manager#getState()
+     */
+    public boolean getState() {
+        return state.get();
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.petalslink.dsb.kernel.pubsubmonitoring.service.Manager#setState(boolean
+     * )
+     */
+    public void setState(boolean state) {
+        this.state.set(state);
     }
 }

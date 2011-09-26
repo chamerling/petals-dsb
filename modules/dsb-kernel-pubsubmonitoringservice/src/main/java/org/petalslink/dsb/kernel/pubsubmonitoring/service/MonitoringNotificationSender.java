@@ -14,6 +14,9 @@ import org.petalslink.dsb.service.client.MessageListener;
 import com.ebmwebsourcing.wsstar.wsnb.services.impl.engines.NotificationProducerEngine;
 
 /**
+ * Used to inject property in message to avoid to monitor myself ie monitoring
+ * message must not be monitored because it creates infinite loop...
+ * 
  * @author chamerling
  * 
  */
