@@ -45,7 +45,8 @@ import org.w3c.dom.DocumentFragment;
 
 /**
  * A client factory implementation which uses the DSB messaging mechanism to
- * send and receive messages.
+ * send and receive messages. It initialize itself and store itself into the
+ * {@link ClientFactoryRegistry}
  * 
  * @author chamerling
  * 
