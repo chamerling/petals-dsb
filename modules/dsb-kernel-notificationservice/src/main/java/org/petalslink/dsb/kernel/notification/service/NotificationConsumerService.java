@@ -24,6 +24,8 @@ import org.petalslink.dsb.soap.api.SimpleExchange;
 import com.ebmwebsourcing.wsstar.wsnb.services.INotificationConsumer;
 
 /**
+ * Exposes notification consumer as external web service
+ * 
  * @author chamerling
  * 
  */
