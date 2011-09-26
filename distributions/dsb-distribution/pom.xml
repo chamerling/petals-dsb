@@ -85,6 +85,13 @@
 			<version>${project.version}</version>
 			<type>war</type>
 		</dependency>
+		
+		<!-- Notification based monitoring -->
+		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>dsb-kernel-pubsubmonitoringservice</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
 		<!-- REST stuff -->
 		<dependency>

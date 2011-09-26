@@ -12,6 +12,9 @@
 	<component definition="org.petalslink.dsb.kernel.monitoring.service.listeners.ListenerManager" name="DSBListenerManager"/>
 	<component definition="org.petalslink.dsb.kernel.monitoring.service.routing.ModuleRegistration" name="ModuleRegistration"/>
 	
+	<!-- Notification based monitoring -->
+	<component definition="org.petalslink.dsb.kernel.pubsubmonitoring.service.PubSubMonitoringModule" name="PubSubMonitoringModule"/>
+	
 	<!-- Implementation dependent -->
 	<component definition="org.petalslink.dsb.kernel.service.easierbsm.EasierBSMClientFactory" name="DSBMonitoringClientFactory"/>
 	
@@ -33,6 +36,10 @@
 	<binding client="ModuleRegistration.receivermodule-100" server="DSBMonitoringRouterMonitoringModule.reportReceiver"/>
 	<binding client="ModuleRegistration.sendermodule-650" server="DSBMonitoringTimeStampMonitoringModule.timestampSender"/>
 	<binding client="ModuleRegistration.receivermodule-110" server="DSBMonitoringTimeStampMonitoringModule.timestampReceiver"/>
+	
+	<!-- Notification based monitoring -->
+	<binding client="ModuleRegistration.sendermodule-630" server="PubSubMonitoringModule.monitoringSender"/>
+	<binding client="ModuleRegistration.receivermodule-120" server="PubSubMonitoringModule.monitoringReceiver"/>
 	
 	<!-- Implementation dependent -->
 	<!-- Nothing...-->
