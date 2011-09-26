@@ -1,0 +1,86 @@
+/**
+ * 
+ */
+package org.petalslink.dsb.kernel.pubsubmonitoring.service;
+
+import org.petalslink.dsb.api.ServiceEndpoint;
+import org.petalslink.dsb.kernel.api.Constants;
+import org.petalslink.dsb.kernel.pubsub.service.DSBNotificationSender;
+import org.petalslink.dsb.service.client.Client;
+import org.petalslink.dsb.service.client.ClientException;
+import org.petalslink.dsb.service.client.Message;
+import org.petalslink.dsb.service.client.MessageListener;
+
+import com.ebmwebsourcing.wsstar.wsnb.services.impl.engines.NotificationProducerEngine;
+
+/**
+ * @author chamerling
+ * 
+ */
+public class MonitoringNotificationSender extends DSBNotificationSender {
+
+    Client client;
+
+    /**
+     * @param producer
+     */
+    public MonitoringNotificationSender(NotificationProducerEngine producer) {
+        super(producer);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.petalslink.dsb.notification.commons.AbstractNotificationSender#
+     * getProducerAddress()
+     */
+    @Override
+    protected String getProducerAddress() {
+        return "dsb://MonitoringNotifcationSender";
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.petalslink.dsb.kernel.pubsub.service.DSBNotificationSender#getClient
+     * (org.petalslink.dsb.api.ServiceEndpoint)
+     */
+    @Override
+    protected synchronized Client getClient(ServiceEndpoint se) {
+        if (client == null) {
+            // we create a client which can handle specific needs for
+            // monitoring.
+            // For example, we ant to add some properties to messages, etc...
+            final Client tmp = super.getClient(se);
+
+            Client result = new Client() {
+
+                public Message sendReceive(Message message) throws ClientException {
+                    message.setProperty(Constants.MESSAGE_SKIP_MONITORING, "true");
+                    return tmp.sendReceive(message);
+                }
+
+                public void sendAsync(Message message, MessageListener listener)
+                        throws ClientException {
+                    System.out.println("Send Async");
+                    message.setProperty(Constants.MESSAGE_SKIP_MONITORING, "true");
+                    tmp.sendAsync(message, listener);
+                }
+
+                public String getName() {
+                    return tmp.getName();
+                }
+
+                public void fireAndForget(Message message) throws ClientException {
+                    System.out.println("Fire and forget");
+                    message.setProperty(Constants.MESSAGE_SKIP_MONITORING, "true");
+                    tmp.fireAndForget(message);
+                }
+            };
+            client = result;
+        }
+        return client;
+    }
+
+}

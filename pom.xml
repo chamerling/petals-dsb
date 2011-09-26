@@ -117,6 +117,7 @@
 		<module>modules/dsb-monitoring-easierbsm-admin-jaxws</module>
 		<module>modules/dsb-eaiserbsm-connector</module>
 		<module>modules/dsb-kernel-easierbsmservice</module>
+		<module>modules/dsb-kernel-pubsubmonitoringservice</module>
 		
 		<!-- SOAP -->
 		<module>modules/dsb-soap</module>
