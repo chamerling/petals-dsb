@@ -26,7 +26,6 @@ import org.petalslink.dsb.api.WSAConstants;
 import org.petalslink.dsb.kernel.io.client.ClientFactoryRegistry;
 import org.petalslink.dsb.notification.commons.PropertiesConfigurationProducer;
 import org.petalslink.dsb.service.client.Client;
-import org.petalslink.dsb.service.client.ClientException;
 import org.petalslink.dsb.service.client.Message;
 import org.petalslink.dsb.service.client.WSAMessageImpl;
 import org.w3c.dom.Document;
@@ -36,6 +35,10 @@ import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Subs
 import com.ebmwebsourcing.wsstar.wsnb.services.impl.util.Wsnb4ServUtils;
 
 /**
+ * The notification bootstrap subscribes to notification producers at DSB
+ * startup. The producers to subscribe to are defined in the consumer.cfg file
+ * available in the classpath.
+ * 
  * @author chamerling
  * 
  */
@@ -130,12 +133,11 @@ public class NotificationBootstrapImpl implements NotificationBootstrap {
                     } finally {
                         if (client != null) {
                             /*
-                            try {
-                                ClientFactoryRegistry.getFactory().release(client);
-                            } catch (ClientException e) {
-                                e.printStackTrace();
-                            }
-                            */
+                             * try {
+                             * ClientFactoryRegistry.getFactory().release(client
+                             * ); } catch (ClientException e) {
+                             * e.printStackTrace(); }
+                             */
                         }
                     }
 
