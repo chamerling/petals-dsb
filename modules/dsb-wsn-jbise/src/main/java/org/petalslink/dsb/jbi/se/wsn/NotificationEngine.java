@@ -154,6 +154,7 @@ public class NotificationEngine {
             }
         };
 
+        // The one which receives notifications from consumers, and forward them to the notification engine
         this.notificationConsumerEngine = new AbsNotificationConsumerEngine(logger) {
 
             @Override
