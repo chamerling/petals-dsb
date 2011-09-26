@@ -48,7 +48,7 @@ public class JBISender implements Client {
     public static final String PREFIX = "wsa";
 
     public static final QName TO_QNAME = new QName(NAMESPACE_URI, "To", PREFIX);
-    
+
     public static final QName ADDRESS_QNAME = new QName(NAMESPACE_URI, "Address", PREFIX);
 
     private ComponentContext componentContext;
@@ -133,6 +133,14 @@ public class JBISender implements Client {
         NormalizedMessage normalizedMessage = Adapter.transform(message);
         messageExchange.setMessage(normalizedMessage, "in");
         messageExchange.setOperation(operation);
+
+        // set the message properties
+        Map<String, String> props = message.getProperties();
+        if (props != null) {
+            for (String key : props.keySet()) {
+                normalizedMessage.setProperty(key, props.get(key));
+            }
+        }
 
         // set the endpoint to consume
         if (serviceEndpoint.getInterfaces() != null && serviceEndpoint.getInterfaces().length >= 1) {
@@ -341,7 +349,7 @@ public class JBISender implements Client {
         // fill property
         message.setProperty(PROTOCOL_HEADERS, headers);
     }
-    
+
     // FIXME : MUST BE IN A JBI COMMONS PROHECT
 
     public static final DocumentFragment getElement(QName qname, String text) {
