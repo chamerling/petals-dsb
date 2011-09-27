@@ -66,7 +66,6 @@ public class MonitoringNotificationSender extends DSBNotificationSender {
 
                 public void sendAsync(Message message, MessageListener listener)
                         throws ClientException {
-                    System.out.println("Send Async");
                     message.setProperty(Constants.MESSAGE_SKIP_MONITORING, "true");
                     tmp.sendAsync(message, listener);
                 }
@@ -76,7 +75,6 @@ public class MonitoringNotificationSender extends DSBNotificationSender {
                 }
 
                 public void fireAndForget(Message message) throws ClientException {
-                    System.out.println("Fire and forget");
                     message.setProperty(Constants.MESSAGE_SKIP_MONITORING, "true");
                     tmp.fireAndForget(message);
                 }
