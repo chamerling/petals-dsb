@@ -45,8 +45,11 @@ public class ReportBean {
     @XmlElement
     private long contentLength;
 
+    /**
+     * Long date to avoid parsing errors... Up to the client to do what needed... 
+     */
     @XmlElement
-    private Date date;
+    private long date;
     
     /**
      * The report type ie t1, t2, t3, t4... Not an enum to be extensible...
@@ -198,7 +201,7 @@ public class ReportBean {
     /**
      * @return the date
      */
-    public Date getDate() {
+    public long getDate() {
         return date;
     }
 
@@ -206,7 +209,7 @@ public class ReportBean {
      * @param date
      *            the date to set
      */
-    public void setDate(Date date) {
+    public void setDate(long date) {
         this.date = date;
     }
 

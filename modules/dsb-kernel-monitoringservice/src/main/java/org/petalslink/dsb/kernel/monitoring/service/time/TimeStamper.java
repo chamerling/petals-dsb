@@ -19,21 +19,21 @@ public interface TimeStamper {
 	public static final URI DATE_CLIENT_OUT_PROPERTY = URI
 			.create("http://petals.ow2.org/date/client/out");
 
-	void setDateClientIn(Date date);
+	void setDateClientIn(long date);
 
-	void setDateClientOut(Date date);
+	void setDateClientOut(long date);
 
-	void setDateProviderIn(Date date);
+	void setDateProviderIn(long date);
 
-	void setDateProviderOut(Date date);
+	void setDateProviderOut(long date);
 
-	Date getDateClientIn();
+	long getDateClientIn();
 
-	Date getDateClientOut();
+	long getDateClientOut();
 
-	Date getDateProviderIn();
+	long getDateProviderIn();
 
-	Date getDateProviderOut();
+	long getDateProviderOut();
 
 	MessageExchange getMessageExchange();
 

@@ -1,7 +1,5 @@
 package org.petalslink.dsb.kernel.monitoring.service.time;
 
-import java.util.Date;
-
 import org.ow2.petals.jbi.messaging.exchange.MessageExchange;
 
 public class TimeStamperImpl implements TimeStamper {
@@ -11,8 +9,8 @@ public class TimeStamperImpl implements TimeStamper {
     public TimeStamperImpl() {
     }
 
-    public Date getDateClientIn() {
-        Date res = null;
+    public long getDateClientIn() {
+        long res = 0L;
         if (this.me != null) {
             long t = 0L;
             Object tmp = this.me.getProperty(TimeStamper.DATE_CLIENT_IN_PROPERTY.toString());
@@ -24,14 +22,14 @@ public class TimeStamperImpl implements TimeStamper {
                 }
             }
             if (tmp != null) {
-                res = new Date(t);
+                res = t;
             }
         }
         return res;
     }
 
-    public Date getDateClientOut() {
-        Date res = null;
+    public long getDateClientOut() {
+        long res = 0L;
         if (this.me != null) {
             long t = 0L;
             Object tmp = this.me.getProperty(TimeStamper.DATE_CLIENT_OUT_PROPERTY.toString());
@@ -43,14 +41,14 @@ public class TimeStamperImpl implements TimeStamper {
                 }
             }
             if (tmp != null) {
-                res = new Date(t);
+                res = t;
             }
         }
         return res;
     }
 
-    public Date getDateProviderIn() {
-        Date res = null;
+    public long getDateProviderIn() {
+        long res = 0L;
         if (this.me != null) {
             long t = 0L;
             Object tmp = this.me.getProperty(TimeStamper.DATE_PROVIDER_IN_PROPERTY.toString());
@@ -62,14 +60,14 @@ public class TimeStamperImpl implements TimeStamper {
                 }
             }
             if (tmp != null) {
-                res = new Date(t);
+                res = t;
             }
         }
         return res;
     }
 
-    public Date getDateProviderOut() {
-        Date res = null;
+    public long getDateProviderOut() {
+        long res = 0L;
         if (this.me != null) {
             long t = 0L;
             Object tmp = this.me.getProperty(TimeStamper.DATE_PROVIDER_OUT_PROPERTY.toString());
@@ -81,50 +79,46 @@ public class TimeStamperImpl implements TimeStamper {
                 }
             }
             if (tmp != null) {
-                res = new Date(t);
+                res = t;
             }
         }
         return res;
     }
 
-    public void setDateClientIn(Date date) {
+    public void setDateClientIn(long date) {
         if (this.me != null) {
-            if (date != null) {
-                this.me.setProperty(TimeStamper.DATE_CLIENT_IN_PROPERTY.toString(), new Long(date
-                        .getTime()));
+            if (date != 0L) {
+                this.me.setProperty(TimeStamper.DATE_CLIENT_IN_PROPERTY.toString(), new Long(date));
             } else {
                 this.me.setProperty(TimeStamper.DATE_CLIENT_IN_PROPERTY.toString(), null);
             }
         }
     }
 
-    public void setDateClientOut(Date date) {
+    public void setDateClientOut(long date) {
         if (this.me != null) {
-            if (date != null) {
-                this.me.setProperty(TimeStamper.DATE_CLIENT_OUT_PROPERTY.toString(), new Long(date
-                        .getTime()));
+            if (date != 0L) {
+                this.me.setProperty(TimeStamper.DATE_CLIENT_OUT_PROPERTY.toString(), new Long(date));
             } else {
                 this.me.setProperty(TimeStamper.DATE_CLIENT_OUT_PROPERTY.toString(), null);
             }
         }
     }
 
-    public void setDateProviderIn(Date date) {
+    public void setDateProviderIn(long date) {
         if (this.me != null) {
-            if (date != null) {
-                this.me.setProperty(TimeStamper.DATE_PROVIDER_IN_PROPERTY.toString(), new Long(date
-                        .getTime()));
+            if (date != 0L) {
+                this.me.setProperty(TimeStamper.DATE_PROVIDER_IN_PROPERTY.toString(), new Long(date));
             } else {
                 this.me.setProperty(TimeStamper.DATE_PROVIDER_IN_PROPERTY.toString(), null);
             }
         }
     }
 
-    public void setDateProviderOut(Date date) {
+    public void setDateProviderOut(long date) {
         if (this.me != null) {
-            if (date != null) {
-                this.me.setProperty(TimeStamper.DATE_PROVIDER_OUT_PROPERTY.toString(), new Long(
-                        date.getTime()));
+            if (date != 0L) {
+                this.me.setProperty(TimeStamper.DATE_PROVIDER_OUT_PROPERTY.toString(), new Long(date));
             } else {
                 this.me.setProperty(TimeStamper.DATE_PROVIDER_OUT_PROPERTY.toString(), null);
             }

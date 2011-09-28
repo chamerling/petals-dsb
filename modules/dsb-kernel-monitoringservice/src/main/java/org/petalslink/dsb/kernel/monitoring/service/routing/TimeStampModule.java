@@ -17,8 +17,6 @@
  */
 package org.petalslink.dsb.kernel.monitoring.service.routing;
 
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Map;
 
 import org.objectweb.fractal.fraclet.annotation.annotations.FractalComponent;
@@ -83,23 +81,23 @@ public class TimeStampModule implements SenderModule, ReceiverModule {
     }
 
     protected void setTimeStamp(MessageExchange exchange) {
-        Date date = GregorianCalendar.getInstance().getTime();
+        long date = System.currentTimeMillis();
         String t = null;
         if (MessageExchange.Role.CONSUMER.equals(exchange.getRole())) {
-            if (TimeStamperHandler.getInstance().getTimeStamp(exchange).getDateClientIn() == null) {
+            if (TimeStamperHandler.getInstance().getTimeStamp(exchange).getDateClientIn() == 0L) {
                 TimeStamperHandler.getInstance().getTimeStamp(exchange).setDateClientIn(date);
                 t = "t1: ";
-            } else if (TimeStamperHandler.getInstance().getTimeStamp(exchange).getDateClientOut() == null) {
+            } else if (TimeStamperHandler.getInstance().getTimeStamp(exchange).getDateClientOut() == 0L) {
                 TimeStamperHandler.getInstance().getTimeStamp(exchange).setDateClientOut(date);
                 t = "t4: ";
             }
         }
 
         if (MessageExchange.Role.PROVIDER.equals(exchange.getRole())) {
-            if (TimeStamperHandler.getInstance().getTimeStamp(exchange).getDateProviderIn() == null) {
+            if (TimeStamperHandler.getInstance().getTimeStamp(exchange).getDateProviderIn() == 0L) {
                 TimeStamperHandler.getInstance().getTimeStamp(exchange).setDateProviderIn(date);
                 t = "t2: ";
-            } else if (TimeStamperHandler.getInstance().getTimeStamp(exchange).getDateProviderOut() == null) {
+            } else if (TimeStamperHandler.getInstance().getTimeStamp(exchange).getDateProviderOut() == 0L) {
                 TimeStamperHandler.getInstance().getTimeStamp(exchange).setDateProviderOut(date);
                 t = "t3: ";
             }
@@ -107,7 +105,7 @@ public class TimeStampModule implements SenderModule, ReceiverModule {
 
         if ((t != null) && this.log.isInfoEnabled()) {
             this.log.info(t + "timestamp the messageExchange (" + exchange.getExchangeId() + "): "
-                    + date.getTime());
+                    + date);
         }
     }
 
