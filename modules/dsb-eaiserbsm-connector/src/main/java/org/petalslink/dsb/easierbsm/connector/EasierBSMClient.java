@@ -3,6 +3,7 @@
  */
 package org.petalslink.dsb.easierbsm.connector;
 
+import java.sql.Date;
 import java.util.GregorianCalendar;
 
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -85,9 +86,9 @@ public class EasierBSMClient implements MonitoringClient {
         EJaxbReportType result = new EJaxbReportType();
         result.setConsumerEndpointAddress(reportBean.getConsumer());
         result.setContentLength(reportBean.getContentLength());
-        if (reportBean.getDate() != null) {
+        if (reportBean.getDate() != 0L) {
             final GregorianCalendar gCalendar = new GregorianCalendar();
-            gCalendar.setTime(reportBean.getDate());
+            gCalendar.setTime(new Date(reportBean.getDate()));
             try {
                 XMLGregorianCalendar xmlCalendar = DatatypeFactory.newInstance()
                         .newXMLGregorianCalendar(gCalendar);
