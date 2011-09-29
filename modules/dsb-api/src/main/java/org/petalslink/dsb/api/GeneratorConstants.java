@@ -7,7 +7,7 @@ package org.petalslink.dsb.api;
  * @author chamerling
  *
  */
-public interface GeneratorContants {
+public interface GeneratorConstants {
     
     static final String ENDPOINT_NAME = "GeneratorEndpoint";
 
