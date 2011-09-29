@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 public class LinkedResourceDescriptor {
 
     /**
-     * The data handler to handle WSDL file
+     * The data handler to handle resources file
      */
-    private DataHandler wsdl;
+    private DataHandler resource;
 
     /**
      * The original wsdl file name
@@ -28,12 +28,12 @@ public class LinkedResourceDescriptor {
     }
 
     @XmlMimeType("application/octet-stream")
-    public DataHandler getWSDL() {
-        return wsdl;
+    public DataHandler getResource() {
+        return resource;
     }
 
-    public void setWSDL(DataHandler dh) {
-        this.wsdl = dh;
+    public void setResource(DataHandler dh) {
+        this.resource = dh;
     }
 
     public void setFileName(String fileName) {

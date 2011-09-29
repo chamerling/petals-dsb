@@ -4,14 +4,9 @@
 package org.petalslink.dsb.kernel.bpel;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.ArrayList;
 import java.util.UUID;
 
 import javax.activation.DataHandler;
@@ -26,11 +21,11 @@ import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
 import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.jbi.descriptor.original.generated.Jbi;
 import org.ow2.petals.jbi.management.deployment.AtomicDeploymentService;
-import org.ow2.petals.kernel.api.server.util.SystemUtil;
 import org.ow2.petals.kernel.configuration.ConfigurationService;
 import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
 import org.ow2.petals.util.LoggingUtil;
 import org.petalslink.dsb.jbi.JBIFileHelper;
+import org.petalslink.dsb.tools.generator.bpel.BPELGenerator;
 import org.petalslink.dsb.ws.api.DSBWebServiceException;
 import org.petalslink.dsb.ws.bpel.api.BPELDeployer;
 import org.petalslink.dsb.ws.bpel.api.BPELDescriptor;
@@ -43,8 +38,6 @@ import org.petalslink.dsb.ws.bpel.api.LinkedResourceDescriptor;
 @FractalComponent
 @Provides(interfaces = { @Interface(name = "service", signature = BPELDeployer.class) })
 public class BPELDeployerImpl implements BPELDeployer {
-
-    private static final String BPEL_DEPLOYER_FOLDER_LIBS = "dsb-bundle-bpelgenerator";
 
     public static final String WORK_DIR = "bpel-generator";
 
@@ -59,10 +52,8 @@ public class BPELDeployerImpl implements BPELDeployer {
     @Requires(name = "atomic-deployment", signature = AtomicDeploymentService.class)
     private AtomicDeploymentService deploymentService;
 
-    private URLClassLoader classloader;
-
     private File workPath;
-    
+
     @LifeCycle(on = LifeCycleType.START)
     protected void start() {
         System.out.println("START");
@@ -76,6 +67,63 @@ public class BPELDeployerImpl implements BPELDeployer {
 
     @LifeCycle(on = LifeCycleType.STOP)
     protected void stop() {
+        if (this.workPath.exists()) {
+            this.workPath.delete();
+        }
+    }
+
+    /**
+     * @param inputFolder
+     * @param bpelDescriptor
+     * @param resources
+     */
+    private void storeFiles(File inputFolder, BPELDescriptor bpelDescriptor,
+            LinkedResourceDescriptor[] resources) {
+        File bpel = new File(inputFolder, bpelDescriptor.getFileName());
+        storeFile(bpel, bpelDescriptor.getAttachment());
+
+        if (resources != null) {
+            for (LinkedResourceDescriptor linkedResourceDescriptor : resources) {
+                File resourceFile = new File(inputFolder, linkedResourceDescriptor.getFileName());
+                storeFile(resourceFile, linkedResourceDescriptor.getResource());
+            }
+        }
+    }
+
+    /**
+     * @param resourceFile
+     * @param wsdl
+     */
+    private void storeFile(File writeTo, DataHandler dh) {
+        if (writeTo != null) {
+            FileOutputStream fos;
+            try {
+                fos = new FileOutputStream(writeTo);
+                dh.writeTo(fos);
+            } catch (FileNotFoundException e) {
+            } catch (IOException e) {
+            }
+        }
+    }
+
+    /**
+     * @return
+     */
+    private File getOutputFolder() {
+        File output = new File(workPath, "output");
+        if (!output.exists())
+            output.mkdirs();
+
+        return output;
+    }
+
+    /**
+     * @return
+     */
+    private File getNewWorkingFolder() {
+        File working = new File(workPath, UUID.randomUUID().toString());
+        working.mkdirs();
+        return working;
     }
 
     /*
@@ -84,33 +132,33 @@ public class BPELDeployerImpl implements BPELDeployer {
      * @see
      * org.petalslink.dsb.ws.bpel.api.BPELDeployer#deploy(org.petalslink.dsb
      * .ws.bpel.api.BPELDescriptor,
+     * org.petalslink.dsb.ws.bpel.api.BPELDescriptor,
      * org.petalslink.dsb.ws.bpel.api.LinkedResourceDescriptor[])
      */
     public boolean deploy(BPELDescriptor bpelDescriptor, LinkedResourceDescriptor[] resources)
             throws DSBWebServiceException {
-        ClassLoader old = Thread.currentThread().getContextClassLoader();
         File sa = null;
+        File inputFolder = null;
         try {
-            System.out.println("Let's go");
-            Thread.currentThread().setContextClassLoader(getBpelGeneratorClassLoader());
-            System.out.println("CLASSLOADER SET");
-            BPELDelegate delegate = new BPELDelegate(this.classloader);
-            System.out.println("DELEGATE DONE");
-            File inputFolder = getNewWorkingFolder();
+            inputFolder = getNewWorkingFolder();
             File outputFolder = getOutputFolder();
             storeFiles(inputFolder, bpelDescriptor, resources);
-            sa = delegate.generate(inputFolder, outputFolder, "1.0",
+            BPELGenerator generator = new BPELGenerator(inputFolder, outputFolder, "1.0",
                     new java.util.HashMap<String, String>());
+
+            sa = generator.generate();
+
+            if (sa == null) {
+                throw new DSBWebServiceException("Unable to generate Service Assembly");
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
+            throw new DSBWebServiceException(e.getMessage());
         } finally {
-            Thread.currentThread().setContextClassLoader(old);
-        }
-
-        System.out.println("2.Generated sa = " + sa);
-
-        if (sa == null) {
-            throw new DSBWebServiceException("Unable to generate Service Assembly");
+            if (inputFolder != null) {
+                inputFolder.delete();
+            }
         }
 
         // let's call the installation services...
@@ -161,90 +209,7 @@ public class BPELDeployerImpl implements BPELDeployer {
         if (sa != null) {
             sa.delete();
         }
-
         return true;
-    }
-
-    /**
-     * @param inputFolder
-     * @param bpelDescriptor
-     * @param resources
-     */
-    private void storeFiles(File inputFolder, BPELDescriptor bpelDescriptor,
-            LinkedResourceDescriptor[] resources) {
-        System.out.println("Storing files into = " + inputFolder);
-        File bpel = new File(inputFolder, bpelDescriptor.getFileName());
-        storeFile(bpel, bpelDescriptor.getAttachment());
-        if (resources != null) {
-            for (LinkedResourceDescriptor linkedResourceDescriptor : resources) {
-                File resourceFile = new File(inputFolder, linkedResourceDescriptor.getFileName());
-                storeFile(resourceFile, linkedResourceDescriptor.getWSDL());
-            }
-        }
-    }
-
-    /**
-     * @param resourceFile
-     * @param wsdl
-     */
-    private void storeFile(File writeTo, DataHandler dh) {
-        if (writeTo != null) {
-            FileOutputStream fos;
-            try {
-                fos = new FileOutputStream(writeTo);
-                dh.writeTo(fos);
-            } catch (FileNotFoundException e) {
-            } catch (IOException e) {
-            }
-        }
-    }
-
-    /**
-     * @return
-     */
-    private File getOutputFolder() {
-        File output = new File(workPath, "output");
-        if (!output.exists())
-            output.mkdirs();
-
-        return output;
-    }
-
-    /**
-     * @return
-     */
-    private File getNewWorkingFolder() {
-        File working = new File(workPath, UUID.randomUUID().toString());
-        working.mkdirs();
-        return working;
-    }
-
-    private synchronized URLClassLoader getBpelGeneratorClassLoader() {
-        File libs = new File(SystemUtil.getPetalsInstallDirectory(), "lib");
-        File extraLibs = new File(libs, BPEL_DEPLOYER_FOLDER_LIBS);
-        
-        final FileFilter jarFileFilter = new FileFilter() {
-            public boolean accept(final File pathname) {
-                return pathname.getName().toLowerCase().endsWith(".jar");
-            }
-        };
-
-        final File[] files = extraLibs.listFiles(jarFileFilter);
-        final ArrayList<URL> urls = new ArrayList<URL>();
-
-        if (files != null && files.length > 0) {
-            for (final File file : files) {
-                try {
-                    urls.add(file.toURI().toURL());
-                } catch (final MalformedURLException e) {
-                    // nothing
-                }
-            }
-        }
-        this.classloader = new URLClassLoader(
-                urls.toArray(new URL[urls.size()]), BPELDeployerImpl.class.getClassLoader());
-        
-        return this.classloader;
     }
 
 }

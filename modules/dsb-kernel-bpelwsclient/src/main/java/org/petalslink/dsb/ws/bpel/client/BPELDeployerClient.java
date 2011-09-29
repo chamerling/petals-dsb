@@ -72,7 +72,7 @@ public class BPELDeployerClient implements BPELDeployer,
                 if (file != null && file.exists() && file.isFile()) {
                     LinkedResourceDescriptor resource = new LinkedResourceDescriptor();
                     resource.setFileName(file.getName());
-                    resource.setWSDL(new DataHandler(new FileDataSource(bpelFile)));
+                    resource.setResource(new DataHandler(new FileDataSource(file)));
                     list.add(resource);
                 } else {
                     // warning
