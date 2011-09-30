@@ -5,12 +5,10 @@ package org.petalslink.dsb.engine.bpelgenerator;
 
 import java.io.File;
 import java.util.HashMap;
-
-import javax.jbi.messaging.MessagingException;
+import java.util.logging.Level;
 
 import org.ow2.petals.component.framework.api.message.Exchange;
 import org.ow2.petals.component.framework.listener.AbstractJBIListener;
-import org.ow2.petals.tools.generator.jbi.api.JBIGenerationException;
 import org.petalslink.dsb.tools.generator.bpel.BPELGenerator;
 
 /**
@@ -32,29 +30,28 @@ public class JBIListener extends AbstractJBIListener {
      */
     @Override
     public boolean onJBIMessage(Exchange exchange) {
-        System.out.println("INput!");
-        // get the input and output folders, then generate
         try {
             String in = exchange.getInMessageProperty(INFOLDER) != null ? exchange
                     .getInMessageProperty(INFOLDER).toString() : "";
             String out = exchange.getInMessageProperty(OUTFOLDER) != null ? exchange
                     .getInMessageProperty(OUTFOLDER).toString() : "";
 
-            System.out.println("In : " + in);
-            System.out.println("Out : " + out);
-
-            System.out.println("1");
+            if (getLogger().isLoggable(Level.FINE)) {
+                getLogger().fine("In folder " + in);
+                getLogger().fine("Out folder " + out);
+            }
             BPELGenerator generator = new BPELGenerator(new File(in), new File(out), "1.0",
                     new HashMap<String, String>(0));
-            System.out.println("2");
             File result = generator.generate();
-            System.out.println("Result " + result.getAbsolutePath());
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        } catch (JBIGenerationException e) {
-            e.printStackTrace();
+
+            if (getLogger().isLoggable(Level.FINE)) {
+                getLogger().fine("Generated file : " + result.getAbsolutePath());
+            }
+
         } catch (Exception e) {
-            e.printStackTrace();
+            if (getLogger().isLoggable(Level.WARNING)) {
+                getLogger().log(Level.WARNING, "Got an error on generation", e);
+            }
         }
 
         return true;
