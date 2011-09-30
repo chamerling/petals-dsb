@@ -84,6 +84,7 @@ public class BPELGenerator extends AbstractGeneratorEngine implements
         try {
             this.analyzeFiles();
         } catch (Exception e) {
+            e.printStackTrace();
             if (logger.isDebugEnabled()) {
                 logger.warn("Problem while analyzing BPEL and related files", e);
             }
@@ -145,8 +146,13 @@ public class BPELGenerator extends AbstractGeneratorEngine implements
     }
 
     protected void analyzeFiles() throws Exception {
-        BPELProcess bpel = BPELFactoryImpl.getInstance().newBPELReader()
-                .readBPEL(this.bpelFile.toURI());
+        BPELProcess bpel = null;
+        try {
+            bpel = BPELFactoryImpl.getInstance().newBPELReader()
+                    .readBPEL(this.bpelFile.toURI());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         if (bpel == null) {
             throw new JBIGenerationException("Can not load BPEL process model");
