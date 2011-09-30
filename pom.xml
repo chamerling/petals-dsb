@@ -107,7 +107,10 @@
 		<module>modules/dsb-kernel-bpelwsapi</module>
 	   	<module>modules/dsb-kernel-bpelwsclient</module>
 		<module>modules/dsb-kernel-bpelservice</module>
-		<module>modules/dsb-bundle-bpelgenerator</module>
+		<!--<module>modules/dsb-bundle-bpelgenerator</module>-->
+		
+		<module>modules/dsb-bpelgenerator-jbise</module>
+		
 		
 		<!-- Monitoring -->
 		<module>modules/dsb-kernel-monitoringservice</module>

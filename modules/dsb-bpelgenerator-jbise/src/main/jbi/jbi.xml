@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jbi:jbi version="1.0" xmlns:jbi="http://java.sun.com/xml/ns/jbi"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:petalsCDK="http://petals.ow2.org/components/extensions/version-5"
+	xmlns:restproxy="http://petals.ow2.org/components/restproxy/version-1">
+	<jbi:component type="binding-component"
+		bootstrap-class-loader-delegation="parent-first">
+		<jbi:identification>
+			<jbi:name>dsb-bpelgenerator-jbise</jbi:name>
+			<jbi:description>The BPEL Generator Binding Component</jbi:description>
+		</jbi:identification>
+		<jbi:component-class-name>org.ow2.petals.component.framework.PetalsBindingComponent</jbi:component-class-name>
+		<jbi:component-class-path>
+			<jbi:path-element />
+		</jbi:component-class-path>
+		<jbi:bootstrap-class-name>org.ow2.petals.component.framework.DefaultBootstrap</jbi:bootstrap-class-name>
+		<jbi:bootstrap-class-path>
+			<jbi:path-element />
+		</jbi:bootstrap-class-path>
+
+		<petalsCDK:acceptor-pool-size>5</petalsCDK:acceptor-pool-size>
+		<petalsCDK:processor-pool-size>10</petalsCDK:processor-pool-size>
+		<petalsCDK:ignored-status>DONE_AND_ERROR_IGNORED</petalsCDK:ignored-status>
+		<petalsCDK:properties-file />
+		<petalsCDK:notifications>false</petalsCDK:notifications>
+		<petalsCDK:jbi-listener-class-name>org.petalslink.dsb.engine.bpelgenerator.JBIListener</petalsCDK:jbi-listener-class-name>
+	</jbi:component>
+</jbi:jbi>

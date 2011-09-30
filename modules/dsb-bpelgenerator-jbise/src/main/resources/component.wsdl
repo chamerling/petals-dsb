@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="component" targetNamespace="http://petals.ow2.org/generator/bpel/"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://petals.ow2.org/generator/bpel/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+	<wsdl:types>
+		<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://petals.ow2.org">
+			<xsd:element name="GET">
+				<xsd:complexType />
+			</xsd:element>
+			<xsd:element name="GETResponse">
+				<xsd:complexType />
+			</xsd:element>
+			<xsd:element name="PUT">
+				<xsd:complexType />
+			</xsd:element>
+			<xsd:element name="PUTResponse">
+				<xsd:complexType />
+			</xsd:element>
+			<xsd:element name="POST">
+				<xsd:complexType />
+			</xsd:element>
+			<xsd:element name="POSTResponse">
+				<xsd:complexType />
+			</xsd:element>
+			<xsd:element name="DELETE">
+				<xsd:complexType />
+			</xsd:element>
+			<xsd:element name="DELETEResponse">
+				<xsd:complexType />
+			</xsd:element>
+		</xsd:schema>
+	</wsdl:types>
+
+	<wsdl:message name="GETRequest">
+		<wsdl:part name="parameters" element="tns:GET"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="GETResponse">
+		<wsdl:part name="parameters" element="tns:GETResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="PUTRequest">
+		<wsdl:part name="parameters" element="tns:PUT"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="PUTResponse">
+		<wsdl:part name="parameters" element="tns:PUTResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="POSTRequest">
+		<wsdl:part name="parameters" element="tns:POST"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="POSTResponse">
+		<wsdl:part name="parameters" element="tns:POSTResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="DELETERequest">
+		<wsdl:part name="parameters" element="tns:DELETE"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="DELETEResponse">
+		<wsdl:part name="parameters" element="tns:DELETEResponse"></wsdl:part>
+	</wsdl:message>
+
+	<wsdl:portType name="GeneratorInterface">
+		<wsdl:operation name="GET">
+			<wsdl:input message="tns:GETRequest"></wsdl:input>
+			<wsdl:output message="tns:GETResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="PUT">
+			<wsdl:input message="tns:PUTRequest"></wsdl:input>
+			<wsdl:output message="tns:PUTResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="POST">
+			<wsdl:input message="tns:POSTRequest"></wsdl:input>
+			<wsdl:output message="tns:POSTResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="DELETE">
+			<wsdl:input message="tns:DELETERequest"></wsdl:input>
+			<wsdl:output message="tns:DELETEResponse"></wsdl:output>
+		</wsdl:operation>
+	</wsdl:portType>
+    <wsdl:binding name="GeneratorBinding" type="tns:GeneratorInterface">
+    	<soap:binding style="document"
+    		transport="http://schemas.xmlsoap.org/soap/http" />
+    	<wsdl:operation name="GET">
+    		<soap:operation soapAction="http://petals.ow2.org/GET" />
+    		<wsdl:input>
+    			<soap:body use="literal" />
+    		</wsdl:input>
+    		<wsdl:output>
+    			<soap:body use="literal" />
+    		</wsdl:output>
+    	</wsdl:operation>
+    	<wsdl:operation name="PUT">
+    		<soap:operation soapAction="http://petals.ow2.org/PUT" />
+    		<wsdl:input>
+    			<soap:body use="literal" />
+    		</wsdl:input>
+    		<wsdl:output>
+    			<soap:body use="literal" />
+    		</wsdl:output>
+    	</wsdl:operation>
+    	<wsdl:operation name="POST">
+    		<soap:operation soapAction="http://petals.ow2.org/POST" />
+    		<wsdl:input>
+    			<soap:body use="literal" />
+    		</wsdl:input>
+    		<wsdl:output>
+    			<soap:body use="literal" />
+    		</wsdl:output>
+    	</wsdl:operation>
+    	<wsdl:operation name="DELETE">
+    		<soap:operation soapAction="http://petals.ow2.org/DELETE" />
+    		<wsdl:input>
+    			<soap:body use="literal" />
+    		</wsdl:input>
+    		<wsdl:output>
+    			<soap:body use="literal" />
+    		</wsdl:output>
+    	</wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="GeneratorService">
+    	<wsdl:port name="GeneratorEndpoint" binding="tns:GeneratorBinding">
+    		<soap:address location="http://petals.ow2.org" />
+    	</wsdl:port>
+    </wsdl:service></wsdl:definitions>
