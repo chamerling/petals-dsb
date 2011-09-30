@@ -3,7 +3,7 @@
 
 <definition extends="BPELType" name="BPEL">
 
-  <component definition="org.petalslink.dsb.kernel.bpel.BPELDeployerImpl" name="BPELDeployerImpl"/>
+  <component definition="org.petalslink.dsb.kernel.management.generator.bpel.BPELDeployerImpl" name="BPELDeployerImpl"/>
  
   <binding client="BPELDeployerImpl.configuration" server="this.configuration"/>
   <binding client="BPELDeployerImpl.atomic-deployment" server="this.atomicDeploymentService"/>

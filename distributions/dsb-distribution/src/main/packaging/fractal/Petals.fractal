@@ -22,7 +22,7 @@
   <component definition="DSBCoreService" name="DSBCoreService"/>
   
   <component definition="REST" name="REST"/>
-  <!--<component definition="BPEL" name="BPEL"/>-->
+  <component definition="BPEL" name="BPEL"/>
   <component definition="DSBMonitoring" name="DSBMonitoring"/>
   <component definition="WebService" name="WebService"/>
   <component definition="Notification" name="Notification"/>
@@ -145,10 +145,8 @@
   <binding client="REST.configuration" server="ConfigurationServiceImpl.service"/>
   
   <!-- BPEL -->
-  <!-- NOT READY, problem with classloaders
   <binding client="BPEL.atomicDeploymentService" server="JBI-Management.atomicDeploymentService"/>
   <binding client="BPEL.configuration" server="ConfigurationServiceImpl.service"/>
-  -->
   
   <!-- Monitoring -->
   <binding client="DSBMonitoring.registrylistenermanager" server="JBI-Messaging.registrylistenermanager"/>
