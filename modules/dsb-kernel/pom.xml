@@ -7,15 +7,16 @@
 		<version>1.0-SNAPSHOT</version>
 		<relativePath>../dsb-parent/pom.xml</relativePath>
 	</parent>
-	
+
 	<groupId>org.petalslink.dsb</groupId>
 	<artifactId>dsb-kernel</artifactId>
 	<name>dsb-kernel</name>
-	
+
 	<scm>
-      <connection>scm:svn:https://svn.petalslink.com/svnroot/trunk/research/commons/dsb/modules/dsb-kernel</connection>
-      <developerConnection>${project.scm.connection}</developerConnection>
-  	</scm>
+		<connection>scm:svn:https://svn.petalslink.com/svnroot/trunk/research/commons/dsb/modules/dsb-kernel
+		</connection>
+		<developerConnection>${project.scm.connection}</developerConnection>
+	</scm>
 
 	<dependencies>
 		<dependency>
@@ -35,7 +36,7 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.petalslink.dsb</groupId>
 			<artifactId>dsb-kernel-api</artifactId>
@@ -47,7 +48,7 @@
 			<artifactId>dsb-annotations</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.petalslink.dsb</groupId>
 			<artifactId>dsb-fractalutils</artifactId>
@@ -59,26 +60,26 @@
 			<artifactId>dsb-service-client</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.petalslink.dsb</groupId>
 			<artifactId>dsb-jbi</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.petalslink.dsb</groupId>
 			<artifactId>dsb-soap</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
-		<!--  Notification -->
+
+		<!-- Notification -->
 		<dependency>
 			<groupId>org.petalslink.dsb</groupId>
 			<artifactId>dsb-notification-commons</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+
 		<!-- For GMS -->
 		<dependency>
 			<groupId>org.petalslink.gms</groupId>
@@ -86,11 +87,8 @@
 			<version>${project.version}</version>
 		</dependency>
 
-		 <!--<dependency>
-            <groupId>eu.soa4all.dsb.petals.transport</groupId>
-            <artifactId>soa4all-petals-federationtransporter</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>-->
+		<!--<dependency> <groupId>eu.soa4all.dsb.petals.transport</groupId> <artifactId>soa4all-petals-federationtransporter</artifactId> 
+			<version>1.0-SNAPSHOT</version> </dependency> -->
 
 		<!-- DONT KNOW WHY THE BAD VERSION ARE PROVIDED BY THE KERNEL DEP... -->
 		<dependency>
@@ -142,6 +140,12 @@
 
 		<dependency>
 			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>dsb-kernel-bpelwsapi</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
 			<artifactId>dsb-transport-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -151,7 +155,7 @@
 			<artifactId>dsb-transport-cxf</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.petalslink.dsb</groupId>
 			<artifactId>dsb-transport-xmpp</artifactId>
@@ -170,32 +174,21 @@
 			<version>${project.version}</version>
 		</dependency>
 
-		<!-- 		<dependency>
-			<groupId>org.ow2.petals</groupId>
-			<artifactId>petals-wsproxifier</artifactId>
-			<version>1.0-SNAPSHOT</version>
-		</dependency>
--->
-		<!--
-			<dependency> <groupId>com.ebmwebsourcing.commons</groupId>
-			<artifactId>commons-wsframework-api</artifactId>
-			<version>1.0-SNAPSHOT</version> </dependency>
-		-->
+		<!-- <dependency> <groupId>org.ow2.petals</groupId> <artifactId>petals-wsproxifier</artifactId> 
+			<version>1.0-SNAPSHOT</version> </dependency> -->
+		<!-- <dependency> <groupId>com.ebmwebsourcing.commons</groupId> <artifactId>commons-wsframework-api</artifactId> 
+			<version>1.0-SNAPSHOT</version> </dependency> -->
 		<!-- TODO : REMOVE -->
 		<dependency>
 			<groupId>org.petalslink.dsb</groupId>
 			<artifactId>dsb-petals-oldies</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<!--  For monitoring -->
-		<!--
+		<!-- For monitoring -->
+		<!-- <artifactId>report.client.petals.module</artifactId> <groupId>org.ow2.petals.monitoring</groupId> 
+			<version>1.0-SNAPSHOT</version> </dependency> -->
 
-			<artifactId>report.client.petals.module</artifactId>
-			<groupId>org.ow2.petals.monitoring</groupId>
-			<version>1.0-SNAPSHOT</version> </dependency>
-		-->
-		
-		<!--  Other stuff... -->
+		<!-- Other stuff... -->
 		<dependency>
 			<groupId>org.objectweb.fractal.julia</groupId>
 			<artifactId>julia-runtime</artifactId>
