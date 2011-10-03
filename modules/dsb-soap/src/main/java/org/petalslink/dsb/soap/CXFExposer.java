@@ -63,6 +63,10 @@ public class CXFExposer implements Exposer {
                 cxfServer = ssf.create();
                 services.add(service);
             }
+            
+            public String getURL() {
+                return service.getURL();
+            }
         };
     }
 
