@@ -10,11 +10,13 @@ import java.util.Set;
 import javax.jbi.messaging.MessagingException;
 import javax.jbi.messaging.NormalizedMessage;
 import javax.xml.namespace.QName;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.dom.DOMSource;
 
 import org.ow2.petals.jbi.messaging.endpoint.JBIServiceEndpointImpl;
 import org.ow2.petals.jbi.messaging.exchange.NormalizedMessageImpl;
 import org.ow2.petals.kernel.api.service.Location;
+import org.ow2.petals.util.XMLUtil;
 import org.petalslink.dsb.service.client.Message;
 import org.petalslink.dsb.xmlutils.XMLHelper;
 import org.w3c.dom.Document;
@@ -41,8 +43,13 @@ public class Adapter {
             se.setType(serviceEndpoint.getType().toString());
         }
 
-        // TODO : change description to string
-        // se.setDescription(description);
+        if (serviceEndpoint.getDescription() != null) {
+            try {
+                se.setDescription(XMLUtil.createStringFromDOMDocument(serviceEndpoint
+                        .getDescription()));
+            } catch (TransformerException e) {
+            }
+        }
 
         se.setEndpointName(serviceEndpoint.getEndpointName());
         se.setServiceName(serviceEndpoint.getServiceName());
@@ -72,6 +79,10 @@ public class Adapter {
                     list.add(qName);
                 }
                 se.setInterfacesName(list);
+            }
+
+            if (serviceEndpoint.getDescription() != null) {
+                se.setDescription(XMLUtil.createDocumentFromString(serviceEndpoint.getDescription()));
             }
         }
         return se;
