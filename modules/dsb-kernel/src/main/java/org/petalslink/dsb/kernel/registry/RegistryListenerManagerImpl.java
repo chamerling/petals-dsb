@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.petalslink.dsb.api.DSBException;
+import org.petalslink.dsb.api.ServiceEndpoint;
 import org.petalslink.dsb.kernel.api.messaging.RegistryListener;
 import org.petalslink.dsb.kernel.api.messaging.RegistryListenerManager;
 
@@ -122,7 +123,7 @@ public class RegistryListenerManagerImpl implements RegistryListenerManager {
         return listener.listener;
     }
 
-    class ManagedRegistryListener {
+    class ManagedRegistryListener implements RegistryListener {
 
         RegistryListener listener;
 
@@ -131,6 +132,42 @@ public class RegistryListenerManagerImpl implements RegistryListenerManager {
         ManagedRegistryListener(RegistryListener listener) {
             this.listener = listener;
             state = true;
+        }
+
+        /*
+         * (non-Javadoc)
+         * 
+         * @see
+         * org.petalslink.dsb.kernel.api.messaging.RegistryListener#onRegister
+         * (org.petalslink.dsb.api.ServiceEndpoint)
+         */
+        public void onRegister(ServiceEndpoint endpoint) throws DSBException {
+            if (state) {
+                this.listener.onRegister(endpoint);
+            }
+        }
+
+        /*
+         * (non-Javadoc)
+         * 
+         * @see
+         * org.petalslink.dsb.kernel.api.messaging.RegistryListener#onUnregister
+         * (org.petalslink.dsb.api.ServiceEndpoint)
+         */
+        public void onUnregister(ServiceEndpoint endpoint) throws DSBException {
+            if (state) {
+                this.listener.onUnregister(endpoint);
+            }
+        }
+
+        /*
+         * (non-Javadoc)
+         * 
+         * @see
+         * org.petalslink.dsb.kernel.api.messaging.RegistryListener#getName()
+         */
+        public String getName() {
+            return this.listener.getName();
         }
     }
 
