@@ -111,6 +111,7 @@ public abstract class BaseEndpointRegistry extends AbstractEndpointRegistry {
                         this.log.debug("Calling registry listener '" + listener.getName()
                                 + "' on new endpoint");
                     }
+                    // status check is done at the manager level...
                     listener.onRegister(Adapter.createServiceEndpoint(endpoint));
                 } catch (DSBException e) {
                     log.warning("Got an error while calling registry listener", e);

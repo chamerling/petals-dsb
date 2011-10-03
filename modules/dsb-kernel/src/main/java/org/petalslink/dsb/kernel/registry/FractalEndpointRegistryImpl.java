@@ -41,8 +41,10 @@ import org.ow2.petals.jbi.messaging.registry.RegistryException;
 import org.ow2.petals.jbi.messaging.registry.RegistryListener;
 import org.ow2.petals.kernel.configuration.ConfigurationService;
 import org.ow2.petals.util.LoggingUtil;
+import org.petalslink.dsb.annotations.LifeCycleListener;
 import org.petalslink.dsb.api.DSBException;
 import org.petalslink.dsb.kernel.api.messaging.RegistryListenerManager;
+import org.petalslink.dsb.kernel.api.messaging.RegistryListenerRegistry;
 import org.w3c.dom.Document;
 
 /**
@@ -227,49 +229,72 @@ public class FractalEndpointRegistryImpl implements EndpointRegistry, RegistryLi
     public List<RegistryListener> getListeners() {
         return this.delegate.getListeners();
     }
-    
+
     // registry listener
 
-    /* (non-Javadoc)
-     * @see org.petalslink.dsb.kernel.api.messaging.RegistryListenerManager#getList()
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.petalslink.dsb.kernel.api.messaging.RegistryListenerManager#getList()
      */
     public List<org.petalslink.dsb.kernel.api.messaging.RegistryListener> getList() {
         return this.delegate.getList();
     }
 
-    /* (non-Javadoc)
-     * @see org.petalslink.dsb.kernel.api.messaging.RegistryListenerManager#add(org.petalslink.dsb.kernel.api.messaging.RegistryListener)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.petalslink.dsb.kernel.api.messaging.RegistryListenerManager#add(org
+     * .petalslink.dsb.kernel.api.messaging.RegistryListener)
      */
     public void add(org.petalslink.dsb.kernel.api.messaging.RegistryListener listener)
             throws DSBException {
-        this.delegate.add(listener) ;       
+        this.delegate.add(listener);
     }
 
-    /* (non-Javadoc)
-     * @see org.petalslink.dsb.kernel.api.messaging.RegistryListenerManager#get(java.lang.String)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.petalslink.dsb.kernel.api.messaging.RegistryListenerManager#get(java
+     * .lang.String)
      */
     public org.petalslink.dsb.kernel.api.messaging.RegistryListener get(String name)
             throws DSBException {
         return this.delegate.get(name);
     }
 
-    /* (non-Javadoc)
-     * @see org.petalslink.dsb.kernel.api.messaging.RegistryListenerManager#remove(java.lang.String)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.petalslink.dsb.kernel.api.messaging.RegistryListenerManager#remove
+     * (java.lang.String)
      */
     public org.petalslink.dsb.kernel.api.messaging.RegistryListener remove(String name)
             throws DSBException {
         return this.delegate.remove(name);
     }
 
-    /* (non-Javadoc)
-     * @see org.petalslink.dsb.kernel.api.messaging.RegistryListenerManager#setState(java.lang.String, boolean)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.petalslink.dsb.kernel.api.messaging.RegistryListenerManager#setState
+     * (java.lang.String, boolean)
      */
     public void setState(String name, boolean onoff) {
-        this.delegate.setState(name, onoff);     
+        this.delegate.setState(name, onoff);
     }
 
-    /* (non-Javadoc)
-     * @see org.petalslink.dsb.kernel.api.messaging.RegistryListenerManager#getState(java.lang.String)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.petalslink.dsb.kernel.api.messaging.RegistryListenerManager#getState
+     * (java.lang.String)
      */
     public boolean getState(String name) {
         return this.delegate.getState(name);
