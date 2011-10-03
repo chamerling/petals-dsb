@@ -20,7 +20,7 @@ package org.petalslink.dsb.api;
 
 /**
  * @author chamerling - eBM WebSourcing
- *
+ * 
  */
 public class DSBException extends Exception {
 
@@ -33,7 +33,6 @@ public class DSBException extends Exception {
      * 
      */
     public DSBException() {
-        // TODO Auto-generated constructor stub
     }
 
     /**
@@ -41,7 +40,10 @@ public class DSBException extends Exception {
      */
     public DSBException(String message) {
         super(message);
-        // TODO Auto-generated constructor stub
+    }
+
+    public DSBException(String messageFormat, Object... arguments) {
+        super(String.format(messageFormat, arguments));
     }
 
     /**
@@ -49,7 +51,6 @@ public class DSBException extends Exception {
      */
     public DSBException(Throwable cause) {
         super(cause);
-        // TODO Auto-generated constructor stub
     }
 
     /**
@@ -58,7 +59,6 @@ public class DSBException extends Exception {
      */
     public DSBException(String message, Throwable cause) {
         super(message, cause);
-        // TODO Auto-generated constructor stub
     }
 
 }
