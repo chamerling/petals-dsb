@@ -64,7 +64,7 @@ public class CXFHelper {
         return getServiceFromFinalURL(address, clazz, bean);
     }
         
-    public static <T> Service getServiceFromFinalURL(String finalURL, Class<T> clazz, Object bean) {
+    public static <T> Service getServiceFromFinalURL(final String finalURL, Class<T> clazz, Object bean) {
         final JaxWsServerFactoryBean sf = new JaxWsServerFactoryBean();
         sf.setDataBinding(new JAXBDataBinding());
         sf.setServiceBean(bean);
@@ -82,6 +82,10 @@ public class CXFHelper {
 
             public void start() {
                 server = sf.create();
+            }
+            
+            public String getURL() {
+                return finalURL;
             }
         };
     }
