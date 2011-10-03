@@ -3,8 +3,9 @@
  */
 package org.petalslink.dsb.kernel.tools.service;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.objectweb.fractal.fraclet.annotation.annotations.FractalComponent;
 import org.objectweb.fractal.fraclet.annotation.annotations.Interface;
@@ -37,7 +38,7 @@ public class CXFServiceExposerImpl implements ServiceExposer {
 
     private Exposer exposer;
 
-    private List<org.petalslink.dsb.commons.service.api.Service> exposed;
+    private Map<String, org.petalslink.dsb.commons.service.api.Service> exposed;
 
     @Requires(name = "registry", signature = ServiceRegistry.class)
     private ServiceRegistry registry;
@@ -46,12 +47,12 @@ public class CXFServiceExposerImpl implements ServiceExposer {
     protected void start() {
         this.log = new LoggingUtil(this.logger);
         this.exposer = new CXFExposer();
-        this.exposed = new ArrayList<org.petalslink.dsb.commons.service.api.Service>();
+        this.exposed = new HashMap<String, org.petalslink.dsb.commons.service.api.Service>();
     }
 
     @LifeCycle(on = LifeCycleType.STOP)
     protected void stop() {
-        for (org.petalslink.dsb.commons.service.api.Service exposedService : exposed) {
+        for (org.petalslink.dsb.commons.service.api.Service exposedService : exposed.values()) {
             if (log.isInfoEnabled()) {
                 log.info("Stopping a service...");
             }
@@ -79,7 +80,7 @@ public class CXFServiceExposerImpl implements ServiceExposer {
                     }
                     org.petalslink.dsb.commons.service.api.Service s = this.exposer.expose(service);
                     s.start();
-                    this.exposed.add(s);
+                    this.exposed.put(s.getURL(), s);
                     log.info(String.format(
                             "Service is exposed and is available as Web service at %s",
                             service.getURL()));
