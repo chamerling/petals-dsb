@@ -1,6 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
 		<artifactId>dsb-parent</artifactId>
@@ -9,29 +9,119 @@
 		<relativePath>../dsb-parent/pom.xml</relativePath>
 	</parent>
 
-  <groupId>org.petalslink.dsb</groupId>
-  <artifactId>dsb-kernel-resourcesservice</artifactId>
-  <version>1.0-SNAPSHOT</version>
-  <packaging>jar</packaging>
+	<groupId>org.petalslink.dsb</groupId>
+	<artifactId>dsb-kernel-resourcesservice</artifactId>
+	<packaging>jar</packaging>
 
-  <name>dsb-kernel-resourcesservice</name>
+	<name>dsb-kernel-resourcesservice</name>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
 
-	<dependency>
-		<groupId>org.petalslink.dsb</groupId>
-  		<artifactId>dsb-resources-api</artifactId>
-  		<version>${project.version}</version>
-	</dependency>
-  </dependencies>
+		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>dsb-kernel</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>dsb-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>dsb-resources-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<artifactId>ws-binding-resources</artifactId>
+			<groupId>com.ebmwebsourcing.easyresources</groupId>
+			<version>1.0-SNAPSHOT</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.ebmwebsourcing.deprecated.oasis-ws-basenotification</groupId>
+					<artifactId>wsn-b-datatypes-jaxbimpl</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.ebmwebsourcing.deprecated.oasis-ws-topics</groupId>
+					<artifactId>wstop-datatypes-jaxbimpl</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.ebmwebsourcing.deprecated.oasis-ws-resource</groupId>
+					<artifactId>wsrf-r-datatypes-jaxbimpl</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.ebmwebsourcing.deprecated.oasis-ws-resourceproperties</groupId>
+					<artifactId>wsrf-rp-datatypes-jaxbimpl</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+
+		<!-- Fractal stuff -->
+
+		<dependency>
+			<groupId>org.objectweb.fractal.fraclet.annotation</groupId>
+			<artifactId>fractal-spoonlet</artifactId>
+			<version>2.0.2</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.objectweb.monolog</groupId>
+					<artifactId>monolog</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.objectweb.monolog</groupId>
+			<artifactId>monolog</artifactId>
+			<version>2.1.10</version>
+		</dependency>
+		<dependency>
+			<groupId>org.objectweb.monolog</groupId>
+			<artifactId>monolog-api</artifactId>
+			<version>2.1.10</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>net.sf.alchim</groupId>
+				<artifactId>spoon-maven-plugin</artifactId>
+				<version>0.7.1</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>recompile</goal>
+						</goals>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>log4j</groupId>
+						<artifactId>log4j</artifactId>
+						<version>1.2.9</version>
+					</dependency>
+					<dependency>
+						<groupId>org.objectweb.monolog</groupId>
+						<artifactId>monolog</artifactId>
+						<version>1.8</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+		</plugins>
+	</build>
 </project>
