@@ -10,6 +10,7 @@
 <!DOCTYPE definition PUBLIC "-//ow2.objectweb//DTD Fractal ADL 2.0//EN" "classpath://org/objectweb/fractal/adl/xml/standard.dtd">
 
 <definition extends="JBI-MessagingType" name="JBI-Messaging">
+
 	<component definition="org.petalslink.dsb.kernel.registry.FractalEndpointRegistryImpl" name="EndpointRegistryImpl" />
 	<component definition="org.petalslink.dsb.kernel.messaging.router.RouterServiceImpl" name="RouterServiceImpl" />	
 	<component definition="org.ow2.petals.jbi.messaging.routing.module.TransportResolverModule" name="TransportResolverModule" />
@@ -21,6 +22,9 @@
 	<component definition="org.petalslink.dsb.kernel.messaging.router.modules.UpdateRemoteTansportModule" name="UpdateRemoteTansportModule" />
 	<component definition="org.petalslink.dsb.kernel.messaging.FractalEndpointSearchEngineImpl" name="EndpointSearchEngineImpl" />
 	<component definition="org.petalslink.dsb.kernel.messaging.router.modules.SourceSetterModule" name="SourceSetterModule" />
+	
+	<component definition="org.petalslink.dsb.kernel.registry.RegistryListenerServiceImpl" name="RegistryListenerServiceImpl"/>
+    <component definition="org.petalslink.dsb.kernel.registry.RegistryListenerRegistryImpl" name="RegistryListenerRegistryImpl"/>
 	
 	<binding client="UpdateRemoteTansportModule.dsbconfiguration" server="this.dsbconfiguration" />
 	
@@ -39,7 +43,7 @@
 	<binding client="EndpointRegistryImpl.topology" server="this.topology" />
 	<binding client="EndpointSearchEngineImpl.topology" server="this.topology" />
 	<binding client="EndpointSearchEngineImpl.configuration" server="this.configuration" />
-	<binding client="EndpointSearchEngineImpl.endpoint" server="EndpointRegistryImpl.service" />
+	<binding client="EndpointSearchEngineImpl.endpoint" server="EndpointRegistryImpl.service" />	
 
 	<binding client="CoreServiceRouterModule.topology" server="this.topology"/>
 
@@ -64,5 +68,9 @@
 
 	<binding client="TransportResolverModule.configuration" server="this.configuration" />
 	<binding client="ExchangeCheckerClientImpl.jmx" server="this.jmx" />
+	
+	<!-- registry listener -->
+	<binding client="RegistryListenerServiceImpl.registry-listener-manager" server="EndpointRegistryImpl.registrylistenermanager"/>
+	<binding client="RegistryListenerRegistryImpl.registry-listener-manager" server="EndpointRegistryImpl.registrylistenermanager"/>
 
 </definition>
