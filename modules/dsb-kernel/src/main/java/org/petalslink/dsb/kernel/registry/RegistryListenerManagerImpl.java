@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.commons.lang.NotImplementedException;
 import org.petalslink.dsb.api.DSBException;
 import org.petalslink.dsb.kernel.api.messaging.RegistryListener;
 import org.petalslink.dsb.kernel.api.messaging.RegistryListenerManager;
@@ -21,13 +20,13 @@ import org.petalslink.dsb.kernel.api.messaging.RegistryListenerManager;
  */
 public class RegistryListenerManagerImpl implements RegistryListenerManager {
 
-    private Map<String, RegistryListener> listeners;
+    private Map<String, ManagedRegistryListener> listeners;
 
     /**
      * 
      */
     public RegistryListenerManagerImpl() {
-        this.listeners = new ConcurrentHashMap<String, RegistryListener>();
+        this.listeners = new ConcurrentHashMap<String, ManagedRegistryListener>();
     }
 
     /*
@@ -38,8 +37,11 @@ public class RegistryListenerManagerImpl implements RegistryListenerManager {
      * (java.lang.String, boolean)
      */
     public void setState(String name, boolean onoff) {
-        // TODO
-        throw new NotImplementedException();
+        ManagedRegistryListener listener = this.listeners.get(name);
+        if (listener == null) {
+            return;
+        }
+        listener.state = onoff;
     }
 
     /*
@@ -50,8 +52,11 @@ public class RegistryListenerManagerImpl implements RegistryListenerManager {
      * (java.lang.String)
      */
     public boolean getState(String name) {
-        // TODO
-        return true;
+        ManagedRegistryListener listener = this.listeners.get(name);
+        if (listener == null) {
+            return false;
+        }
+        return listener.state;
     }
 
     /*
@@ -62,8 +67,8 @@ public class RegistryListenerManagerImpl implements RegistryListenerManager {
      */
     public List<RegistryListener> getList() {
         List<RegistryListener> result = new ArrayList<RegistryListener>(this.listeners.size());
-        for (RegistryListener registryListener : this.listeners.values()) {
-            result.add(registryListener);
+        for (ManagedRegistryListener registryListener : this.listeners.values()) {
+            result.add(registryListener.listener);
         }
         return result;
     }
@@ -84,7 +89,7 @@ public class RegistryListenerManagerImpl implements RegistryListenerManager {
         if (name == null) {
             throw new DSBException("listener name null");
         }
-        this.listeners.put(listener.getName(), listener);
+        this.listeners.put(listener.getName(), new ManagedRegistryListener(listener));
     }
 
     /*
@@ -95,7 +100,11 @@ public class RegistryListenerManagerImpl implements RegistryListenerManager {
      * .lang.String)
      */
     public RegistryListener get(String name) throws DSBException {
-        return this.listeners.get(name);
+        ManagedRegistryListener listener = this.listeners.get(name);
+        if (listener == null) {
+            throw new DSBException(String.format("No such listener %s", name));
+        }
+        return listener.listener;
     }
 
     /*
@@ -106,7 +115,23 @@ public class RegistryListenerManagerImpl implements RegistryListenerManager {
      * (java.lang.String)
      */
     public RegistryListener remove(String name) throws DSBException {
-        return this.listeners.remove(name);
+        ManagedRegistryListener listener = this.listeners.remove(name);
+        if (listener == null) {
+            throw new DSBException("No such listener %s", name);
+        }
+        return listener.listener;
+    }
+
+    class ManagedRegistryListener {
+
+        RegistryListener listener;
+
+        boolean state;
+
+        ManagedRegistryListener(RegistryListener listener) {
+            this.listener = listener;
+            state = true;
+        }
     }
 
 }
