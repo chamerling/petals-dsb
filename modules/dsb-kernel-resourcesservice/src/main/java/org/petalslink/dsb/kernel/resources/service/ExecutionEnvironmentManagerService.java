@@ -140,8 +140,7 @@ public class ExecutionEnvironmentManagerService implements ExecutionEnvironmentM
         }
         for (ServiceEndpoint serviceEndpoint : endpoints) {
             ResourceIdentifier epInfo = new ResourceIdentifier();
-            // FIXME : is it enough? Maybe add location...
-            epInfo.setId(serviceEndpoint.getEndpointName());
+            epInfo.setId(ResourceIdBuilder.getId(serviceEndpoint));
             epInfo.setResourceType("endpoint");
             response.getResourceIdentifier().add(epInfo);
         }
@@ -264,7 +263,13 @@ public class ExecutionEnvironmentManagerService implements ExecutionEnvironmentM
         }
 
         for (org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint serviceEndpoint : endpoints) {
-            if (serviceEndpoint.getEndpointName().equals(id)) {
+            if (serviceEndpoint.getEndpointName().equals(ResourceIdBuilder.getEndpointName(id))
+                    && serviceEndpoint.getLocation().getComponentName()
+                            .equals(ResourceIdBuilder.getComponent(id))
+                    && serviceEndpoint.getLocation().getContainerName()
+                            .equals(ResourceIdBuilder.getContainer(id))
+                    && serviceEndpoint.getLocation().getSubdomainName()
+                            .equals(ResourceIdBuilder.getDomain(id))) {
                 return Adapter.createServiceEndpoint(serviceEndpoint);
             }
         }
