@@ -61,11 +61,15 @@ public class ResourceIdBuilder {
     public static String getDomain(String id) {
         String path = getPath(id);
         String subPath = path.substring(path.indexOf('/') + 1);
-        return subPath.substring(0, subPath.indexOf("/"));    }
+        return subPath.substring(0, subPath.indexOf("/"));
+    }
 
     private static String getPath(String id) {
-        if (id.startsWith(ROOT) && id.length() > ROOT.length() + 1) {
-            return id.substring(ROOT.length() + 1);
+        QName qname = QName.valueOf(id);
+
+        if (qname.getNamespaceURI().startsWith(ROOT)
+                && qname.getNamespaceURI().length() > ROOT.length() + 1) {
+            return qname.getNamespaceURI().substring(ROOT.length() + 1);
         }
         return "";
     }

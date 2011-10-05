@@ -4,6 +4,7 @@
 package org.petalslink.dsb.kernel.resources.service;
 
 import javax.xml.namespace.QName;
+import javax.xml.transform.TransformerException;
 
 import org.objectweb.fractal.fraclet.annotation.annotations.FractalComponent;
 import org.objectweb.fractal.fraclet.annotation.annotations.Interface;
@@ -13,12 +14,14 @@ import org.objectweb.fractal.fraclet.annotation.annotations.Provides;
 import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
 import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.util.LoggingUtil;
+import org.ow2.petals.util.XMLUtil;
 import org.petalslink.dsb.api.DSBException;
 import org.petalslink.dsb.api.ServiceEndpoint;
 import org.petalslink.dsb.kernel.pubsub.service.NotificationCenter;
 import org.petalslink.dsb.kernel.resources.service.utils.SOAException;
 import org.petalslink.dsb.kernel.resources.service.utils.SOAJAXBContext;
 import org.petalslink.dsb.notification.commons.NotificationException;
+import org.petalslink.dsb.notification.commons.api.NotificationSender;
 import org.w3c.dom.Document;
 
 import com.petalslink.easyresources.execution_environment_connection_model.ResourceIdentifier;
@@ -45,9 +48,16 @@ public class RegistryListener implements org.petalslink.dsb.kernel.api.messaging
 
     public static final String dialect = "http://docs.oasis-open.org/wsn/t-1/TopicExpression/Concrete";
 
+    private SOAJAXBContext context;
+
     @LifeCycle(on = LifeCycleType.START)
     protected void start() {
         this.log = new LoggingUtil(this.logger);
+        try {
+            context = SOAJAXBContext.getInstance();
+            context.addOtherObjectFactory(com.petalslink.easyresources.execution_environment_connection_model.ObjectFactory.class);
+        } catch (SOAException e) {
+        }
     }
 
     @LifeCycle(on = LifeCycleType.STOP)
@@ -77,14 +87,31 @@ public class RegistryListener implements org.petalslink.dsb.kernel.api.messaging
             throw new DSBException(e);
         }
 
+        try {
+            System.out.println(XMLUtil.createStringFromDOMDocument(payload));
+        } catch (TransformerException e1) {
+        }
+        if (log.isDebugEnabled()) {
+            try {
+                log.debug(XMLUtil.createStringFromDOMDocument(payload));
+            } catch (TransformerException e) {
+            }
+        }
+
         NotificationCenter notificationCenter = NotificationCenter.get();
         if (notificationCenter == null) {
             throw new DSBException(
                     "Can not get the notification center to send new resource notification...");
         }
 
+        NotificationSender sender = notificationCenter.getSender();
+        if (sender == null) {
+            throw new DSBException(
+                    "Can not get the notification sender from the notification center...");
+        }
+
         try {
-            notificationCenter.getSender().notify(payload, topicUsed, dialect);
+            sender.notify(payload, topicUsed, dialect);
         } catch (NotificationException e) {
             throw new DSBException(e);
         }

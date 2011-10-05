@@ -3,8 +3,11 @@
  */
 package org.petalslink.dsb.kernel.resources.service;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.namespace.QName;
 
@@ -16,6 +19,9 @@ import org.objectweb.fractal.fraclet.annotation.annotations.Provides;
 import org.objectweb.fractal.fraclet.annotation.annotations.Requires;
 import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
 import org.objectweb.util.monolog.api.Logger;
+import org.ow2.easywsdl.extensions.wsdl4complexwsdl.WSDL4ComplexWsdlFactory;
+import org.ow2.easywsdl.extensions.wsdl4complexwsdl.api.Description;
+import org.ow2.easywsdl.extensions.wsdl4complexwsdl.api.WSDL4ComplexWsdlException;
 import org.ow2.petals.jbi.messaging.registry.EndpointRegistry;
 import org.ow2.petals.jbi.messaging.registry.RegistryException;
 import org.ow2.petals.kernel.configuration.ConfigurationService;
@@ -96,17 +102,14 @@ public class ExecutionEnvironmentManagerService implements ExecutionEnvironmentM
                     getAdditionalContent.getResourceIdentifier().getId()));
         }
 
-        // get the WSDL import according to the input path
-        // FIXME : the ESB/DSB API does not have this feature...
         String relativePath = getAdditionalContent.getId();
-
         Document doc = getDescription(se.getDescription());
 
         Document importDesc = getImport(doc, relativePath);
         if (importDesc == null) {
             throw new GetAdditionalContentFault(String.format(
-                    "Impossible to find ressource corresponding to %s on endpoint %s",
-                    relativePath, getAdditionalContent.getResourceIdentifier().getId()));
+                    "Impossible to find import corresponding to %s on endpoint %s", relativePath,
+                    getAdditionalContent.getResourceIdentifier().getId()));
         }
         response.setAny(importDesc.getDocumentElement());
         return response;
@@ -181,6 +184,9 @@ public class ExecutionEnvironmentManagerService implements ExecutionEnvironmentM
         }
 
         Document doc = getDescription(se.getDescription());
+        if (doc == null) {
+            throw new GetContentFault("Can not generate WSDL document from endpoint description");
+        }
         response.setAny(doc.getDocumentElement());
         return response;
     }
@@ -235,7 +241,18 @@ public class ExecutionEnvironmentManagerService implements ExecutionEnvironmentM
      * @return
      */
     private Document getDescription(String description) {
-        return XMLUtil.createDocumentFromString(description);
+        Description desc;
+        try {
+            desc = WSDL4ComplexWsdlFactory.newInstance().newWSDLReader()
+                    .read(XMLUtil.createDocumentFromString(description));
+            return WSDL4ComplexWsdlFactory.newInstance().newWSDLWriter().getDocument(desc);
+
+        } catch (WSDL4ComplexWsdlException e) {
+            e.printStackTrace();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**
@@ -244,7 +261,26 @@ public class ExecutionEnvironmentManagerService implements ExecutionEnvironmentM
      * @return
      */
     private Document getImport(Document doc, String relativePath) {
-        // TODO Auto-generated method stub
+        if (log.isDebugEnabled()) {
+            log.debug(String.format("Try to get import from %s", relativePath));
+        }
+
+        try {
+            Description desc = WSDL4ComplexWsdlFactory.newInstance().newWSDLReader().read(doc);
+            Map<URI, org.w3c.dom.Document> imports = desc.deleteImportedDocumentsInWsdl();
+            if (imports != null) {
+                for (URI uri : imports.keySet()) {
+                    System.out.printf("Import URI %s", uri.toString());
+                    if (uri.toString().equals(relativePath)) {
+                        return imports.get(uri);
+                    }
+                }
+            }
+        } catch (WSDL4ComplexWsdlException e) {
+            e.printStackTrace();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
