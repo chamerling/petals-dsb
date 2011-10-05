@@ -14,6 +14,7 @@
 	
 	<!-- Notification based monitoring -->
 	<component definition="org.petalslink.dsb.kernel.pubsubmonitoring.service.PubSubMonitoringModule" name="PubSubMonitoringModule"/>
+	<component definition="org.petalslink.dsb.kernel.pubsubmonitoring.service.PubSubMonitoringService" name="PubSubMonitoringService"/>
 	
 	<!-- Implementation dependent -->
 	<component definition="org.petalslink.dsb.kernel.service.easierbsm.EasierBSMClientFactory" name="DSBMonitoringClientFactory"/>
