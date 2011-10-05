@@ -15,6 +15,9 @@
   <component definition="Container" name="Container"/>
   <component definition="org.ow2.petals.jbi.management.autoload.AutoLoaderServiceImpl" name="AutoLoaderServiceImpl"/>
   <component definition="Tools" name="Tools"/>
+  
+  <!-- DSB stuff -->
+  
   <component definition="DSBManagement" name="DSBManagement"/>
   <component definition="JBI-Messaging" name="JBI-Messaging"/>
   <component definition="Transporter" name="Transporter"/>
@@ -26,6 +29,7 @@
   <component definition="DSBMonitoring" name="DSBMonitoring"/>
   <component definition="WebService" name="WebService"/>
   <component definition="Notification" name="Notification"/>
+  <component definition="ResourceAPI" name="ResourceAPI"/>
   
   <component definition="org.petalslink.dsb.kernel.io.client.DSBClientFactoryImpl" name="DSBClientFactoryImpl"/>
 
@@ -156,4 +160,10 @@
   <!-- Notification -->
   <binding client="Notification.dsbconfiguration" server="DSBManagement.dsbconfiguration"/>
   <binding client="Notification.configuration" server="ConfigurationServiceImpl.service"/>
+  
+  <!-- Resource API -->
+  <binding client="ResourceAPI.configuration" server="ConfigurationServiceImpl.service"/>
+  <binding client="ResourceAPI.dsbconfiguration" server="DSBManagement.dsbconfiguration"/>
+  <binding client="ResourceAPI.registry" server="JBI-Messaging.endpoint"/>
+  
 </definition>
