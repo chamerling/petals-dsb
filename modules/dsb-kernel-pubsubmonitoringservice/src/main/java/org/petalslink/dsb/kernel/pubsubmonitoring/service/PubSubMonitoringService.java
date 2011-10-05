@@ -12,13 +12,10 @@ import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
 import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.util.LoggingUtil;
 import org.petalslink.dsb.kernel.pubsub.service.NotificationCenter;
-import org.petalslink.dsb.notification.commons.NotificationException;
 import org.petalslink.dsb.notification.commons.NotificationHelper;
 import org.petalslink.dsb.ws.api.DSBWebServiceException;
 
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.SubscribeResponse;
-import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.utils.WsnbException;
-import com.ebmwebsourcing.wsstar.wsrfbf.services.faults.AbsWSStarFault;
 
 /**
  * @author chamerling
