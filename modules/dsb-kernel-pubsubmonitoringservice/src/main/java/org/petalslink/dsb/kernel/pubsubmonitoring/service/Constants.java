@@ -11,7 +11,7 @@ import javax.xml.namespace.QName;
  */
 public interface Constants {
 
-    QName MONITORING_TOPIC = new QName("http://www.petalslink.org/dsb/topicsns/",
+    QName MONITORING_TOPIC = new QName("http://www.petalslink.org/resources/event/1.0",
             "MonitoringTopic", "dsb");
 
 }
