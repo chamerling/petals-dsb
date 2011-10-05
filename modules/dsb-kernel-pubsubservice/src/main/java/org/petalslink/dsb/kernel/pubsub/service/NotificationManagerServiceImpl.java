@@ -72,7 +72,7 @@ public class NotificationManagerServiceImpl implements NotificationManager {
     protected void stop() {
     }
 
-    @LifeCycleListener
+    @LifeCycleListener(priority=10001)
     public void initialize() {
         if (log.isDebugEnabled()) {
             log.debug("Initializing notification manager...");
