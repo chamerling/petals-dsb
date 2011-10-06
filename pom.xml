@@ -143,6 +143,9 @@
 		<module>modules/dsb-resources-api</module>
 		<module>modules/dsb-kernel-resourcesservice</module>
 		
+		<!-- Micro kernel -->
+		<module>modules/dsb-ukernel-binding</module>
+		
 		<!-- Independant things, to be moved elsewhere -->
 		<module>modules/gms-core</module>
    		<module>modules/gms-prototype</module>
@@ -151,8 +154,7 @@
 		<module>modules/dsb-xmlutils</module>
 
 		<!-- samples -->
-		<module>samples/dsb-wsn-sample</module>
-		
+		<module>samples/dsb-wsn-sample</module>		
 		
   </modules>
 
