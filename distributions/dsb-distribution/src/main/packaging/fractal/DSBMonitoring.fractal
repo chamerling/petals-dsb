@@ -33,14 +33,14 @@
 	
 	<!-- will need to be removed when the modules will be detected by the FW -->
 	<binding client="ModuleRegistration.routermodulemanager" server="this.routermodulemanager"/>
-	<binding client="ModuleRegistration.sendermodule-640" server="DSBMonitoringRouterMonitoringModule.reportSender"/>
-	<binding client="ModuleRegistration.receivermodule-100" server="DSBMonitoringRouterMonitoringModule.reportReceiver"/>
-	<binding client="ModuleRegistration.sendermodule-650" server="DSBMonitoringTimeStampMonitoringModule.timestampSender"/>
-	<binding client="ModuleRegistration.receivermodule-110" server="DSBMonitoringTimeStampMonitoringModule.timestampReceiver"/>
+	<binding client="ModuleRegistration.sendermodule-640-monitoringreportsender" server="DSBMonitoringRouterMonitoringModule.reportSender"/>
+	<binding client="ModuleRegistration.receivermodule-100-monitoringreportreceiver" server="DSBMonitoringRouterMonitoringModule.reportReceiver"/>
+	<binding client="ModuleRegistration.sendermodule-650-monitoringtimestampsender" server="DSBMonitoringTimeStampMonitoringModule.timestampSender"/>
+	<binding client="ModuleRegistration.receivermodule-110-monitoringtimestampreceiver" server="DSBMonitoringTimeStampMonitoringModule.timestampReceiver"/>
 	
 	<!-- Notification based monitoring -->
-	<binding client="ModuleRegistration.sendermodule-630" server="PubSubMonitoringModule.monitoringSender"/>
-	<binding client="ModuleRegistration.receivermodule-120" server="PubSubMonitoringModule.monitoringReceiver"/>
+	<binding client="ModuleRegistration.sendermodule-630-pubsubmonitoringsender" server="PubSubMonitoringModule.monitoringSender"/>
+	<binding client="ModuleRegistration.receivermodule-120-pubsubmonitoringreceiver" server="PubSubMonitoringModule.monitoringReceiver"/>
 	
 	<!-- Implementation dependent -->
 	<!-- Nothing...-->

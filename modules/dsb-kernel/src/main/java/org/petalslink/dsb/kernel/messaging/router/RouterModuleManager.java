@@ -30,14 +30,28 @@ public interface RouterModuleManager {
      * @param name
      * @param onoff
      */
-    void setState(String name, boolean onoff);
+    void setSenderState(String name, boolean onoff);
+
+    /**
+     * 
+     * @param name
+     * @param onoff
+     */
+    void setReceiverState(String name, boolean onoff);
 
     /**
      * 
      * @param name
      * @return
      */
-    boolean getState(String name);
+    boolean getReceiverState(String name);
+
+    /**
+     * 
+     * @param name
+     * @return
+     */
+    boolean getSenderState(String name);
 
     /**
      * 

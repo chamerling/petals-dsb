@@ -9,7 +9,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.apache.commons.lang.NotImplementedException;
+import org.ow2.petals.jbi.component.context.ComponentContext;
+import org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint;
+import org.ow2.petals.jbi.messaging.exchange.MessageExchange;
+import org.ow2.petals.jbi.messaging.routing.RoutingException;
+import org.ow2.petals.transport.util.TransportSendContext;
 
 /**
  * @author chamerling
@@ -17,9 +21,9 @@ import org.apache.commons.lang.NotImplementedException;
  */
 public class RouterModuleManagerImpl implements RouterModuleManager {
 
-    private Map<String, SenderModule> senders;
+    private Map<String, ManagedSenderModule> senders;
 
-    private Map<String, ReceiverModule> receivers;
+    private Map<String, ManagedReceiverModule> receivers;
 
     /**
      * 
@@ -27,12 +31,12 @@ public class RouterModuleManagerImpl implements RouterModuleManager {
     public RouterModuleManagerImpl() {
         // to keep backward compatibility, modules are reverse alphabetically
         // ordered ie sender-02 have more priority than sender-01
-        this.senders = new TreeMap<String, SenderModule>(new Comparator<String>() {
+        this.senders = new TreeMap<String, ManagedSenderModule>(new Comparator<String>() {
             public int compare(String o1, String o2) {
                 return o2.compareTo(o1);
             }
         });
-        this.receivers = new TreeMap<String, ReceiverModule>(new Comparator<String>() {
+        this.receivers = new TreeMap<String, ManagedReceiverModule>(new Comparator<String>() {
             public int compare(String o1, String o2) {
                 return o2.compareTo(o1);
             }
@@ -48,7 +52,7 @@ public class RouterModuleManagerImpl implements RouterModuleManager {
      */
     public void add(SenderModule module) {
         if (module != null && module.getName() != null) {
-            this.senders.put(module.getName(), module);
+            this.senders.put(module.getName(), new ManagedSenderModule(module));
         }
     }
 
@@ -61,31 +65,8 @@ public class RouterModuleManagerImpl implements RouterModuleManager {
      */
     public void add(ReceiverModule module) {
         if (module != null && module.getName() != null) {
-            this.receivers.put(module.getName(), module);
+            this.receivers.put(module.getName(), new ManagedReceiverModule(module));
         }
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.petalslink.dsb.kernel.messaging.router.RouterModuleManager#setState
-     * (java.lang.String, boolean)
-     */
-    public void setState(String name, boolean onoff) {
-        throw new NotImplementedException();
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.petalslink.dsb.kernel.messaging.router.RouterModuleManager#getState
-     * (java.lang.String)
-     */
-    public boolean getState(String name) {
-        // TODO
-        return true;
     }
 
     /*
@@ -102,6 +83,63 @@ public class RouterModuleManagerImpl implements RouterModuleManager {
         }
         return result;
     }
+    
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.petalslink.dsb.kernel.messaging.router.RouterModuleManager#setSenderState
+     * (java.lang.String, boolean)
+     */
+    public void setSenderState(String name, boolean onoff) {
+        ManagedSenderModule module = this.senders.get(name);
+        if (module != null) {
+            module.state = onoff;
+        }
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.petalslink.dsb.kernel.messaging.router.RouterModuleManager#
+     * setReceiverState(java.lang.String, boolean)
+     */
+    public void setReceiverState(String name, boolean onoff) {
+        ManagedReceiverModule module = this.receivers.get(name);
+        if (module != null) {
+            module.state = onoff;
+        }
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.petalslink.dsb.kernel.messaging.router.RouterModuleManager#
+     * getReceiverState(java.lang.String)
+     */
+    public boolean getReceiverState(String name) {
+        ManagedReceiverModule module = this.receivers.get(name);
+        if (module == null) {
+            return false;
+        }
+        return module.state;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.petalslink.dsb.kernel.messaging.router.RouterModuleManager#getSenderState
+     * (java.lang.String)
+     */
+    public boolean getSenderState(String name) {
+        ManagedSenderModule module = this.senders.get(name);
+        if (module == null) {
+            return false;
+        }
+        return module.state;
+    }
+
 
     /*
      * (non-Javadoc)
@@ -118,4 +156,99 @@ public class RouterModuleManagerImpl implements RouterModuleManager {
         return result;
     }
 
+    class ManagedSenderModule implements SenderModule {
+
+        private SenderModule module;
+
+        boolean state = true;
+
+        /**
+         * 
+         */
+        public ManagedSenderModule(SenderModule module) {
+            this.module = module;
+        }
+
+        /*
+         * (non-Javadoc)
+         * 
+         * @see
+         * org.ow2.petals.jbi.messaging.routing.module.SenderModule#electEndpoints
+         * (java.util.Map,
+         * org.ow2.petals.jbi.component.context.ComponentContext,
+         * org.ow2.petals.jbi.messaging.exchange.MessageExchange)
+         */
+        public void electEndpoints(Map<ServiceEndpoint, TransportSendContext> electedEndpoints,
+                ComponentContext sourceComponentContext, MessageExchange exchange)
+                throws RoutingException {
+            if (state) {
+                this.module.electEndpoints(electedEndpoints, sourceComponentContext, exchange);
+            }
+
+        }
+
+        /*
+         * (non-Javadoc)
+         * 
+         * @see
+         * org.petalslink.dsb.kernel.messaging.router.SenderModule#getName()
+         */
+        public String getName() {
+            return this.module.getName();
+        }
+
+        /* (non-Javadoc)
+         * @see org.petalslink.dsb.kernel.messaging.router.SenderModule#getDescription()
+         */
+        public String getDescription() {
+            return this.module.getDescription();
+        }
+
+    }
+
+    class ManagedReceiverModule implements ReceiverModule {
+
+        private ReceiverModule receiver;
+
+        private boolean state;
+
+        public ManagedReceiverModule(ReceiverModule receiver) {
+            this.receiver = receiver;
+            this.state = true;
+        }
+
+        /*
+         * (non-Javadoc)
+         * 
+         * @see org.ow2.petals.jbi.messaging.routing.module.ReceiverModule#
+         * receiveExchange
+         * (org.ow2.petals.jbi.messaging.exchange.MessageExchange,
+         * org.ow2.petals.jbi.component.context.ComponentContext)
+         */
+        public boolean receiveExchange(MessageExchange exchange,
+                ComponentContext sourceComponentContext) throws RoutingException {
+            if (this.state) {
+                return this.receiver.receiveExchange(exchange, sourceComponentContext);
+            }
+            return true;
+        }
+
+        /*
+         * (non-Javadoc)
+         * 
+         * @see
+         * org.petalslink.dsb.kernel.messaging.router.ReceiverModule#getName()
+         */
+        public String getName() {
+            return this.receiver.getName();
+        }
+        
+        /*
+         * (non-Javadoc)
+         * @see org.petalslink.dsb.kernel.messaging.router.ReceiverModule#getDescription()
+         */
+        public String getDescription() {
+            return this.receiver.getDescription();
+        }
+    }
 }

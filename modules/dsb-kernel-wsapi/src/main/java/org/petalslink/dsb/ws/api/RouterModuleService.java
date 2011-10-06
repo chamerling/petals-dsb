@@ -3,7 +3,7 @@
  */
 package org.petalslink.dsb.ws.api;
 
-import java.util.Set;
+import java.util.List;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
@@ -19,29 +19,33 @@ public interface RouterModuleService {
 
     /**
      * Get all the senders names
+     * 
      * @return
      */
     @WebMethod
-    Set<String> getSenders();
+    List<RouterModule> getSenders();
 
     /**
      * Get all the receiver names
+     * 
      * @return
      */
     @WebMethod
-    Set<String> getReceivers();
+    List<RouterModule> getReceivers();
 
     /**
-     * Set the state of a module
      * 
      * @param name
      * @param onoff
-     * @return
      */
     @WebMethod
-    boolean setState(String name, boolean onoff);
+    void setSenderState(String name, boolean onoff);
 
+    /**
+     * 
+     * @param name
+     * @param onoff
+     */
     @WebMethod
-    boolean getState(String name);
-
+    void setReceiverState(String name, boolean onoff);
 }

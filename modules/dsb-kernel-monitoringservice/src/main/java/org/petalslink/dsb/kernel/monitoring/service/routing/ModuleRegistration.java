@@ -95,6 +95,10 @@ public class ModuleRegistration {
             public String getName() {
                 return name;
             }
+
+            public String getDescription() {
+                return sender.getClass().getName();
+            }
         });
     }
 
@@ -113,6 +117,10 @@ public class ModuleRegistration {
 
                     public String getName() {
                         return name;
+                    }
+                    
+                    public String getDescription() {
+                        return receiver.getClass().getName();
                     }
                 });
     }
