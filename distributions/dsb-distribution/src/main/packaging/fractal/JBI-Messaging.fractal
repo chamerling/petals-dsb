@@ -25,6 +25,8 @@
 	
 	<component definition="org.petalslink.dsb.kernel.registry.RegistryListenerServiceImpl" name="RegistryListenerServiceImpl"/>
     <component definition="org.petalslink.dsb.kernel.registry.RegistryListenerRegistryImpl" name="RegistryListenerRegistryImpl"/>
+
+	<component definition="org.petalslink.dsb.kernel.messaging.router.RouterModuleServiceImpl" name="RouterModuleServiceImpl"/>
 	
 	<binding client="UpdateRemoteTansportModule.dsbconfiguration" server="this.dsbconfiguration" />
 	
@@ -54,12 +56,12 @@
 	<binding client="RouterServiceImpl.transporter-xmpp" server="this.transporter-xmpp" />
 	
 	<!-- Routing modules -->
-	<binding client="RouterServiceImpl.sendermodule-700" server="CoreServiceRouterModule.service" />
-	<binding client="RouterServiceImpl.sendermodule-600" server="EndpointResolverModule.service" />
-	<binding client="RouterServiceImpl.sendermodule-100" server="TransportResolverModule.service" />
-	<binding client="RouterServiceImpl.sendermodule-50" server="UpdateRemoteTansportModule.service" />
-	<binding client="RouterServiceImpl.sendermodule-30" server="SourceSetterModule.service"/>
-	<binding client="RouterServiceImpl.sendermodule-10" server="LoggerModule.service" />
+	<binding client="RouterServiceImpl.sendermodule-700-coreservicerouter" server="CoreServiceRouterModule.service" />
+	<binding client="RouterServiceImpl.sendermodule-600-endpointresolver" server="EndpointResolverModule.service" />
+	<binding client="RouterServiceImpl.sendermodule-100-transportresolver" server="TransportResolverModule.service" />
+	<binding client="RouterServiceImpl.sendermodule-50-updateremotetransport" server="UpdateRemoteTansportModule.service" />
+	<binding client="RouterServiceImpl.sendermodule-30-sourcesetter" server="SourceSetterModule.service"/>
+	<binding client="RouterServiceImpl.sendermodule-10-logger" server="LoggerModule.service" />
 
 	<!-- Endpoint resolver -->
 	<binding client="EndpointResolverModule.configuration" server="this.configuration" />
@@ -72,5 +74,8 @@
 	<!-- registry listener -->
 	<binding client="RegistryListenerServiceImpl.registry-listener-manager" server="EndpointRegistryImpl.registrylistenermanager"/>
 	<binding client="RegistryListenerRegistryImpl.registry-listener-manager" server="EndpointRegistryImpl.registrylistenermanager"/>
+	
+	<!-- Modules management -->
+	<binding client="RouterModuleServiceImpl.router-module-manager" server="RouterServiceImpl.routermodulemanager"/>
 
 </definition>
