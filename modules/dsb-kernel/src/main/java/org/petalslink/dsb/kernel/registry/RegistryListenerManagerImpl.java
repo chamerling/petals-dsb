@@ -69,7 +69,7 @@ public class RegistryListenerManagerImpl implements RegistryListenerManager {
     public List<RegistryListener> getList() {
         List<RegistryListener> result = new ArrayList<RegistryListener>(this.listeners.size());
         for (ManagedRegistryListener registryListener : this.listeners.values()) {
-            result.add(registryListener.listener);
+            result.add(registryListener);
         }
         return result;
     }
@@ -105,7 +105,7 @@ public class RegistryListenerManagerImpl implements RegistryListenerManager {
         if (listener == null) {
             throw new DSBException(String.format("No such listener %s", name));
         }
-        return listener.listener;
+        return listener;
     }
 
     /*
