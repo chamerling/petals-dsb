@@ -91,9 +91,6 @@ public class RegistryListenerRegistryImpl implements RegistryListenerRegistry {
             Object o = FractalHelper.getContent(component);
             if (o instanceof RegistryListener) {
                 RegistryListener listener = (RegistryListener) o;
-                System.out.println(String.format(
-                        "++++ Got a registry listener detected from the framework : %s",
-                        listener.getName()));
                 if (this.log.isDebugEnabled()) {
                     this.log.debug(String.format(
                             "Got a registry listener detected from the framework : %s",
