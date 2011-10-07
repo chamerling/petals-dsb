@@ -5,7 +5,6 @@ package org.petalslink.dsb.jbi.se.wsn;
 
 import java.net.URI;
 import java.net.URL;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -48,8 +47,8 @@ public class NotificationEngine {
     NotificationManager notificationManager;
 
     private URL topicNamespaces;
-
-    private List<String> supportedTopics;
+    
+    private URL topicSet;
 
     private QName serviceName;
 
@@ -72,12 +71,11 @@ public class NotificationEngine {
 
     private ServiceEngine serviceEngine;
 
-    public NotificationEngine(Logger logger, URL topicNamespaces, List<String> supportedTopics,
-            QName serviceName, QName interfaceName, String endpointName, Client client) {
+    public NotificationEngine(Logger logger, URL topicSet, URL topicNamespaces, QName serviceName, QName interfaceName, String endpointName, Client client) {
         super();
         this.logger = logger;
         this.topicNamespaces = topicNamespaces;
-        this.supportedTopics = supportedTopics;
+        this.topicSet = topicSet;
         this.serviceName = serviceName;
         this.interfaceName = interfaceName;
         this.endpointName = endpointName;
@@ -88,7 +86,7 @@ public class NotificationEngine {
      * 
      */
     public void init() {
-        this.notificationManager = new NotificationManagerImpl(topicNamespaces, supportedTopics,
+        this.notificationManager = new NotificationManagerImpl(topicSet, topicNamespaces,
                 serviceName, interfaceName, endpointName);
         this.internalNotificationSender = new AbstractNotificationSender(this
                 .getNotificationManager().getNotificationProducerEngine()) {

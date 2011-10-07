@@ -72,13 +72,13 @@ public class NotificationManagerServiceImpl implements NotificationManager {
     protected void stop() {
     }
 
-    @LifeCycleListener(priority=10001)
+    @LifeCycleListener(priority = 10001)
     public void initialize() {
         if (log.isDebugEnabled()) {
             log.debug("Initializing notification manager...");
         }
-        this.manager = new NotificationManagerImpl(configuration.getTopicNamespaces(),
-                configuration.getSupportedTopics(), configuration.getServiceName(),
+        this.manager = new NotificationManagerImpl(configuration.getTopicSet(),
+                configuration.getTopicNamespaces(), configuration.getServiceName(),
                 configuration.getInterfaceName(), configuration.getEndpointName());
         NotificationCenter.get().setNotificationManager(this);
 

@@ -13,6 +13,8 @@ import javax.xml.namespace.QName;
  * 
  */
 public interface NotificationConfiguration {
+    
+    URL getTopicSet();
 
     URL getTopicNamespaces();
 

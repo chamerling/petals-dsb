@@ -34,7 +34,9 @@ public class FileNotificationConfigurationImpl implements NotificationConfigurat
 
     public static final String FILE_CFG = "notification.cfg";
 
-    public static final String TOPICS_NS_FILE = "topics.xml";
+    public static final String TOPICS_NS_FILE = "kernel-topicns-rpupdate.xml";
+
+    public static final String TOPICSSET_FILE = "kernel-topicset.xml";
 
     private static final String ENDPOINT_NAME = "endpoint";
 
@@ -112,7 +114,9 @@ public class FileNotificationConfigurationImpl implements NotificationConfigurat
     public URL getTopicNamespaces() {
         File configPath = new File(this.configurationService.getContainerConfiguration()
                 .getRootDirectoryPath(), "conf");
-        File result = new File(configPath, TOPICS_NS_FILE);
+        File topicPath = new File(configPath, "topics");
+
+        File result = new File(topicPath, TOPICS_NS_FILE);
         try {
             return result.toURI().toURL();
         } catch (MalformedURLException e) {
@@ -159,6 +163,25 @@ public class FileNotificationConfigurationImpl implements NotificationConfigurat
      */
     public String getEndpointName() {
         return this.endpointName;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.petalslink.dsb.kernel.pubsub.service.NotificationConfiguration#
+     * getTopicSet()
+     */
+    public URL getTopicSet() {
+        File configPath = new File(this.configurationService.getContainerConfiguration()
+                .getRootDirectoryPath(), "conf");
+        File topicPath = new File(configPath, "topics");
+        File result = new File(topicPath, TOPICSSET_FILE);
+        try {
+            return result.toURI().toURL();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

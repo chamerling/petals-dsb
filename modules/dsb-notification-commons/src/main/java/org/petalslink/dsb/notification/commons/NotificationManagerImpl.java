@@ -84,6 +84,65 @@ public class NotificationManagerImpl implements NotificationManager {
                 new WsnbModelFactoryImpl());
     }
 
+    public NotificationManagerImpl(URL topicSetXML, URL topicNamespaceRPUpdate, QName serviceName,
+            QName interfaceName, String endpointName) {
+        this.endpointName = endpointName;
+        this.serviceName = serviceName;
+        this.interfaceName = interfaceName;
+
+        Document topicSetDom = null;
+        Document topicNSRPUpdateDom = null;
+        try {
+            topicSetDom = SOAUtil.getInstance().getDocumentBuilderFactory().newDocumentBuilder()
+                    .parse(topicSetXML.openStream());
+
+            topicNSRPUpdateDom = SOAUtil.getInstance().getDocumentBuilderFactory()
+                    .newDocumentBuilder().parse(topicNamespaceRPUpdate.openStream());
+
+            this.topicSet = RefinedWstopFactory.getInstance().getWstopReader()
+                    .readTopicSetType(topicSetDom);
+
+            this.topicNamespace = RefinedWstopFactory.getInstance().getWstopReader()
+                    .readTopicNamespaceType(topicNSRPUpdateDom);
+
+            final org.w3c.dom.Document out = RefinedWstopFactory.getInstance().getWstopWriter()
+                    .writeTopicSetTypeAsDOM(topicSet);
+
+            final org.w3c.dom.Document out2 = RefinedWstopFactory.getInstance().getWstopWriter()
+                    .writeTopicNamespaceTypeAsDOM(topicNamespace);
+
+            System.out.println("TOPIC SET : " + XMLPrettyPrinter.prettyPrint(out));
+            System.out.println("TOPIC NS RP Update : " + XMLPrettyPrinter.prettyPrint(out2));
+
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParserConfigurationException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (WstopException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        this.topicsManagerEngine = new TopicsManagerEngine();
+        this.subscriptionManagerEngine = new SubscriptionManagerEngine(logger);
+
+        this.subscriptionManagerEngine.setSubscriptionsManagerEdp(getEndpointName());
+        this.subscriptionManagerEngine.setSubscriptionsManagerInterface(getInterfaceName());
+        this.subscriptionManagerEngine.setSubscriptionsManagerService(getServiceName());
+
+        // TODO : move to to a dedicated component?
+        try {
+            this.notificationProducerEngine = new NotificationProducerEngine(logger,
+                    getTopicsManagerEngine(), getSubscriptionManagerEngine(), true, getTopicSet(),
+                    getTopicNamespace(), "wsn", null);
+        } catch (WsnbException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
 	 * 
 	 */
@@ -97,7 +156,7 @@ public class NotificationManagerImpl implements NotificationManager {
         try {
             docTopicNs = SOAUtil.getInstance().getDocumentBuilderFactory().newDocumentBuilder()
                     .parse(topicNamespaces.openStream());
-            
+
             this.supportedTopics = supportedTopics;
             this.topicNamespace = RefinedWstopFactory.getInstance().getWstopReader()
                     .readTopicNamespaceType(docTopicNs);
@@ -349,8 +408,11 @@ public class NotificationManagerImpl implements NotificationManager {
         return notificationProducerEngine;
     }
 
-    /* (non-Javadoc)
-     * @see org.petalslink.dsb.notification.commons.api.NotificationManager#getSupportedTopics()
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.petalslink.dsb.notification.commons.api.NotificationManager#
+     * getSupportedTopics()
      */
     public List<String> getSupportedTopics() {
         return this.supportedTopics;

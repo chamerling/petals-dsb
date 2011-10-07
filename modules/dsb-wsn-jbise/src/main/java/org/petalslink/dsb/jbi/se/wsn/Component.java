@@ -20,7 +20,6 @@ package org.petalslink.dsb.jbi.se.wsn;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -41,11 +40,8 @@ import org.ow2.petals.component.framework.util.UtilFactory;
 import org.ow2.petals.component.framework.util.XMLUtil;
 import org.petalslink.dsb.notification.commons.PropertiesConfigurationProducer;
 import org.petalslink.dsb.notification.commons.api.ConfigurationProducer;
-import org.petalslink.dsb.service.client.Message;
-import org.petalslink.dsb.service.client.WSAMessageImpl;
 import org.w3c.dom.Document;
 
-import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.WsnbConstants;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Subscribe;
 import com.ebmwebsourcing.wsstar.wsnb.services.impl.util.Wsnb4ServUtils;
 
@@ -65,15 +61,15 @@ public class Component extends PetalsBindingComponent {
 
     public static final String FILE_CFG = "notification.cfg";
 
-    public static final String TOPICS_NS_FILE = "topics.xml";
+    public static final String TOPICS_NS_FILE = "topics/business-topicns-rpupdate.xml";
+
+    public static final String TOPICSET_FILE = "topics/business-topicset.xml";
 
     private static final String ENDPOINT_NAME = "endpoint";
 
     private static final String INTERFACE_NAME = "interface";
 
     private static final String SERVICE_NAME = "service";
-
-    private static final String SUPPORTED_TOPICS = "supported-topics";
 
     NotificationEngine engine;
 
@@ -98,31 +94,22 @@ public class Component extends PetalsBindingComponent {
             throw new JBIException("Can not find the notification configuration file");
         }
 
-        URL url = Component.class.getClassLoader().getResource("topics.xml");
-        if (url == null) {
-            throw new JBIException("Can not find the notification topics configuration file");
+        URL topics = Component.class.getClassLoader().getResource(TOPICSET_FILE);
+        if (topics == null) {
+            throw new JBIException("Can not find the notification topicnamespace configuration file");
+        }
+        
+        URL tns = Component.class.getClassLoader().getResource(TOPICS_NS_FILE);
+        if (tns == null) {
+            throw new JBIException("Can not find the notification topicnamespace configuration file");
         }
 
         String endpointName = props.getProperty(ENDPOINT_NAME);
         QName interfaceName = QName.valueOf(props.getProperty(INTERFACE_NAME));
         QName serviceName = QName.valueOf(props.getProperty(SERVICE_NAME));
 
-        String tmp = props.getProperty(SUPPORTED_TOPICS);
-        List<String> supportedTopics = new ArrayList<String>();
-        if (tmp != null) {
-            tmp = tmp.trim();
-            String[] topics = tmp.split(",");
-            if (topics != null) {
-                for (String string : topics) {
-                    if (string.trim().length() > 0) {
-                        supportedTopics.add(string.trim());
-                    }
-                }
-            }
-        }
-
         if (engine == null) {
-            engine = new NotificationEngine(getLogger(), url, supportedTopics, serviceName,
+            engine = new NotificationEngine(getLogger(), topics, tns, serviceName,
                     interfaceName, endpointName, getJBIClient());
         }
         this.engine.init();
