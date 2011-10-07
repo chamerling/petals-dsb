@@ -1,0 +1,16 @@
+<wstop:TopicSet xmlns:wstop="http://docs.oasis-open.org/wsn/t-1"
+	xmlns:s="http://streams.event-processing.org/ids/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xhtml="http://www.w3.org/1999/xhtml#">
+	<s:NiceTempStream wstop:topic="true"
+		xhtml:icon="http://www.ville-nice.fr/design/standard/images/favicon.ico"
+		dcterms:title="Nice Temperatures" dcterms:description="A stream of temperature readings."></s:NiceTempStream>
+	<s:NiceWeatherStream wstop:topic="true"
+		xhtml:icon="http://www.ville-nice.fr/design/standard/images/favicon.ico"
+		dcterms:title="Nice aggregated Weather" dcterms:description="A stream of complex events."></s:NiceWeatherStream>
+	<s:FacebookStatusFeed wstop:topic="true"
+		xhtml:icon="https://s-static.ak.facebook.com/rsrc.php/yi/r/q9U99v3_saj.ico"
+		dcterms:title="Facebook Status Feed" dcterms:description="A stream of Facebook Wall updates."></s:FacebookStatusFeed>
+	<s:PachubeFeed wstop:topic="true"
+		xhtml:icon="http://pachube.com/favicon.ico" dcterms:title="Pachube Stream"
+		dcterms:description="A stream of Pachube events."></s:PachubeFeed>
+</wstop:TopicSet> 

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wstop:TopicNamespace name="DSBEvents"
+	targetNamespace="http://dsb.petalslink.org/kernel/"
+	xmlns:msg="http://dsb.petalslink.org/kernel/" xmlns:wstop="http://docs.oasis-open.org/wsn/t-1"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:resources_event="http://www.petalslink.com/easyresources/execution.environment.connection.api/1.0"
+	xsi:schemaLocation="http://docs.oasis-open.org/wsn/t-1 http://docs.oasis-open.org/wsn/t-1.xsd http://www.petalslink.com/easyresources/execution.environment.connection.api/">
+	<wstop:Topic name="DSBTopic" messageTypes="msg:stateEventNotificationMessage" />
+	<wstop:Topic name="MonitoringTopic" messageTypes="msg:stateEventNotificationMessage" />
+	<wstop:Topic name="ManagementTopic" messageTypes="msg:stateEventNotificationMessage" />
+	<wstop:Topic name="ExceptionTopic" messageTypes="msg:stateEventNotificationMessage" />
+</wstop:TopicNamespace>
