@@ -87,10 +87,6 @@ public class RegistryListener implements org.petalslink.dsb.kernel.api.messaging
             throw new DSBException(e);
         }
 
-        try {
-            System.out.println(XMLUtil.createStringFromDOMDocument(payload));
-        } catch (TransformerException e1) {
-        }
         if (log.isDebugEnabled()) {
             try {
                 log.debug(XMLUtil.createStringFromDOMDocument(payload));
