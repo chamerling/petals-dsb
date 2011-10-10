@@ -10,12 +10,14 @@ import java.util.logging.Logger;
 import javax.xml.namespace.QName;
 
 import org.petalslink.dsb.api.ServiceEndpoint;
+import org.petalslink.dsb.api.util.EndpointHelper;
 import org.petalslink.dsb.kernel.io.client.ClientFactoryRegistry;
 import org.petalslink.dsb.notification.commons.AbstractNotificationSender;
 import org.petalslink.dsb.notification.commons.NotificationException;
 import org.petalslink.dsb.service.client.Client;
 import org.petalslink.dsb.service.client.ClientException;
 import org.petalslink.dsb.service.client.Message;
+import org.petalslink.dsb.service.client.MessageImpl;
 import org.petalslink.dsb.service.client.WSAMessageImpl;
 import org.w3c.dom.Document;
 
@@ -76,7 +78,19 @@ public class DSBNotificationSender extends AbstractNotificationSender {
 
         Client client = null;
 
-        if (isExternalService(uri)) {
+        if (isInternalService(uri)) {
+            message = new MessageImpl();
+            ServiceEndpoint se = EndpointHelper.getServiceEndpoint(uri);
+            message.setEndpoint(se.getEndpointName());
+            message.setService(se.getServiceName());
+
+            client = getClient(se);
+            if (client == null) {
+                throw new NotificationException(String.format(
+                        "Can not find any client to send notification to %s", uri.toString()));
+            }
+
+        } else if (isExternalService(uri)) {
             message = new WSAMessageImpl(uri.toString());
             ServiceEndpoint se = new ServiceEndpoint();
             se.setEndpointName(message.getEndpoint());
@@ -87,16 +101,8 @@ public class DSBNotificationSender extends AbstractNotificationSender {
                 throw new NotificationException("Can not find any client to send notification");
             }
         } else {
-            System.out.println("!!! Internal service : TODO NotificationSender class!!!");
+            log.warning("Do not know how to process this type of URI : " + uri);
             return;
-            // URI is service@endpoint
-            /*
-             * componentName = AddressingHelper.getComponent(uri); ns =
-             * String.format(WSAConstants.NS_TEMPLATE, componentName);
-             * serviceName = AddressingHelper.getServiceName(uri); ep =
-             * AddressingHelper.getEndpointName(uri);
-             */
-            // TODO how to define internal addresses???
         }
 
         try {
@@ -105,7 +111,7 @@ public class DSBNotificationSender extends AbstractNotificationSender {
             message.setPayload(payload);
             message.setOperation(WsnbConstants.NOTIFY_QNAME);
             client.fireAndForget(message);
-            
+
         } catch (ClientException e) {
             e.printStackTrace();
         } catch (WsnbException e) {
@@ -121,6 +127,14 @@ public class DSBNotificationSender extends AbstractNotificationSender {
                 }
             }
         }
+    }
+
+    /**
+     * @param uri
+     * @return
+     */
+    private boolean isInternalService(URI uri) {
+        return EndpointHelper.isDSBService(uri);
     }
 
     /*
