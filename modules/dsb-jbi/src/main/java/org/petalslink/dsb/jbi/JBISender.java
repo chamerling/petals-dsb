@@ -3,6 +3,7 @@
  */
 package org.petalslink.dsb.jbi;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -193,7 +194,10 @@ public class JBISender implements Client {
                         }
 
                         public List<QName> getInterfacesName() {
-                            return Arrays.asList(serviceEndpoint.getInterfaces());
+                            if (serviceEndpoint.getInterfaces() != null)
+                                return Arrays.asList(serviceEndpoint.getInterfaces());
+                            else 
+                                return new ArrayList<QName>(0);
                         }
 
                         public Document getDescription() {
