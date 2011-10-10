@@ -16,6 +16,7 @@ import org.ow2.petals.component.framework.AbstractComponent;
 import org.ow2.petals.component.framework.ComponentWsdl;
 import org.ow2.petals.component.framework.api.Wsdl;
 import org.ow2.petals.component.framework.util.UtilFactory;
+import org.petalslink.dsb.api.util.EndpointHelper;
 import org.petalslink.dsb.notification.commons.AbstractNotificationSender;
 import org.petalslink.dsb.notification.commons.NotificationException;
 import org.petalslink.dsb.notification.commons.NotificationManagerImpl;
@@ -24,6 +25,7 @@ import org.petalslink.dsb.notification.service.NotificationProducerRPService;
 import org.petalslink.dsb.service.client.Client;
 import org.petalslink.dsb.service.client.ClientException;
 import org.petalslink.dsb.service.client.Message;
+import org.petalslink.dsb.service.client.MessageImpl;
 import org.petalslink.dsb.service.client.WSAMessageImpl;
 import org.w3c.dom.Document;
 
@@ -118,19 +120,16 @@ public class NotificationEngine {
                 URI uri = currentConsumerEdp.getAddress().getValue();
                 Message message = null;
 
-                if (AddressingHelper.isExternalService(uri)) {
+                if (EndpointHelper.isDSBService(uri)) {
+                    message = new MessageImpl();
+                    message.setEndpoint(EndpointHelper.getEndpoint(uri));
+                    message.setService(EndpointHelper.getService(uri));
+                    
+                } else if (AddressingHelper.isExternalService(uri)) {
                     message = new WSAMessageImpl(uri.toString());
                 } else {
                     System.out.println("Internal service : TODO NotificationEngine class!");
                     return;
-                    // URI is service@endpoint
-                    /*
-                     * componentName = AddressingHelper.getComponent(uri); ns =
-                     * String.format(WSAConstants.NS_TEMPLATE, componentName);
-                     * serviceName = AddressingHelper.getServiceName(uri); ep =
-                     * AddressingHelper.getEndpointName(uri);
-                     */
-                    // TODO how to define internal addresses???
                 }
 
                 try {
