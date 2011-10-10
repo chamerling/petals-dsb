@@ -25,8 +25,9 @@
 	<component name="NotificationManagerService" definition="org.petalslink.dsb.kernel.pubsub.service.NotificationManagerServiceImpl"/>
 	<component name="NotificationConfiguration" definition="org.petalslink.dsb.kernel.pubsub.service.FileNotificationConfigurationImpl"/>
 	
-	<!-- Bootstrap -->
+	<!-- Bootstraps -->
 	<component name="NotificationBootstrap" definition="org.petalslink.dsb.kernel.wsn.NotificationBootstrapImpl"/>
+	<component name="SubscriberBootstrapImpl" definition="org.petalslink.dsb.kernel.pubsub.service.SubscriberBootstrapImpl"/>
 	
 	<!-- bindings -->
 	<!-- internal -->
