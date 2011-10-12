@@ -19,7 +19,21 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.METHOD })
 public @interface Notify {
+    /**
+     * List of topics in a QName serialized form like : {nsuri}prefix:localPart
+     * 
+     * @return
+     */
     String[] topics() default "";
 
     String dialect() default "";
+
+    /**
+     * Do we need to just get the business message or the complete notification
+     * as input Document?
+     * 
+     * @return
+     */
+    Mode mode() default Mode.PAYLOAD;
+
 }
