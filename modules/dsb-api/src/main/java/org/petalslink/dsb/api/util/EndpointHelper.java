@@ -15,7 +15,9 @@ import org.petalslink.dsb.api.ServiceEndpoint;
  */
 public class EndpointHelper {
 
-    static final String DSB_PREFIX = "dsb";
+    public static final String DSB_PREFIX = "dsb";
+
+    public static final String JAVA_PREFIX = "java";
 
     /**
      * 
@@ -29,6 +31,10 @@ public class EndpointHelper {
 
     public static boolean isDSBService(URI uri) {
         return uri != null && uri.toString().startsWith(DSB_PREFIX + "://");
+    }
+    
+    public static boolean isJavaService(URI uri) {
+        return uri != null && uri.toString().startsWith(JAVA_PREFIX + "://");
     }
 
     public static org.petalslink.dsb.api.ServiceEndpoint getServiceEndpoint(URI uri) {
