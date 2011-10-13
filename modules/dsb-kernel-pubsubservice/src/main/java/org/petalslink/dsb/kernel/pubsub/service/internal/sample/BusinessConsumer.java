@@ -8,7 +8,6 @@ import javax.xml.transform.TransformerException;
 import org.objectweb.fractal.fraclet.annotation.annotations.FractalComponent;
 import org.objectweb.fractal.fraclet.annotation.annotations.LifeCycle;
 import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
-import org.ow2.petals.util.LoggingUtil;
 import org.ow2.petals.util.XMLUtil;
 import org.petalslink.dsb.annotations.notification.Mode;
 import org.petalslink.dsb.annotations.notification.Notify;

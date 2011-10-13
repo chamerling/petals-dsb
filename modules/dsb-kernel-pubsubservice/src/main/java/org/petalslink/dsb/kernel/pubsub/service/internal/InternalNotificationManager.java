@@ -19,17 +19,13 @@ import org.petalslink.dsb.annotations.LifeCycleListener;
 import org.petalslink.dsb.annotations.Phase;
 import org.petalslink.dsb.api.util.EndpointHelper;
 import org.petalslink.dsb.kernel.pubsub.service.NotificationCenter;
-import org.petalslink.dsb.notification.commons.NotificationException;
 import org.petalslink.dsb.notification.commons.NotificationHelper;
 import org.petalslink.dsb.notification.commons.api.NotificationManager;
 
 import com.ebmwebsourcing.easycommons.xml.XMLHelper;
-import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Subscribe;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.SubscribeResponse;
-import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.utils.WsnbException;
 import com.ebmwebsourcing.wsstar.wsnb.services.impl.engines.NotificationProducerEngine;
 import com.ebmwebsourcing.wsstar.wsnb.services.impl.util.Wsnb4ServUtils;
-import com.ebmwebsourcing.wsstar.wsrfbf.services.faults.AbsWSStarFault;
 
 /**
  * Register all the internal notification aware components in the notification
