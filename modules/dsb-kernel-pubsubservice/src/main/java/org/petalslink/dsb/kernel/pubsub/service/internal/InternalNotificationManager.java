@@ -4,6 +4,9 @@
 package org.petalslink.dsb.kernel.pubsub.service.internal;
 
 import java.util.List;
+import java.util.UUID;
+
+import javax.xml.namespace.QName;
 
 import org.objectweb.fractal.fraclet.annotation.annotations.FractalComponent;
 import org.objectweb.fractal.fraclet.annotation.annotations.LifeCycle;
@@ -14,6 +17,19 @@ import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.util.LoggingUtil;
 import org.petalslink.dsb.annotations.LifeCycleListener;
 import org.petalslink.dsb.annotations.Phase;
+import org.petalslink.dsb.api.util.EndpointHelper;
+import org.petalslink.dsb.kernel.pubsub.service.NotificationCenter;
+import org.petalslink.dsb.notification.commons.NotificationException;
+import org.petalslink.dsb.notification.commons.NotificationHelper;
+import org.petalslink.dsb.notification.commons.api.NotificationManager;
+
+import com.ebmwebsourcing.easycommons.xml.XMLHelper;
+import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Subscribe;
+import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.SubscribeResponse;
+import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.utils.WsnbException;
+import com.ebmwebsourcing.wsstar.wsnb.services.impl.engines.NotificationProducerEngine;
+import com.ebmwebsourcing.wsstar.wsnb.services.impl.util.Wsnb4ServUtils;
+import com.ebmwebsourcing.wsstar.wsrfbf.services.faults.AbsWSStarFault;
 
 /**
  * Register all the internal notification aware components in the notification
@@ -35,6 +51,9 @@ public class InternalNotificationManager {
     @Requires(name = "scanner", signature = NotificationConsumerScanner.class)
     protected NotificationConsumerScanner scanner;
 
+    @Requires(name = "registry", signature = NotificationConsumerRegistry.class)
+    protected NotificationConsumerRegistry registry;
+
     @LifeCycle(on = LifeCycleType.START)
     protected void start() {
         this.log = new LoggingUtil(this.logger);
@@ -50,13 +69,76 @@ public class InternalNotificationManager {
      */
     @LifeCycleListener(phase = Phase.START, priority = 0)
     public void register() {
-        List<NotificationTargetBean> beans = this.scanner.scan();
-        for (NotificationTargetBean notificationTargetBean : beans) {
-            log.info(String.format(
-                    "Registering a notification subscriber in the notification center : %s",
-                    notificationTargetBean.toString()));
+        NotificationManager manager = NotificationCenter.get().getManager();
+        if (manager == null) {
+            this.log.warning("Can not find the notification manager to register local subscribers!");
         }
 
-    }
+        NotificationProducerEngine engine = manager.getNotificationProducerEngine();
+        if (engine == null) {
+            this.log.warning("Can not find the notification engine to register local subscribers!");
+        }
 
+        List<NotificationTargetBean> beans = this.scanner.scan();
+        for (NotificationTargetBean bean : beans) {
+
+            if (log.isDebugEnabled()) {
+                log.debug(String.format("Registering Java listener to the notification engine %s",
+                        bean.toString()));
+            }
+
+            // get all the topics, then register and create the wrapper if
+            // subscription is successful...
+            String[] topics = bean.topic;
+            if (topics != null) {
+                for (String string : topics) {
+                    QName tmp = QName.valueOf(string);
+                    String namespaceURI = tmp.getNamespaceURI();
+                    String localPart = null;
+                    String prefix = "";
+                    if (tmp.getLocalPart().contains(":")) {
+                        localPart = tmp.getLocalPart().substring(
+                                tmp.getLocalPart().indexOf(':') + 1);
+                        prefix = tmp.getLocalPart().substring(0, tmp.getLocalPart().indexOf(':'));
+                    } else {
+                        localPart = tmp.getLocalPart();
+                    }
+                    QName topic = new QName(namespaceURI, localPart, prefix);
+
+                    // wrap and subscribe...
+                    InternalNotificationConsumer consumer = new InternalNotificationConsumerWrapper(
+                            bean, topic);
+
+                    // create a unique local ID...
+                    String uniqueID = EndpointHelper.JAVA_PREFIX + "://" + UUID.randomUUID();
+
+                    if (log.isDebugEnabled()) {
+                        log.debug(String.format("Registering for topic '%s' with unique ID '%s'",
+                                topic.toString(), uniqueID));
+                    }
+
+                    try {
+                        // store before subscriber so that we can receive
+                        // notification right now!
+                        this.registry.add(uniqueID, consumer);
+                        SubscribeResponse response = engine.subscribe(NotificationHelper
+                                .createSubscribe(uniqueID, topic));
+
+                        if (log.isDebugEnabled()) {
+                            log.debug(String.format("Got response : %s", XMLHelper
+                                    .createStringFromDOMDocument(Wsnb4ServUtils.getWsnbWriter()
+                                            .writeSubscribeResponseAsDOM(response))));
+                        }
+
+                        // TODO : Manage ID so we can unregister...
+
+                    } catch (Exception e) {
+                        // remove the subscriber from the registry!
+                        e.printStackTrace();
+                        this.registry.remove(uniqueID);
+                    }
+                }
+            }
+        }
+    }
 }

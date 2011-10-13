@@ -54,6 +54,7 @@ public class NotificationConsumerScannerImpl implements NotificationConsumerScan
      * #scan()
      */
     public List<NotificationTargetBean> scan() {
+        System.out.println("Scanning...");
         List<NotificationTargetBean> result = new ArrayList<NotificationTargetBean>();
         Component root = FractalHelper.getRootComponent(component);
         if (root != null) {
@@ -63,7 +64,7 @@ public class NotificationConsumerScannerImpl implements NotificationConsumerScan
                 for (Component component : components) {
                     String componentName = FractalHelper.getName(component);
 
-                    // get the topic name
+                    // get the topic names
                     Object o = FractalHelper.getContent(component);
                     // get all the methods which are annotated with Notify
                     if (o != null) {
@@ -72,11 +73,15 @@ public class NotificationConsumerScannerImpl implements NotificationConsumerScan
                                 log.debug(String.format(
                                         "Found notify annotation on method %s for component %s",
                                         m.getName(), componentName));
+                                
+                                // just accept one argument method which is a dom document...
                                 Notify n = m.getAnnotation(Notify.class);
                                 NotificationTargetBean target = new NotificationTargetBean();
                                 target.m = m;
                                 target.target = o;
                                 target.topic = n.topics();
+                                target.mode = n.mode();
+                                target.id = componentName;
                                 result.add(target);
                             }
                         }

@@ -6,6 +6,8 @@ package org.petalslink.dsb.kernel.pubsub.service.internal;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
+import org.petalslink.dsb.annotations.notification.Mode;
+
 /**
  * @author chamerling
  * 
@@ -26,6 +28,16 @@ public class NotificationTargetBean {
      * Topics interested in
      */
     String[] topic;
+    
+    /**
+     * The id used to register to the engine so it can retrieve me to notify me...
+     */
+    String id;
+    
+    /**
+     *  
+     */
+    Mode mode;
 
     /*
      * (non-Javadoc)

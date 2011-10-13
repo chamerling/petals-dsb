@@ -12,6 +12,7 @@ import javax.xml.namespace.QName;
 import org.petalslink.dsb.api.ServiceEndpoint;
 import org.petalslink.dsb.api.util.EndpointHelper;
 import org.petalslink.dsb.kernel.io.client.ClientFactoryRegistry;
+import org.petalslink.dsb.kernel.pubsub.service.internal.InternalClient;
 import org.petalslink.dsb.notification.commons.AbstractNotificationSender;
 import org.petalslink.dsb.notification.commons.NotificationException;
 import org.petalslink.dsb.service.client.Client;
@@ -24,7 +25,6 @@ import org.w3c.dom.Document;
 import com.ebmwebsourcing.wsaddressing10.api.type.EndpointReferenceType;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.WsnbConstants;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Notify;
-import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.utils.WsnbException;
 import com.ebmwebsourcing.wsstar.wsnb.services.impl.engines.NotificationProducerEngine;
 import com.ebmwebsourcing.wsstar.wsnb.services.impl.util.Wsnb4ServUtils;
 
@@ -83,12 +83,12 @@ public class DSBNotificationSender extends AbstractNotificationSender {
             ServiceEndpoint se = EndpointHelper.getServiceEndpoint(uri);
             message.setEndpoint(se.getEndpointName());
             message.setService(se.getServiceName());
-
             client = getClient(se);
-            if (client == null) {
-                throw new NotificationException(String.format(
-                        "Can not find any client to send notification to %s", uri.toString()));
-            }
+
+        } else if (isJavaService(uri)) {
+            message = new MessageImpl();
+            message.getProperties().put(InternalClient.UNIQUEID, uri.toString());
+            client = getInternalClient();
 
         } else if (isExternalService(uri)) {
             message = new WSAMessageImpl(uri.toString());
@@ -97,12 +97,14 @@ public class DSBNotificationSender extends AbstractNotificationSender {
             se.setServiceName(message.getService());
             se.setInterfaces(new QName[] { message.getInterface() });
             client = getClient(se);
-            if (client == null) {
-                throw new NotificationException("Can not find any client to send notification");
-            }
         } else {
             log.warning("Do not know how to process this type of URI : " + uri);
             return;
+        }
+
+        if (client == null) {
+            throw new NotificationException(String.format(
+                    "Can not find any client to send notification to %s", uri.toString()));
         }
 
         try {
@@ -112,14 +114,13 @@ public class DSBNotificationSender extends AbstractNotificationSender {
             message.setOperation(WsnbConstants.NOTIFY_QNAME);
             client.fireAndForget(message);
 
-        } catch (ClientException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch (WsnbException e) {
-            e.printStackTrace();
+            if (log.isLoggable(Level.WARNING)) {
+                log.log(Level.WARNING, "Can not send notification", e);
+            }
         } finally {
             if (client != null) {
-                // releasing client
-                System.out.println("Releasing client");
                 try {
                     ClientFactoryRegistry.getFactory().release(client);
                 } catch (ClientException e) {
@@ -130,11 +131,22 @@ public class DSBNotificationSender extends AbstractNotificationSender {
     }
 
     /**
+     * @return
+     */
+    private Client getInternalClient() {
+        return InternalClient.getInstance();
+    }
+
+    /**
      * @param uri
      * @return
      */
     private boolean isInternalService(URI uri) {
         return EndpointHelper.isDSBService(uri);
+    }
+
+    private boolean isJavaService(URI uri) {
+        return EndpointHelper.isJavaService(uri);
     }
 
     /*

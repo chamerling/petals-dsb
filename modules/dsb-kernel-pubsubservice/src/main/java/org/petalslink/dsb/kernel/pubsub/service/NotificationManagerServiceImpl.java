@@ -82,95 +82,86 @@ public class NotificationManagerServiceImpl implements NotificationManager {
                 configuration.getInterfaceName(), configuration.getEndpointName());
         NotificationCenter.get().setNotificationManager(this);
 
-        AbstractNotificationSender sender = new AbstractNotificationSender(
-                this.manager.getNotificationProducerEngine()) {
+        // AbstractNotificationSender sender = new AbstractNotificationSender(
+        // this.manager.getNotificationProducerEngine()) {
+        //
+        // @Override
+        // protected String getProducerAddress() {
+        // return "dsb://KernelService";
+        // }
+        //
+        // @Override
+        // protected final void doNotify(Notify notify, String producerAddress,
+        // EndpointReferenceType currentConsumerEdp, String subscriptionId,
+        // QName topic,
+        // String dialect) throws NotificationException {
+        //
+        // if (currentConsumerEdp == null || currentConsumerEdp.getAddress() ==
+        // null
+        // || currentConsumerEdp.getAddress().getValue() == null) {
+        // log.debug("No address found, do not send notification");
+        // return;
+        // }
+        //
+        // if (log.isDebugEnabled()) {
+        // log.debug("Need to send the message to a subscriber which is : "
+        // + currentConsumerEdp.getAddress().getValue());
+        // }
+        //
+        // URI uri = currentConsumerEdp.getAddress().getValue();
+        // Message message = null;
+        //
+        // Client client = null;
+        //
+        // if (isExternalService(uri)) {
+        // message = new WSAMessageImpl(uri.toString());
+        // ServiceEndpoint se = new ServiceEndpoint();
+        // se.setEndpointName(message.getEndpoint());
+        // se.setServiceName(message.getService());
+        // se.setInterfaces(new QName[] { message.getInterface() });
+        // try {
+        // client = ClientFactoryRegistry.getFactory().getClient(se);
+        // } catch (ClientException e) {
+        // if (log.isDebugEnabled()) {
+        // e.printStackTrace();
+        // }
+        // throw new NotificationException(e.getMessage());
+        // }
+        // } else {
+        // System.out.println("!!! Internal service : TODO NotificationSender class!!!");
+        // return;
+        // }
+        //
+        // try {
+        // final Document payload = Wsnb4ServUtils.getWsnbWriter()
+        // .writeNotifyAsDOM(notify);
+        //
+        // message.setPayload(payload);
+        // message.setOperation(WsnbConstants.NOTIFY_QNAME);
+        // if (client != null) {
+        // client.fireAndForget(message);
+        // } else {
+        // log.error("Can not get client to send message");
+        // }
+        // } catch (ClientException e) {
+        // e.printStackTrace();
+        // } catch (WsnbException e) {
+        // e.printStackTrace();
+        // } finally {
+        // if (client != null) {
+        // System.out.println("Releasing client");
+        // try {
+        // ClientFactoryRegistry.getFactory().release(client);
+        // } catch (ClientException e) {
+        // e.printStackTrace();
+        // }
+        // }
+        // }
+        // }
+        // };
 
-            @Override
-            protected String getProducerAddress() {
-                return "dsb://KernelService";
-            }
-
-            @Override
-            protected final void doNotify(Notify notify, String producerAddress,
-                    EndpointReferenceType currentConsumerEdp, String subscriptionId, QName topic,
-                    String dialect) throws NotificationException {
-
-                if (currentConsumerEdp == null || currentConsumerEdp.getAddress() == null
-                        || currentConsumerEdp.getAddress().getValue() == null) {
-                    // no address found...
-                    log.debug("No address found, do not send notification");
-                    return;
-                }
-
-                if (log.isDebugEnabled()) {
-                    log.debug("Need to send the message to a subscriber which is : "
-                            + currentConsumerEdp.getAddress().getValue());
-                }
-
-                // we use a WSA endpoint to send the notification...
-                // extract data from address
-                URI uri = currentConsumerEdp.getAddress().getValue();
-                Message message = null;
-
-                Client client = null;
-
-                if (isExternalService(uri)) {
-                    message = new WSAMessageImpl(uri.toString());
-                    ServiceEndpoint se = new ServiceEndpoint();
-                    se.setEndpointName(message.getEndpoint());
-                    se.setServiceName(message.getService());
-                    se.setInterfaces(new QName[] { message.getInterface() });
-                    try {
-                        client = ClientFactoryRegistry.getFactory().getClient(se);
-                    } catch (ClientException e) {
-                        if (log.isDebugEnabled()) {
-                            e.printStackTrace();
-                        }
-                        throw new NotificationException(e.getMessage());
-                    }
-                } else {
-                    System.out.println("!!! Internal service : TODO NotificationSender class!!!");
-                    return;
-                    // URI is service@endpoint
-                    /*
-                     * componentName = AddressingHelper.getComponent(uri); ns =
-                     * String.format(WSAConstants.NS_TEMPLATE, componentName);
-                     * serviceName = AddressingHelper.getServiceName(uri); ep =
-                     * AddressingHelper.getEndpointName(uri);
-                     */
-                    // TODO how to define internal addresses???
-                }
-
-                try {
-                    final Document payload = Wsnb4ServUtils.getWsnbWriter()
-                            .writeNotifyAsDOM(notify);
-
-                    message.setPayload(payload);
-                    message.setOperation(WsnbConstants.NOTIFY_QNAME);
-                    if (client != null) {
-                        client.fireAndForget(message);
-                    } else {
-                        log.error("Can not get client to send message");
-                    }
-                } catch (ClientException e) {
-                    e.printStackTrace();
-                } catch (WsnbException e) {
-                    e.printStackTrace();
-                } finally {
-                    if (client != null) {
-                        // releasing client
-                        System.out.println("Releasing client");
-                        try {
-                            ClientFactoryRegistry.getFactory().release(client);
-                        } catch (ClientException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }
-
-        };
-        NotificationCenter.get().setNotifificationSender(sender);
+        NotificationCenter.get().setNotifificationSender(
+                new DSBNotificationSender(this.manager.getNotificationProducerEngine()));
     }
 
     /*

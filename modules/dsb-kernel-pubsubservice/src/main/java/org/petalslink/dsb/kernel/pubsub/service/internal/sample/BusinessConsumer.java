@@ -7,9 +7,7 @@ import javax.xml.transform.TransformerException;
 
 import org.objectweb.fractal.fraclet.annotation.annotations.FractalComponent;
 import org.objectweb.fractal.fraclet.annotation.annotations.LifeCycle;
-import org.objectweb.fractal.fraclet.annotation.annotations.Monolog;
 import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
-import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.util.LoggingUtil;
 import org.ow2.petals.util.XMLUtil;
 import org.petalslink.dsb.annotations.notification.Mode;
@@ -21,29 +19,24 @@ import org.w3c.dom.Document;
  * 
  */
 @FractalComponent
-public class LoggerConsumer {
-
-    @Monolog(name = "logger")
-    private Logger logger;
-
-    private LoggingUtil log;
+public class BusinessConsumer {
 
     @LifeCycle(on = LifeCycleType.START)
     protected void start() {
-        this.log = new LoggingUtil(this.logger);
     }
 
     @LifeCycle(on = LifeCycleType.STOP)
     protected void stop() {
     }
 
-    @Notify(topics = { "{http://www.petalslink.org/resources/event/1.0}dsb:DSBTopic" }, mode = Mode.WSN)
+    @Notify(topics = { "{http://www.petalslink.org/resources/event/1.0}dsb:DSBTopic" }, mode = Mode.PAYLOAD)
     public void interestedInNotificationButNotOnly(Document document) {
-        System.out.println("I just received a WSN notification!");
+        System.out.println("I just received a payload notification!");
         try {
-            System.out.println(XMLUtil.parseToString(document));
+            System.out.println("####\n" + XMLUtil.parseToString(document) + " \n####");
         } catch (TransformerException e) {
             e.printStackTrace();
         }
     }
+
 }

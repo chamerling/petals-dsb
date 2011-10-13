@@ -15,7 +15,7 @@ public class NotificationCenter {
 
     private static NotificationCenter instance;
 
-    public static final NotificationCenter get() {
+    public synchronized static final NotificationCenter get() {
         if (instance == null) {
             instance = new NotificationCenter();
         }

@@ -22,8 +22,6 @@ import com.ebmwebsourcing.wsstar.wsnb.services.impl.engines.NotificationProducer
  */
 public class MonitoringNotificationSender extends DSBNotificationSender {
 
-    Client client;
-
     /**
      * @param producer
      */
@@ -51,37 +49,32 @@ public class MonitoringNotificationSender extends DSBNotificationSender {
      */
     @Override
     protected synchronized Client getClient(ServiceEndpoint se) {
-        if (client == null) {
-            // we create a client which can handle specific needs for
-            // monitoring.
-            // For example, we ant to add some properties to messages, etc...
-            final Client tmp = super.getClient(se);
+        // we create a client which can handle specific needs for
+        // monitoring.
+        // For example, we ant to add some properties to messages, etc...
+        final Client tmp = super.getClient(se);
+        Client result = new Client() {
 
-            Client result = new Client() {
+            public Message sendReceive(Message message) throws ClientException {
+                message.setProperty(Constants.MESSAGE_SKIP_MONITORING, "true");
+                return tmp.sendReceive(message);
+            }
 
-                public Message sendReceive(Message message) throws ClientException {
-                    message.setProperty(Constants.MESSAGE_SKIP_MONITORING, "true");
-                    return tmp.sendReceive(message);
-                }
+            public void sendAsync(Message message, MessageListener listener) throws ClientException {
+                message.setProperty(Constants.MESSAGE_SKIP_MONITORING, "true");
+                tmp.sendAsync(message, listener);
+            }
 
-                public void sendAsync(Message message, MessageListener listener)
-                        throws ClientException {
-                    message.setProperty(Constants.MESSAGE_SKIP_MONITORING, "true");
-                    tmp.sendAsync(message, listener);
-                }
+            public String getName() {
+                return tmp.getName();
+            }
 
-                public String getName() {
-                    return tmp.getName();
-                }
-
-                public void fireAndForget(Message message) throws ClientException {
-                    message.setProperty(Constants.MESSAGE_SKIP_MONITORING, "true");
-                    tmp.fireAndForget(message);
-                }
-            };
-            client = result;
-        }
-        return client;
+            public void fireAndForget(Message message) throws ClientException {
+                message.setProperty(Constants.MESSAGE_SKIP_MONITORING, "true");
+                tmp.fireAndForget(message);
+            }
+        };
+        return result;
     }
 
 }

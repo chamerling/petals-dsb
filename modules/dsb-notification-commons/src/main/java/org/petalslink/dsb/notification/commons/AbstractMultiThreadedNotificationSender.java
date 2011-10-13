@@ -144,8 +144,6 @@ public abstract class AbstractMultiThreadedNotificationSender implements Notific
                                                                 subscriptionId, topic, dialect,
                                                                 payload);
 
-                                                // really send the
-                                                // notification...
                                                 if (log.isLoggable(Level.FINE)) {
                                                     log.fine(String.format("Sending notify to %s",
                                                             currentConsumerEdp.getAddress()

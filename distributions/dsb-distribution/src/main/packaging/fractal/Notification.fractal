@@ -29,6 +29,17 @@
 	<component name="NotificationBootstrap" definition="org.petalslink.dsb.kernel.wsn.NotificationBootstrapImpl"/>
 	<component name="SubscriberBootstrapImpl" definition="org.petalslink.dsb.kernel.pubsub.service.SubscriberBootstrapImpl"/>
 	
+	<!-- Internal notification support -->
+	<component name="NotificationConsumerScannerImpl" definition="org.petalslink.dsb.kernel.pubsub.service.internal.NotificationConsumerScannerImpl"/>
+	<component name="NotificationConsumerRegistryImpl" definition="org.petalslink.dsb.kernel.pubsub.service.internal.NotificationConsumerRegistryImpl"/>
+	<component name="InternalNotificationManager" definition="org.petalslink.dsb.kernel.pubsub.service.internal.InternalNotificationManager"/>
+	<component name="InternalClient" definition="org.petalslink.dsb.kernel.pubsub.service.internal.InternalClient"/>
+	<!-- samples -->
+	<component name="InternalClientBusinessSample" definition="org.petalslink.dsb.kernel.pubsub.service.internal.sample.BusinessConsumer"/>
+	<component name="InternalClientLoggerSample" definition="org.petalslink.dsb.kernel.pubsub.service.internal.sample.LoggerConsumer"/>
+	
+	
+
 	<!-- bindings -->
 	<!-- internal -->
 	<binding client="NotificationConfiguration.configuration" server="this.configuration"/>
@@ -40,4 +51,9 @@
 	<binding client="NotificationConsumerService.configuration" server="this.dsbconfiguration"/>
 	
 	<binding client="INotificationProducer.notification-manager" server="NotificationManagerService.service"/>
+	
+	<!-- internal notification support -->
+	<binding client="InternalNotificationManager.scanner" server="NotificationConsumerScannerImpl.service"/>
+	<binding client="InternalNotificationManager.registry" server="NotificationConsumerRegistryImpl.service"/>
+	<binding client="InternalClient.registry" server="NotificationConsumerRegistryImpl.service"/>
 </definition>
