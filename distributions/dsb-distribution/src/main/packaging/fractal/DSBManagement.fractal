@@ -39,9 +39,11 @@
 	<component definition="org.petalslink.dsb.kernel.tools.cron.CronScannerImpl" name="CronScannerImpl"/>
 	<component definition="org.petalslink.dsb.kernel.tools.cron.CronRegistryImpl" name="CronRegistryImpl"/>
 	<component definition="org.petalslink.dsb.kernel.tools.cron.CronManagerImpl" name="CronManagerImpl"/>
+	<!--
 	<component definition="org.petalslink.dsb.kernel.tools.cron.sample.FooJob" name="FooJob"/>
 	<component definition="org.petalslink.dsb.kernel.tools.cron.sample.BarJob" name="BarJob"/>
-
+	-->
+	
 	<!-- *** EXPOSE *** -->
 	<!-- Expose to other components -->
 	<binding client="this.exposer-registry" server="ServiceExposerRegistry.service" />
