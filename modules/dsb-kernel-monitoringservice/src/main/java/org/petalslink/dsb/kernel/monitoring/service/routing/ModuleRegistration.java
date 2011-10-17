@@ -62,7 +62,6 @@ public class ModuleRegistration {
 
     @LifeCycleListener
     public void loadModules() {
-        System.out.println("LOAD");
         if (log.isDebugEnabled()) {
             log.debug("Ack to add modules to manager");
         }

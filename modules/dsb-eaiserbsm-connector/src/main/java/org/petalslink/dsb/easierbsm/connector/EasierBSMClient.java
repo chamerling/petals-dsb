@@ -36,8 +36,6 @@ public class EasierBSMClient implements MonitoringClient {
 
     private String address;
 
-    private static final String ENDPOINT_SUFFIX = "_WSDMMonitoring";
-
     private static Log logger = LogFactory.getLog(EasierBSMClient.class);
 
     /**

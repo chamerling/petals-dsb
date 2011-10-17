@@ -18,15 +18,23 @@ public interface MonitoringClientFactory {
      * @param adress
      * @return
      */
-    MonitoringClient getMonitoringClient(String address);
+    MonitoringClient getMonitoringClient(String endpointName);
+
+    /**
+     * Get a raw monitoring client used to send raw reports to an endpoint which
+     * can manage them.
+     * 
+     * @return
+     */
+    MonitoringClient getRawMonitoringClient();
 
     /**
      * Get a management client which is in charge of creating stuff on the
-     * monitoring size on endpount creation.
+     * monitoring size on endpoint creation.
      * 
      * @param adress
      * @return
      */
-    MonitoringAdminClient getMonitoringAdminClient(String adress);
+    MonitoringAdminClient getMonitoringAdminClient();
 
 }

@@ -65,8 +65,6 @@ public class MonitoringModule implements SenderModule, ReceiverModule {
 
     private org.ow2.petals.kernel.api.log.Logger log;
 
-    private static final String RAW_REPORT_SERVICE_ENDPOINT = "rawReportEndpointClientProxyEndpoint";
-
     /**
      * The logger.
      */
@@ -113,8 +111,7 @@ public class MonitoringModule implements SenderModule, ReceiverModule {
                 this.log.debug("In Report Module electDestinations");
             }
             if (reports.getReports().size() > 0) {
-                this.sendReport(reports, this.configuration.getBaseURL()
-                        + RAW_REPORT_SERVICE_ENDPOINT);
+                this.sendRawReport(reports);
             }
 
         } catch (Exception e) {
@@ -138,9 +135,7 @@ public class MonitoringModule implements SenderModule, ReceiverModule {
                 }
                 ReportListBean reports = this.createReportListFromExchange(exchange);
                 if (reports.getReports().size() > 0) {
-                    this.sendReport(reports, this.configuration.getBaseURL()
-                            + exchange.getEndpoint().getEndpointName()
-                            + "_WSDMMonitoringClientProxyEndpoint");
+                    this.sendReport(reports, exchange.getEndpoint().getEndpointName());
                 }
             } catch (Exception e) {
                 throw new RoutingException(e);
@@ -153,11 +148,22 @@ public class MonitoringModule implements SenderModule, ReceiverModule {
         return true;
     }
 
-    private void sendReport(ReportListBean reports, String address) throws Exception {
+    private void sendReport(ReportListBean reports, String endpointName) throws Exception {
         // this may be completely async
-        MonitoringClient client = this.getMonitoringClient(address);
+        MonitoringClient client = this.getMonitoringClient(endpointName);
         if (client == null) {
-            throw new DSBException("Can nto get any client to send report to monitoring layer");
+            throw new DSBException(
+                    "Can not get any client to send report to monitoring layer for endpoint %s",
+                    endpointName);
+        }
+        client.send(reports);
+    }
+    
+    private void sendRawReport(ReportListBean reports) throws Exception {
+        MonitoringClient client = this.monitoringClientFactory.getRawMonitoringClient();
+        if (client == null) {
+            throw new DSBException(
+                    "Can not get any client to send RAW report to monitoring layer");
         }
         client.send(reports);
     }
@@ -166,8 +172,8 @@ public class MonitoringModule implements SenderModule, ReceiverModule {
      * @param address
      * @return
      */
-    private MonitoringClient getMonitoringClient(String address) {
-        return monitoringClientFactory.getMonitoringClient(address);
+    private MonitoringClient getMonitoringClient(String endpointName) {
+        return monitoringClientFactory.getMonitoringClient(endpointName);
     }
 
     protected ReportListBean createReportListFromExchange(MessageExchange exchange)

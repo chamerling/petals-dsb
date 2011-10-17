@@ -42,11 +42,6 @@ public class RegistryListenerImpl implements RegistryListener {
 
     protected org.ow2.petals.kernel.api.log.Logger log;
 
-    /**
-     * TODO : Cache endpoints to be registered
-     */
-    // private Map<String, ServiceEndpoint> cache;
-
     @LifeCycle(on = LifeCycleType.START)
     protected void start() {
         this.log = new LoggingUtil(this.logger);
@@ -93,7 +88,7 @@ public class RegistryListenerImpl implements RegistryListener {
      * 
      */
     private MonitoringAdminClient getClient() {
-        return factory.getMonitoringAdminClient(configurationService.getAdminURL());
+        return factory.getMonitoringAdminClient();
     }
 
     /**
