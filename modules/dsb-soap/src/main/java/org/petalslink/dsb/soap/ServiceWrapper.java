@@ -88,6 +88,16 @@ public class ServiceWrapper implements Provider<SOAPMessage> {
             if (o != null && o instanceof QName) {
                 result = (QName) o;
             }
+
+            if (result != null && result.getLocalPart().equals("invoke")
+                    && result.getNamespaceURI().equals("http://cxf.apache.org/jaxws/provider")
+                    && (wsContext.getMessageContext().get("SOAPAction") != null)) {
+                // try to get the soap action...
+                String soapAction = wsContext.getMessageContext().get("SOAPAction").toString();
+                String ns = soapAction.substring(0, soapAction.lastIndexOf("/"));
+                String localPart = soapAction.substring(soapAction.lastIndexOf("/") + 1);
+                result = new QName(ns, localPart);
+            }
         }
         return result;
     }
@@ -123,5 +133,4 @@ public class ServiceWrapper implements Provider<SOAPMessage> {
     public Service getService() {
         return service;
     }
-
 }
