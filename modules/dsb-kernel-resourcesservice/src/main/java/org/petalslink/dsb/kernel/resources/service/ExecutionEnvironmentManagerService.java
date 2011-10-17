@@ -221,7 +221,7 @@ public class ExecutionEnvironmentManagerService implements ExecutionEnvironmentM
                 .createInterfaceConnectorId("resourcesSubscriptionEndpoint"));
         itfSubscribeProducer.setInterfaceName(new QName(
                 "http://www.petalslink.com/wsn/service/WsnProducer", "NotificationProducer"));
-        itfSubscribeProducer.setEndpointAddress(getNotificationEndpoint());
+        itfSubscribeProducer.setEndpointAddress(getProducerEndpoint());
         result.getInterfaceConnector().add(itfSubscribeProducer);
 
         InterfaceConnector itfUnSubscribeProducer = new InterfaceConnector();
