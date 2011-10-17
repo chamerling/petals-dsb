@@ -34,6 +34,13 @@
 
 	<!-- Get information from JBI components -->
 	<component definition="org.petalslink.dsb.kernel.management.component.JNDIComponentInformationServiceImpl" name="ComponentInformationService" />
+	
+	<!-- The cronjob management -->
+	<component definition="org.petalslink.dsb.kernel.tools.cron.CronScannerImpl" name="CronScannerImpl"/>
+	<component definition="org.petalslink.dsb.kernel.tools.cron.CronRegistryImpl" name="CronRegistryImpl"/>
+	<component definition="org.petalslink.dsb.kernel.tools.cron.CronManagerImpl" name="CronManagerImpl"/>
+	<component definition="org.petalslink.dsb.kernel.tools.cron.sample.FooJob" name="FooJob"/>
+	<component definition="org.petalslink.dsb.kernel.tools.cron.sample.BarJob" name="BarJob"/>
 
 	<!-- *** EXPOSE *** -->
 	<!-- Expose to other components -->
@@ -112,5 +119,9 @@
 	<!-- Binders -->
 	<binding client="ServiceBinderRegistry.service-binder-soap" server="SOAPServiceBinder.service" />
 	<binding client="ServiceBinderRegistry.service-binder-rest" server="RESTServiceBinder.service" />
+	
+	<!-- CronJobs Management -->
+	<binding client="CronManagerImpl.cron-registry" server="CronRegistryImpl.service"/>
+	<binding client="CronManagerImpl.cron-scanner" server="CronScannerImpl.service"/>
 
 </definition>
