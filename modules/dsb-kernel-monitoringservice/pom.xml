@@ -15,7 +15,7 @@
 
 	<name>dsb-kernel-monitoringservice</name>
 
-	<description>All that is required to collect and send monnitoring to EasierBSM</description>
+	<description>All that is required to collect and send monnitoring to a monitoring layer. Need to implement the right org.petalslink.dsb.monitoring.api.MonitoringClientFactory to provide different versions of the monitoring connection. For example, for easierBSM, there is a specific factory implementation.</description>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
