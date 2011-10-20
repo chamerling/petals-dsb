@@ -153,6 +153,16 @@ public class Component extends PetalsBindingComponent {
             for (String key : toSubscribe.keySet()) {
                 // let's subscribe...
                 try {
+                    
+                    if (getLogger().isLoggable(Level.INFO)) {
+                        getLogger().info("Subscribe request : ");
+                        if (toSubscribe.get(key) != null) {
+                            Document doc = Wsnb4ServUtils.getWsnbWriter()
+                                    .writeSubscribeAsDOM(toSubscribe.get(key));
+                            getLogger().info(XMLUtil.createStringFromDOMDocument(doc));
+                        }
+                    }
+                    
                     final com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.SubscribeResponse subscribeResponse = getNotificationEngine()
                             .getNotificationManager().getNotificationProducerEngine()
                             .subscribe(toSubscribe.get(key));
@@ -164,7 +174,7 @@ public class Component extends PetalsBindingComponent {
                                     .writeSubscribeResponseAsDOM(subscribeResponse);
                             getLogger().info(XMLUtil.createStringFromDOMDocument(doc));
                         } else {
-                            getLogger().info("None...");
+                            getLogger().info("No response...");
                         }
                     }
                 } catch (Exception e) {
