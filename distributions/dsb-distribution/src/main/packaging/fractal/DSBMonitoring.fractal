@@ -7,7 +7,7 @@
 	<!-- Common part -->
 	<component definition="org.petalslink.dsb.kernel.monitoring.service.FileConfigurationServiceImpl" name="DSBMonitoringConfiguration" />
 	<component definition="org.petalslink.dsb.kernel.monitoring.service.listeners.RegistryListenerImpl" name="DSBMonitoringRegistryListener"/>
-	<component definition="org.petalslink.dsb.kernel.monitoring.service.routing.MonitoringModule" name="DSBMonitoringRouterMonitoringModule"/>
+	<component definition="org.petalslink.dsb.kernel.monitoring.service.routing.MonitoringModuleTwoReportsPerExchange" name="DSBMonitoringRouterMonitoringModule"/>
 	<component definition="org.petalslink.dsb.kernel.monitoring.service.routing.TimeStampModule" name="DSBMonitoringTimeStampMonitoringModule"/>
 	<component definition="org.petalslink.dsb.kernel.monitoring.service.listeners.ListenerManager" name="DSBListenerManager"/>
 	<component definition="org.petalslink.dsb.kernel.monitoring.service.routing.ModuleRegistration" name="ModuleRegistration"/>
