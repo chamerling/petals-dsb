@@ -6,9 +6,8 @@ package org.petalslink.dsb.easierbsm.connector;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Logger;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.petalslink.dsb.monitoring.api.MonitoringAdminClient;
 import org.petalslink.dsb.monitoring.api.MonitoringClient;
 import org.petalslink.dsb.monitoring.api.MonitoringClientFactory;
@@ -25,11 +24,13 @@ public class EasierBSMClientFactory implements MonitoringClientFactory {
 
     public static final String ADMIN_URL = "easierbsm.admin";
     
-    private static final String ENDPOINT_SUFFIX = "_WSDMMonitoring";
+    public static final String WSDM_SUFFIX = "_WSDMMonitoring";
+    
+    public static final String FINAL_ENDPOINT_SUFFIX = WSDM_SUFFIX + "ClientProxyEndpoint";
     
     private static final String RAW_REPORT_SERVICE_ENDPOINT = "rawReportEndpointClientProxyEndpoint";
 
-    private static Log logger = LogFactory.getLog(EasierBSMClientFactory.class);
+    private static Logger logger = Logger.getLogger(EasierBSMClientFactory.class.getName());
 
     private Map<String, MonitoringClient> monitoringClients;
 
@@ -67,7 +68,7 @@ public class EasierBSMClientFactory implements MonitoringClientFactory {
             baseURL = baseURL + "/";
         }
 
-        String address = baseURL + endpointName + ENDPOINT_SUFFIX;
+        String address = baseURL + endpointName + FINAL_ENDPOINT_SUFFIX;
 
         if (this.monitoringClients.get(address) == null) {
             this.monitoringClients.put(address, new EasierBSMClient(address));

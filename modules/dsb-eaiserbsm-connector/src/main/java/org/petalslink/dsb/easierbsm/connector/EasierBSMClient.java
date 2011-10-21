@@ -5,14 +5,14 @@ package org.petalslink.dsb.easierbsm.connector;
 
 import java.sql.Date;
 import java.util.GregorianCalendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.petalslink.dsb.api.DSBException;
 import org.petalslink.dsb.cxf.CXFHelper;
 import org.petalslink.dsb.monitoring.api.MonitoringClient;
@@ -35,8 +35,8 @@ public class EasierBSMClient implements MonitoringClient {
     private RawReportInterface bsmReportInterface;
 
     private String address;
-
-    private static Log logger = LogFactory.getLog(EasierBSMClient.class);
+    
+    private static Logger logger = Logger.getLogger(EasierBSMClient.class.getName());
 
     /**
      * 
@@ -53,14 +53,10 @@ public class EasierBSMClient implements MonitoringClient {
      * .dsb.monitoring.api.ReportListBean)
      */
     public void send(ReportListBean reportList) throws DSBException {
-        if (logger.isInfoEnabled()) {
-            logger.info("Sending report to remote monitoring service...");
-        }
-        
         if (reportList == null || reportList.getReports() == null) {
             final String message = "Can not send null reports...";
-            if (logger.isWarnEnabled()) {
-                logger.warn(message);
+            if (logger.isLoggable(Level.FINE)) {
+                logger.fine(message);
             }
             throw new DSBException(message);
         }
@@ -106,7 +102,8 @@ public class EasierBSMClient implements MonitoringClient {
             result.setServiceQName(QName.valueOf(reportBean.getServiceName()));
         if (reportBean.getType() != null) {
             try {
-                result.setTimeStamp(EJaxbReportTimeStampType.fromValue(reportBean.getType()));
+                result.setTimeStamp(EJaxbReportTimeStampType.fromValue(reportBean.getType()
+                        .toLowerCase()));
             } catch (Exception e) {
             }
         }
@@ -114,8 +111,8 @@ public class EasierBSMClient implements MonitoringClient {
     }
 
     private synchronized RawReportInterface getClient() {
-        if (logger.isDebugEnabled()) {
-            logger.debug("Get Client");
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("Get client");
         }
         if (bsmReportInterface == null) {
             bsmReportInterface = CXFHelper.getClientFromFinalURL(this.address,

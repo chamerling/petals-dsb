@@ -3,8 +3,9 @@
  */
 package org.petalslink.dsb.easierbsm.connector;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.petalslink.dsb.api.DSBException;
 import org.petalslink.dsb.api.ServiceEndpoint;
 import org.petalslink.dsb.cxf.CXFHelper;
@@ -19,13 +20,11 @@ import easyesb.petalslink.com.service.wsdmadmin._1_0.WSDMAdminItf;
  */
 public class EasierBSMAdminClient implements MonitoringAdminClient {
 
-    private static final String ENDPOINT_SUFFIX = "_WSDMMonitoring";
-
     private String address;
 
     private WSDMAdminItf wsdmAdmin;
 
-    private static Log logger = LogFactory.getLog(EasierBSMAdminClient.class);
+    private static Logger logger = Logger.getLogger(EasierBSMAdminClient.class.getName());
 
     /**
      * 
@@ -41,7 +40,7 @@ public class EasierBSMAdminClient implements MonitoringAdminClient {
      * createMonitoringEndpoint(org.petalslink.dsb.api.ServiceEndpoint)
      */
     public void createMonitoringEndpoint(ServiceEndpoint serviceEndpoint) throws DSBException {
-        if (logger.isInfoEnabled()) {
+        if (logger.isLoggable(Level.INFO)) {
             logger.info("Creating monitoring endpoint for service " + serviceEndpoint);
         }
         if (serviceEndpoint == null) {
@@ -49,19 +48,21 @@ public class EasierBSMAdminClient implements MonitoringAdminClient {
             throw new DSBException(message);
         }
         WSDMAdminItf wsdmAdminItf = getAdminClient();
-        String wsdmProviderEndpointName = serviceEndpoint.getEndpointName() + ENDPOINT_SUFFIX;
+        // create the WSDM monitoring endpoint
+        String wsdmProviderEndpointName = serviceEndpoint.getEndpointName()
+                + EasierBSMClientFactory.WSDM_SUFFIX;
         String result = null;
         try {
             result = wsdmAdminItf.createMonitoringEndpoint(serviceEndpoint.getServiceName(),
                     wsdmProviderEndpointName, true);
         } catch (AdminExceptionMsg e) {
             final String message = "Error while sending request to monitoring layer";
-            if (logger.isWarnEnabled()) {
-                logger.warn(message, e);
+            if (logger.isLoggable(Level.INFO)) {
+                logger.log(Level.WARNING, message, e);
             }
             throw new DSBException(message, e);
         }
-        if (logger.isInfoEnabled()) {
+        if (logger.isLoggable(Level.INFO)) {
             logger.info("Monitoring bus returned " + result);
         }
     }
@@ -83,9 +84,16 @@ public class EasierBSMAdminClient implements MonitoringAdminClient {
      * deleteMonitoringEndpoint(org.petalslink.dsb.api.ServiceEndpoint)
      */
     public void deleteMonitoringEndpoint(ServiceEndpoint serviceEndpoint) throws DSBException {
-        if (logger.isInfoEnabled()) {
+        if (logger.isLoggable(Level.INFO)) {
             logger.info("Deleting monitoring endpoint for service " + serviceEndpoint);
         }
-        throw new DSBException("deleteMonitoringEndpoint is not implemented");
+        if (serviceEndpoint == null) {
+            final String message = "Can not delete monitoring endpoint from null endpoint...";
+            throw new DSBException(message);
+        }
+
+        if (logger.isLoggable(Level.INFO)) {
+            logger.info("Deleting monitoring endpoint for easierBSM is not implemented");
+        }
     }
 }
