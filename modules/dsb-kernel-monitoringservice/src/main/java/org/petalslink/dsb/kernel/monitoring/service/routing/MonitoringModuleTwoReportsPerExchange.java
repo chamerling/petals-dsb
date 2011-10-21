@@ -18,12 +18,11 @@
 package org.petalslink.dsb.kernel.monitoring.service.routing;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import javax.jbi.messaging.MessageExchange.Role;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamSource;
 
@@ -88,12 +87,6 @@ public class MonitoringModuleTwoReportsPerExchange implements SenderModule, Rece
     private MonitoringClientFactory monitoringClientFactory;
 
     /**
-     * key = uuid exchange, value = length of in message
-     */
-    private final Map<String, Integer> map = Collections
-            .synchronizedMap(new HashMap<String, Integer>());
-
-    /**
      * {@inheritDoc}
      */
     public void electEndpoints(
@@ -117,12 +110,18 @@ public class MonitoringModuleTwoReportsPerExchange implements SenderModule, Rece
                 this.log.debug("In Report Module electDestinations");
             }
             if (reports.getReports().size() == 2) {
-                // this.sendRawReport(reports);
                 this.sendReport(reports, exchange.getEndpoint().getEndpointName());
+            } else {
+                log.debug("Bad number of reports " + reports.getReports().size());
             }
 
         } catch (Exception e) {
-            throw new RoutingException(e);
+            final String message = "Problem while generating or sending report on send...";
+            if (log.isDebugEnabled()) {
+                log.warning(message, e);
+            } else {
+                log.warning(message);
+            }
         }
     }
 
@@ -143,14 +142,20 @@ public class MonitoringModuleTwoReportsPerExchange implements SenderModule, Rece
                 ReportListBean reports = this.createReportListFromExchange(exchange);
                 if (reports.getReports().size() == 2) {
                     this.sendReport(reports, exchange.getEndpoint().getEndpointName());
+                } else {
+                    log.debug("Bad number of reports " + reports.getReports().size());
                 }
             } catch (Exception e) {
-                throw new RoutingException(e);
+                final String message = "Problem while generating or sending report on receive...";
+                if (log.isDebugEnabled()) {
+                    log.warning(message, e);
+                } else {
+                    log.warning(message);
+                }
             }
         } else {
             // FIXME : wrong...
-            this.log.warning("ERROR: TIMEOUT");
-            throw new RoutingException("Impossible to create report");
+            this.log.warning("No exchange to create report from...");
         }
         return true;
     }
@@ -176,18 +181,15 @@ public class MonitoringModuleTwoReportsPerExchange implements SenderModule, Rece
                 try {
                     client.send(reports);
                 } catch (DSBException e) {
-                    e.printStackTrace();
+                    final String message = "Error while sending report";
+                    if (log.isDebugEnabled()) {
+                        log.warning(message, e);
+                    } else {
+                        log.warning(message);                        
+                    }
                 }
             }
         });
-    }
-
-    private void sendRawReport(ReportListBean reports) throws Exception {
-        MonitoringClient client = this.monitoringClientFactory.getRawMonitoringClient();
-        if (client == null) {
-            throw new DSBException("Can not get any client to send RAW report to monitoring layer");
-        }
-        client.send(reports);
     }
 
     /**
@@ -212,69 +214,11 @@ public class MonitoringModuleTwoReportsPerExchange implements SenderModule, Rece
                         || (((MessageExchange.IN_OUT_PATTERN.equals(exchange.getPattern()) || (MessageExchange.IN_OPTIONAL_OUT_PATTERN
                                 .equals(exchange.getPattern())))
                                 && (exchange.getMessage("out") == null) && !exchange.isTerminated()))) {
-                    // stock message
-                    if (!this.map.containsKey(exchange.getExchangeId())) {
-                        if (exchange.getMessage("in").getContent() == null) {
-                            this.map.put(exchange.getExchangeId(), 0);
-                        } else {
-                            if (exchange.getMessage("in").getContent() instanceof StreamSource) {
-                                this.map.put(exchange.getExchangeId(), ((StreamSource) exchange
-                                        .getMessage("in").getContent()).getInputStream()
-                                        .available());
-                            } else if (exchange.getMessage("in").getContent() instanceof DOMSource) {
-                                InputSource source = SourceHelper
-                                        .convertDOMSource2InputSource((DOMSource) exchange
-                                                .getMessage("in").getContent());
-                                this.map.put(exchange.getExchangeId(), source.getByteStream()
-                                        .available());
-                            } else {
-                                throw new DSBException("Source unknown: "
-                                        + exchange.getMessage("in").getContent().getClass());
-                            }
-                        }
-                    }
 
-                    // create date client in
-                    ReportBean report1 = new ReportBean();
-                    report1.setType("t1");
-                    this.setSOACommonInformation(exchange, report1);
-                    report1.setDate(TimeStamperHandler.getInstance().getTimeStamp(exchange)
-                            .getDateClientIn());
-                    report1.setContentLength(this.map.remove(exchange.getExchangeId()));
-
-                    if (report1.getDate() != 0L) {
-                        res.getReports().add(report1);
-                    }
-
-                    // create date provider in
-                    ReportBean report2 = new ReportBean();
-                    report2.setType("t2");
-                    this.setSOACommonInformation(exchange, report2);
-                    report2.setDate(TimeStamperHandler.getInstance().getTimeStamp(exchange)
-                            .getDateProviderIn());
-
-                    if (exchange.getMessage("in") != null) {
-                        if ((exchange.getMessage("in").getContent() instanceof StreamSource)
-                                && ((StreamSource) exchange.getMessage("in").getContent() != null)
-                                && (((StreamSource) exchange.getMessage("in").getContent())
-                                        .getInputStream() != null)) {
-                            report2.setContentLength(((StreamSource) exchange.getMessage("in")
-                                    .getContent()).getInputStream().available());
-                        } else if ((exchange.getMessage("in").getContent() instanceof DOMSource)
-                                && ((DOMSource) exchange.getMessage("in").getContent() != null)) {
-                            InputSource source = SourceHelper
-                                    .convertDOMSource2InputSource((DOMSource) exchange.getMessage(
-                                            "in").getContent());
-                            report2.setContentLength(source.getByteStream().available());
-                        } else {
-                            throw new DSBException("Source unknown");
-                        }
-                    } else {
-                        report2.setContentLength(-1L);
-                    }
-
-                    if (report2.getDate() != 0L) {
-                        res.getReports().add(report2);
+                    if (log.isDebugEnabled()) {
+                        log.debug("IN* & T1 Phase : "
+                                + TimeStamperHandler.getInstance().getTimeStamp(exchange)
+                                        .getDateClientIn());
                     }
                 }
 
@@ -282,60 +226,20 @@ public class MonitoringModuleTwoReportsPerExchange implements SenderModule, Rece
                 if (MessageExchange.IN_ONLY_PATTERN.equals(exchange.getPattern())
                         && exchange.isTerminated()) {
 
-                    // create date client in
-                    /*
-                     * ReportBean report1 = new ReportBean();
-                     * report1.setType("t1");
-                     * this.setSOACommonInformation(exchange, report1);
-                     * report1.setDate
-                     * (TimeStamperHandler.getInstance().getTimeStamp(exchange)
-                     * .getDateClientIn());
-                     * report1.setContentLength(this.map.remove
-                     * (exchange.getExchangeId()));
-                     * 
-                     * res.getReports().add(report1);
-                     * 
-                     * // create date provider in ReportBean report2 = new
-                     * ReportBean(); report2.setType("t2");
-                     * this.setSOACommonInformation(exchange, report2);
-                     * report2.setDate
-                     * (TimeStamperHandler.getInstance().getTimeStamp(exchange)
-                     * .getDateProviderIn());
-                     * 
-                     * if (exchange.getMessage("in") != null) { if
-                     * ((exchange.getMessage("in").getContent() instanceof
-                     * StreamSource) && ((StreamSource)
-                     * exchange.getMessage("in").getContent() != null) &&
-                     * (((StreamSource) exchange.getMessage("in").getContent())
-                     * .getInputStream() != null)) {
-                     * report2.setContentLength(((StreamSource)
-                     * exchange.getMessage("in")
-                     * .getContent()).getInputStream().available()); } else if
-                     * ((exchange.getMessage("in").getContent() instanceof
-                     * DOMSource) && ((DOMSource)
-                     * exchange.getMessage("in").getContent() != null)) {
-                     * InputSource source = SourceHelper
-                     * .convertDOMSource2InputSource((DOMSource)
-                     * exchange.getMessage( "in").getContent());
-                     * report2.setContentLength
-                     * (source.getByteStream().available()); } else { throw new
-                     * DSBException("Source unknown"); } } else {
-                     * report2.setContentLength(-1L); }
-                     * res.getReports().add(report2);
-                     */
+                    if (log.isDebugEnabled()) {
+                        log.debug("INONLY & T3 + T4 Phase for exchange terminated");
+                    }
 
-                    // create date provider out
+                    // provider out date
                     ReportBean report3 = new ReportBean();
                     report3.setType("t3");
                     this.setSOACommonInformation(exchange, report3);
                     report3.setDate(TimeStamperHandler.getInstance().getTimeStamp(exchange)
                             .getDateProviderOut());
+                    // no out
                     report3.setContentLength(0L);
                     report3.setException(false);
-
-                    if (report3.getDate() != 0L) {
-                        res.getReports().add(report3);
-                    }
+                    res.getReports().add(report3);
 
                     // create date client out
                     ReportBean report4 = new ReportBean();
@@ -343,12 +247,10 @@ public class MonitoringModuleTwoReportsPerExchange implements SenderModule, Rece
                     this.setSOACommonInformation(exchange, report4);
                     report4.setDate(TimeStamperHandler.getInstance().getTimeStamp(exchange)
                             .getDateClientOut());
+                    // no out
                     report4.setContentLength(0);
                     report4.setException(false);
-
-                    if (report4.getDate() != 0L) {
-                        res.getReports().add(report4);
-                    }
+                    res.getReports().add(report4);
                 }
 
                 // handle in out request for out messages
@@ -357,26 +259,9 @@ public class MonitoringModuleTwoReportsPerExchange implements SenderModule, Rece
                         && ((exchange.getMessage("out") != null) || (exchange.getFault() != null) || (exchange
                                 .getError() != null))) {
 
-                    /*
-                     * // create date client in ReportBean report1 = new
-                     * ReportBean(); report1.setType("t1");
-                     * this.setSOACommonInformation(exchange, report1);
-                     * report1.setDate
-                     * (TimeStamperHandler.getInstance().getTimeStamp(exchange)
-                     * .getDateClientIn());
-                     * report1.setContentLength(this.map.remove
-                     * (exchange.getExchangeId()));
-                     * res.getReports().add(report1);
-                     * 
-                     * // create date provider in ReportBean report2 = new
-                     * ReportBean(); report2.setType("t2");
-                     * this.setSOACommonInformation(exchange, report2);
-                     * report2.setDate
-                     * (TimeStamperHandler.getInstance().getTimeStamp(exchange)
-                     * .getDateProviderIn());
-                     * report2.setContentLength(report2.getContentLength());
-                     * res.getReports().add(report2);
-                     */
+                    if (log.isDebugEnabled()) {
+                        log.debug("IN+OUT* & T3 + T4 Phase for output/fault/error message");
+                    }
 
                     // create date provider out
                     ReportBean report3 = new ReportBean();
@@ -399,8 +284,8 @@ public class MonitoringModuleTwoReportsPerExchange implements SenderModule, Rece
                                             "out").getContent());
                             report3.setContentLength(source.getByteStream().available());
                         } else {
-                            throw new DSBException("Source unknown: "
-                                    + exchange.getMessage("out").getContent());
+                            report3.setContentLength(-1);
+                            log.debug("Can not calcultate size on unknown OUT message type");
                         }
                     } else {
                         report3.setContentLength(0);
@@ -412,26 +297,79 @@ public class MonitoringModuleTwoReportsPerExchange implements SenderModule, Rece
                         report3.setException(false);
                     }
 
-                    if (report3.getDate() != 0L) {
-                        res.getReports().add(report3);
-                    }
+                    res.getReports().add(report3);
 
                     // create date client out
                     ReportBean report4 = new ReportBean();
                     report4.setType("t4");
                     this.setSOACommonInformation(exchange, report4);
                     report4.setDate(TimeStamperHandler.getInstance().getTimeStamp(exchange)
-                            .getDateProviderOut());
+                            .getDateClientOut());
+                    // same length as T3...
                     report4.setContentLength(report3.getContentLength());
                     if ((exchange.getFault() != null) || (exchange.getError() != null)) {
                         report4.setException(true);
                     } else {
                         report4.setException(false);
                     }
-                    if (report4.getDate() != 0L) {
-                        res.getReports().add(report4);
+                    res.getReports().add(report4);
+                }
+
+            } else if (exchange.getRole() == Role.PROVIDER) {
+                // provider, must have T2 and T1, so send the report...
+                if ((MessageExchange.IN_ONLY_PATTERN.equals(exchange.getPattern()) && !exchange
+                        .isTerminated())
+                        || (((MessageExchange.IN_OUT_PATTERN.equals(exchange.getPattern()) || (MessageExchange.IN_OPTIONAL_OUT_PATTERN
+                                .equals(exchange.getPattern())))
+                                && (exchange.getMessage("out") == null) && !exchange.isTerminated()))) {
+                    // we can have T3 here is exchnage.getOut is not null...
+
+                    // creat T1 + T2 report, then send to monitoring layer...
+                    int size = 0;
+                    if (exchange.getMessage("in") != null) {
+                        if ((exchange.getMessage("in").getContent() instanceof StreamSource)
+                                && ((StreamSource) exchange.getMessage("in").getContent() != null)
+                                && (((StreamSource) exchange.getMessage("in").getContent())
+                                        .getInputStream() != null)) {
+                            size = ((StreamSource) exchange.getMessage("in").getContent())
+                                    .getInputStream().available();
+                        } else if ((exchange.getMessage("in").getContent() instanceof DOMSource)
+                                && ((DOMSource) exchange.getMessage("in").getContent() != null)) {
+                            InputSource source = SourceHelper
+                                    .convertDOMSource2InputSource((DOMSource) exchange.getMessage(
+                                            "in").getContent());
+                            size = source.getByteStream().available();
+                        } else {
+                            log.debug("Can not calcultate size on unknown message type");
+                        }
+                    }
+
+                    ReportBean report1 = new ReportBean();
+                    report1.setType("t1");
+                    this.setSOACommonInformation(exchange, report1);
+                    report1.setDate(TimeStamperHandler.getInstance().getTimeStamp(exchange)
+                            .getDateClientIn());
+                    report1.setContentLength(size);
+                    res.getReports().add(report1);
+
+                    ReportBean report2 = new ReportBean();
+                    report2.setType("t2");
+                    this.setSOACommonInformation(exchange, report2);
+                    report2.setDate(TimeStamperHandler.getInstance().getTimeStamp(exchange)
+                            .getDateProviderIn());
+                    report2.setContentLength(size);
+                    res.getReports().add(report2);
+
+                    if (log.isDebugEnabled()) {
+                        log.debug("PROVIDER IN T2? = "
+                                + TimeStamperHandler.getInstance().getTimeStamp(exchange)
+                                        .getDateProviderIn());
+                        log.debug("PROVIDER IN T3? = "
+                                + TimeStamperHandler.getInstance().getTimeStamp(exchange)
+                                        .getDateProviderOut());
                     }
                 }
+
             }
         } catch (IOException e) {
             throw new DSBException(e);

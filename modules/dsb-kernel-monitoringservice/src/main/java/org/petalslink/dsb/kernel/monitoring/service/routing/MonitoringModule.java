@@ -158,12 +158,11 @@ public class MonitoringModule implements SenderModule, ReceiverModule {
         }
         client.send(reports);
     }
-    
+
     private void sendRawReport(ReportListBean reports) throws Exception {
         MonitoringClient client = this.monitoringClientFactory.getRawMonitoringClient();
         if (client == null) {
-            throw new DSBException(
-                    "Can not get any client to send RAW report to monitoring layer");
+            throw new DSBException("Can not get any client to send RAW report to monitoring layer");
         }
         client.send(reports);
     }
@@ -189,7 +188,7 @@ public class MonitoringModule implements SenderModule, ReceiverModule {
                         || (((MessageExchange.IN_OUT_PATTERN.equals(exchange.getPattern()) || (MessageExchange.IN_OPTIONAL_OUT_PATTERN
                                 .equals(exchange.getPattern())))
                                 && (exchange.getMessage("out") == null) && !exchange.isTerminated()))) {
-                    // stock message
+                    // store message if not already stored in previous step
                     if (!this.map.containsKey(exchange.getExchangeId())) {
                         if (exchange.getMessage("in").getContent() == null) {
                             this.map.put(exchange.getExchangeId(), 0);
@@ -210,9 +209,6 @@ public class MonitoringModule implements SenderModule, ReceiverModule {
                             }
                         }
                     }
-                    
-                    // create T1 + T2 report
-                    // TODO
                 }
 
                 // handle done request
@@ -341,7 +337,7 @@ public class MonitoringModule implements SenderModule, ReceiverModule {
                     report1.setType("t4");
                     this.setSOACommonInformation(exchange, report4);
                     report4.setDate(TimeStamperHandler.getInstance().getTimeStamp(exchange)
-                            .getDateProviderOut());
+                            .getDateClientOut());
                     report4.setContentLength(report3.getContentLength());
                     if ((exchange.getFault() != null) || (exchange.getError() != null)) {
                         report4.setException(true);

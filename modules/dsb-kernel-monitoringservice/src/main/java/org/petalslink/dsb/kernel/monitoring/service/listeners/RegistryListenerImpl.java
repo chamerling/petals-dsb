@@ -79,8 +79,13 @@ public class RegistryListenerImpl implements RegistryListener {
 
         try {
             client.createMonitoringEndpoint(endpoint);
-        } catch (DSBException e) {
-            this.log.warning("Can not add monitoring endpoint", e);
+        } catch (Exception e) {
+            final String message = "Can not add monitoring endpoint";
+            if (this.log.isDebugEnabled()) {
+                this.log.warning(message, e);                
+            } else {
+                this.log.warning(message);                                
+            }
         }
     }
 
@@ -117,7 +122,7 @@ public class RegistryListenerImpl implements RegistryListener {
 
         try {
             client.deleteMonitoringEndpoint(endpoint);
-        } catch (DSBException e) {
+        } catch (Exception e) {
             this.log.warning("Can not delete monitoring endpoint", e);
         }
     }

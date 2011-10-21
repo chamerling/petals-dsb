@@ -52,7 +52,6 @@ public class ListenerManager {
      */
     @LifeCycleListener(phase = Phase.START)
     public void registerListeners() {
-        System.out.println("REGISTER LISTENER FOR MONITORING!!!");
         try {
             this.registryListenerManager.add(listener);
         } catch (DSBException e) {
