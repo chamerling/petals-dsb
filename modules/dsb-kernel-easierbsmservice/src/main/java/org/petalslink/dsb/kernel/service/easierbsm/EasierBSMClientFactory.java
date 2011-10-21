@@ -3,6 +3,10 @@
  */
 package org.petalslink.dsb.kernel.service.easierbsm;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
 import org.objectweb.fractal.fraclet.annotation.annotations.FractalComponent;
 import org.objectweb.fractal.fraclet.annotation.annotations.Interface;
 import org.objectweb.fractal.fraclet.annotation.annotations.LifeCycle;
@@ -33,8 +37,21 @@ public class EasierBSMClientFactory implements MonitoringClientFactory {
     @LifeCycle(on = LifeCycleType.START)
     protected void start() {
         this.log = new LoggingUtil(this.logger);
+        Properties props = new Properties();
+        InputStream is = EasierBSMClientFactory.class.getResourceAsStream("/easierbsm.cfg");
+
+        if (is != null) {
+            try {
+                props.load(is);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            log.warning("Can not configure easierBSM from a null configuration file...");
+        }
+
         if (this.delegate == null) {
-            this.delegate = new org.petalslink.dsb.easierbsm.connector.EasierBSMClientFactory();
+            this.delegate = new org.petalslink.dsb.easierbsm.connector.EasierBSMClientFactory(props);
         }
         this.log.start();
     }
@@ -63,9 +80,19 @@ public class EasierBSMClientFactory implements MonitoringClientFactory {
      * @see org.petalslink.dsb.monitoring.api.MonitoringClientFactory#
      * getMonitoringAdminClient(java.lang.String)
      */
-    public MonitoringAdminClient getMonitoringAdminClient(String address) {
+    public MonitoringAdminClient getMonitoringAdminClient() {
         this.log.start();
-        return this.delegate.getMonitoringAdminClient(address);
+        return this.delegate.getMonitoringAdminClient();
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.petalslink.dsb.monitoring.api.MonitoringClientFactory#
+     * getRawMonitoringClient()
+     */
+    public MonitoringClient getRawMonitoringClient() {
+        return this.delegate.getRawMonitoringClient();
     }
 
 }
