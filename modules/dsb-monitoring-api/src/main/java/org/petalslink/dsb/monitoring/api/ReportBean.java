@@ -213,9 +213,21 @@ public class ReportBean {
         this.date = date;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
+    /**
+     * @return the type
+     */
+    public String getType() {
+        return type;
+    }
+
+    /**
+     * @param type the type to set
+     */
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    /* (non-Javadoc)
      * @see java.lang.Object#toString()
      */
     @Override
@@ -237,26 +249,14 @@ public class ReportBean {
         builder.append(provider);
         builder.append(", isException=");
         builder.append(isException);
-        builder.append(", contentLenght=");
+        builder.append(", contentLength=");
         builder.append(contentLength);
         builder.append(", date=");
         builder.append(date);
+        builder.append(", type=");
+        builder.append(type);
         builder.append("]");
         return builder.toString();
-    }
-
-    /**
-     * @return the type
-     */
-    public String getType() {
-        return type;
-    }
-
-    /**
-     * @param type the type to set
-     */
-    public void setType(String type) {
-        this.type = type;
     }
 
 }
