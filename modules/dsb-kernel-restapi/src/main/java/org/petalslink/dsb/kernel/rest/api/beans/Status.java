@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.petalslink.dsb.kernel.rest.api;
+package org.petalslink.dsb.kernel.rest.api.beans;
 
 import javax.xml.bind.annotation.XmlRootElement;
 

@@ -3,6 +3,9 @@
  */
 package org.petalslink.dsb.kernel.rest.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.objectweb.fractal.fraclet.annotation.annotations.FractalComponent;
 import org.objectweb.fractal.fraclet.annotation.annotations.Interface;
 import org.objectweb.fractal.fraclet.annotation.annotations.LifeCycle;
@@ -16,7 +19,8 @@ import org.ow2.petals.kernel.api.server.PetalsException;
 import org.ow2.petals.util.LoggingUtil;
 import org.petalslink.dsb.annotations.service.RESTService;
 import org.petalslink.dsb.kernel.rest.api.ServiceAssembly;
-import org.petalslink.dsb.kernel.rest.api.Status;
+import org.petalslink.dsb.kernel.rest.api.beans.SA;
+import org.petalslink.dsb.kernel.rest.api.beans.Status;
 
 /**
  * @author chamerling
@@ -121,6 +125,25 @@ public class ServiceAssemblyServiceImpl implements ServiceAssembly {
      */
     public Status undeploy(String saName) {
         return new Status("TODO");
+    }
+    
+    /* (non-Javadoc)
+     * @see org.petalslink.dsb.kernel.rest.api.ServiceAssembly#all()
+     */
+    public List<SA> all() {
+        List<SA> result = new ArrayList<SA>();
+        SA a = new SA();
+        a.setName("SA-1");
+        a.setState("started");
+        
+        SA b = new SA();
+        b.setName("SA-2");
+        b.setState("stopped");
+        
+        result.add(a);
+        result.add(b);
+        
+        return result;
     }
 
 }
