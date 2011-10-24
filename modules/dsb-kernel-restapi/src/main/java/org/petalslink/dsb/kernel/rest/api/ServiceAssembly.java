@@ -14,7 +14,7 @@ import org.petalslink.dsb.kernel.rest.api.beans.SA;
 import org.petalslink.dsb.kernel.rest.api.beans.Status;
 
 /**
- * Reach it at http://localhost:7600/rest/kernel/$METHODPATH
+ * Reach it at http://localhost:7600/rest/kernel/$PATH/$METHODPATH
  * 
  * @author chamerling
  * 
