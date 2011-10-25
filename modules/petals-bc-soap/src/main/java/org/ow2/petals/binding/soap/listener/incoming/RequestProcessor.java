@@ -390,7 +390,9 @@ public abstract class RequestProcessor {
     protected void handleFault(final MessageExchange exchange, final MessageContext outMessage,
             final SOAPFactory factory) throws AxisFault {
         // exchange FAULT : return a fault message
-        logger.warning("Got a fault on JBI response");
+        if (logger.isLoggable(Level.FINE)) {
+            logger.warning("Got a fault on JBI response");
+        }
         try {
             final SOAPEnvelope envelope = Marshaller.createSOAPEnvelope(factory, exchange
                     .getFault(),true);
