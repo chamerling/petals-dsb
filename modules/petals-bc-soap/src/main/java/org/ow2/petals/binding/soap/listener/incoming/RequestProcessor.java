@@ -394,6 +394,11 @@ public abstract class RequestProcessor {
         try {
             final SOAPEnvelope envelope = Marshaller.createSOAPEnvelope(factory, exchange
                     .getFault(),true);
+            
+            if (logger.isLoggable(Level.FINE)) {
+                logger.log(Level.FINE, "SOAP FAULT FROM JBI response : " + envelope.toString());
+            }
+            
             outMessage.setEnvelope(envelope);
         } catch (final AxisFault e) {
             final String errorMsg = "Error while creating SOAP Fault response.";
