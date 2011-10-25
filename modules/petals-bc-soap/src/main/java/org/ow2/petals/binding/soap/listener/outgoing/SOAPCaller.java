@@ -262,7 +262,10 @@ public class SOAPCaller extends AbstractExternalServiceCaller {
                 }
             } catch (final Exception e) {
                 this.logger.warning("Catch an exception on the WS invocation : " + e.getMessage());
-
+                
+                if (logger.isLoggable(Level.FINE)) {
+                    logger.log(Level.FINE, String.format("Caused by invoking %s", address), e);
+                }
                 // The exception is an AxisFault (probably a SOAP Fault)
                 if (e instanceof AxisFault) {
                     this.handleSOAPFault(exchange, (AxisFault) e);
