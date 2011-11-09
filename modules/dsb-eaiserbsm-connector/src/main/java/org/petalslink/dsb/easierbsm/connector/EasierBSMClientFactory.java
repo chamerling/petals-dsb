@@ -29,6 +29,8 @@ public class EasierBSMClientFactory implements MonitoringClientFactory {
     public static final String FINAL_ENDPOINT_SUFFIX = WSDM_SUFFIX + "ClientProxyEndpoint";
     
     private static final String RAW_REPORT_SERVICE_ENDPOINT = "rawReportEndpointClientProxyEndpoint";
+    
+    private static final String DISPATCHER_ENDPOINT = "DispatcherProviderEndpointClientProxyEndpoint";
 
     private static Logger logger = Logger.getLogger(EasierBSMClientFactory.class.getName());
 
@@ -68,7 +70,8 @@ public class EasierBSMClientFactory implements MonitoringClientFactory {
             baseURL = baseURL + "/";
         }
 
-        String address = baseURL + endpointName + FINAL_ENDPOINT_SUFFIX;
+        //String address = baseURL + endpointName + FINAL_ENDPOINT_SUFFIX;
+        String address = baseURL + DISPATCHER_ENDPOINT;
 
         if (this.monitoringClients.get(address) == null) {
             this.monitoringClients.put(address, new EasierBSMClient(address));
