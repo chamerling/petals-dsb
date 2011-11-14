@@ -1,0 +1,86 @@
+
+.zindexFront {
+z-index: 1000;
+float:left;
+
+}
+
+#selectable { list-style-type: none; margin: 0; padding: 0; width: 60%; }
+
+.magnet{
+z-index:50000;
+}	
+
+.zindexMiddle {
+z-index: 500;
+position:absolute;
+}
+
+
+.drawingZone{
+overflow: scroll;
+border:1px solid red;
+}
+.zindexBack {
+z-index: 1;
+position:absolute;
+color:red;
+}
+
+
+div.inner-default-layout-header{
+background-image: url(images/logo.png);
+height:60px;
+background-repeat: no-repeat;
+}	
+
+div.default-layout-header{
+background-image: url(images/logo_repeat.png);
+height:60px;
+background-repeat: repeat-x;
+}	
+
+div.welcome-header{
+background-image: url(images/home.png);
+height:100%;
+width:100%;
+background-repeat: no-repeat;
+
+}	
+
+div.home-label{
+float:left;
+clear:left;
+margin-left:100px;
+margin-top:20px;
+color:#e46425;
+font-size: 16px;
+cursor: pointer;
+background-image: url(images/bpmndesigner/puce_g_45.png);
+background-repeat: no-repeat;
+
+height:35px;
+padding-left:40px;
+padding-top:25px;
+}	
+
+
+.x-tree-node-leaf .x-tree-node-icon{background-image:none;}
+
+.white-background{
+background-image: #FFFFFF;
+background: #FFFFFF;
+}	
+
+                     
+
+
+div.version-label{
+font-size:12px;
+color:black;
+margin-top:165px;
+margin-left:270px;
+float:left;
+}
+
+

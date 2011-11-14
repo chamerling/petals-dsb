@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+
+	<!-- Servlets -->
+
+	<!-- Default page to serve -->
+	<welcome-file-list>
+		<welcome-file>DSBPetalsBPMClient.html</welcome-file>
+	</welcome-file-list>
+	
+		<context-param>
+		<!--	     max size of the upload request -->
+		<param-name>maxSize</param-name>
+		<param-value>3145728</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>slowUploads</param-name>
+		<param-value>200</param-value>
+	</context-param>
+
+	<servlet>
+		<servlet-name>uploadServlet</servlet-name>
+		<!--	     This is the default servlet, it puts files in session -->
+		<servlet-class>gwtupload.server.UploadServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>uploadServlet</servlet-name>
+		<url-pattern>*.gupld</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>downloadServlet</servlet-name>
+		<servlet-class>com.ebmwebsourcing.webeditor.server.impl.service.download.DownloadServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>downloadServlet</servlet-name>
+		<url-pattern>/org.petalslink.dsb.petalsbpm.DSBPetalsBPMClient/downloadService</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>gWTProjectServiceImpl</servlet-name>
+		<servlet-class>com.ebmwebsourcing.geasytools.webeditor.impl.server.service.project.GWTProjectServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>gWTProjectServiceImpl</servlet-name>
+		<url-pattern>/org.petalslink.dsb.petalsbpm.DSBPetalsBPMClient/projectService</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>fileRepositoryServiceImpl</servlet-name>
+		<servlet-class>com.ebmwebsourcing.geasywebeditor.server.file.repository.FileRepositoryServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>fileRepositoryServiceImpl</servlet-name>
+		<url-pattern>/org.petalslink.dsb.petalsbpm.DSBPetalsBPMClient/FileRepositoryService</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>bPMNDeploymentServiceImpl</servlet-name>
+		<servlet-class>com.ebmwebsourcing.bpmn.deployer.server.BPMNDeploymentServiceImpl</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>bPMNDeploymentServiceImpl</servlet-name>
+		<url-pattern>/org.petalslink.dsb.petalsbpm.DSBPetalsBPMClient/BPMNDeploymentService</url-pattern>
+	</servlet-mapping>
+
+</web-app>
