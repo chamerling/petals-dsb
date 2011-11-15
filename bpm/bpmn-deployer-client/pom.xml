@@ -1,46 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-  <!-- POM file generated with GWT webAppCreator -->
-  <modelVersion>4.0.0</modelVersion>
- <parent>
-    <groupId>com.ebmwebsourcing.experimental.experimental-parents</groupId>
-    <artifactId>geasy-parent</artifactId>
-    <version>1.0-SNAPSHOT</version>
-</parent>
+	<!-- POM file generated with GWT webAppCreator -->
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.ebmwebsourcing.experimental.experimental-parents</groupId>
+		<artifactId>geasy-parent</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
 
-  <groupId>org.petalslink.dsb</groupId>
-  <artifactId>dsb-bpmn-deployer-client</artifactId>
-  <packaging>war</packaging>
-  <version>1.0-SNAPSHOT</version>
-  <name>dsb-bpmn-deployer-client</name>
+	<groupId>org.petalslink.dsb</groupId>
+	<artifactId>dsb-bpmn-deployer-client</artifactId>
+	<packaging>war</packaging>
+	<version>1.0-SNAPSHOT</version>
+	<name>dsb-bpmn-deployer-client</name>
 
-  <properties>
-    <gwt.runTarget>DSBPetalsBPMClient.html</gwt.runTarget>
-    <gwt.validateOnly>false</gwt.validateOnly>
-    <gwt.module>org.petalslink.dsb.petalsbpm.DSBPetalsBPMClient</gwt.module>
-    <gwt.draftCompile>true</gwt.draftCompile>
-    <gwt.style>DETAILED</gwt.style>
-  </properties>
+	<properties>
+		<gwt.runTarget>DSBPetalsBPMClient.html</gwt.runTarget>
+		<gwt.validateOnly>false</gwt.validateOnly>
+		<gwt.module>org.petalslink.dsb.petalsbpm.DSBPetalsBPMClient</gwt.module>
+		<gwt.draftCompile>true</gwt.draftCompile>
+		<gwt.style>DETAILED</gwt.style>
+		<petalsbpm.version>${maven.build.timestamp}</petalsbpm.version>
+	</properties>
 
-  <dependencies>
-  	<!-- dependencies for the petalsbpm client -->
-  	<dependency>
-      <groupId>com.ebmwebsourcing.petalsbpm</groupId>
-      <artifactId>bpmn-plugins</artifactId>
-      <version>1.0-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>com.ebmwebsourcing.geasywebeditor</groupId>
-      <artifactId>webeditor-ui</artifactId>
-      <version>1.0-SNAPSHOT</version>
-    </dependency>
-    <!-- dependency for the deployment on the dsb -->
-    <dependency>
-      <groupId>org.petalslink.dsb</groupId>
-	  <artifactId>dsb-bpmn-deployer</artifactId>
-	  <version>1.0-SNAPSHOT</version>
-    </dependency>
-  </dependencies>
+	<dependencies>
+		<!-- dependencies for the petalsbpm client -->
+		<dependency>
+			<groupId>com.ebmwebsourcing.petalsbpm</groupId>
+			<artifactId>bpmn-plugins</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.ebmwebsourcing.geasywebeditor</groupId>
+			<artifactId>webeditor-ui</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+		<!-- dependency for the deployment on the dsb -->
+		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>dsb-bpmn-deployer</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>versionReplace</id>
+						<phase>compile</phase>
+						<configuration>
+							<tasks>
+								<echo file="${webappDirectory}${file.separator}version.txt">${petalsbpm.version}</echo>
+							</tasks>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 
 </project>

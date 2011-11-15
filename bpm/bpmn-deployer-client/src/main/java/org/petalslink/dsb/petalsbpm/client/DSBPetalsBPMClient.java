@@ -16,6 +16,7 @@ import com.ebmwebsourcing.geasytools.webeditor.impl.client.project.request.SaveP
 import com.ebmwebsourcing.geasytools.webeditor.impl.client.request.RequestEvent;
 import com.ebmwebsourcing.geasytools.webeditor.ui.component.menu.GWTExtMenuComponentButton;
 import com.ebmwebsourcing.geasytools.webeditor.ui.core.EditorView;
+import com.ebmwebsourcing.petalsbpm.client.component.bpmn.WelcomeComponent;
 import com.ebmwebsourcing.petalsbpm.client.plugin.bpmn.BPMNProjectInstance;
 import com.ebmwebsourcing.petalsbpm.client.plugin.bpmn.descriptive.process.DescriptiveBPMNPrivateProcessPlugin;
 import com.ebmwebsourcing.petalsbpm.client.plugin.bpmn.executable.ExecutableBPMNProjectType;
