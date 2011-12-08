@@ -26,11 +26,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.mortbay.jetty.Server;
-import org.mortbay.jetty.handler.ContextHandlerCollection;
-import org.mortbay.jetty.servlet.Context;
-import org.mortbay.jetty.servlet.ServletHolder;
-import org.mortbay.jetty.webapp.WebAppContext;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.ContextHandler.Context;
+import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.objectweb.fractal.fraclet.annotation.annotations.FractalComponent;
 import org.objectweb.fractal.fraclet.annotation.annotations.Interface;
 import org.objectweb.fractal.fraclet.annotation.annotations.LifeCycle;
@@ -100,6 +98,7 @@ public class JettyWebAppServerImpl implements WebAppServer {
         }
 
         // get the webapps path
+        /*
         File webappdir = new File(this.configurationService.getContainerConfiguration()
                 .getRootDirectoryPath(), "webapps");
 
@@ -162,6 +161,7 @@ public class JettyWebAppServerImpl implements WebAppServer {
         }
         this.log.info("The DSB Web application is available at http://localhost:"
                 + this.dsbConfigurationService.getWebAppPort() + "/dsb/");
+                */
     }
 
     /**

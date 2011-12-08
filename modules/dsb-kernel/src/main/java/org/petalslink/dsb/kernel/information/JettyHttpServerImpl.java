@@ -18,10 +18,8 @@
  */
 package org.petalslink.dsb.kernel.information;
 
-import org.mortbay.jetty.Server;
-import org.mortbay.jetty.handler.ContextHandlerCollection;
-import org.mortbay.jetty.servlet.Context;
-import org.mortbay.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.objectweb.fractal.fraclet.annotation.annotations.FractalComponent;
 import org.objectweb.fractal.fraclet.annotation.annotations.Interface;
 import org.objectweb.fractal.fraclet.annotation.annotations.LifeCycle;
@@ -76,7 +74,7 @@ public class JettyHttpServerImpl implements HttpServer {
         final ContextHandlerCollection contexts = new ContextHandlerCollection();
         this.server.setHandler(contexts);
 
-        // create the axis context
+        /*
         final Context restContext = new Context(contexts, "/", Context.SESSIONS);
 
         // create axis servlet holder
@@ -90,6 +88,7 @@ public class JettyHttpServerImpl implements HttpServer {
         } catch (Exception e) {
             this.log.warning(e.getMessage());
         }
+        */
 
     }
 

@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
-import org.mortbay.jetty.webapp.WebAppContext;
 import org.objectweb.util.monolog.api.BasicLevel;
 import org.objectweb.util.monolog.api.Logger;
 
@@ -30,32 +29,32 @@ import org.objectweb.util.monolog.api.Logger;
  * @author chamerling - eBM WebSourcing
  * 
  */
-public class WebAppClassLoader extends org.mortbay.jetty.webapp.WebAppClassLoader {
+public class WebAppClassLoader { // extends
+                                 // org.mortbay.jetty.webapp.WebAppClassLoader {
 
-    private final ClassLoader petalsClassLoader;
+    private ClassLoader petalsClassLoader;
 
-    private final Logger logger;
+    private Logger logger;
 
     /**
      * 
      */
-    public WebAppClassLoader(ClassLoader petalsClassLoader, WebAppContext context, Logger logger)
-            throws IOException {
-        super(context);
-        this.petalsClassLoader = petalsClassLoader;
-        this.logger = logger;
-    }
+    /*
+     * public WebAppClassLoader(ClassLoader petalsClassLoader, WebAppContext
+     * context, Logger logger) throws IOException { super(context);
+     * this.petalsClassLoader = petalsClassLoader; this.logger = logger; }
+     */
 
     /**
      * {@inheritDoc}
      */
-    @Override
+    
     public synchronized URL getResource(String name) {
         URL result = null;
         result = this.petalsClassLoader.getResource(name);
 
         if (result == null) {
-            result = super.getResource(name);
+            //result = super.getResource(name);
         }
 
         return result;
@@ -64,13 +63,13 @@ public class WebAppClassLoader extends org.mortbay.jetty.webapp.WebAppClassLoade
     /**
      * {@inheritDoc}
      */
-    @Override
+    
     public InputStream getResourceAsStream(String name) {
         InputStream result = null;
         result = this.petalsClassLoader.getResourceAsStream(name);
 
         if (result == null) {
-            result = super.getResourceAsStream(name);
+           // result = super.getResourceAsStream(name);
         }
         return result;
     }
@@ -78,7 +77,7 @@ public class WebAppClassLoader extends org.mortbay.jetty.webapp.WebAppClassLoade
     /**
      * {@inheritDoc}
      */
-    @Override
+    
     public synchronized Class loadClass(String name) throws ClassNotFoundException {
         // try to load from petals class loader
         if (this.logger.isLoggable(BasicLevel.DEBUG)) {
@@ -94,7 +93,7 @@ public class WebAppClassLoader extends org.mortbay.jetty.webapp.WebAppClassLoade
             }
         }
         if (result == null) {
-            result = super.loadClass(name);
+            //result = super.loadClass(name);
             if (result != null) {
                 if (this.logger.isLoggable(BasicLevel.DEBUG)) {
                     this.logger.log(BasicLevel.DEBUG, "Class '" + name
@@ -113,17 +112,13 @@ public class WebAppClassLoader extends org.mortbay.jetty.webapp.WebAppClassLoade
     /**
      * {@inheritDoc}
      */
-    @Override
+    
     protected synchronized Class loadClass(String name, boolean resolve)
             throws ClassNotFoundException {
         Class result = null;
         if (this.logger.isLoggable(BasicLevel.DEBUG)) {
             this.logger.log(BasicLevel.DEBUG, "Loading Class '" + name + "' with resolve = '"
                     + resolve + "'");
-        }
-        try {
-            result = super.loadClass(name, resolve);
-        } catch (ClassNotFoundException e) {
         }
         return result;
     }
