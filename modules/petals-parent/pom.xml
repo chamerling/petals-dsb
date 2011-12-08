@@ -1,0 +1,864 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<prerequisites>
+		<maven>2.0.6</maven>
+	</prerequisites>
+
+	<parent>
+		<groupId>org.ow2</groupId>
+		<artifactId>ow2</artifactId>
+		<version>1.1</version>
+	</parent>
+
+	<!-- ============== -->
+	<!-- Identification -->
+	<!-- ============== -->
+
+	<name>PEtALS</name>
+	<artifactId>petals-parent</artifactId>
+	<groupId>org.petalslink.dsb</groupId>
+	<packaging>pom</packaging>
+	<version>17</version>
+
+	<inceptionYear>2005</inceptionYear>
+	<description>The PEtALS Services Platform provides a distributed open source implementation of Java Business Integration (JBI) specification as a core element to build OW2 ESB solutions, leveraging existing Consortium's components.</description>
+	<url>http://petals.ow2.org</url>
+
+	<issueManagement>
+		<url>http://forge.objectweb.org/tracker/?group_id=213</url>
+	</issueManagement>
+
+	<distributionManagement>
+		<repository>
+			<id>ow2</id>
+			<name>OW2 Maven2 release repository</name>
+			<url>scp://jupiter.objectweb.org:/var/lib/gforge/chroot/home/groups/maven/htdocs/maven2</url>
+		</repository>
+		<snapshotRepository>
+			<id>ow2</id>
+			<name>OW2 Maven2 snapshot repository</name>
+			<url>scp://jupiter.objectweb.org:/var/lib/gforge/chroot/home/groups/maven/htdocs/maven2-snapshot</url>
+		</snapshotRepository>
+		<site>
+			<id>petals.site</id>
+			<name>PEtALS Maven Site</name>
+			<url>scp://jupiter.objectweb.org:/var/lib/gforge/chroot/home/groups/petals/htdocs/maven2/</url>
+		</site>
+	</distributionManagement>
+
+	<!-- Source code management -->
+	<scm>
+		<connection>scm:svn:svn://svn.forge.objectweb.org/svnroot/petals/tags/petals-parent-17</connection>
+		<developerConnection>scm:svn:svn+ssh://fgardes@svn.forge.objectweb.org/svnroot/petals/tags/petals-parent-17</developerConnection>
+		<url>http://fisheye.ow2.org/browse/PEtALS/tags/petals-parent-17</url>
+	</scm>
+
+	<!-- Continuous integration -->
+	<ciManagement>
+		<system>Bamboo</system>
+		<url>http://www.forge.ow2.org/bamboo/</url>
+		<notifiers>
+			<notifier>
+			<type>mail</type>
+			<configuration>
+				<address>petals-dev@ow2.org</address>
+			</configuration>
+			</notifier>
+		</notifiers>
+	</ciManagement>
+
+	<mailingLists>
+		<mailingList>
+			<name>PETALS General Development Mailing List</name>
+			<subscribe>petals-dev-subscribe@ow2.org</subscribe>
+			<unsubscribe>petals-dev-unsubscribe@ow2.org</unsubscribe>
+			<archive>
+				http://mail-archive.objectweb.org/petals-dev/index.html
+			</archive>
+		</mailingList>
+
+		<mailingList>
+			<name>PETALS Users Mailing List</name>
+			<subscribe>petals-users-subscribe@ow2.org</subscribe>
+			<unsubscribe>petals-users-unsubscribe@ow2.org</unsubscribe>
+			<archive>
+				http://mail-archive.objectweb.org/petals-users/index.html
+			</archive>
+		</mailingList>
+
+		<mailingList>
+			<name>Petals Source Code Notification</name>
+			<subscribe>petals-commits-subscribe@ow2.org</subscribe>
+			<unsubscribe>
+				petals-commits-unsubscribe@ow2.org
+			</unsubscribe>
+			<archive>
+				http://mail-archive.objectweb.org/petals-commits/index.html
+			</archive>
+		</mailingList>
+	</mailingLists>
+
+	<!-- ======= -->
+	<!-- License -->
+	<!-- ======= -->
+	<licenses>
+		<license>
+			<name>GNU LESSER GENERAL PUBLIC LICENSE Version 2.1</name>
+			<url>http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html</url>
+		</license>
+	</licenses>
+
+	<!-- ========== -->
+	<!-- Developers -->
+	<!-- ========== -->
+	<developers>
+		<developer>
+			<name>Gael Blondelle</name>
+			<id>gblondelle</id>
+			<email>gael.blondelle@ebmwebsourcing.com</email>
+			<organization>EBM WebSourcing</organization>
+			<organizationUrl>
+				http://www.ebmwebsourcing.com
+			</organizationUrl>
+			<timezone>+1</timezone>
+		</developer>
+		<developer>
+			<name>Christophe Hamerling</name>
+			<id>chamerling</id>
+			<email>christophe.hamerling@ebmwebsourcing.com</email>
+			<url>http://www.ebmwebsourcing.com/chamerling</url>
+			<organization>EBM WebSourcing</organization>
+			<organizationUrl>
+				http://www.ebmwebsourcing.com
+			</organizationUrl>
+			<roles>
+				<role>Developer</role>
+			</roles>
+			<timezone>+1</timezone>
+		</developer>
+		<developer>
+			
+			<name>Christophe DENEUX</name>
+			<email>christophe.deneux@capgemini.com</email>
+			<id>cdeneux</id>
+			<organization>Capgemini Sud</organization>
+			<organizationUrl>http://www.capgemini.com</organizationUrl>
+			<roles>
+				<role>Maven Reviewer</role>
+				<role>Code Reviewer</role>
+				<role>Developer</role>
+			</roles>
+			<timezone>+1</timezone>
+		</developer>
+		<developer>
+			<name>Roland NAUDIN</name>
+			<email>roland.naudin@ebmwebsourcing.com</email>
+			<id>rnaudin</id>
+			<organization>EBM WebSourcing</organization>
+			<organizationUrl>
+				http://www.ebmwebsourcing.com
+			</organizationUrl>
+			<roles>
+				<role>Developer</role>
+			</roles>
+			<timezone>+1</timezone>
+		</developer>
+		<developer>
+			<name>Charles CASADEI</name>
+			<email>charles.casadei@petalslink.com</email>
+			<id>ccasadei</id>
+			<organization>EBM WebSourcing</organization>
+			<organizationUrl>
+				http://www.ebmwebsourcing.com
+			</organizationUrl>
+			<roles>
+				<role>Developer</role>
+			</roles>
+			<timezone>+1</timezone>
+		</developer>
+		<developer>
+			<name>Frederic GARDES</name>
+			<email>frederic.gardes@petalslink.com</email>
+			<id>fgardes</id>
+			<organization>EBM WebSourcing</organization>
+			<organizationUrl>
+				http://www.ebmwebsourcing.com
+			</organizationUrl>
+			<roles>
+				<role>Developer</role>
+			</roles>
+			<timezone>+1</timezone>
+		</developer>
+		<developer>
+			<name>Mohammed ELJAI</name>
+			<email>mohammed.eljai@petalslink.com</email>
+			<id>meljai</id>
+			<organization>EBM WebSourcing</organization>
+			<organizationUrl>
+				http://www.ebmwebsourcing.com
+			</organizationUrl>
+			<roles>
+				<role>Developer</role>
+			</roles>
+			<timezone>+1</timezone>
+		</developer>
+		<developer>
+			<name>Mathieu CARROLLE</name>
+			<email>mathieu.carrolle@petalslink.com</email>
+			<id>mcarrolle</id>
+			<organization>EBM WebSourcing</organization>
+			<organizationUrl>
+				http://www.ebmwebsourcing.com
+			</organizationUrl>
+			<roles>
+				<role>Developer</role>
+			</roles>
+			<timezone>+1</timezone>
+		</developer>
+	</developers>
+
+
+	<!-- ============ -->
+	<!-- Contributors -->
+	<!-- ============ -->
+	<contributors>
+
+	</contributors>
+
+	<!-- ========== -->
+	<!-- Properties -->
+	<!-- ========== -->
+	<properties>
+		<cobertura.version>2.0-beta1</cobertura.version>
+		<site.version>2.3</site.version>
+		<mprojectinfo.version>2.0-beta-3</mprojectinfo.version>
+		<umlgraph.version>4.6</umlgraph.version>
+		<topDirectoryLocation>..</topDirectoryLocation>
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>private</id>
+			<name>Private Repository</name>
+			<url>
+				file:${basedir}/${topDirectoryLocation}/etc/maven/private-repository
+			</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>private</id>
+			<name>Private Repository</name>
+			<url>
+				file:${basedir}/${topDirectoryLocation}/etc/maven/private-repository
+			</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>findbugs</groupId>
+			<artifactId>annotations</artifactId>
+			<version>1.0.0</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+    
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>3.8.1</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.easymock</groupId>
+				<artifactId>easymock</artifactId>
+				<version>2.2</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.easymock</groupId>
+				<artifactId>easymockclassextension</artifactId>
+				<version>2.2</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>log4j</groupId>
+				<artifactId>log4j</artifactId>
+				<version>1.2.13</version>
+			</dependency>
+			<dependency>
+				<groupId>org.ow2.petals</groupId>
+				<artifactId>petals-jbi</artifactId>
+				<version>1.0.1</version>
+			</dependency>
+			<dependency>
+				<groupId>org.ow2.petals</groupId>
+				<artifactId>petals-jbi-descriptor</artifactId>
+				<version>2.0.1</version>			
+			</dependency>	
+			<dependency>
+				<groupId>commons-lang</groupId>
+				<artifactId>commons-lang</artifactId>
+				<version>2.2</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>1.4</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-logging</groupId>
+				<artifactId>commons-logging</artifactId>
+				<version>1.0.4</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-pool</groupId>
+				<artifactId>commons-pool</artifactId>
+				<version>1.4</version>
+			</dependency>
+			<dependency>
+				<groupId>org.ow2.easywsdl</groupId>
+				<artifactId>easywsdl-wsdl</artifactId>
+				<version>2.0.1</version>	
+			</dependency>
+			<dependency>
+				<groupId>org.ow2.easywsdl</groupId>
+				<artifactId>easywsdl-ext-wsdl4complexwsdl</artifactId>
+				<version>2.0.1</version>	
+			</dependency>
+			<dependency>
+		   		<groupId>com.ebmwebsourcing.wsstar</groupId>
+		    		<artifactId>ws-addressing-definition</artifactId>
+				<version>1.0</version>
+			</dependency>
+			<dependency>
+		   		<groupId>com.ebmwebsourcing.wsstar</groupId>
+		    		<artifactId>ws-notification-definition</artifactId>
+				<version>1.0</version>
+			</dependency>
+			<dependency>
+		   		<groupId>com.ebmwebsourcing.wsstar</groupId>
+		    		<artifactId>ws-notification-extension</artifactId>
+				<version>1.0</version>
+			</dependency>
+			<dependency>
+		   		<groupId>com.ebmwebsourcing.wsstar</groupId>
+		    		<artifactId>ws-notification-service</artifactId>
+				<version>1.0</version>
+			</dependency>
+			<dependency>
+            			<artifactId>geronimo-stax-api_1.0_spec</artifactId>
+            			<groupId>org.apache.geronimo.specs</groupId>
+            			<version>1.0.1</version>
+        		</dependency>			
+		</dependencies>
+	</dependencyManagement>
+
+	<!-- ======== -->
+	<!-- Profiles -->
+	<!-- ======== -->
+	<!--
+	| Several profiles are defined to build Petals:
+	|    - a default profile used during PEtALS developement,
+	|    - a profile used to build the PEtALS release,
+	|    - a profile used in a continous integration context.
+	-->
+
+	<profiles>
+		<!--
+			| The following profile will be used when developping Petals.
+		-->
+		<profile>
+			<id>plugins</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<java.compiler.showWarnings>
+					true
+				</java.compiler.showWarnings>
+				<java.compiler.debug>true</java.compiler.debug>
+				<java.compiler.optimize>false</java.compiler.optimize>
+			</properties>
+		</profile>
+		<!--
+			| The following profile will be used when developping Petals.
+			| It is activated by default.
+		-->
+		<profile>
+			<id>development</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<java.compiler.showWarnings>
+					true
+				</java.compiler.showWarnings>
+				<java.compiler.debug>true</java.compiler.debug>
+				<java.compiler.optimize>false</java.compiler.optimize>
+			</properties>
+		</profile>
+		<!--
+			| The following profile will be used when releasing Petals.
+		-->
+		<profile>
+			<id>release</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<java.compiler.showWarnings>
+					false
+				</java.compiler.showWarnings>
+				<java.compiler.debug>false</java.compiler.debug>
+				<java.compiler.optimize>true</java.compiler.optimize>
+			</properties>
+		</profile>
+
+		<!-- Partial reporting for site publication -->
+		<profile>
+			<id>reporting</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<reporting>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<!--
+						<reportSets>
+							<reportSet>
+								<id>uml</id>
+								<configuration>
+									<doclet>
+										gr.spinellis.umlgraph.doclet.UmlGraphDoc
+									</doclet>
+									<docletArtifact>
+										<groupId>gr.spinellis</groupId>
+										<artifactId>
+											UmlGraph
+										</artifactId>
+										<version>
+											4.6
+										</version>
+									</docletArtifact>
+									<additionalparam>
+										-inferrel -inferdep -quiet -hide
+										java.* -collpackages java.util.*
+										-qualify -postfixpackage
+										-nodefontsize 9
+										-nodefontpackagesize 7
+									</additionalparam>
+									<encoding>ISO-8859-1</encoding>
+									<show>private</show>
+									<source>1.5</source>
+								</configuration>
+								<reports>
+									<report>javadoc</report>
+								</reports>
+							</reportSet>
+						</reportSets>
+						-->
+					</plugin>
+
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jxr-plugin</artifactId>
+					</plugin>
+
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>javancss-maven-plugin</artifactId>
+						<version>2.0-beta-2</version>
+					</plugin>
+
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-changes-plugin</artifactId>
+						<reportSets>
+							<reportSet>
+								<reports>
+									<report>changes-report</report>
+								</reports>
+							</reportSet>
+						</reportSets>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-checkstyle-plugin</artifactId>
+						<version>2.2</version>
+						<configuration>
+							<configLocation>
+								checkstyle.xml
+							</configLocation>
+							<includeTestSourceDirectory>
+								true
+							</includeTestSourceDirectory>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>taglist-maven-plugin</artifactId>
+					</plugin>
+
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>jdepend-maven-plugin</artifactId>
+					</plugin>
+				</plugins>
+			</reporting>
+		</profile>
+
+		<!-- Full reporting -->
+		<profile>
+			<id>fullreporting</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<reporting>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<!--
+						<reportSets>
+							<reportSet>
+								<id>uml</id>
+								<configuration>
+									<doclet>
+										gr.spinellis.umlgraph.doclet.UmlGraphDoc
+									</doclet>
+									<docletArtifact>
+										<groupId>gr.spinellis</groupId>
+										<artifactId>
+											UmlGraph
+										</artifactId>
+										<version>
+											4.6
+										</version>
+									</docletArtifact>
+									<additionalparam>
+										-inferrel -inferdep -quiet -hide
+										java.* -collpackages java.util.*
+										-qualify -postfixpackage
+										-nodefontsize 9
+										-nodefontpackagesize 7
+									</additionalparam>
+									<encoding>ISO-8859-1</encoding>
+									<show>private</show>
+									<source>1.5</source>
+								</configuration>
+								<reports>
+									<report>javadoc</report>
+								</reports>
+							</reportSet>
+						</reportSets>
+						-->
+					</plugin>
+
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jxr-plugin</artifactId>
+					</plugin>
+
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>javancss-maven-plugin</artifactId>
+						<version>2.0-beta-2</version>
+					</plugin>
+
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>cobertura-maven-plugin</artifactId>
+						<configuration>
+							<formats>
+								<format>html</format>
+								<format>xml</format>
+							</formats>
+						</configuration>
+					</plugin>
+
+					<!--
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-changelog-plugin</artifactId>
+					</plugin>
+					-->
+
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-changes-plugin</artifactId>
+						<reportSets>
+							<reportSet>
+								<reports>
+									<report>changes-report</report>
+								</reports>
+							</reportSet>
+						</reportSets>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-pmd-plugin</artifactId>
+						<version>2.2</version>
+						<configuration>
+							<rulesets>
+								<ruleset>pmd.xml</ruleset>
+							</rulesets>
+							<linkXref>true</linkXref>
+							<sourceEncoding>UTF-8</sourceEncoding>
+							<minimumTokens>100</minimumTokens>
+							<targetJdk>1.5</targetJdk>
+							<includeTests>true</includeTests>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-checkstyle-plugin</artifactId>
+						<version>2.2</version>
+						<configuration>
+							<configLocation>
+								checkstyle.xml
+							</configLocation>
+							<includeTestSourceDirectory>
+								true
+							</includeTestSourceDirectory>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>findbugs-maven-plugin</artifactId>
+						<configuration>
+							<threshold>Low</threshold>
+							<effort>Max</effort>
+						</configuration>
+					</plugin>
+
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>taglist-maven-plugin</artifactId>
+					</plugin>
+
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>jdepend-maven-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>
+							maven-surefire-report-plugin
+						</artifactId>
+					</plugin>
+				</plugins>
+			</reporting>
+		</profile>
+		<profile>
+			<id>buildnumber</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+					        <groupId>org.codehaus.mojo</groupId>
+	        				<artifactId>buildnumber-maven-plugin</artifactId>
+					        <executions>
+							<execution>
+								<phase>validate</phase>
+								<goals>
+									<goal>create</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<!--<format>{0,date,yyyy-MM-dd HH:mm:ss}</format>-->
+						        <items>
+							        <item>timestamp</item>
+						        </items>
+							<doCheck>false</doCheck>
+							<doUpdate>false</doUpdate>
+							<revisionOnScmFailure>undefined</revisionOnScmFailure>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+	<!-- =================== -->
+	<!-- Build Specification -->
+	<!-- =================== -->
+	<build>
+		<extensions>
+			<extension>
+				<groupId>org.ow2.petals</groupId>
+				<artifactId>petals-quality</artifactId>
+				<version>1.1</version>
+			</extension>
+		</extensions>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-clean-plugin</artifactId>
+					<version>2.2</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-release-plugin</artifactId>
+					<version>2.0-beta-7</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>2.2</version>
+				</plugin>
+				
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>2.2</version>
+					<configuration>
+						<archive>
+							<manifest>
+								<addClasspath>true</addClasspath>
+								<addExtensions />
+								<classpathPrefix />
+							</manifest>
+							<manifestEntries>
+								<mode>development</mode>
+								<url>${pom.url}</url>
+								<SCM-Revision>${buildNumber}</SCM-Revision>
+								<Build-Date />
+							</manifestEntries>
+						</archive>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>2.0.2</version>
+					<configuration>
+						<source>1.5</source>
+						<target>1.5</target>
+						<showDeprecation>true</showDeprecation>
+						<showWarnings>
+							${java.compiler.showWarnings}
+						</showWarnings>
+						<fork>false</fork>
+						<debug>${java.compiler.debug}</debug>
+						<optimize>${java.compiler.optimize}</optimize>
+					</configuration>
+				</plugin>
+				<plugin>
+					<artifactId>maven-assembly-plugin</artifactId>
+					<groupId>org.apache.maven.plugins</groupId>
+					<version>2.2-beta-3</version>
+				</plugin>
+                                <plugin>
+                                        <groupId>org.codehaus.mojo</groupId>
+                                        <artifactId>netbeans-freeform-maven-plugin</artifactId>
+                                        <configuration>
+                                                <additionalFolders>
+                                                        src/changes, src/doc
+                                                </additionalFolders>
+                                        </configuration>
+                                </plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-eclipse-plugin</artifactId>
+					<version>2.5.1</version>
+					<configuration>
+						<downloadSources>true</downloadSources>
+						<downloadJavadocs>true</downloadJavadocs>
+						<additionalBuildCommands>
+							<buildcommand>
+								com.atlassw.tools.eclipse.checkstyle.CheckstyleBuilder
+							</buildcommand>
+							<buildcommand>
+								net.sourceforge.pmd.runtime.pmdBuilder
+							</buildcommand>
+						</additionalBuildCommands>
+						<additionalProjectnatures>
+							<projectnature>
+								com.atlassw.tools.eclipse.checkstyle.CheckstyleNature
+							</projectnature>
+							<projectnature>
+								net.sourceforge.pmd.runtime.pmdNature
+							</projectnature>
+						</additionalProjectnatures>
+						<additionalConfig>
+							<!-- Code formater -->
+							<file>
+								<name>.settings/org.eclipse.jdt.core.prefs</name>
+								<location>eclipse/project-configuration/_settings/org.eclipse.jdt.core.prefs</location>
+							</file>
+							<!-- Imports order -->
+							<file>
+								<name>.settings/org.eclipse.jdt.ui.prefs</name>
+								<location>eclipse/project-configuration/_settings/org.eclipse.jdt.ui.prefs</location>
+							</file>
+							<!-- Checkstyle rules configuration file -->
+							<file>
+								<name>.checkstyle-rules.xml</name>
+								<location>checkstyle.xml</location>
+							</file>
+							<!-- Eclipse Checkstyle plugin configuration file -->
+							<file>
+								<name>.checkstyle</name>
+								<location>eclipse/project-configuration/_checkstyle.xml</location>
+							</file>
+							<!-- PMD configuration files -->
+							<!-- To uncomment when MECLIPSE-219 will be fixed
+								<file>
+								<name>.pmd</name>
+								<content>
+								<![CDATA[
+								<?xml version="1.0" encoding="UTF-8"?>
+								<pmd>
+								<useProjectRuleSet>true</useProjectRuleSet>
+								<rules />
+								<includeDerivedFiles>false</includeDerivedFiles>
+								</pmd>
+								]]>
+								</content>
+								</file>
+								<file>
+								<name>.ruleset</name>
+								<content></content>
+								</file>
+							-->
+						</additionalConfig>
+					</configuration>
+					<dependencies>
+						<dependency>
+							<groupId>org.ow2.petals</groupId>
+							<artifactId>petals-quality</artifactId>
+							<version>1.1</version>
+						</dependency>
+					</dependencies>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<defaultGoal>install</defaultGoal>
+	</build>
+
+</project>
