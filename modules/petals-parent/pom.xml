@@ -47,6 +47,28 @@
 		</site>
 	</distributionManagement>
 -->
+<distributionManagement>
+ <repository>
+      <uniqueVersion>false</uniqueVersion>
+      <id>petalslink-public.release</id>
+      <name>PetalsLink Maven 2 Releases Public Repository</name>
+      <url>http://maven.petalslink.com/public</url>
+      <layout>default</layout>
+    </repository>
+    <snapshotRepository>
+      <uniqueVersion>true</uniqueVersion>
+      <id>petalslink-public.snapshot</id>
+      <name>PetalsLink Maven 2 Snapshots Public Repository</name>
+      <url>http://maven.petalslink.com/public-snapshot</url>
+      <layout>default</layout>
+    </snapshotRepository>
+	<site>
+		<id>labs.site.deployments</id>
+		<name>Labs Site deployments</name>
+		<url>scp://labs.petalslink.org:/home/www/labs/commons/dsb/sites/${project.version}/</url>
+	</site>
+</distributionManagement>
+
 
 	<!-- Source code management -->
 	<!--
