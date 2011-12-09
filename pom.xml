@@ -38,6 +38,8 @@
 
 	<modules>
 		
+		<module>modules/petals-parent</module>
+		
 		<!-- Commons -->
 		<module>modules/dsb-commons-serviceapi</module>
 		
@@ -152,6 +154,11 @@
 
 		<!-- Utils -->
 		<module>modules/dsb-xmlutils</module>
+		<module>modules/dsb-jaxbutils</module>
+		<module>modules/dsb-logger-jbise</module>
+		
+		<!-- prototypes -->
+		<module>modules/dsb-node-manager</module>
 
 		<!-- samples -->
 		<module>samples/dsb-wsn-sample</module>		
