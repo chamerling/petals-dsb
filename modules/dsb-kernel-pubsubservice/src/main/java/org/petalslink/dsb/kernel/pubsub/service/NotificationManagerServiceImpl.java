@@ -6,8 +6,6 @@ package org.petalslink.dsb.kernel.pubsub.service;
 import java.net.URI;
 import java.util.List;
 
-import javax.xml.namespace.QName;
-
 import org.objectweb.fractal.fraclet.annotation.annotations.FractalComponent;
 import org.objectweb.fractal.fraclet.annotation.annotations.Interface;
 import org.objectweb.fractal.fraclet.annotation.annotations.LifeCycle;
@@ -18,28 +16,14 @@ import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
 import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.util.LoggingUtil;
 import org.petalslink.dsb.annotations.LifeCycleListener;
-import org.petalslink.dsb.api.ServiceEndpoint;
-import org.petalslink.dsb.kernel.io.client.ClientFactoryRegistry;
-import org.petalslink.dsb.notification.commons.AbstractNotificationSender;
-import org.petalslink.dsb.notification.commons.NotificationException;
 import org.petalslink.dsb.notification.commons.NotificationManagerImpl;
 import org.petalslink.dsb.notification.commons.api.NotificationManager;
-import org.petalslink.dsb.service.client.Client;
-import org.petalslink.dsb.service.client.ClientException;
-import org.petalslink.dsb.service.client.Message;
-import org.petalslink.dsb.service.client.WSAMessageImpl;
-import org.w3c.dom.Document;
 
-import com.ebmwebsourcing.wsaddressing10.api.type.EndpointReferenceType;
-import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.WsnbConstants;
-import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Notify;
-import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.utils.WsnbException;
 import com.ebmwebsourcing.wsstar.topics.datatypes.api.abstraction.TopicNamespaceType;
 import com.ebmwebsourcing.wsstar.topics.datatypes.api.abstraction.TopicSetType;
 import com.ebmwebsourcing.wsstar.wsnb.services.impl.engines.NotificationProducerEngine;
 import com.ebmwebsourcing.wsstar.wsnb.services.impl.engines.SubscriptionManagerEngine;
 import com.ebmwebsourcing.wsstar.wsnb.services.impl.topic.TopicsManagerEngine;
-import com.ebmwebsourcing.wsstar.wsnb.services.impl.util.Wsnb4ServUtils;
 
 /**
  * The Notification Manager component. It is automatically initialized at DSB

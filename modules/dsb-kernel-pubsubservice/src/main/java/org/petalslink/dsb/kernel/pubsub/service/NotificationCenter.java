@@ -7,7 +7,7 @@ import org.petalslink.dsb.notification.commons.api.NotificationManager;
 import org.petalslink.dsb.notification.commons.api.NotificationSender;
 
 /**
- * 
+ * FIXME = remove me, moved to commons wsn api
  * @author chamerling
  * 
  */

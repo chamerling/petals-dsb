@@ -12,13 +12,11 @@ import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
 import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.util.LoggingUtil;
 import org.petalslink.dsb.notification.commons.NotificationException;
-import org.petalslink.dsb.notification.commons.api.NotificationManager;
 import org.petalslink.dsb.notification.commons.api.NotificationSender;
 
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Notify;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.utils.WsnbException;
 import com.ebmwebsourcing.wsstar.wsnb.services.INotificationConsumer;
-import com.ebmwebsourcing.wsstar.wsnb.services.impl.engines.NotificationProducerEngine;
 
 /**
  * This consumer service is a facade to the notification engine. It is just used
