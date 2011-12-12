@@ -38,11 +38,13 @@
 			<artifactId>dsb-soap</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- 
 		<dependency>
 			<groupId>org.petalslink.dsb</groupId>
 			<artifactId>dsb-notification-jaxws</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
+		-->
 	</dependencies>
 </project>
