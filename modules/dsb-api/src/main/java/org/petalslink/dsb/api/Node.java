@@ -66,4 +66,18 @@ public class Node {
         this.properties = properties;
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Node [uuid=");
+        builder.append(uuid);
+        builder.append(", properties=");
+        builder.append(properties);
+        builder.append("]");
+        return builder.toString();
+    }
+
 }

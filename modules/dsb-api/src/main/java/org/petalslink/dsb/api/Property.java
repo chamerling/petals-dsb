@@ -41,6 +41,11 @@ public class Property {
 
     @XmlElement
     private String value;
+    
+    public Property(String name, String value) {
+        this.name = name;
+        this.value = value;
+    }
 
     public Property() {
         super();
