@@ -134,6 +134,7 @@
 		<!--<module>modules/dsb-notification-jaxws</module>-->
 		<module>modules/dsb-notification-service</module>
 		<module>modules/dsb-kernel-pubsubservice</module>
+		<module>modules/dsb-notification-lightweight</module>
 		<module>modules/dsb-kernel-notificationservice</module>
 		<module>modules/dsb-notification-httpclient</module>
 		<module>modules/dsb-wsn-jbise</module>
