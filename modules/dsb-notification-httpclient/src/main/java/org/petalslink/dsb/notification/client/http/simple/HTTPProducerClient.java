@@ -10,7 +10,6 @@ import org.petalslink.dsb.notification.commons.NotificationException;
 import org.petalslink.dsb.notification.commons.NotificationHelper;
 import org.petalslink.dsb.notification.commons.api.client.simple.ProducerClient;
 
-import com.ebmwebsourcing.wsaddressing10.api.element.ReferenceParameters;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Subscribe;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.SubscribeResponse;
 
@@ -44,13 +43,12 @@ public class HTTPProducerClient implements ProducerClient {
         Subscribe subscribe = NotificationHelper.createSubscribe(me, topic);
         try {
             SubscribeResponse response = this.client.subscribe(subscribe);
-            ReferenceParameters params = response.getSubscriptionReference()
-                    .getReferenceParameters();
+//            ReferenceParameters params = response.getSubscriptionReference()
+//                  .getReferenceParameters();
             // TODO : return UUID
         } catch (Exception e) {
             throw new NotificationException(e);
         }
-        return null;
+        return "NotAvailableForNow...";
     }
-
 }
