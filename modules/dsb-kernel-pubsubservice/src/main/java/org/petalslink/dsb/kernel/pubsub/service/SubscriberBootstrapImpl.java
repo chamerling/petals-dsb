@@ -5,7 +5,7 @@ package org.petalslink.dsb.kernel.pubsub.service;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Map;
+import java.util.List;
 import java.util.Properties;
 
 import org.objectweb.fractal.fraclet.annotation.annotations.FractalComponent;
@@ -84,12 +84,12 @@ public class SubscriberBootstrapImpl {
 
         if (subscriberProps != null) {
             ConfigurationProducer producers = new PropertiesConfigurationProducer(subscriberProps);
-            Map<String, Subscribe> toSubscribe = producers.getSubscribe();
-            for (String key : toSubscribe.keySet()) {
+            List<Subscribe> toSubscribe = producers.getSubscribes();
+            for (Subscribe subscribe : toSubscribe) {
                 // let's subscribe...
                 try {
                     final com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.SubscribeResponse subscribeResponse = engine
-                            .subscribe(toSubscribe.get(key));
+                            .subscribe(subscribe);
 
                     if (log.isDebugEnabled()) {
                         Document doc = Wsnb4ServUtils.getWsnbWriter().writeSubscribeResponseAsDOM(

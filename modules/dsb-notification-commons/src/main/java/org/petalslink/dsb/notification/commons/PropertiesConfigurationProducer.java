@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import javax.xml.namespace.QName;
 
@@ -38,21 +39,19 @@ public class PropertiesConfigurationProducer implements ConfigurationProducer {
      * (non-Javadoc)
      * 
      * @see org.petalslink.dsb.notification.commons.api.ConfigurationProducer#
-     * getSubscribe()
+     * getSubscribes()
      */
-    public Map<String, Subscribe> getSubscribe() {
-        Map<String, Subscribe> result = new HashMap<String, Subscribe>();
-
-        // get all the names
-        if (properties == null) {
+    public List<Subscribe> getSubscribes() {
+        List<Subscribe> result = new ArrayList<Subscribe>();
+        if (this.properties == null) {
             return result;
         }
 
         Set<String> keys = getAllKeys(properties);
         for (String string : keys) {
-            Subscribe subscribe = load(properties, string);
-            if (subscribe != null) {
-                result.put(string, subscribe);
+            List<Subscribe> subscribes = loadList(properties, string);
+            if (subscribes != null) {
+                result.addAll(subscribes);
             }
         }
 
@@ -80,6 +79,23 @@ public class PropertiesConfigurationProducer implements ConfigurationProducer {
         return load(map);
     }
 
+    public List<Subscribe> loadList(Properties properties, String key) {
+        Map<String, String> map = new HashMap<String, String>();
+
+        for (Object o : properties.keySet()) {
+            String k = o.toString();
+            if (k.startsWith(key + ".")) {
+                map.put(k.substring(key.length() + 1), properties.getProperty(k));
+            }
+        }
+
+        if (map.size() == 0) {
+            return null;
+        }
+
+        return loadList(map);
+    }
+
     /**
      * @param map
      * @return
@@ -99,6 +115,43 @@ public class PropertiesConfigurationProducer implements ConfigurationProducer {
                 e.printStackTrace();
             }
         }
+        return result;
+    }
+
+    private List<Subscribe> loadList(Map<String, String> map) {
+        List<Subscribe> result = new ArrayList<Subscribe>();
+        String url = map.get("consumerReference");
+        String topic = map.get("topicName");
+        String topicPrefix = map.get("topicPrefix");
+        String topicURI = map.get("topicURI");
+
+        if (url != null && topic != null && topicPrefix != null && topicURI != null) {
+            QName topicName = new QName(topicURI, topic, topicPrefix);
+
+            List<String> urls = getURLs(url);
+            for (String finalURL : urls) {
+                try {
+                    result.add(NotificationHelper.createSubscribe(finalURL, topicName));
+                } catch (NotificationException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return result;
+    }
+
+    public static List<String> getURLs(String csv) {
+        List<String> result = new ArrayList<String>();
+
+        StringTokenizer tokenizer = new StringTokenizer(csv, ",");
+        while (tokenizer.hasMoreTokens()) {
+            String token = tokenizer.nextToken();
+            token = token.trim();
+            if (token.length() > 0) {
+                result.add(token);
+            }
+        }
+
         return result;
     }
 

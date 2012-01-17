@@ -149,23 +149,23 @@ public class Component extends PetalsBindingComponent {
 
         if (subscriberProps != null) {
             ConfigurationProducer producers = new PropertiesConfigurationProducer(subscriberProps);
-            Map<String, Subscribe> toSubscribe = producers.getSubscribe();
-            for (String key : toSubscribe.keySet()) {
+            List <Subscribe> toSubscribe = producers.getSubscribes();
+            for (Subscribe subscribe : toSubscribe) {
                 // let's subscribe...
                 try {
                     
                     if (getLogger().isLoggable(Level.INFO)) {
                         getLogger().info("Subscribe request : ");
-                        if (toSubscribe.get(key) != null) {
+                        if (subscribe != null) {
                             Document doc = Wsnb4ServUtils.getWsnbWriter()
-                                    .writeSubscribeAsDOM(toSubscribe.get(key));
+                                    .writeSubscribeAsDOM(subscribe);
                             getLogger().info(XMLUtil.createStringFromDOMDocument(doc));
                         }
                     }
                     
                     final com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.SubscribeResponse subscribeResponse = getNotificationEngine()
                             .getNotificationManager().getNotificationProducerEngine()
-                            .subscribe(toSubscribe.get(key));
+                            .subscribe(subscribe);
 
                     if (getLogger().isLoggable(Level.INFO)) {
                         getLogger().info("Subscribe response");

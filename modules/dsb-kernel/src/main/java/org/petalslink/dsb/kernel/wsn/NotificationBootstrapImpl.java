@@ -6,6 +6,7 @@ package org.petalslink.dsb.kernel.wsn;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -24,7 +25,7 @@ import org.petalslink.dsb.annotations.Phase;
 import org.petalslink.dsb.api.ServiceEndpoint;
 import org.petalslink.dsb.api.WSAConstants;
 import org.petalslink.dsb.kernel.io.client.ClientFactoryRegistry;
-import org.petalslink.dsb.notification.commons.PropertiesConfigurationProducer;
+import org.petalslink.dsb.notification.commons.PropertiesConfigurationConsumer;
 import org.petalslink.dsb.service.client.Client;
 import org.petalslink.dsb.service.client.Message;
 import org.petalslink.dsb.service.client.WSAMessageImpl;
@@ -92,52 +93,55 @@ public class NotificationBootstrapImpl implements NotificationBootstrap {
         }
 
         if (consumerProps != null) {
-            PropertiesConfigurationProducer producers = new PropertiesConfigurationProducer(
+            PropertiesConfigurationConsumer producers = new PropertiesConfigurationConsumer(
                     consumerProps);
 
-            Map<String, Subscribe> toSubscribe = producers.getSubscribe();
+            Map<String, List<Subscribe>> toSubscribe = producers.getSubscribes();
 
             for (String key : toSubscribe.keySet()) {
                 // let's subscribe on behalf of the service bus...
-                String to = producers.getProperty(key, "producerReference");
-                if (to != null) {
+                if (key != null) {
                     if (log.isInfoEnabled()) {
-                        log.info(String.format("Sending subscribe to %s", to));
+                        log.info(String.format("Sending subscribe to %s", key));
                     }
 
-                    // FIXME : need to set it statically somewhere...
-                    URI uri = URI.create(to);
-                    ServiceEndpoint wsaEP = new ServiceEndpoint();
-                    String ns = String.format(WSAConstants.NS_TEMPLATE, uri.getScheme());
-                    wsaEP.setEndpointName(WSAConstants.ENDPOINT_NAME);
-                    wsaEP.setServiceName(new QName(ns, WSAConstants.SERVICE_NAME));
-                    wsaEP.setInterfaces(new QName[] { new QName(ns, WSAConstants.INTERFACE_NAME) });
+                    List<Subscribe> toSend = toSubscribe.get(key);
+                    for (Subscribe subscribe : toSend) {
 
-                    QName operation = WsnbConstants.SUBSCRIBE_QNAME;
+                        // FIXME : need to set it statically somewhere...
+                        URI uri = URI.create(key);
+                        ServiceEndpoint wsaEP = new ServiceEndpoint();
+                        String ns = String.format(WSAConstants.NS_TEMPLATE, uri.getScheme());
+                        wsaEP.setEndpointName(WSAConstants.ENDPOINT_NAME);
+                        wsaEP.setServiceName(new QName(ns, WSAConstants.SERVICE_NAME));
+                        wsaEP.setInterfaces(new QName[] { new QName(ns, WSAConstants.INTERFACE_NAME) });
 
-                    Message message = new WSAMessageImpl(to);
-                    message.setOperation(operation);
-                    Client client = null;
-                    try {
-                        Document payload = Wsnb4ServUtils.getWsnbWriter().writeSubscribeAsDOM(
-                                toSubscribe.get(key));
-                        message.setPayload(payload);
+                        QName operation = WsnbConstants.SUBSCRIBE_QNAME;
 
-                        // send the subscribe using WSA stuff
-                        client = ClientFactoryRegistry.getFactory().getClient(wsaEP);
-                        if (client != null) {
-                            client.fireAndForget(message);
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    } finally {
-                        if (client != null) {
-                            /*
-                             * try {
-                             * ClientFactoryRegistry.getFactory().release(client
-                             * ); } catch (ClientException e) {
-                             * e.printStackTrace(); }
-                             */
+                        Message message = new WSAMessageImpl(key);
+                        message.setOperation(operation);
+                        Client client = null;
+                        try {
+                            Document payload = Wsnb4ServUtils.getWsnbWriter().writeSubscribeAsDOM(
+                                    subscribe);
+                            message.setPayload(payload);
+
+                            // send the subscribe using WSA stuff
+                            client = ClientFactoryRegistry.getFactory().getClient(wsaEP);
+                            if (client != null) {
+                                client.fireAndForget(message);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        } finally {
+                            if (client != null) {
+                                /*
+                                 * try {
+                                 * ClientFactoryRegistry.getFactory().release
+                                 * (client ); } catch (ClientException e) {
+                                 * e.printStackTrace(); }
+                                 */
+                            }
                         }
                     }
 
