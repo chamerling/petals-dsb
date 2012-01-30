@@ -45,6 +45,7 @@
 		
 		<!-- DSB -->
 		<module>modules/dsb-parent</module>
+		<module>modules/dsb-registry</module>
 		<module>modules/dsb-annotations</module>
 		<module>modules/dsb-api</module>
 		<module>modules/dsb-client-servicebinder</module>
