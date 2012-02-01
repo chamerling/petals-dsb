@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsnt:SubscribeResponse xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2">
+	<wsnt:SubscriptionReference>
+		<wsa:Address xmlns:wsa="http://www.w3.org/2005/08/addressing">http://dsb.petalslink.com/notification/::Service@Enpoint</wsa:Address>
+		<wsa:ReferenceParameters xmlns:wsa="http://www.w3.org/2005/08/addressing">
+			<rpimpl:SubscriptionId
+				xmlns:rpimpl="http://www.ebmwebsourcing.com/wsstar/wsnb/ws-resource">123456789</rpimpl:SubscriptionId>
+		</wsa:ReferenceParameters>
+	</wsnt:SubscriptionReference>
+	<wsnt:CurrentTime>2012-02-01T14:44:55.593+01:00</wsnt:CurrentTime>
+	<wsnt:TerminationTime xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:nil="true" />
+</wsnt:SubscribeResponse>

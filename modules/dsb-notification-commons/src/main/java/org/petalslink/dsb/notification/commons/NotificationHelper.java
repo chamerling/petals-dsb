@@ -18,11 +18,13 @@ import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Noti
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.NotificationMessageHolderType.Message;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Notify;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Subscribe;
+import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.SubscribeResponse;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.TopicExpressionType;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Unsubscribe;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.refinedabstraction.RefinedWsnbFactory;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.utils.WsnbException;
 import com.ebmwebsourcing.wsstar.wsnb.services.impl.util.Wsnb4ServUtils;
+import com.sun.corba.se.spi.activation.Repository;
 
 /**
  * @author chamerling
@@ -172,5 +174,16 @@ public class NotificationHelper {
         }
 
         return result;
+    }
+
+    public static String getSubscriptionID(SubscribeResponse response) throws NotificationException {
+        if (response != null && response.getSubscriptionReference() != null
+                && response.getSubscriptionReference().getReferenceParameters() != null) {
+            return Wsnb4ServUtils.getSubscriptionIdFromReferenceParams((response
+                    .getSubscriptionReference()).getReferenceParameters());
+        } else {
+            return null;
+        }
+
     }
 }
