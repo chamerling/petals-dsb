@@ -16,6 +16,7 @@ import junit.framework.TestCase;
 
 import org.petalslink.dsb.notification.commons.AbstractNotificationSender;
 import org.petalslink.dsb.notification.commons.NotificationException;
+import org.petalslink.dsb.notification.commons.NotificationHelper;
 import org.petalslink.dsb.notification.commons.NotificationManagerImpl;
 import org.petalslink.dsb.notification.commons.api.NotificationManager;
 import org.petalslink.dsb.notification.commons.api.NotificationSender;
@@ -27,6 +28,8 @@ import com.ebmwebsourcing.wsstar.basefaults.datatypes.impl.impl.WsrfbfModelFacto
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Notify;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Subscribe;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.SubscribeResponse;
+import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Unsubscribe;
+import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.UnsubscribeResponse;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.utils.WsnbException;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.impl.impl.WsnbModelFactoryImpl;
 import com.ebmwebsourcing.wsstar.resource.datatypes.impl.impl.WsrfrModelFactoryImpl;
@@ -136,5 +139,102 @@ public class LocalNotificationSenderTest extends TestCase {
         sender.notify(payload, topic, dialect);
 
         assertEquals(1, calls.get());
+    }
+
+    public void testSubscribeUnsubscribe() throws Exception {
+        final AtomicInteger calls = new AtomicInteger(0);
+        QName topic = new QName("http://www.petalslink.org/dsb/topicsns/", "DSBTopic", "dsb");
+        String dialect = "http://www.w3.org/TR/1999/REC-xpath-19991116";
+
+        URL topicNamespaces = LocalNotificationSenderTest.class.getResource("/topicNS.xml");
+        List<String> supportedTopics = new ArrayList<String>();
+        supportedTopics.add("DSBTopic");
+        String NS = "http://dsb.petalslink.com/notification/";
+        QName serviceName = new QName(NS, "Service");
+        QName interfaceName = new QName(NS, "Interface");
+        String endpointName = "Enpoint";
+
+        NotificationManager notificationManager = new NotificationManagerImpl(topicNamespaces,
+                supportedTopics, serviceName, interfaceName, endpointName);
+
+        // does nothing but just check that the notification is received...
+        NotificationSender sender = new AbstractNotificationSender(
+                notificationManager.getNotificationProducerEngine()) {
+
+            @Override
+            protected String getProducerAddress() {
+                return "http://localhost:9998/foo/bar/Producer";
+            }
+
+            @Override
+            protected void doNotify(Notify notify, String producerAddress,
+                    EndpointReferenceType currentConsumerEdp, String subscriptionId, QName topic,
+                    String dialect) throws NotificationException {
+                System.out.println("Got a notify...");
+                System.out.println("Topic : " + topic);
+                System.out.println("Dialect : " + dialect);
+                System.out.println("SubscriptionID " + subscriptionId);
+                // this is where the message needs to be sent...
+                System.out.println("Consumer Endpoint : "
+                        + currentConsumerEdp.getAddress().getValue());
+                try {
+                    System.out.println("--- NOTIFICATION RECEIVED ---");
+                    Document n = Wsnb4ServUtils.getWsnbWriter().writeNotifyAsDOM(notify);
+                    System.out.println(XMLHelper.createStringFromDOMDocument(n));
+                    System.out.println("--- /NOTIFICATION RECEIVED ---");
+                } catch (WsnbException e) {
+                    e.printStackTrace();
+                } catch (TransformerException e) {
+                    e.printStackTrace();
+                }
+                calls.incrementAndGet();
+            }
+        };
+
+        // now subscribe to be notified...
+        System.out.println("Subscribe...");
+        DocumentBuilderFactory f = DocumentBuilderFactory.newInstance();
+        // Important!
+        f.setNamespaceAware(true);
+        Subscribe subscribe = Wsnb4ServUtils.getWsnbReader().readSubscribe(
+                f.newDocumentBuilder().parse(
+                        LocalNotificationSenderTest.class.getResourceAsStream("/subscribe.xml")));
+
+        SubscribeResponse response = notificationManager.getNotificationProducerEngine().subscribe(
+                subscribe);
+
+        // get the subscribe ID from the response
+        System.out.println("Subscribed!");
+        System.out.println("Subscribe Response : ");
+        Document n = Wsnb4ServUtils.getWsnbWriter().writeSubscribeResponseAsDOM(response);
+        System.out.println(XMLHelper.createStringFromDOMDocument(n));
+
+        String id = NotificationHelper.getSubscriptionID(response);
+        System.out.println("Subscription ID = " + id);
+
+        System.out.println("Let's Notify and see if the subscriber receives it...");
+        Document payload = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+                .parse(LocalNotificationSenderTest.class.getResourceAsStream("/notify.xml"));
+        sender.notify(payload, topic, dialect);
+
+        assertEquals(1, calls.get());
+
+        // let's unsubscribe...
+        System.out.println("Unsubscribe...");
+        Unsubscribe unsubscribe = NotificationHelper.createUnsubscribe(id);
+        UnsubscribeResponse unsubscribeResponse = notificationManager
+                .getSubscriptionManagerEngine().unsubscribe(unsubscribe);
+        System.out.println("Unsubscribe response = "
+                + XMLHelper.createStringFromDOMDocument(Wsnb4ServUtils.getWsnbWriter()
+                        .writeUnsubscribeResponseAsDOM(unsubscribeResponse)));
+
+        System.out.println("Let's Notify and see if the subscriber receives it...");
+        payload = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+                .parse(LocalNotificationSenderTest.class.getResourceAsStream("/notify.xml"));
+        sender.notify(payload, topic, dialect);
+
+        assertEquals(1, calls.get());
+        System.out.println("OK, no one received the notification");
+
     }
 }

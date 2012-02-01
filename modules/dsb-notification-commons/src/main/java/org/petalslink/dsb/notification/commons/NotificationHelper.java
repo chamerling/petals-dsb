@@ -4,6 +4,7 @@
 package org.petalslink.dsb.notification.commons;
 
 import java.net.URI;
+import java.util.Arrays;
 
 import javax.xml.namespace.QName;
 
