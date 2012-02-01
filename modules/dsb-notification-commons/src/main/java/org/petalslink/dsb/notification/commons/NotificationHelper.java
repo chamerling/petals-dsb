@@ -8,6 +8,7 @@ import java.net.URI;
 import javax.xml.namespace.QName;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import com.ebmwebsourcing.wsaddressing10.api.element.Address;
 import com.ebmwebsourcing.wsaddressing10.api.element.ReferenceParameters;
@@ -18,8 +19,10 @@ import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Noti
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Notify;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Subscribe;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.TopicExpressionType;
+import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Unsubscribe;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.refinedabstraction.RefinedWsnbFactory;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.utils.WsnbException;
+import com.ebmwebsourcing.wsstar.wsnb.services.impl.util.Wsnb4ServUtils;
 
 /**
  * @author chamerling
@@ -119,8 +122,8 @@ public class NotificationHelper {
                 producerRef.setAddress(address);
                 msg.setProducerReference(producerRef);
             }
-            
-            //notifyPayload.addNotificationMessage(msg);
+
+            // notifyPayload.addNotificationMessage(msg);
 
         } catch (WsnbException e) {
             throw new NotificationException(e);
@@ -149,10 +152,25 @@ public class NotificationHelper {
                     NotificationConstants.DIALECT_CONCRETE);
             filter.addTopicExpression(topicExpression);
             result.setFilter(filter);
-            
+
         } catch (WsnbException e) {
             throw new NotificationException(e);
         }
+        return result;
+    }
+
+    public static Unsubscribe createUnsubscribe(String subscriptionId) throws NotificationException {
+        Unsubscribe result = null;
+
+        Element element = Wsnb4ServUtils.createSubscriptionIdAsReferenceParamElt(subscriptionId);
+
+        try {
+            result = RefinedWsnbFactory.getInstance().createUnsubscribe();
+            result.addAny(element);
+        } catch (WsnbException e) {
+            throw new NotificationException(e);
+        }
+
         return result;
     }
 }
