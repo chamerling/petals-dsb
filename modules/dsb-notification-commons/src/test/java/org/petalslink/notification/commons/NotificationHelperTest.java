@@ -18,6 +18,7 @@ import com.ebmwebsourcing.easycommons.xml.XMLHelper;
 import com.ebmwebsourcing.wsstar.basefaults.datatypes.impl.impl.WsrfbfModelFactoryImpl;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Notify;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Subscribe;
+import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Unsubscribe;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.refinedabstraction.RefinedWsnbFactory;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.impl.impl.WsnbModelFactoryImpl;
 import com.ebmwebsourcing.wsstar.resource.datatypes.impl.impl.WsrfrModelFactoryImpl;
@@ -86,5 +87,13 @@ public class NotificationHelperTest extends TestCase {
         Subscribe s = NotificationHelper.createSubscribe(ep, topic);
         Document d = RefinedWsnbFactory.getInstance().getWsnbWriter().writeSubscribeAsDOM(s);
         System.out.println(XMLHelper.createStringFromDOMDocument(d));
+    }
+
+    public void testCreateUnsubscribe() throws Exception {
+        Unsubscribe unsubscribe = NotificationHelper.createUnsubscribe("123456789");
+        Document d = RefinedWsnbFactory.getInstance().getWsnbWriter().writeUnsubscribeAsDOM(unsubscribe);
+        String out = XMLHelper.createStringFromDOMDocument(d);
+        assertTrue(out.contains("123456789"));
+        System.out.println(out);
     }
 }
