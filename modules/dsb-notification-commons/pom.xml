@@ -26,10 +26,11 @@
 			<version>3.8.1</version>
 			<scope>test</scope>
 		</dependency>
+		
 		<dependency>
 			<artifactId>wsn-b-services-impl</artifactId>
 			<groupId>com.ebmwebsourcing.deprecated.oasis-ws-basenotification</groupId>
-			<version>1.0-SNAPSHOT</version>
 		</dependency>
+		
 	</dependencies>
 </project>
