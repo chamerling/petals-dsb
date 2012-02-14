@@ -31,6 +31,8 @@
   <component definition="Notification" name="Notification"/>
   <component definition="ResourceAPI" name="ResourceAPI"/>
   
+  <component definition="ManagementAPI" name="ManagementAPI"/>
+  
   <component definition="org.petalslink.dsb.kernel.io.client.DSBClientFactoryImpl" name="DSBClientFactoryImpl"/>
 
   <binding client="Communication.configuration" server="ConfigurationServiceImpl.service"/>

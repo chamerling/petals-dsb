@@ -20,7 +20,7 @@
 			<fileMode>644</fileMode>
 			<includes>
 				<include>org.petalslink.dsb:*:zip</include>
-				<include>org.petalslink.research:*:zip</include>
+				<include>org.petalslink.research.petals:*:zip</include>
 			</includes>
 			<excludes>
 				<exclude>org.petalslink.dsb:dsb-distribution:zip</exclude>

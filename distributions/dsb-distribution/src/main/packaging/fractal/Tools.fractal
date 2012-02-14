@@ -20,6 +20,9 @@
   <component definition="org.ow2.petals.ws.DeploymentServiceImpl" name="DeploymentWebServiceImpl"/>
   <component definition="org.ow2.petals.ws.InstallationServiceImpl" name="InstallationWebServiceImpl"/>
   <component definition="org.ow2.petals.ws.ServiceAssemblyStateServiceImpl" name="ServiceAssemblyStateWebServiceImpl"/>
+
+  <!-- Master 1.0 connection service -->
+  <component definition="org.petalslink.dsb.kernel.ws.MasterConnectionServiceImpl" name="MasterConnectionServiceImpl"/>
   
   <!-- DSB specific services -->
   <component definition="org.petalslink.dsb.kernel.ws.HelloServiceImpl" name="HelloWebServiceImpl"/>
@@ -71,6 +74,13 @@
   <binding client="InstallationWebServiceImpl.artifactrepository" server="this.artifactrepository"/>
   <binding client="InstallationWebServiceImpl.componentInstallation" server="this.componentInstallationService"/>
   <binding client="ServiceAssemblyStateWebServiceImpl.adminService" server="this.adminService"/>
+
+
+  <!-- MAster 1.0 -->
+  <binding client="MasterConnectionServiceImpl.endpoint" server="this.endpoint"/>
+  <binding client="MasterConnectionServiceImpl.configuration" server="this.configuration"/>
+  <binding client="MasterConnectionServiceImpl.topology" server="this.topology"/>
+  <binding client="MasterConnectionServiceImpl.adminService" server="this.adminService"/>
     
   <!-- DEPRECATED : use SOAPServiceBinderImpl and RESTServiceBinderImpl define below -->
   <binding client="ServiceBinderImpl.soapservice-binder" server="SOAPServiceBinderImpl.webservice"/>

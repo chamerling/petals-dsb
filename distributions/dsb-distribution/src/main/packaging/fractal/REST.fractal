@@ -9,6 +9,7 @@
  
   <!-- REST Services, they can be defined everywhere in the framework... -->
   <component definition="org.petalslink.dsb.kernel.rest.impl.ServiceAssemblyServiceImpl" name="RESTServiceAssemblyServiceImpl"/>
+  <component definition="org.petalslink.dsb.kernel.rest.impl.TestServiceImpl" name="TestServiceImpl"/>
  
   <binding client="RESTServiceManagerImpl.restexposer" server="RESTServiceExposerImpl.service"/>
   <binding client="RESTServiceManagerImpl.restregistry" server="RESTServiceRegistryImpl.service"/>

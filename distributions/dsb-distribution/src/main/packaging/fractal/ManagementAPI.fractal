@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE definition PUBLIC "-//objectweb.org//DTD Fractal ADL 2.0//EN" "classpath://org/objectweb/fractal/adl/xml/standard.dtd">
+
+<definition extends="ManagementAPIType" name="ManagementAPI">
+
+  <component definition="org.petalslink.dsb.kernel.esmanagement.AdminManagement" name="ESAdminManagement"/>
+  <component definition="org.petalslink.dsb.kernel.esmanagement.UserManagement" name="ESUserManagement"/>
+
+<!--
+  <binding client="ExecutionEnvironmentManager.endpoint" server="this.registry"/>
+  <binding client="ExecutionEnvironmentManager.configuration" server="this.configuration"/>
+  <binding client="ExecutionEnvironmentManager.dsbconfiguration" server="this.dsbconfiguration"/>
+-->
+
+</definition>
