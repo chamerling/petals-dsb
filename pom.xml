@@ -147,6 +147,9 @@
 		<module>modules/dsb-resources-api</module>
 		<module>modules/dsb-kernel-resourcesservice</module>
 		
+		<!-- ES Management -->
+		<module>modules/dsb-kernel-esmanagement</module>
+		
 		<!-- Micro kernel -->
 		<module>modules/dsb-ukernel-binding</module>
 		
@@ -158,6 +161,9 @@
 		<module>modules/dsb-xmlutils</module>
 		<module>modules/dsb-jaxbutils</module>
 		<module>modules/dsb-logger-jbise</module>
+		
+		<!-- Cloud -->
+		<module>modules/dsb-cloud-kernel</module>
 		
 		<!-- prototypes -->
 		<module>modules/dsb-node-manager</module>
