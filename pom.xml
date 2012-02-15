@@ -166,8 +166,9 @@
 		<module>modules/dsb-cloud-kernel</module>
 		
 		<!-- prototypes -->
+		<!--
 		<module>modules/dsb-node-manager</module>
-
+		-->
 		<!-- samples -->
 		<module>samples/dsb-wsn-sample</module>		
 		
