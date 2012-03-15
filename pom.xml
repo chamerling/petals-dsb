@@ -52,7 +52,7 @@
 		<module>modules/dsb-kernel-wsapi</module>
 		<module>modules/dsb-kernel-api</module>
 		<module>modules/dsb-kernel</module>
-		<module>modules/dsb-petals-oldies</module>
+		<!--<module>modules/dsb-petals-oldies</module>-->
 		<module>modules/dsb-webapp</module>
 		<module>modules/dsb-webappapi</module>
 		<module>modules/dsb-transport-api</module>
@@ -163,7 +163,7 @@
 		<module>modules/dsb-logger-jbise</module>
 		
 		<!-- Cloud -->
-		<module>modules/dsb-cloud-kernel</module>
+		<!--<module>modules/dsb-cloud-kernel</module>-->
 		
 		<!-- prototypes -->
 		<!--
