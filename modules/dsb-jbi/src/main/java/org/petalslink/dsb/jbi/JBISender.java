@@ -21,7 +21,6 @@ import javax.jbi.messaging.NormalizedMessage;
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 
-import org.ow2.petals.commons.threadlocal.DocumentBuilders;
 import org.ow2.petals.jbi.component.context.ComponentContext;
 import org.ow2.petals.kernel.api.service.Location;
 import org.petalslink.dsb.api.ServiceEndpoint;
@@ -33,6 +32,8 @@ import org.petalslink.dsb.service.client.MessageListener;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentFragment;
 import org.w3c.dom.Element;
+
+import com.ebmwebsourcing.easycommons.xml.DocumentBuilders;
 
 /**
  * Send messages through JBI
@@ -384,13 +385,14 @@ public class JBISender implements Client {
      * @return
      */
     protected static final Element createAddressElement(String content) {
-        final DocumentBuilder docBuilder = DocumentBuilders.getJvmDocumentBuilder();
+        final DocumentBuilder docBuilder = DocumentBuilders.takeDocumentBuilder();
         final Document doc = docBuilder.newDocument();
         QName address = ADDRESS_QNAME;
         Element e = doc.createElementNS(address.getNamespaceURI(), address.getLocalPart());
         e.setPrefix(address.getPrefix());
         e.setTextContent(content);
         e.normalize();
+        DocumentBuilders.releaseDocumentBuilder(docBuilder);
         return e;
     }
 
@@ -401,7 +403,7 @@ public class JBISender implements Client {
      */
     protected static final DocumentFragment createDocumentFragment(QName documentName) {
         DocumentFragment result = null;
-        final DocumentBuilder docBuilder = DocumentBuilders.getJvmDocumentBuilder();
+        final DocumentBuilder docBuilder = DocumentBuilders.takeDocumentBuilder();
         final Document doc = docBuilder.newDocument();
         final Element elt = doc.createElementNS(documentName.getNamespaceURI(),
                 documentName.getLocalPart());
@@ -409,6 +411,7 @@ public class JBISender implements Client {
         result = doc.createDocumentFragment();
         result.appendChild(doc.importNode(elt, true));
         result.normalize();
+        DocumentBuilders.releaseDocumentBuilder(docBuilder);
         return result;
     }
 

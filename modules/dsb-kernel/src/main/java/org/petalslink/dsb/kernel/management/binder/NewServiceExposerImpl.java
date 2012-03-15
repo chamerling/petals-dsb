@@ -39,7 +39,7 @@ import org.ow2.petals.jbi.management.admin.AdminService;
 import org.ow2.petals.jbi.messaging.registry.EndpointRegistry;
 import org.ow2.petals.jbi.messaging.registry.RegistryException;
 import org.ow2.petals.kernel.api.service.ServiceEndpoint;
-import org.ow2.petals.util.LoggingUtil;
+import org.ow2.petals.util.oldies.LoggingUtil;
 import org.petalslink.dsb.kernel.Constants;
 import org.petalslink.dsb.kernel.api.DSBConfigurationService;
 import org.petalslink.dsb.kernel.api.management.binder.BinderException;

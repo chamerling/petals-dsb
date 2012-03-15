@@ -1,0 +1,7 @@
+target
+.settings
+.project
+.checkstyle
+.classpath
+*/.checkstyle-rules.xml
+.checkstyle-rules.xml

@@ -5,8 +5,9 @@ import javax.xml.transform.TransformerException;
 
 import org.ow2.petals.component.framework.api.message.Exchange;
 import org.ow2.petals.component.framework.listener.AbstractJBIListener;
-import org.ow2.petals.component.framework.util.XMLUtil;
 import org.w3c.dom.Document;
+
+import com.ebmwebsourcing.easycommons.xml.XMLHelper;
 
 /**
  * 
@@ -22,7 +23,7 @@ public class JBIListener extends AbstractJBIListener {
         sb.append("\n");
         try {
             Document in = exchange.getInMessageContentAsDocument(true);
-            String payload = XMLUtil.createStringFromDOMDocument(in);
+            String payload = XMLHelper.createStringFromDOMDocument(in);
             sb.append("IN MESSAGE :");
             sb.append("\n");
             sb.append(payload);

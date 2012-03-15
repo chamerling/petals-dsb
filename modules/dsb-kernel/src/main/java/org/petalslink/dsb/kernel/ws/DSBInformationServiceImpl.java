@@ -33,7 +33,7 @@ import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
 import org.ow2.petals.tools.ws.KernelWebService;
 import org.ow2.petals.tools.ws.WebServiceException;
 import org.ow2.petals.tools.ws.WebServiceManager;
-import org.ow2.petals.util.LoggingUtil;
+import org.ow2.petals.util.oldies.LoggingUtil;
 import org.petalslink.dsb.ws.api.DSBInformationService;
 import org.petalslink.dsb.ws.api.DSBWebServiceException;
 

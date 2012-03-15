@@ -16,7 +16,7 @@ import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
 import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
 import org.ow2.petals.tools.ws.KernelWebService;
-import org.ow2.petals.util.LoggingUtil;
+import org.ow2.petals.util.oldies.LoggingUtil;
 import org.petalslink.dsb.kernel.Constants;
 import org.petalslink.dsb.kernel.api.management.binder.BinderException;
 import org.petalslink.dsb.kernel.api.management.binder.ServiceExposerRegistry;

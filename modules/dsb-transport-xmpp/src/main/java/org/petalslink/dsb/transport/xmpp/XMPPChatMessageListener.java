@@ -25,8 +25,8 @@ import javax.jbi.messaging.MessagingException;
 import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Packet;
-import org.ow2.petals.jbi.messaging.exchange.MessageExchange;
-import org.ow2.petals.util.LoggingUtil;
+import org.ow2.petals.jbi.messaging.exchange.MessageExchangeWrapper;
+import org.ow2.petals.util.oldies.LoggingUtil;
 import org.petalslink.dsb.transport.api.Receiver;
 
 
@@ -94,7 +94,7 @@ public class XMPPChatMessageListener implements PacketListener {
          */
         public void run() {
             try {
-                MessageExchange exchange = Adapter.createJBIMessage(this.message);
+                MessageExchangeWrapper exchange = Adapter.createJBIMessage(this.message);
                 if (exchange != null) {
                     XMPPChatMessageListener.this.receiver.onMessage(exchange);
                 } else {

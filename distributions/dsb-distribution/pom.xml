@@ -46,14 +46,6 @@
 			<!-- <scope>runtime</scope> -->
 		</dependency>
 
-		<!-- Raw monitoring @ Deprecated -->
-		<dependency>
-			<groupId>org.petalslink.dsb</groupId>
-			<artifactId>dsb-monitoring</artifactId>
-			<version>${project.version}</version>
-			<!-- <scope>runtime</scope> -->
-		</dependency>
-
 		<!-- EasierBSM based Monitoring -->
 		<dependency>
 			<groupId>org.petalslink.dsb</groupId>

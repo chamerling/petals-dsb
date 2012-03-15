@@ -52,7 +52,9 @@
 		<module>modules/dsb-kernel-wsapi</module>
 		<module>modules/dsb-kernel-api</module>
 		<module>modules/dsb-kernel</module>
-		<module>modules/dsb-petals-oldies</module>
+		
+		<!--<module>modules/dsb-petals-oldies</module>-->
+		
 		<module>modules/dsb-webapp</module>
 		<module>modules/dsb-webappapi</module>
 		<module>modules/dsb-transport-api</module>
@@ -66,7 +68,7 @@
 		<module>modules/dsb-router</module>
 		<module>modules/dsb-microkernel</module>
 		
-   		<module>modules/dsb-monitoring</module>
+   		<!--<module>modules/dsb-monitoring</module>-->
    		<module>modules/dsb-service-client</module>
 
 		<!-- Service Polling -->
@@ -81,7 +83,11 @@
 		<module>modules/dsb-launcher</module>
 		<!-- Petals ESB related things -->
 		<module>modules/petals-cdk</module>
+		
+		<!-- DSB UPDATE, commented until update to latest SOAP commponent
 		<module>modules/petals-bc-soap</module>
+		-->
+		
 		<module>modules/petals-bc-restproxy</module>
 		<module>modules/petals-bc-soapproxy</module>
 		<module>modules/petals-messaging</module>
@@ -163,14 +169,19 @@
 		<module>modules/dsb-logger-jbise</module>
 		
 		<!-- Cloud -->
+		<!--
 		<module>modules/dsb-cloud-kernel</module>
+		-->
 		
 		<!-- prototypes -->
 		<!--
 		<module>modules/dsb-node-manager</module>
 		-->
 		<!-- samples -->
-		<module>samples/dsb-wsn-sample</module>		
+		<module>samples/dsb-wsn-sample</module>	
+		
+		<!-- Removed stuff from Petals 3.0 to 3.2 -->
+		<module>modules/dsb-removed</module>	
 		
   </modules>
 
@@ -187,13 +198,6 @@
 					<!--<module>modules/dsb-kernel-federationservice</module>-->
 			</modules>
 		</profile>
-		<profile>
-		<!-- Deprecated, to be deleted after BSM implementation -->
-			<id>fork</id>
-			<modules>
-				<module>forks/wsdm-monitoring</module>
-			</modules>
-		</profile>
 			<profile>
 				<id>mocks</id>
 				<modules>
@@ -206,14 +210,6 @@
 				<module>distributions/dsb-distribution</module>
 				<!--<module>distributions/fdsb-distribution</module>-->
 				<module>distributions/dsb-installer</module>
-			</modules>
-		</profile>
-		<profile>
-			<!-- This profile may contain modules which depends on other profiles...-->
-			<id>sandbox</id>
-			<modules>
-				<module>sandbox/dsb-wsdm</module>
-				<module>sandbox/dsb-wsdm-distribution</module>
 			</modules>
 		</profile>
 	</profiles>

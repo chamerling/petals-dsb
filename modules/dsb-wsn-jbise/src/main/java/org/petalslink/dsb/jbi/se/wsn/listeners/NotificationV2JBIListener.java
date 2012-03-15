@@ -12,11 +12,11 @@ import javax.jbi.messaging.NormalizedMessage;
 import javax.xml.namespace.QName;
 import javax.xml.transform.TransformerException;
 
+import org.ow2.petals.component.framework.NotificationListener;
 import org.ow2.petals.component.framework.api.exception.PEtALSCDKException;
 import org.ow2.petals.component.framework.api.message.Exchange;
 import org.ow2.petals.component.framework.listener.AbstractJBIListener;
-import org.ow2.petals.component.framework.util.UtilFactory;
-import org.ow2.petals.component.framework.util.XMLUtil;
+import org.ow2.petals.component.framework.util.SourceUtil;
 import org.petalslink.dsb.jbi.se.wsn.AddressingHelper;
 import org.petalslink.dsb.jbi.se.wsn.Component;
 import org.petalslink.dsb.jbi.se.wsn.Constants;
@@ -24,19 +24,21 @@ import org.petalslink.dsb.jbi.se.wsn.NotificationEngine;
 import org.w3c.dom.Document;
 
 import com.ebmwebsourcing.wsaddressing10.api.element.Address;
+import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.WsnbConstants;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.refinedabstraction.RefinedWsnbFactory;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.utils.WsnbException;
-import com.ebmwebsourcing.wsstar.notification.definition.basenotification.WsnbConstants;
 import com.ebmwebsourcing.wsstar.resourceproperties.datatypes.api.refinedabstraction.RefinedWsrfrpFactory;
 import com.ebmwebsourcing.wsstar.resourceproperties.datatypes.api.utils.WsrfrpException;
 import com.ebmwebsourcing.wsstar.wsnb.services.impl.util.Wsnb4ServUtils;
 import com.ebmwebsourcing.wsstar.wsrfbf.services.faults.AbsWSStarFault;
 
 /**
+ * FIXME = Is it really used? Not sure since the jbi descriptor does not mention it
+ * 
  * @author chamerling
  * 
  */
-public abstract class NotificationV2JBIListener extends AbstractJBIListener {
+public abstract class NotificationV2JBIListener extends NotificationListener {
 
     // TODO : put in a common project
     static final String LOCATION_COMPONENT = "consumer.location.component";
@@ -87,17 +89,10 @@ public abstract class NotificationV2JBIListener extends AbstractJBIListener {
                 if (exchange.getFault() != null) {
 
                     if (this.getLogger().isLoggable(Level.WARNING)) {
-                        if (UtilFactory.getExchangeUtil().isPetalsException(exchange.getFault())) {
-                            this.getLogger().warning(
-                                    "notification technical fault message content: "
-                                            + UtilFactory.getSourceUtil().createString(
-                                                    exchange.getFault().getContent()));
-                        } else {
                             this.getLogger().warning(
                                     "notification business fault message content: "
-                                            + UtilFactory.getSourceUtil().createString(
+                                            + SourceUtil.createString(
                                                     exchange.getFault().getContent()));
-                        }
                     }
 
                 } else {
@@ -110,7 +105,7 @@ public abstract class NotificationV2JBIListener extends AbstractJBIListener {
                     // need to use some WS-Addressing based stuff to send
                     // notifications.
                     normalizedMessage = exchange.getInMessage();
-                    document = UtilFactory.getSourceUtil().createDocument(
+                    document = SourceUtil.createDocument(
                             normalizedMessage.getContent());
 
                     if (getLogger().isLoggable(Level.FINE)) {
@@ -123,8 +118,8 @@ public abstract class NotificationV2JBIListener extends AbstractJBIListener {
                         }
                     }
 
-                    if (WsnbConstants.SUBSCRIBE_NAME.equals(exchange.getOperation().getLocalPart())) {
-                        document = UtilFactory.getSourceUtil().createDocument(
+                    if (WsnbConstants.SUBSCRIBE_QNAME.getLocalPart().equals(exchange.getOperation().getLocalPart())) {
+                        document = SourceUtil.createDocument(
                                 normalizedMessage.getContent());
 
                         com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Subscribe subscribe = RefinedWsnbFactory
@@ -197,11 +192,11 @@ public abstract class NotificationV2JBIListener extends AbstractJBIListener {
                         document = RefinedWsnbFactory.getInstance().getWsnbWriter()
                                 .writeSubscribeResponseAsDOM(subscribeResponse);
                         normalizedMessage = exchange.getOutMessage();
-                        normalizedMessage.setContent(UtilFactory.getSourceUtil()
+                        normalizedMessage.setContent(SourceUtil
                                 .createStreamSource(document));
                         exchange.setOutMessage(normalizedMessage);
 
-                    } else if (WsnbConstants.NOTIFY_NAME.equals(exchange.getOperation()
+                    } else if (WsnbConstants.NOTIFY_QNAME.getLocalPart().equals(exchange.getOperation()
                             .getLocalPart())) {
                         
                         com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Notify notify = RefinedWsnbFactory
@@ -219,7 +214,7 @@ public abstract class NotificationV2JBIListener extends AbstractJBIListener {
                         
                     } else if (WsnbConstants.UNSUBSCRIBE_NAME.equals(exchange.getOperation()
                             .getLocalPart())) {
-                        document = UtilFactory.getSourceUtil().createDocument(
+                        document = SourceUtil.createDocument(
                                 normalizedMessage.getContent());
 
                         com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Unsubscribe unsubscribe = RefinedWsnbFactory
@@ -231,18 +226,17 @@ public abstract class NotificationV2JBIListener extends AbstractJBIListener {
                         document = RefinedWsnbFactory.getInstance().getWsnbWriter()
                                 .writeUnsubscribeResponseAsDOM(unsubscribeResponse);
                         normalizedMessage = exchange.getOutMessage();
-                        normalizedMessage.setContent(UtilFactory.getSourceUtil()
-                                .createStreamSource(document));
+                        normalizedMessage.setContent(SourceUtil.createStreamSource(document));
                         exchange.setOutMessage(normalizedMessage);
 
-                    } else if (WsnbConstants.GET_CURRENT_MESSAGE_NAME.equals(exchange
+                    } else if (WsnbConstants.GET_CURRENT_MESSAGE_QNAME.getLocalPart().equals(exchange
                             .getOperation().getLocalPart())) {
                         System.out.println("TODO");
-                    } else if (WsnbConstants.RENEW_NAME.equals(exchange.getOperation()
+                    } else if (WsnbConstants.RENEW_QNAME.getLocalPart().equals(exchange.getOperation()
                             .getLocalPart())) {
                         System.out.println("TODO");
                     } else if ("GetResourceProperty".equals(exchange.getOperation().getLocalPart())) {
-                        document = UtilFactory.getSourceUtil().createDocument(
+                        document = SourceUtil.createDocument(
                                 normalizedMessage.getContent());
 
                         QName qname = RefinedWsrfrpFactory.getInstance().getWsrfrpReader()
@@ -254,7 +248,7 @@ public abstract class NotificationV2JBIListener extends AbstractJBIListener {
                                 .writeGetResourcePropertyResponseAsDOM(res);
 
                         normalizedMessage = exchange.getOutMessage();
-                        normalizedMessage.setContent(UtilFactory.getSourceUtil()
+                        normalizedMessage.setContent(SourceUtil
                                 .createStreamSource(document));
                         exchange.setOutMessage(normalizedMessage);
                     } else {

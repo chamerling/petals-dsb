@@ -1,6 +1,6 @@
 package org.petalslink.dsb.kernel.monitoring.service.time;
 
-import org.ow2.petals.jbi.messaging.exchange.MessageExchange;
+import org.ow2.petals.jbi.messaging.exchange.MessageExchangeWrapper;
 
 public class TimeStamperHandler {
 
@@ -15,7 +15,7 @@ public class TimeStamperHandler {
 		return instance;
 	}
 
-	public TimeStamper getTimeStamp(MessageExchange me) {
+	public TimeStamper getTimeStamp(MessageExchangeWrapper me) {
 		this.ts.setMessageExchange(me);
 		return this.ts;
 	}

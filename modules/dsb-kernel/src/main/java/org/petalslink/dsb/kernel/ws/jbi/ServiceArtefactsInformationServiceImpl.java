@@ -27,7 +27,7 @@ import org.ow2.petals.jbi.descriptor.original.JBIDescriptorBuilder;
 import org.ow2.petals.jbi.descriptor.original.generated.Jbi;
 import org.ow2.petals.jbi.descriptor.original.generated.ServiceAssembly;
 import org.ow2.petals.jbi.management.admin.AdminService;
-import org.ow2.petals.util.LoggingUtil;
+import org.ow2.petals.util.oldies.LoggingUtil;
 import org.petalslink.dsb.ws.api.DSBWebServiceException;
 import org.petalslink.dsb.ws.api.jbi.ServiceArtefactsInformationService;
 

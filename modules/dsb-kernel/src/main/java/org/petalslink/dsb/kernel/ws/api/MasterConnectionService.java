@@ -16,7 +16,7 @@ import org.ow2.dragon.connection.api.to.ExecutionEnvironment;
  * @author chamerling
  * 
  */
-@WebService(targetNamespace = "http://service.api.connection.dragon.ow2.org/")
+@WebService(targetNamespace = "http://service.api.connection.dragon.ow2.org/dsb")
 @SOAPBinding(style = SOAPBinding.Style.DOCUMENT, use = SOAPBinding.Use.LITERAL)
 public interface MasterConnectionService {
 
@@ -27,7 +27,7 @@ public interface MasterConnectionService {
      * @return a list of managed {@link ExecutionEnvironment}, must be non null,
      *         can be empty.
      */
-    @WebResult(targetNamespace = "http://service.api.connection.dragon.ow2.org/", name = "ExecutionEnvironment")
+    @WebResult(targetNamespace = "http://service.api.connection.dragon.ow2.org/dsb", name = "ExecutionEnvironment")
     List<ExecutionEnvironment> getManagedExecutionEnvironments();
 
     /**
@@ -39,7 +39,7 @@ public interface MasterConnectionService {
      * @return a list of hosted {@link Endpoint}, must be non null, can be
      *         empty.
      */
-    @WebResult(targetNamespace = "http://service.api.connection.dragon.ow2.org/", name = "Endpoint")
+    @WebResult(targetNamespace = "http://service.api.connection.dragon.ow2.org/dsb", name = "Endpoint")
     List<Endpoint> getHostedEndpointsOnExecEnv(String managedExecEnvName);
 
     /**
@@ -50,7 +50,7 @@ public interface MasterConnectionService {
      * @return a list of hosted {@link Endpoint}, must be non null, can be
      *         empty.
      */
-    @WebResult(targetNamespace = "http://service.api.connection.dragon.ow2.org/", name = "Endpoint")
+    @WebResult(targetNamespace = "http://service.api.connection.dragon.ow2.org/dsb", name = "Endpoint")
     List<Endpoint> getHostedEndpointsOnProcessor(String managedProcessorName);
 
     /**
@@ -62,7 +62,7 @@ public interface MasterConnectionService {
      * @return a list of members {@link ExecutionEnvironment}, must be non null,
      *         can be empty
      */
-    @WebResult(targetNamespace = "http://service.api.connection.dragon.ow2.org/", name = "ExecutionEnvironment")
+    @WebResult(targetNamespace = "http://service.api.connection.dragon.ow2.org/dsb", name = "ExecutionEnvironment")
     List<ExecutionEnvironment> getFederationMembers(String managedFederationName);
 
     /**
@@ -71,6 +71,6 @@ public interface MasterConnectionService {
      * @return a {@link ExecutionEnvironmentManager} instance representation,
      *         filled with its properties
      */
-    @WebResult(targetNamespace = "http://service.api.connection.dragon.ow2.org/", name = "ExecutionEnvironmentManager")
+    @WebResult(targetNamespace = "http://service.api.connection.dragon.ow2.org/dsb", name = "ExecutionEnvironmentManager")
     org.ow2.dragon.connection.api.to.ExecutionEnvironmentManager getProperties();
 }

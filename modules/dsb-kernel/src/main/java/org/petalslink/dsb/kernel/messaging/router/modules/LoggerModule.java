@@ -30,11 +30,11 @@ import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
 import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.jbi.component.context.ComponentContext;
 import org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint;
-import org.ow2.petals.jbi.messaging.exchange.MessageExchange;
+import org.ow2.petals.jbi.messaging.exchange.MessageExchangeWrapper;
 import org.ow2.petals.jbi.messaging.routing.RoutingException;
 import org.ow2.petals.jbi.messaging.routing.module.SenderModule;
 import org.ow2.petals.transport.util.TransportSendContext;
-import org.ow2.petals.util.LoggingUtil;
+import org.ow2.petals.util.oldies.LoggingUtil;
 
 /**
  * @author chamerling - eBM WebSourcing
@@ -64,7 +64,7 @@ public class LoggerModule implements SenderModule {
      * {@inheritDoc}
      */
     public void electEndpoints(Map<ServiceEndpoint, TransportSendContext> electedEndpoints,
-            ComponentContext sourceComponentContext, MessageExchange exchange)
+            ComponentContext sourceComponentContext, MessageExchangeWrapper exchange)
             throws RoutingException {
         this.log.debug("******************************* Router logs *******************************");
 
@@ -78,8 +78,9 @@ public class LoggerModule implements SenderModule {
             if (exchange.getConsumerEndpoint() != null) {
                 log.debug("  - Endpoint name : " + exchange.getConsumerEndpoint().getEndpointName());
                 log.debug("  - Service name : " + exchange.getConsumerEndpoint().getServiceName());
-                log.debug("  - Location : " + exchange.getConsumerEndpoint().getLocation());
-                log.debug("  - Interfaces : " + exchange.getConsumerEndpoint().getInterfacesName());
+                // CHA 2012 : !
+                // log.debug("  - Location : " + exchange.getConsumerEndpoint().getLocation());
+                // log.debug("  - Interfaces : " + exchange.getConsumerEndpoint().getInterfacesName());
             } else {
                 log.debug("  - None");
             }

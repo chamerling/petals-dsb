@@ -42,7 +42,7 @@ import org.ow2.petals.tools.generator.commons.Creator;
 import org.ow2.petals.tools.generator.jbi.api.JBIGenerationException;
 import org.ow2.petals.tools.generator.jbi.ws2jbi.Constants;
 import org.ow2.petals.tools.generator.rest2jbi.REST2Jbi;
-import org.ow2.petals.util.LoggingUtil;
+import org.ow2.petals.util.oldies.LoggingUtil;
 import org.petalslink.dsb.jbi.JBIFileHelper;
 import org.petalslink.dsb.kernel.api.management.binder.BinderChecker;
 import org.petalslink.dsb.kernel.api.management.binder.BinderException;

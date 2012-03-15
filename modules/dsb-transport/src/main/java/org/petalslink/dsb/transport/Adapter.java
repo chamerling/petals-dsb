@@ -20,17 +20,15 @@ package org.petalslink.dsb.transport;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 import javax.jbi.messaging.Fault;
+import javax.jbi.messaging.MessageExchange.Role;
 import javax.jbi.messaging.MessagingException;
 import javax.jbi.messaging.NormalizedMessage;
-import javax.jbi.messaging.MessageExchange.Role;
-import javax.xml.namespace.QName;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -39,12 +37,12 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import org.ow2.petals.commons.stream.InputStreamForker;
-import org.ow2.petals.commons.stream.ReaderInputStream;
-import org.ow2.petals.commons.threadlocal.Transformers;
-import org.ow2.petals.jbi.messaging.endpoint.JBIServiceEndpointImpl;
-import org.ow2.petals.jbi.messaging.exchange.MessageExchange;
-import org.ow2.petals.kernel.api.service.Location;
+import org.ow2.petals.jbi.messaging.exchange.MessageExchangeWrapper;
+import org.petalslink.dsb.api.ServiceEndpoint;
+
+import com.ebmwebsourcing.easycommons.stream.InputStreamForker;
+import com.ebmwebsourcing.easycommons.stream.ReaderInputStream;
+import com.ebmwebsourcing.easycommons.xml.Transformers;
 
 /**
  * Adapter to change JAXB annotated
@@ -58,6 +56,14 @@ public class Adapter {
 
     private Adapter() {
     }
+    
+    public static MessageExchangeWrapper createJBIMessageWrapper(
+            org.petalslink.dsb.api.MessageExchange messageExchange) throws MessagingException {
+        // TODO
+        // CHA2012
+        System.out.println("TODOOOOOOOOOOOO");
+        return null;
+    }
 
     /**
      * @param messageExchange
@@ -67,8 +73,8 @@ public class Adapter {
             org.petalslink.dsb.api.MessageExchange messageExchange) throws MessagingException {
 
         org.petalslink.dsb.transport.MessageExchange me = new org.petalslink.dsb.transport.MessageExchange(
-                org.petalslink.dsb.jbi.Adapter.createServiceEndpoint(messageExchange.getConsumer()));
-        me.setEndpoint(org.petalslink.dsb.jbi.Adapter.createServiceEndpoint(messageExchange.getEndpoint()));
+                org.petalslink.dsb.jbi.Adapter.createJBIServiceEndpoint(messageExchange.getConsumer()));
+        me.setEndpoint(org.petalslink.dsb.jbi.Adapter.createJBIServiceEndpoint(messageExchange.getEndpoint()));
 
         me.setExchangeId(messageExchange.getId());
         me.setInterfaceName(messageExchange.getInterfaceName());
@@ -162,14 +168,17 @@ public class Adapter {
     }
 
     /**
+     * CHA2012 : Note that locations are no more set here...
+     * 
      * @param exchange
      * @return
      */
-    public static org.petalslink.dsb.api.MessageExchange createWSMessage(MessageExchange exchange) {
+    public static org.petalslink.dsb.api.MessageExchange createWSMessage(MessageExchangeWrapper exchange) {
         org.petalslink.dsb.api.MessageExchange me = new org.petalslink.dsb.api.MessageExchange();
-        me.setConsumer(org.petalslink.dsb.jbi.Adapter.createServiceEndpoint(exchange.getConsumerEndpoint()));
-        me
-                .setEndpoint(org.petalslink.dsb.jbi.Adapter.createServiceEndpoint((org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint) exchange
+        ServiceEndpoint consumer = org.petalslink.dsb.jbi.Adapter.createServiceEndpointFromJBI(exchange.getConsumerEndpoint());
+        // removed the WSDL and location...
+        me.setConsumer(consumer);
+        me.setEndpoint(org.petalslink.dsb.jbi.Adapter.createServiceEndpointFromJBI(exchange
                         .getEndpoint()));
         me.setId(exchange.getExchangeId());
         me.setInterfaceName(exchange.getInterfaceName());
@@ -262,11 +271,12 @@ public class Adapter {
         try {
             final StringWriter buffer = new StringWriter();
             final Result sresult = new StreamResult(buffer);
-            final Transformer transformer = Transformers.getDefaultTransformer();
+            final Transformer transformer = Transformers.takeTransformer();
             try {
                 transformer.transform(tempSource, sresult);
             } finally {
                 transformer.reset();
+                Transformers.releaseTransformer(transformer);
             }
 
             return buffer.toString();
@@ -279,7 +289,7 @@ public class Adapter {
     }
 
     private static final InputStream forkStreamSource(StreamSource streamSource) {
-        InputStreamForker streamForker;
+        InputStreamForker streamForker = null;
         final InputStream isContent = streamSource.getInputStream();
         if (isContent != null) {
             // The StreamSource was created from an InputStream
@@ -289,8 +299,14 @@ public class Adapter {
             // we wrap it as an InputStream
             streamForker = new InputStreamForker(new ReaderInputStream(streamSource.getReader()));
         }
-        streamSource.setInputStream(streamForker.getInputStreamOne());
-        return streamForker.getInputStreamTwo();
+        try {
+            streamSource.setInputStream(streamForker.fork());
+            return streamForker.fork();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

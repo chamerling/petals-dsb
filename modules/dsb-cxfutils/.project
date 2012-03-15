@@ -1,15 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
   <name>org.petalslink.dsb.dsb-cxfutils</name>
-  <comment>Distributed Service Bus</comment>
+  <comment>Distributed Service Bus. NO_M2ECLIPSE_SUPPORT: Project files created with the maven-eclipse-plugin are not supported in M2Eclipse.</comment>
   <projects>
     <project>org.petalslink.dsb.dsb-jaxwsutils</project>
+    <project>org.petalslink.dsb.dsb-commons-serviceapi</project>
   </projects>
   <buildSpec>
     <buildCommand>
       <name>org.eclipse.jdt.core.javabuilder</name>
     </buildCommand>
+    <buildCommand>
+      <name>org.eclipse.m2e.core.maven2Builder</name>
+    </buildCommand>
   </buildSpec>
   <natures>
+    <nature>org.eclipse.m2e.core.maven2Nature</nature>
     <nature>org.eclipse.jdt.core.javanature</nature>
     <nature>com.atlassw.tools.eclipse.checkstyle.CheckstyleNature</nature>
     <nature>net.sourceforge.pmd.runtime.pmdNature</nature>

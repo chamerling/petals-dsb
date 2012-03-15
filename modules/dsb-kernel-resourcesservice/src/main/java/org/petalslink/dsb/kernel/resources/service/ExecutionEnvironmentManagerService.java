@@ -3,6 +3,7 @@
  */
 package org.petalslink.dsb.kernel.resources.service;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -25,13 +26,14 @@ import org.ow2.easywsdl.extensions.wsdl4complexwsdl.api.WSDL4ComplexWsdlExceptio
 import org.ow2.petals.jbi.messaging.registry.EndpointRegistry;
 import org.ow2.petals.jbi.messaging.registry.RegistryException;
 import org.ow2.petals.kernel.configuration.ConfigurationService;
-import org.ow2.petals.util.LoggingUtil;
-import org.ow2.petals.util.XMLUtil;
+import org.ow2.petals.util.oldies.LoggingUtil;
 import org.petalslink.dsb.api.ServiceEndpoint;
 import org.petalslink.dsb.jbi.Adapter;
 import org.petalslink.dsb.kernel.api.DSBConfigurationService;
 import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
+import com.ebmwebsourcing.easycommons.xml.XMLHelper;
 import com.petalslink.easyresources.execution_environment_connection_api._1.GetAdditionalContent;
 import com.petalslink.easyresources.execution_environment_connection_api._1.GetAdditionalContentResponse;
 import com.petalslink.easyresources.execution_environment_connection_api._1.GetContent;
@@ -244,12 +246,18 @@ public class ExecutionEnvironmentManagerService implements ExecutionEnvironmentM
         Description desc;
         try {
             desc = WSDL4ComplexWsdlFactory.newInstance().newWSDLReader()
-                    .read(XMLUtil.createDocumentFromString(description));
+                    .read(XMLHelper.createDocumentFromString(description));
             return WSDL4ComplexWsdlFactory.newInstance().newWSDLWriter().getDocument(desc);
 
         } catch (WSDL4ComplexWsdlException e) {
             e.printStackTrace();
         } catch (URISyntaxException e) {
+            e.printStackTrace();
+        } catch (SAXException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return null;
@@ -306,7 +314,7 @@ public class ExecutionEnvironmentManagerService implements ExecutionEnvironmentM
                             .equals(ResourceIdBuilder.getContainer(id))
                     && serviceEndpoint.getLocation().getSubdomainName()
                             .equals(ResourceIdBuilder.getDomain(id))) {
-                return Adapter.createServiceEndpoint(serviceEndpoint);
+                return Adapter.createDSBServiceEndpoint(serviceEndpoint);
             }
         }
         return result;
@@ -336,7 +344,7 @@ public class ExecutionEnvironmentManagerService implements ExecutionEnvironmentM
                 .getEndpoints();
 
         for (org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint serviceEndpoint : endpoints) {
-            ServiceEndpoint se = Adapter.createServiceEndpoint(serviceEndpoint);
+            ServiceEndpoint se = Adapter.createServiceEndpointFromJBI(serviceEndpoint);
             result.add(se);
         }
 

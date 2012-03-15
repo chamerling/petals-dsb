@@ -45,7 +45,7 @@ import org.ow2.petals.registry.api.exception.LifeCycleException;
 import org.ow2.petals.registry.api.exception.RegistryException;
 import org.ow2.petals.registry.client.RegistryClientFactory;
 import org.ow2.petals.registry.core.factory.RegistryFactory;
-import org.ow2.petals.util.LoggingUtil;
+import org.ow2.petals.util.oldies.LoggingUtil;
 import org.petalslink.dsb.api.DSBException;
 import org.petalslink.dsb.api.ServiceEndpoint;
 import org.petalslink.dsb.jbi.Adapter;
@@ -512,13 +512,13 @@ public class EndpointRegistryImpl extends BaseEndpointRegistry implements Endpoi
                             public void onUnregister(ServiceEndpoint endpoint) throws DSBException {
                                 log.call("Calling onUnregister in registry listener '" + getName()
                                         + "' for " + endpoint.toString());
-                                registryListener.onUnregister(Adapter.createServiceEndpoint(endpoint));
+                                registryListener.onUnregister(Adapter.createJBIServiceEndpoint(endpoint));
                             }
 
                             public void onRegister(ServiceEndpoint endpoint) throws DSBException {
                                 log.call("Calling onRegister in registry listener '" + getName()
                                         + "' for " + endpoint.toString());
-                                registryListener.onUnregister(Adapter.createServiceEndpoint(endpoint));
+                                registryListener.onUnregister(Adapter.createJBIServiceEndpoint(endpoint));
                             }
 
                             public String getName() {

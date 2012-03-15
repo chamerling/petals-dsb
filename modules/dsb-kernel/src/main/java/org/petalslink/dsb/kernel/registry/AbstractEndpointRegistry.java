@@ -28,7 +28,7 @@ import javax.xml.namespace.QName;
 import org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint;
 import org.ow2.petals.jbi.messaging.registry.EndpointRegistry;
 import org.ow2.petals.jbi.messaging.registry.RegistryException;
-import org.ow2.petals.util.LoggingUtil;
+import org.ow2.petals.util.oldies.LoggingUtil;
 import org.petalslink.dsb.kernel.api.messaging.RegistryListenerManager;
 
 /**

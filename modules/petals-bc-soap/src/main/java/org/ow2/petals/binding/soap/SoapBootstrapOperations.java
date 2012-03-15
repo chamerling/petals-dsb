@@ -44,6 +44,8 @@ import static org.ow2.petals.binding.soap.Constants.Axis2.AXIS2_XML;
 import static org.ow2.petals.binding.soap.Constants.Axis2.MODULES_PATH;
 import static org.ow2.petals.binding.soap.Constants.Axis2.MODULE_ARCHIVE_EXTENSION;
 
+import com.ebmwebsourcing.easycommons.xml.XMLHelper;
+
 /**
  * The operations which are exposed during bootstrap phase
  * 
@@ -169,7 +171,7 @@ public class SoapBootstrapOperations {
                 module.setAttribute("ref", moduleName);
                 rootElement.appendChild(module);
 
-                XMLUtil.writeDocument(document, new FileOutputStream(configFile));
+                XMLHelper.writeDocument(document, new FileOutputStream(configFile));
 
             } else {
                 throw new FileNotFoundException("Module file source does not exists");

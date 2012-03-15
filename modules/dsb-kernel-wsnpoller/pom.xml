@@ -21,6 +21,14 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 	<dependencies>
+			<!--  CHA2012 : Fix API changes -->
+		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>dsb-removed</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<!--  END API CHANGES -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>

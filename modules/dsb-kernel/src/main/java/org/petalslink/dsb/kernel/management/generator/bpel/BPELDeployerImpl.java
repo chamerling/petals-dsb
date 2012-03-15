@@ -25,7 +25,7 @@ import org.ow2.petals.jbi.descriptor.original.generated.Jbi;
 import org.ow2.petals.jbi.management.deployment.AtomicDeploymentService;
 import org.ow2.petals.kernel.configuration.ConfigurationService;
 import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
-import org.ow2.petals.util.LoggingUtil;
+import org.ow2.petals.util.oldies.LoggingUtil;
 import org.petalslink.dsb.api.GeneratorConstants;
 import org.petalslink.dsb.api.ServiceEndpoint;
 import org.petalslink.dsb.jbi.JBIFileHelper;

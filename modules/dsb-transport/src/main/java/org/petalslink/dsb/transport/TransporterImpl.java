@@ -33,14 +33,14 @@ import org.objectweb.fractal.fraclet.annotation.annotations.Requires;
 import org.objectweb.fractal.fraclet.annotation.annotations.type.Contingency;
 import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
 import org.objectweb.util.monolog.api.Logger;
-import org.ow2.petals.jbi.messaging.exchange.MessageExchange;
+import org.ow2.petals.jbi.messaging.exchange.MessageExchangeWrapper;
 import org.ow2.petals.kernel.configuration.ConfigurationService;
 import org.ow2.petals.transport.TransportException;
 import org.ow2.petals.transport.TransportListener;
 import org.ow2.petals.transport.Transporter;
 import org.ow2.petals.transport.util.TransportSendContext;
 import org.ow2.petals.transport.util.TransporterUtil;
-import org.ow2.petals.util.LoggingUtil;
+import org.ow2.petals.util.oldies.LoggingUtil;
 import org.petalslink.dsb.transport.api.Client;
 import org.petalslink.dsb.transport.api.ClientException;
 import org.petalslink.dsb.transport.api.ClientFactory;
@@ -63,7 +63,7 @@ public class TransporterImpl implements Transporter, Receiver {
     /**
      * Map of exchanges that are blocked during a synchronous send
      */
-    private Map<String, MessageExchange> pendingSyncExchanges;
+    private Map<String, MessageExchangeWrapper> pendingSyncExchanges;
 
     private boolean stopTraffic;
 
@@ -113,7 +113,7 @@ public class TransporterImpl implements Transporter, Receiver {
         this.log.debug("Starting...");
         this.sendTimeout = this.configurationService.getContainerConfiguration()
                 .getTCPSendTimeout();
-        this.pendingSyncExchanges = new ConcurrentHashMap<String, MessageExchange>(100);
+        this.pendingSyncExchanges = new ConcurrentHashMap<String, MessageExchangeWrapper>(100);
     }
 
     @LifeCycle(on = LifeCycleType.STOP)
@@ -124,7 +124,7 @@ public class TransporterImpl implements Transporter, Receiver {
     /**
      * {@inheritDoc}
      */
-    public void send(MessageExchange exchange, TransportSendContext transportContext)
+    public void send(MessageExchangeWrapper exchange, TransportSendContext transportContext)
             throws TransportException {
         this.log.start("Send exchange to destination '" + transportContext.destination + "'");
 
@@ -168,7 +168,7 @@ public class TransporterImpl implements Transporter, Receiver {
      * @param transportContext
      * @return
      */
-    private boolean interceptSend(MessageExchange exchange, TransportSendContext transportContext) {
+    private boolean interceptSend(MessageExchangeWrapper exchange, TransportSendContext transportContext) {
         boolean result = true;
 
         if (this.sendInterceptor == null) {
@@ -187,11 +187,11 @@ public class TransporterImpl implements Transporter, Receiver {
     /**
      * {@inheritDoc}
      */
-    public MessageExchange sendSync(MessageExchange exchange, TransportSendContext transportContext)
+    public void sendSync(MessageExchangeWrapper exchange, TransportSendContext transportContext)
             throws TransportException {
         this.log
                 .start("Send synchronous exchange to destination : " + transportContext.destination);
-        MessageExchange responseExchange;
+        MessageExchangeWrapper responseExchange;
 
         this.checkTransporterState();
 
@@ -224,17 +224,21 @@ public class TransporterImpl implements Transporter, Receiver {
         // stopping
         if (responseExchange == exchange) {
             this.checkTransporterState();
+            exchange.setTimeout(true);
 
             this.log.warning("Failed to send synchronously the exchange: "
                     + exchange.getExchangeId() + ". Timeout occured");
 
             this.log.end();
-            return null;
+        } else {
+            try {
+                exchange.setMessageExchange(responseExchange.getMessageExchange());
+            } catch (MessagingException e) {
+                throw new TransportException(e);
+            }
         }
 
         this.log.end();
-
-        return responseExchange;
     }
 
     /**
@@ -249,7 +253,7 @@ public class TransporterImpl implements Transporter, Receiver {
         boolean redo = true;
         while (redo) {
             try {
-                for (final MessageExchange messageExchangeImpl : this.pendingSyncExchanges.values()) {
+                for (final MessageExchangeWrapper messageExchangeImpl : this.pendingSyncExchanges.values()) {
                     synchronized (messageExchangeImpl) {
                         messageExchangeImpl.notify();
                     }
@@ -279,7 +283,7 @@ public class TransporterImpl implements Transporter, Receiver {
     /**
      * {@inheritDoc}
      */
-    public void onMessage(MessageExchange messageExchange) {
+    public void onMessage(MessageExchangeWrapper messageExchange) {
         this.log.start();
 
         boolean intercept = interceptReceive(messageExchange);
@@ -295,7 +299,7 @@ public class TransporterImpl implements Transporter, Receiver {
                         + " is a synchronized response");
             }
             TransporterUtil.updateSyncProperties(messageExchange);
-            MessageExchange exchange = this.pendingSyncExchanges.put(messageExchange
+            MessageExchangeWrapper exchange = this.pendingSyncExchanges.put(messageExchange
                     .getExchangeId(), messageExchange);
             synchronized (exchange) {
                 exchange.notify();
@@ -314,7 +318,7 @@ public class TransporterImpl implements Transporter, Receiver {
      * @param messageExchange
      * @return
      */
-    private boolean interceptReceive(MessageExchange messageExchange) {
+    private boolean interceptReceive(MessageExchangeWrapper messageExchange) {
         boolean result = true;
         if (this.receiveInterceptor == null) {
             return true;
@@ -330,7 +334,7 @@ public class TransporterImpl implements Transporter, Receiver {
      * @param b
      * @return
      */
-    private boolean getSyncMode(MessageExchange messageExchange, boolean isResponse) {
+    private boolean getSyncMode(MessageExchangeWrapper messageExchange, boolean isResponse) {
         final boolean syncMode;
         if ((MessageExchange.Role.CONSUMER.equals(messageExchange.getRole()) && isResponse)
                 || (MessageExchange.Role.PROVIDER.equals(messageExchange.getRole()) && !isResponse)) {

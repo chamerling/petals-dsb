@@ -37,7 +37,6 @@ import org.apache.cxf.message.MessageImpl;
 import org.apache.cxf.service.model.BindingOperationInfo;
 import org.apache.cxf.ws.addressing.EndpointReferenceType;
 import org.apache.cxf.wsdl.EndpointReferenceUtils;
-import org.ow2.petals.registry.api.util.XMLUtil;
 import org.petalslink.dsb.api.ServiceEndpoint;
 import org.petalslink.dsb.kernel.io.Constants;
 import org.petalslink.dsb.kernel.io.client.ClientFactoryRegistry;
@@ -136,7 +135,7 @@ public class DSBConduitOutputStream extends CachedOutputStream {
                     Boolean.TRUE.toString());
 
             if (LOG.isLoggable(Level.INFO))
-                LOG.info("Sending the message : " + XMLUtil.createStringFromDOMDocument(doc));
+                LOG.info("Sending the message : " + com.ebmwebsourcing.easycommons.xml.XMLHelper.createStringFromDOMDocument(doc));
 
             // get a client
             ServiceEndpoint serviceEndpoint = new ServiceEndpoint();
@@ -163,7 +162,7 @@ public class DSBConduitOutputStream extends CachedOutputStream {
 
                 if (LOG.isLoggable(Level.INFO))
                     LOG.info("RESPONSE from service : "
-                            + XMLUtil.createStringFromDOMDocument(out.getPayload()));
+                            + com.ebmwebsourcing.easycommons.xml.XMLHelper.createStringFromDOMDocument(out.getPayload()));
 
                 InputStream ins = XMLHelper.getInputStream(out.getPayload());
                 if (ins == null) {

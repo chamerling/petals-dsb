@@ -31,12 +31,12 @@ import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.jbi.component.context.ComponentContext;
 import org.ow2.petals.jbi.messaging.control.ExchangeCheckerClient;
 import org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint;
-import org.ow2.petals.jbi.messaging.exchange.MessageExchange;
+import org.ow2.petals.jbi.messaging.exchange.MessageExchangeWrapper;
 import org.ow2.petals.jbi.messaging.routing.RoutingException;
 import org.ow2.petals.jbi.messaging.routing.module.SenderModule;
 import org.ow2.petals.kernel.configuration.ConfigurationService;
 import org.ow2.petals.transport.util.TransportSendContext;
-import org.ow2.petals.util.LoggingUtil;
+import org.ow2.petals.util.oldies.LoggingUtil;
 import org.petalslink.dsb.kernel.api.messaging.EndpointSearchEngine;
 
 
@@ -108,7 +108,7 @@ public class FractalEndpointResolverModule implements SenderModule {
      * {@inheritDoc}
      */
     public void electEndpoints(Map<ServiceEndpoint, TransportSendContext> electedEndpoints,
-            ComponentContext sourceComponentContext, MessageExchange exchange)
+            ComponentContext sourceComponentContext, MessageExchangeWrapper exchange)
             throws RoutingException {
         this.delegate.electEndpoints(electedEndpoints, sourceComponentContext, exchange);
     }

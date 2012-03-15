@@ -22,7 +22,7 @@ import java.util.Collection;
 
 import org.jivesoftware.smack.RosterListener;
 import org.jivesoftware.smack.packet.Presence;
-import org.ow2.petals.util.LoggingUtil;
+import org.ow2.petals.util.oldies.LoggingUtil;
 
 /**
  * Does nothing but log activity...

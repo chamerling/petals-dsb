@@ -50,7 +50,7 @@ public class InternalNotificationConsumerWrapperTest extends TestCase {
         bean.m = mock.getClass().getMethod("mockMe", Document.class);
         bean.target = mock;
 
-        InternalNotificationConsumerWrapper wrapper = new InternalNotificationConsumerWrapper(bean);
+        InternalNotificationConsumerWrapper wrapper = new InternalNotificationConsumerWrapper(bean, null);
         wrapper.notify(getNotify());
 
         assertTrue(report.ok);
@@ -65,7 +65,7 @@ public class InternalNotificationConsumerWrapperTest extends TestCase {
         bean.m = mock.getClass().getMethod("mockMe", (Class<?>) null);
         bean.target = mock;
 
-        InternalNotificationConsumerWrapper wrapper = new InternalNotificationConsumerWrapper(bean);
+        InternalNotificationConsumerWrapper wrapper = new InternalNotificationConsumerWrapper(bean, null);
         wrapper.notify(getNotify());
 
         assertTrue(report.ok);
@@ -80,7 +80,7 @@ public class InternalNotificationConsumerWrapperTest extends TestCase {
         bean.m = mock.getClass().getMethod("mockMe", Notify.class);
         bean.target = mock;
 
-        InternalNotificationConsumerWrapper wrapper = new InternalNotificationConsumerWrapper(bean);
+        InternalNotificationConsumerWrapper wrapper = new InternalNotificationConsumerWrapper(bean, null);
         wrapper.notify(getNotify());
 
         assertTrue(report.ok);
@@ -95,7 +95,7 @@ public class InternalNotificationConsumerWrapperTest extends TestCase {
         bean.m = mock.getClass().getMethod("mockMe", String.class, Document.class);
         bean.target = mock;
 
-        InternalNotificationConsumerWrapper wrapper = new InternalNotificationConsumerWrapper(bean);
+        InternalNotificationConsumerWrapper wrapper = new InternalNotificationConsumerWrapper(bean, null);
         wrapper.notify(getNotify());
 
         assertTrue(report.ok);

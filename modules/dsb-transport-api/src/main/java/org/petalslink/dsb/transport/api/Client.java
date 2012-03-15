@@ -18,7 +18,7 @@
  */
 package org.petalslink.dsb.transport.api;
 
-import org.ow2.petals.jbi.messaging.exchange.MessageExchange;
+import org.ow2.petals.jbi.messaging.exchange.MessageExchangeWrapper;
 
 
 /**
@@ -41,6 +41,6 @@ public interface Client {
      * @param exchange
      * @param sendTimeout
      */
-    void send(MessageExchange exchange, long sendTimeout) throws ClientException;
+    void send(MessageExchangeWrapper exchange, long sendTimeout) throws ClientException;
 
 }

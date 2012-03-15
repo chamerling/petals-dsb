@@ -38,7 +38,7 @@ import org.ow2.petals.jbi.management.admin.AdminService;
 import org.ow2.petals.jbi.management.installation.ComponentInstallationService;
 import org.ow2.petals.system.repository.artifact.Artifact;
 import org.ow2.petals.system.repository.artifact.ArtifactRepositoryService;
-import org.ow2.petals.util.LoggingUtil;
+import org.ow2.petals.util.oldies.LoggingUtil;
 import org.petalslink.dsb.annotations.LifeCycleListener;
 import org.petalslink.dsb.annotations.Phase;
 import org.petalslink.dsb.kernel.api.DSBConfigurationService;

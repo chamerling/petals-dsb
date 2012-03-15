@@ -34,7 +34,7 @@ import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.kernel.ws.api.JBIArtefactsService;
 import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
 import org.ow2.petals.kernel.ws.api.to.Component;
-import org.ow2.petals.util.LoggingUtil;
+import org.ow2.petals.util.oldies.LoggingUtil;
 import org.petalslink.dsb.kernel.api.DSBConfigurationService;
 import org.petalslink.dsb.kernel.api.management.binder.BinderChecker;
 

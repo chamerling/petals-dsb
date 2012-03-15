@@ -8,10 +8,11 @@ import javax.xml.transform.TransformerException;
 import org.objectweb.fractal.fraclet.annotation.annotations.FractalComponent;
 import org.objectweb.fractal.fraclet.annotation.annotations.LifeCycle;
 import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
-import org.ow2.petals.util.XMLUtil;
 import org.petalslink.dsb.annotations.notification.Mode;
 import org.petalslink.dsb.annotations.notification.Notify;
 import org.w3c.dom.Document;
+
+import com.ebmwebsourcing.easycommons.xml.XMLHelper;
 
 /**
  * @author chamerling
@@ -32,7 +33,7 @@ public class BusinessConsumer {
     public void interestedInNotificationButNotOnly(Document document) {
         System.out.println("I just received a payload notification!");
         try {
-            System.out.println("####\n" + XMLUtil.parseToString(document) + " \n####");
+            System.out.println("####\n" + XMLHelper.createStringFromDOMDocument(document) + " \n####");
         } catch (TransformerException e) {
             e.printStackTrace();
         }

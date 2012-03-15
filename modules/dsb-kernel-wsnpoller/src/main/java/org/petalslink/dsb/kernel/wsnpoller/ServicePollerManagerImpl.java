@@ -30,14 +30,15 @@ import org.ow2.petals.jbi.management.deployment.AtomicDeploymentService;
 import org.ow2.petals.kernel.api.server.PetalsException;
 import org.ow2.petals.tools.generator.commons.Constants;
 import org.ow2.petals.tools.generator.jbi.api.JBIGenerationException;
-import org.ow2.petals.util.LoggingUtil;
-import org.ow2.petals.util.XMLUtil;
+import org.ow2.petals.util.oldies.LoggingUtil;
 import org.petalslink.dsb.servicepoller.api.ServicePollerException;
 import org.petalslink.dsb.servicepoller.api.ServicePollerInformation;
 import org.petalslink.dsb.servicepoller.api.WSNPoller;
 import org.petalslink.dsb.servicepoller.api.WSNPollerServiceInformation;
 import org.petalslink.dsb.tools.generator.wsnpoller2jbi.Poller2Jbi;
 import org.w3c.dom.Document;
+
+import com.ebmwebsourcing.easycommons.xml.XMLHelper;
 
 /**
  * @author chamerling
@@ -281,7 +282,7 @@ public class ServicePollerManagerImpl implements WSNPoller {
             WSNPollerServiceInformation info = new WSNPollerServiceInformation();
             info.setCronExpression(pollerInformation.cronExpression);
             try {
-                info.setInputMessage(XMLUtil
+                info.setInputMessage(XMLHelper
                         .createStringFromDOMDocument(pollerInformation.inputMessage));
             } catch (Exception e) {
             }

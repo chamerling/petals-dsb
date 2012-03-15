@@ -13,8 +13,7 @@ import org.objectweb.fractal.fraclet.annotation.annotations.Monolog;
 import org.objectweb.fractal.fraclet.annotation.annotations.Provides;
 import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
 import org.objectweb.util.monolog.api.Logger;
-import org.ow2.petals.util.LoggingUtil;
-import org.ow2.petals.util.XMLUtil;
+import org.ow2.petals.util.oldies.LoggingUtil;
 import org.petalslink.dsb.api.DSBException;
 import org.petalslink.dsb.api.ServiceEndpoint;
 import org.petalslink.dsb.kernel.pubsub.service.NotificationCenter;
@@ -24,6 +23,7 @@ import org.petalslink.dsb.notification.commons.NotificationException;
 import org.petalslink.dsb.notification.commons.api.NotificationSender;
 import org.w3c.dom.Document;
 
+import com.ebmwebsourcing.easycommons.xml.XMLHelper;
 import com.petalslink.easyresources.execution_environment_connection_model.ResourceIdentifier;
 
 /**
@@ -89,7 +89,7 @@ public class RegistryListener implements org.petalslink.dsb.kernel.api.messaging
 
         if (log.isDebugEnabled()) {
             try {
-                log.debug(XMLUtil.createStringFromDOMDocument(payload));
+                log.debug(XMLHelper.createStringFromDOMDocument(payload));
             } catch (TransformerException e) {
             }
         }

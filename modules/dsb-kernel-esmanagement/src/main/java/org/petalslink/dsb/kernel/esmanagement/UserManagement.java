@@ -28,7 +28,7 @@ import org.objectweb.fractal.fraclet.annotation.annotations.Monolog;
 import org.objectweb.fractal.fraclet.annotation.annotations.Provides;
 import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
 import org.objectweb.util.monolog.api.Logger;
-import org.ow2.petals.util.LoggingUtil;
+import org.ow2.petals.util.oldies.LoggingUtil;
 
 import com.ebmwebsourcing.wsstar.jaxb.notification.base.Notify;
 import com.ebmwebsourcing.wsstar.jaxb.notification.base.Subscribe;

@@ -14,7 +14,7 @@ import org.objectweb.fractal.fraclet.annotation.annotations.Monolog;
 import org.objectweb.fractal.fraclet.annotation.annotations.Requires;
 import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
 import org.objectweb.util.monolog.api.Logger;
-import org.ow2.petals.util.LoggingUtil;
+import org.ow2.petals.util.oldies.LoggingUtil;
 import org.petalslink.dsb.annotations.LifeCycleListener;
 import org.petalslink.dsb.annotations.Phase;
 import org.petalslink.dsb.api.util.EndpointHelper;

@@ -53,7 +53,7 @@ import org.ow2.petals.binding.restproxy.HTTPConstants;
 import org.ow2.petals.binding.restproxy.HTTPUtils;
 import org.ow2.petals.binding.restproxy.RESTException;
 import org.ow2.petals.component.framework.api.exception.PEtALSCDKException;
-import org.ow2.petals.component.framework.util.UtilFactory;
+import org.ow2.petals.component.framework.util.SourceUtil;
 import org.ow2.petals.component.framework.util.XMLUtil;
 import org.ow2.petals.messaging.framework.EngineFactory;
 import org.ow2.petals.messaging.framework.message.Callback;
@@ -323,7 +323,7 @@ public class CommonsHTTPClient implements Client {
                     }
                     // let's create the source if we can!
                     Document doc = XMLUtil.loadDocument(in);
-                    result = UtilFactory.getSourceUtil().createStreamSource(doc);
+                    result = SourceUtil.createStreamSource(doc);
                 }
             }
         } catch (Exception e) {
@@ -468,7 +468,7 @@ public class CommonsHTTPClient implements Client {
             if ((message != null) && (message.getContent(Source.class) != null)) {
                 String payload = null;
                 try {
-                    payload = UtilFactory.getSourceUtil().createString(
+                    payload = SourceUtil.createString(
                             message.getContent(Source.class));
                 } catch (PEtALSCDKException e) {
                     this.logger.warning(e.getMessage());

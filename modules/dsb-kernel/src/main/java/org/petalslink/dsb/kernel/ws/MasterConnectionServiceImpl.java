@@ -6,14 +6,12 @@ package org.petalslink.dsb.kernel.ws;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javax.xml.namespace.QName;
-import javax.xml.transform.TransformerException;
 
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.fraclet.annotation.annotations.FractalComponent;
@@ -25,11 +23,14 @@ import org.objectweb.fractal.fraclet.annotation.annotations.Requires;
 import org.objectweb.fractal.fraclet.annotation.annotations.type.Contingency;
 import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
 import org.objectweb.util.monolog.api.Logger;
+import org.ow2.dragon.connection.api.service.EeType;
+import org.ow2.dragon.connection.api.service.FedPattern;
+import org.ow2.dragon.connection.api.service.HashMapType;
+import org.ow2.dragon.connection.api.service.Node;
 import org.ow2.dragon.connection.api.to.Endpoint;
 import org.ow2.dragon.connection.api.to.EnvironmentFederation;
-import org.ow2.dragon.connection.api.to.EnvironmentFederation.FedPattern;
 import org.ow2.dragon.connection.api.to.ExecutionEnvironment;
-import org.ow2.dragon.connection.api.to.ExecutionEnvironment.EEType;
+import org.ow2.dragon.connection.api.to.HashMapEntryType;
 import org.ow2.dragon.connection.api.to.Processor;
 import org.ow2.easywsdl.extensions.wsdl4complexwsdl.WSDL4ComplexWsdlFactory;
 import org.ow2.easywsdl.extensions.wsdl4complexwsdl.api.Description;
@@ -41,9 +42,10 @@ import org.ow2.petals.jbi.messaging.registry.EndpointRegistry;
 import org.ow2.petals.jbi.messaging.registry.RegistryException;
 import org.ow2.petals.kernel.configuration.ConfigurationService;
 import org.ow2.petals.kernel.configuration.ContainerConfiguration;
-import org.ow2.petals.util.LoggingUtil;
-import org.ow2.petals.util.XMLUtil;
+import org.ow2.petals.util.oldies.LoggingUtil;
 import org.petalslink.dsb.kernel.ws.api.MasterConnectionService;
+
+import com.ebmwebsourcing.easycommons.xml.XMLHelper;
 
 /**
  * @author chamerling
@@ -155,7 +157,7 @@ public class MasterConnectionServiceImpl implements MasterConnectionService {
 
         final ExecutionEnvironment env = new ExecutionEnvironment();
         env.setIpv4Address(containerConfiguration.getHost());
-        env.setEnvType(EEType.ESB);
+        env.setEnvType(EeType.ESB);
         env.setType("PEtALS");
         env.setVersion(this.adminService.getSystemInfo());
         env.setName(containerConfiguration.getName());
@@ -174,9 +176,16 @@ public class MasterConnectionServiceImpl implements MasterConnectionService {
 
         final List<Endpoint> endpoints = this.getEndpointsForContainer(containerConfiguration
                 .getName());
-        env.setEndpoints(endpoints);
+        Node.Endpoints eps = new Node.Endpoints();
+        eps.getEndpoint().addAll(endpoints);
+        env.setEndpoints(eps);
+        
         env.setHostProcessor(this.getProcessor(containerConfiguration));
-        env.setProperties(this.getProperties(containerConfiguration));
+
+        Node.Properties props = new Node.Properties();
+        props.getProperty().addAll(this.getProperties(containerConfiguration));
+        env.setProperties(props);
+        
         return env;
     }
 
@@ -225,21 +234,22 @@ public class MasterConnectionServiceImpl implements MasterConnectionService {
                             .writeWSDL4ComplexWsdl(desc);
                     endpoint.setWsdlDescription(rootWSDL);
 
-                    HashMap<String, String> wsdlDescriptionImports = new HashMap<String, String>();
+                    HashMapType map = new HashMapType();
                     if (imports != null) {
                         for (URI uri : imports.keySet()) {
                             try {
-                                wsdlDescriptionImports.put(uri.toString(),
-                                        XMLUtil.createStringFromDOMDocument(imports.get(uri)));
-                            } catch (TransformerException e) {
+                                HashMapEntryType entry = new HashMapEntryType();
+                                entry.setKey(uri.toString());
+                                entry.setValue(XMLHelper.createStringFromDOMDocument(imports.get(uri)));
+                                map.getEntry().add(entry);
+                            } catch (Exception e) {
                                 // skipped
                                 this.log.warning(e.getMessage());
                             }
                         }
                     }
 
-                    endpoint.setWsdlDescriptionImports(wsdlDescriptionImports);
-                    endpoint.setWsdlDescriptionImports(wsdlDescriptionImports);
+                    endpoint.setWsdlDescriptionImports(map);
                     result.add(endpoint);
                 } catch (WSDL4ComplexWsdlException e) {
                     this.log.warning(e.getMessage());

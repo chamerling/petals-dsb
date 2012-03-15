@@ -14,11 +14,11 @@ import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
 import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.jbi.component.context.ComponentContext;
 import org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint;
-import org.ow2.petals.jbi.messaging.exchange.MessageExchange;
+import org.ow2.petals.jbi.messaging.exchange.MessageExchangeWrapper;
 import org.ow2.petals.jbi.messaging.routing.RoutingException;
 import org.ow2.petals.jbi.messaging.routing.module.SenderModule;
 import org.ow2.petals.transport.util.TransportSendContext;
-import org.ow2.petals.util.LoggingUtil;
+import org.ow2.petals.util.oldies.LoggingUtil;
 
 /**
  * Sets some properties concerning the consumer in the message exchnage so that
@@ -60,7 +60,7 @@ public class SourceSetterModule implements SenderModule {
      * org.ow2.petals.jbi.messaging.exchange.MessageExchange)
      */
     public void electEndpoints(Map<ServiceEndpoint, TransportSendContext> electedEndpoints,
-            ComponentContext sourceComponentContext, MessageExchange exchange)
+            ComponentContext sourceComponentContext, MessageExchangeWrapper exchange)
             throws RoutingException {
         
         if (log.isDebugEnabled()) {
@@ -68,15 +68,17 @@ public class SourceSetterModule implements SenderModule {
         }
 
         if (exchange.getConsumerEndpoint() != null
-                && exchange.getConsumerEndpoint().getLocation() != null) {
-            exchange.setProperty(LOCATION_COMPONENT, exchange.getConsumerEndpoint().getLocation()
-                    .getComponentName());
-            exchange.setProperty(LOCATION_CONTAINER, exchange.getConsumerEndpoint().getLocation()
-                    .getContainerName());
-            exchange.setProperty(LOCATION_DOMAIN, exchange.getConsumerEndpoint().getLocation()
-                    .getSubdomainName());
-        }
+                && exchange.getConsumerEndpoint() instanceof ServiceEndpoint) {
+            ServiceEndpoint serviceEndpoint = (ServiceEndpoint) exchange.getConsumerEndpoint();
 
+            exchange.setProperty(LOCATION_COMPONENT, serviceEndpoint.getLocation()
+                    .getComponentName());
+            exchange.setProperty(LOCATION_CONTAINER, serviceEndpoint.getLocation()
+                    .getContainerName());
+            exchange.setProperty(LOCATION_DOMAIN, serviceEndpoint.getLocation().getSubdomainName());
+        } else {
+            // ...
+        }
     }
 
 }

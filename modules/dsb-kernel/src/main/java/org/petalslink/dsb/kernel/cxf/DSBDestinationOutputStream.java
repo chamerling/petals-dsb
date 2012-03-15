@@ -27,7 +27,6 @@ import javax.xml.transform.stream.StreamSource;
 import org.apache.cxf.common.logging.LogUtils;
 import org.apache.cxf.io.CachedOutputStream;
 import org.apache.cxf.message.Message;
-import org.ow2.petals.registry.api.util.XMLUtil;
 import org.petalslink.dsb.service.client.MessageListener;
 import org.petalslink.dsb.xmlutils.XMLHelper;
 import org.w3c.dom.Document;
@@ -75,7 +74,7 @@ public class DSBDestinationOutputStream extends CachedOutputStream {
 
                 if (LOG.isLoggable(Level.INFO)) {
                     LOG.info("On destination to be sent back to the client"
-                            + XMLUtil.createStringFromDOMDocument(doc));
+                            + com.ebmwebsourcing.easycommons.xml.XMLHelper.createStringFromDOMDocument(doc));
                 }
                 bais.close();
 

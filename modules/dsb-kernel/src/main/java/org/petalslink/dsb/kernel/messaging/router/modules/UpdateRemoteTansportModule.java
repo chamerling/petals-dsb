@@ -30,12 +30,12 @@ import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
 import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.jbi.component.context.ComponentContext;
 import org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint;
-import org.ow2.petals.jbi.messaging.exchange.MessageExchange;
+import org.ow2.petals.jbi.messaging.exchange.MessageExchangeWrapper;
 import org.ow2.petals.jbi.messaging.routing.RoutingException;
 import org.ow2.petals.jbi.messaging.routing.module.SenderModule;
 import org.ow2.petals.transport.Transporter;
 import org.ow2.petals.transport.util.TransportSendContext;
-import org.ow2.petals.util.LoggingUtil;
+import org.ow2.petals.util.oldies.LoggingUtil;
 import org.petalslink.dsb.kernel.api.DSBConfigurationService;
 
 
@@ -73,7 +73,7 @@ public class UpdateRemoteTansportModule implements SenderModule {
      * {@inheritDoc}
      */
     public void electEndpoints(Map<ServiceEndpoint, TransportSendContext> electedEndpoints,
-            ComponentContext sourceComponentContext, MessageExchange exchange)
+            ComponentContext sourceComponentContext, MessageExchangeWrapper exchange)
             throws RoutingException {
         if ((this.dsbConfigurationService.getRemoteTransport() == null)
                 || (this.dsbConfigurationService.getRemoteTransport().length() == 0)) {

@@ -16,31 +16,45 @@
  * 
  * Initial developer(s): EBM WebSourcing
  */
-package org.petalslink.dsb.kernel.listener;
+package org.ow2.petals.launcher.tasks;
 
-import java.util.Set;
+import java.util.List;
 
-import org.ow2.petals.kernel.api.server.PetalsStateListener;
+import org.ow2.petals.kernel.api.server.PetalsException;
+import org.ow2.petals.kernel.api.server.PetalsServer;
 
 /**
- * Manage the collection of {@link PetalsStateListener} defined by configuration.
- * 
  * @author chamerling - eBM WebSourcing
- * @deprecated to be removed on 1.0
  *
  */
-public interface LifeCycleListenerManager {
+public class SynchronizeRegistryTask extends Task {
+
+    private final PetalsServer petalsServer;
 
     /**
-     * The binding prefix of the component which is listening petals state
-     */
-    static final String PREFIX = "petals-state-listener-";
-
-    /**
-     * Get an ordered set of listeners
      * 
-     * @return
      */
-    Set<PetalsStateListener> getListeners();
+    public SynchronizeRegistryTask(final PetalsServer petalsServer) {
+        super();
+        this.petalsServer = petalsServer;
+        this.setName("sync");
+        this.setShortcut("s");
+        this.setDescription("Synchronize the endpoint registry");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected int doProcess(List<String> args) {
+        try {
+            System.out.print("Synchronizing the registry...");
+            this.petalsServer.synchronizeRegistry();
+            System.out.println(" Done!");
+        } catch (PetalsException e) {
+            e.printStackTrace(System.err);
+        }
+        return OK_CODE;
+    }
 
 }

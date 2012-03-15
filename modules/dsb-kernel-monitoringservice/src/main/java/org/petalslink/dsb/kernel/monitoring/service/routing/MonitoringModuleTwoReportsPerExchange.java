@@ -37,12 +37,13 @@ import org.objectweb.util.monolog.api.Logger;
 import org.ow2.easywsdl.schema.api.XmlException;
 import org.ow2.easywsdl.schema.util.SourceHelper;
 import org.ow2.petals.jbi.component.context.ComponentContext;
-import org.ow2.petals.jbi.messaging.exchange.MessageExchange;
+import org.ow2.petals.jbi.messaging.exchange.MessageExchangeImpl;
+import org.ow2.petals.jbi.messaging.exchange.MessageExchangeWrapper;
 import org.ow2.petals.jbi.messaging.routing.RoutingException;
 import org.ow2.petals.jbi.messaging.routing.module.ReceiverModule;
 import org.ow2.petals.jbi.messaging.routing.module.SenderModule;
 import org.ow2.petals.transport.util.TransportSendContext;
-import org.ow2.petals.util.LoggingUtil;
+import org.ow2.petals.util.oldies.LoggingUtil;
 import org.petalslink.dsb.api.DSBException;
 import org.petalslink.dsb.kernel.monitoring.service.ConfigurationService;
 import org.petalslink.dsb.kernel.monitoring.service.time.TimeStamperHandler;
@@ -91,7 +92,7 @@ public class MonitoringModuleTwoReportsPerExchange implements SenderModule, Rece
      */
     public void electEndpoints(
             Map<org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint, TransportSendContext> electedDestinations,
-            ComponentContext sourceComponentContext, MessageExchange exchange)
+            ComponentContext sourceComponentContext, MessageExchangeWrapper exchange)
             throws RoutingException {
         this.log.call();
 
@@ -125,7 +126,7 @@ public class MonitoringModuleTwoReportsPerExchange implements SenderModule, Rece
         }
     }
 
-    public boolean receiveExchange(MessageExchange exchange, ComponentContext arg1)
+    public boolean receiveExchange(MessageExchangeWrapper exchange, ComponentContext arg1)
             throws RoutingException {
         if (!this.configuration.isActive()) {
             if (this.log.isDebugEnabled()) {
@@ -200,18 +201,18 @@ public class MonitoringModuleTwoReportsPerExchange implements SenderModule, Rece
         return monitoringClientFactory.getMonitoringClient(endpointName);
     }
 
-    protected ReportListBean createReportListFromExchange(MessageExchange exchange)
+    protected ReportListBean createReportListFromExchange(MessageExchangeWrapper exchange)
             throws DSBException {
         ReportListBean res = new ReportListBean();
         try {
             // flash on request in
-            if (MessageExchange.Role.CONSUMER.equals(exchange.getRole())) {
+            if (MessageExchangeImpl.Role.CONSUMER.equals(exchange.getRole())) {
 
                 // handle in request for all message patterns. This is detected
                 // with the exchnage terminated flag.
-                if ((MessageExchange.IN_ONLY_PATTERN.equals(exchange.getPattern()) && !exchange
+                if ((MessageExchangeImpl.IN_ONLY_PATTERN.equals(exchange.getPattern()) && !exchange
                         .isTerminated())
-                        || (((MessageExchange.IN_OUT_PATTERN.equals(exchange.getPattern()) || (MessageExchange.IN_OPTIONAL_OUT_PATTERN
+                        || (((MessageExchangeImpl.IN_OUT_PATTERN.equals(exchange.getPattern()) || (MessageExchangeImpl.IN_OPTIONAL_OUT_PATTERN
                                 .equals(exchange.getPattern())))
                                 && (exchange.getMessage("out") == null) && !exchange.isTerminated()))) {
 
@@ -223,7 +224,7 @@ public class MonitoringModuleTwoReportsPerExchange implements SenderModule, Rece
                 }
 
                 // handle done request for InOnly message...
-                if (MessageExchange.IN_ONLY_PATTERN.equals(exchange.getPattern())
+                if (MessageExchangeImpl.IN_ONLY_PATTERN.equals(exchange.getPattern())
                         && exchange.isTerminated()) {
 
                     if (log.isDebugEnabled()) {
@@ -254,7 +255,7 @@ public class MonitoringModuleTwoReportsPerExchange implements SenderModule, Rece
                 }
 
                 // handle in out request for out messages
-                if ((MessageExchange.IN_OUT_PATTERN.equals(exchange.getPattern()) || MessageExchange.IN_OPTIONAL_OUT_PATTERN
+                if ((MessageExchangeImpl.IN_OUT_PATTERN.equals(exchange.getPattern()) || MessageExchangeImpl.IN_OPTIONAL_OUT_PATTERN
                         .equals(exchange.getPattern()))
                         && ((exchange.getMessage("out") != null) || (exchange.getFault() != null) || (exchange
                                 .getError() != null))) {
@@ -317,9 +318,9 @@ public class MonitoringModuleTwoReportsPerExchange implements SenderModule, Rece
 
             } else if (exchange.getRole() == Role.PROVIDER) {
                 // provider, must have T2 and T1, so send the report...
-                if ((MessageExchange.IN_ONLY_PATTERN.equals(exchange.getPattern()) && !exchange
+                if ((MessageExchangeImpl.IN_ONLY_PATTERN.equals(exchange.getPattern()) && !exchange
                         .isTerminated())
-                        || (((MessageExchange.IN_OUT_PATTERN.equals(exchange.getPattern()) || (MessageExchange.IN_OPTIONAL_OUT_PATTERN
+                        || (((MessageExchangeImpl.IN_OUT_PATTERN.equals(exchange.getPattern()) || (MessageExchangeImpl.IN_OPTIONAL_OUT_PATTERN
                                 .equals(exchange.getPattern())))
                                 && (exchange.getMessage("out") == null) && !exchange.isTerminated()))) {
                     // we can have T3 here is exchnage.getOut is not null...
@@ -379,7 +380,7 @@ public class MonitoringModuleTwoReportsPerExchange implements SenderModule, Rece
         return res;
     }
 
-    private void setSOACommonInformation(MessageExchange exchange, ReportBean report) {
+    private void setSOACommonInformation(MessageExchangeWrapper exchange, ReportBean report) {
         // TODO : Get the MEX information for WS-Addressing information and
         // inject it in the report.
         // exchange.getProperty("WSA:TO");

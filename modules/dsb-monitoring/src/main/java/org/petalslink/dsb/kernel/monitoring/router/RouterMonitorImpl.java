@@ -39,7 +39,7 @@ import org.ow2.petals.jbi.messaging.routing.RouterService;
 import org.ow2.petals.jbi.messaging.routing.RoutingException;
 import org.ow2.petals.monitoring.router.Monitoring;
 import org.ow2.petals.monitoring.router.RouterMonitor;
-import org.ow2.petals.util.LoggingUtil;
+import org.ow2.petals.util.oldies.LoggingUtil;
 
 /**
  * @version $Rev: 617 $ $Date: 2006-06-19 17:28:41 +0200 (lun, 19 jun 2006) $

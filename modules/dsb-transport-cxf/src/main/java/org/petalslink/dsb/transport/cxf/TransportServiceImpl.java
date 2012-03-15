@@ -20,12 +20,12 @@ package org.petalslink.dsb.transport.cxf;
 
 import javax.jbi.messaging.MessagingException;
 
+import org.ow2.petals.jbi.messaging.exchange.MessageExchangeWrapper;
+import org.ow2.petals.util.oldies.LoggingUtil;
 import org.petalslink.dsb.api.TransportException;
 import org.petalslink.dsb.api.TransportService;
 import org.petalslink.dsb.transport.Adapter;
 import org.petalslink.dsb.transport.api.Receiver;
-import org.ow2.petals.jbi.messaging.exchange.MessageExchange;
-import org.ow2.petals.util.LoggingUtil;
 
 /**
  * The Transport Service is in charge of translating received message and
@@ -65,9 +65,9 @@ public class TransportServiceImpl implements TransportService {
         }
 
         // transform the message to JBI one and send to receiver
-        MessageExchange jbiMessageExchange = null;
+        MessageExchangeWrapper jbiMessageExchange = null;
         try {
-            jbiMessageExchange = Adapter.createJBIMessage(messageExchange);
+            jbiMessageExchange = Adapter.createJBIMessageWrapper(messageExchange);
         } catch (MessagingException e) {
             throw new TransportException(e.getMessage());
         }

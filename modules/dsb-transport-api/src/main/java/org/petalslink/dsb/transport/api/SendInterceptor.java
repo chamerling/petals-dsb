@@ -18,7 +18,7 @@
  */
 package org.petalslink.dsb.transport.api;
 
-import org.ow2.petals.jbi.messaging.exchange.MessageExchange;
+import org.ow2.petals.jbi.messaging.exchange.MessageExchangeWrapper;
 import org.ow2.petals.transport.util.TransportSendContext;
 
 /**
@@ -27,7 +27,7 @@ import org.ow2.petals.transport.util.TransportSendContext;
  */
 public interface SendInterceptor {
 
-    Constants.STATUS send(MessageExchange exchange, TransportSendContext context)
+    Constants.STATUS send(MessageExchangeWrapper exchange, TransportSendContext context)
             throws ClientException;
 
 }

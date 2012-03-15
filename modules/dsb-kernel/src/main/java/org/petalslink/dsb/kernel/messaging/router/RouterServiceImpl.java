@@ -1,12 +1,28 @@
 /**
+ * PETALS - PETALS Services Platform. Copyright (c) 2007 EBM Websourcing,
+ * http://www.ebmwebsourcing.com/
  * 
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version. This library is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ * -------------------------------------------------------------------------
+ * $Id: RouterService.java,v 1.2 2005/07/22 10:24:27 alouis Exp $
+ * -------------------------------------------------------------------------
  */
+
 package org.petalslink.dsb.kernel.messaging.router;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ConcurrentModificationException;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -18,11 +34,8 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
-import javax.jbi.messaging.MessageExchange;
+import javax.jbi.messaging.MessageExchange.Role;
 import javax.jbi.messaging.MessagingException;
-import javax.jbi.messaging.NormalizedMessage;
-import javax.xml.transform.Source;
-import javax.xml.transform.stream.StreamSource;
 
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.fraclet.annotation.annotations.FractalComponent;
@@ -35,32 +48,33 @@ import org.objectweb.fractal.fraclet.annotation.annotations.type.Cardinality;
 import org.objectweb.fractal.fraclet.annotation.annotations.type.Contingency;
 import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
 import org.objectweb.util.monolog.api.Logger;
-import org.ow2.petals.commons.stream.InputStreamForker;
-import org.ow2.petals.commons.stream.ReaderInputStream;
 import org.ow2.petals.container.lifecycle.ServiceUnitLifeCycle;
 import org.ow2.petals.jbi.component.context.ComponentContext;
 import org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint;
+import org.ow2.petals.jbi.messaging.exchange.MessageExchangeWrapper;
 import org.ow2.petals.jbi.messaging.routing.RouterService;
 import org.ow2.petals.jbi.messaging.routing.RoutingException;
 import org.ow2.petals.jbi.messaging.routing.module.InstallModule;
 import org.ow2.petals.jbi.messaging.routing.module.ReceiverModule;
 import org.ow2.petals.jbi.messaging.routing.module.SenderModule;
-import org.ow2.petals.kernel.server.FractalHelper;
+import org.ow2.petals.jbi.messaging.routing.monitoring.RouterMonitorService;
+import org.ow2.petals.jbi.messaging.routing.util.SourcesForkerUtil;
 import org.ow2.petals.transport.TransportException;
 import org.ow2.petals.transport.TransportListener;
 import org.ow2.petals.transport.Transporter;
 import org.ow2.petals.transport.util.TransportSendContext;
-import org.ow2.petals.util.LoggingUtil;
+import org.ow2.petals.util.oldies.LoggingUtil;
 import org.petalslink.dsb.annotations.LifeCycleListener;
 import org.petalslink.dsb.annotations.Phase;
 
 import static javax.jbi.management.LifeCycleMBean.SHUTDOWN;
 import static javax.jbi.management.LifeCycleMBean.STARTED;
 import static javax.jbi.management.LifeCycleMBean.STOPPED;
+import static javax.jbi.messaging.MessageExchange.Role.CONSUMER;
+import static javax.jbi.messaging.MessageExchange.Role.PROVIDER;
 
 /**
- * FIXME : THis is a port from petals-kernel-3.0.4 to introduce
- * RouterModuleManager
+ * CHA 2012 : Update to add module management.
  * 
  * Routes messages to their destinations. Performs an itinerary resolution,
  * adding for example a transformation service before delivering the message to
@@ -76,8 +90,20 @@ import static javax.jbi.management.LifeCycleMBean.STOPPED;
 @Provides(interfaces = {
         @Interface(name = "service", signature = org.ow2.petals.jbi.messaging.routing.RouterService.class),
         @Interface(name = "transportlistener", signature = TransportListener.class),
+        
+        // CHA 2012
         @Interface(name = "routermodulemanager", signature = RouterModuleManager.class) })
 public class RouterServiceImpl implements RouterService, TransportListener, RouterModuleManager {
+    
+    // CHA 2012
+    private LoggingUtil log;
+
+    @Monolog(name = "logger")
+    private Logger logger;
+    
+    private RouterModuleManager routerModuleManager;
+    
+    // -CHA 2012
 
     private static final String INSTALLMODULE_FRACTAL_PREFIX = "installmodule";
 
@@ -102,14 +128,17 @@ public class RouterServiceImpl implements RouterService, TransportListener, Rout
     private static final String TRANSPORTER_FRACTAL_PREFIX = "transporter";
 
     /**
-     * a map of Stream caches to send to multiple destination a stream
-     */
-    private Map<String, Map<String, InputStreamForker>> exchangeForkedStreamCache;
-
-    /**
      * The map of the exchanges queues. One queue per installed component.
      */
-    private Map<String, BlockingQueue<org.ow2.petals.jbi.messaging.exchange.MessageExchange>> exchangeQueues;
+    private Map<String, BlockingQueue<MessageExchangeWrapper>> exchangeQueues;
+
+    /**
+     * The Router Monitor Fractal component
+     */
+    // CHA 2012 : set to optional while it is not required in the DSB
+    // This need to be part of a module and not directly in the router itself...
+    @Requires(name = "routermonitor", signature = RouterMonitorService.class, contingency=Contingency.OPTIONAL)
+    private RouterMonitorService routerMonitorService;
 
     /**
      * The list of installModule Fractal components
@@ -118,21 +147,10 @@ public class RouterServiceImpl implements RouterService, TransportListener, Rout
     private final Map<String, Object> installModules = new Hashtable<String, Object>();
 
     /**
-     * Logger wrapper.
-     */
-    private LoggingUtil log;
-
-    /**
-     * The logger.
-     */
-    @Monolog(name = "logger")
-    private Logger logger;
-
-    /**
      * The map of the pending exchanges. One List per Provides of SU stopped or
      * shut down.
      */
-    private Map<String, List<org.ow2.petals.jbi.messaging.exchange.MessageExchange>> pendingMessageExchanges;
+    private Map<String, List<MessageExchangeWrapper>> pendingMessageExchanges;
 
     /**
      * The list of ReceiverModule Fractal components
@@ -162,13 +180,27 @@ public class RouterServiceImpl implements RouterService, TransportListener, Rout
     @Requires(name = TRANSPORTER_FRACTAL_PREFIX, signature = Transporter.class, cardinality = Cardinality.COLLECTION, contingency = Contingency.OPTIONAL)
     private final Map<String, Object> transporters = new Hashtable<String, Object>();
 
-    // @Requires(name = "modulemanager", signature = RouterModuleManager.class)
-    /*
-     * For now it is not a require since I have an exception at startup...
-     * IllegalBindingException: Mandatory client interface unbound (client
-     * interface = /Petals/JBI-Messaging/DSBRouterServiceImpl.modulemanager)
+    /**
+     * Check if the message exchange to send is marked to be bypassed.
+     * 
+     * @param exchange
+     *            The exchange to check
      */
-    private RouterModuleManager routerModuleManager;
+    private static final boolean checkBypassMessageExchange(final MessageExchangeWrapper exchange) {
+        boolean bypass = false;
+        Object noAck = null;
+
+        if (exchange.isTerminated()) {
+            if (CONSUMER.equals(exchange.getRole())) {
+                noAck = exchange.getProperty(RouterService.PROPERTY_ROUTER_PROVIDER_NOACK);
+            } else {
+                noAck = exchange.getProperty(RouterService.PROPERTY_ROUTER_CONSUMER_NOACK);
+            }
+            bypass = noAck != null && noAck.toString().toLowerCase().equals("true");
+        }
+
+        return bypass;
+    }
 
     /*
      * (non-Javadoc)
@@ -185,10 +217,23 @@ public class RouterServiceImpl implements RouterService, TransportListener, Rout
         }
 
         this.exchangeQueues.put(componentContext.getComponentName(),
-                new ArrayBlockingQueue<org.ow2.petals.jbi.messaging.exchange.MessageExchange>(
-                        QUEUE_SIZE));
+                new ArrayBlockingQueue<MessageExchangeWrapper>(QUEUE_SIZE));
 
         this.log.end();
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.ow2.petals.transport.TransportListener#exchangeSent(org.ow2.petals
+     * .jbi.messaging.exchange.MessageExchangeDecorator)
+     */
+    public void exchangeSent(MessageExchangeWrapper exchangeDecorator) {
+        if (this.routerMonitorService != null) {
+            this.routerMonitorService.exchangeSent(exchangeDecorator);
+        }
+
     }
 
     /*
@@ -212,13 +257,11 @@ public class RouterServiceImpl implements RouterService, TransportListener, Rout
                                 + provides.getServiceName() + PROVIDER_SUFFIX;
                         if (STOPPED.equals(suState) || SHUTDOWN.equals(suState)) {
                             if (!this.pendingMessageExchanges.containsKey(uniqueId)) {
-                                this.pendingMessageExchanges
-                                        .put(uniqueId,
-                                                new Vector<org.ow2.petals.jbi.messaging.exchange.MessageExchange>(
-                                                        100));
+                                this.pendingMessageExchanges.put(uniqueId,
+                                        new Vector<MessageExchangeWrapper>(100));
                             }
                         } else if (STARTED.equals(suState)) {
-                            final BlockingQueue<org.ow2.petals.jbi.messaging.exchange.MessageExchange> componentQueue = this.exchangeQueues
+                            final BlockingQueue<MessageExchangeWrapper> componentQueue = this.exchangeQueues
                                     .get(serviceUnitLifeCycle.getTargetComponentName());
                             componentQueue.addAll(this.pendingMessageExchanges.remove(uniqueId));
                         }
@@ -236,34 +279,39 @@ public class RouterServiceImpl implements RouterService, TransportListener, Rout
      * 
      * @see
      * org.ow2.petals.transport.TransportListener#onExchange(org.ow2.petals.
-     * jbi.messaging.exchange.MessageExchangeImpl)
+     * jbi.messaging.exchange.MessageExchangeDecorator)
      */
-    public void onExchange(final org.ow2.petals.jbi.messaging.exchange.MessageExchange exchange) {
+    public void onExchange(final MessageExchangeWrapper exchangeDecorator) {
         this.log.start();
 
         String componentName = null;
 
+        if (this.routerMonitorService != null) {
+            this.routerMonitorService.exchangeReceived(exchangeDecorator);
+        }
+
         synchronized (this.pendingMessageExchanges) {
-            if (exchange.getRole().equals(MessageExchange.Role.CONSUMER)) {
+            if (exchangeDecorator.getRole().equals(CONSUMER)) {
                 // TODO: handle the List of shut down consumes
-                componentName = exchange.getConsumerEndpoint().getLocation().getComponentName();
-            } else if (exchange.getRole().equals(MessageExchange.Role.PROVIDER)) {
-                final org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint endpoint = (org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint) exchange
+                componentName = ((ServiceEndpoint)exchangeDecorator.getConsumerEndpoint()).getLocation()
+                        .getComponentName();
+            } else if (exchangeDecorator.getRole().equals(PROVIDER)) {
+                final org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint endpoint = (org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint) exchangeDecorator
                         .getEndpoint();
                 final String uniqueId = endpoint.getEndpointName() + endpoint.getServiceName()
                         + PROVIDER_SUFFIX;
                 if (this.pendingMessageExchanges.containsKey(uniqueId)) {
                     this.log.debug("SU not started, store the exchange");
-                    this.pendingMessageExchanges.get(uniqueId).add(exchange);
+                    this.pendingMessageExchanges.get(uniqueId).add(exchangeDecorator);
                 } else {
-                    componentName = ((org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint) exchange
+                    componentName = ((org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint) exchangeDecorator
                             .getEndpoint()).getLocation().getComponentName();
                 }
             }
         }
 
-        if (componentName != null && this.exchangeQueues.get(componentName) != null) {
-            this.exchangeQueues.get(componentName).add(exchange);
+        if (componentName != null) {
+            this.exchangeQueues.get(componentName).add(exchangeDecorator);
         }
 
         this.log.end();
@@ -276,11 +324,11 @@ public class RouterServiceImpl implements RouterService, TransportListener, Rout
      * org.ow2.petals.jbi.messaging.routing.Router#receive(org.ow2.petals.jbi
      * .component.context.ComponentContextImpl, long)
      */
-    public org.ow2.petals.jbi.messaging.exchange.MessageExchange receive(
-            final ComponentContext source, final long timeoutMS) throws RoutingException {
+    public MessageExchangeWrapper receive(final ComponentContext componentContext,
+            final long timeoutMS) throws RoutingException {
 
-        org.ow2.petals.jbi.messaging.exchange.MessageExchange exchange;
-        final String componentName = source.getComponentName();
+        MessageExchangeWrapper exchangeDecorator;
+        final String componentName = componentContext.getComponentName();
 
         this.log.start("Component : " + componentName + " - Timeout : " + timeoutMS);
 
@@ -288,42 +336,43 @@ public class RouterServiceImpl implements RouterService, TransportListener, Rout
 
         if (timeoutMS == 0) {
             // non-blocking call
-            exchange = this.exchangeQueues.get(componentName).poll();
+            exchangeDecorator = this.exchangeQueues.get(componentName).poll();
         } else {
             this.threadsList.add(Thread.currentThread());
             try {
                 if (timeoutMS > 0) {
                     // blocking call with timeout
-                    exchange = this.exchangeQueues.get(componentName).poll(timeoutMS,
+                    exchangeDecorator = this.exchangeQueues.get(componentName).poll(timeoutMS,
                             TimeUnit.MILLISECONDS);
                 } else {
                     // blocking call without timeout
-                    exchange = this.exchangeQueues.get(componentName).take();
+                    exchangeDecorator = this.exchangeQueues.get(componentName).take();
                 }
             } catch (final InterruptedException e) {
                 Thread.currentThread().interrupt();
                 throw new RoutingException("The pending receipt for the component '"
-                        + source.getComponentName() + "' is interrupted", e);
+                        + componentName + "' is interrupted", e);
             } finally {
                 this.threadsList.remove(Thread.currentThread());
             }
         }
 
-        if (exchange != null) {
+        // CHA 2012
+        if (exchangeDecorator != null) {
             for (org.petalslink.dsb.kernel.messaging.router.ReceiverModule receiver : this.routerModuleManager
                     .getReceivers()) {
                 if (log.isDebugEnabled()) {
                     log.debug(String.format("Receiver module %s is called", receiver.getName()));
                 }
-                receiver.receiveExchange(exchange, source);
+                receiver.receiveExchange(exchangeDecorator, componentContext);
             }
-            this.log.end("Exchange Id : " + exchange.getExchangeId() + " - Component : "
+            this.log.end("Exchange Id : " + exchangeDecorator.getExchangeId() + " - Component : "
                     + componentName);
         } else {
             this.log.end("No exchange - Component : " + componentName);
         }
 
-        return exchange;
+        return exchangeDecorator;
     }
 
     /*
@@ -353,17 +402,16 @@ public class RouterServiceImpl implements RouterService, TransportListener, Rout
      * .context.ComponentContextImpl,
      * org.ow2.petals.jbi.messaging.exchange.MessageExchangeImpl, long)
      */
-    public void send(final ComponentContext source,
-            final org.ow2.petals.jbi.messaging.exchange.MessageExchange exchange)
+    public void send(final ComponentContext source, final MessageExchangeWrapper exchangeDecorator)
             throws RoutingException {
         this.log.call();
 
         this.checkStopTraffic();
 
-        if (!checkBypassMessageExchange(exchange)) {
+        if (!checkBypassMessageExchange(exchangeDecorator)) {
 
             // clean unused messages
-            exchange.cleanMessages();
+            exchangeDecorator.getMessageExchange().cleanMessages();
 
             // Get the list of elected endpoints from the sender modules
             final Map<ServiceEndpoint, TransportSendContext> electedDestinations = new LinkedHashMap<ServiceEndpoint, TransportSendContext>();
@@ -372,22 +420,38 @@ public class RouterServiceImpl implements RouterService, TransportListener, Rout
                 if (log.isDebugEnabled()) {
                     log.debug(String.format("Sender module %s is called", senderModule.getName()));
                 }
-                senderModule.electEndpoints(electedDestinations, source, exchange);
+                senderModule.electEndpoints(electedDestinations, source, exchangeDecorator);
             }
 
-            if (MessageExchange.Role.CONSUMER.equals(exchange.getRole())) {
-                exchange.setRole(MessageExchange.Role.PROVIDER);
-            } else {
-                exchange.setRole(MessageExchange.Role.CONSUMER);
-            }
-
-            if (MessageExchange.Role.PROVIDER.equals(exchange.getRole())) {
-                this.sendToProvider(electedDestinations, source, exchange, false, 0);
-            } else {
-                // only one destination for a consumer
-                final TransportSendContext transportSendContext = electedDestinations.values()
-                        .iterator().next();
-                this.sendToConsumer(transportSendContext, exchange, false, 0);
+            boolean isLocalSend = false;
+            try {
+                exchangeDecorator.setObserverRole(null);
+                if (CONSUMER.equals(exchangeDecorator.getRole())) {
+                    exchangeDecorator.setRole(PROVIDER);
+                    isLocalSend = this.sendToProvider(electedDestinations, source,
+                            exchangeDecorator, false, 0);
+                } else {
+                    exchangeDecorator.setRole(CONSUMER);
+                    // only one destination for a consumer
+                    final TransportSendContext transportSendContext = electedDestinations.values()
+                            .iterator().next();
+                    isLocalSend = this.sendToConsumer(transportSendContext, exchangeDecorator,
+                            false, 0);
+                }
+                // if local, the observer role is set in the onExchange() method
+                if (!isLocalSend) {
+                    exchangeDecorator.setObserverRole(exchangeDecorator.getRole());
+                }
+            } catch (RoutingException e) {
+                // reset the roles
+                if (CONSUMER.equals(exchangeDecorator.getRole())) {
+                    exchangeDecorator.setRole(PROVIDER);
+                    exchangeDecorator.setObserverRole(PROVIDER);
+                } else {
+                    exchangeDecorator.setRole(CONSUMER);
+                    exchangeDecorator.setObserverRole(CONSUMER);
+                }
+                throw e;
             }
         }
     }
@@ -396,59 +460,81 @@ public class RouterServiceImpl implements RouterService, TransportListener, Rout
      * (non-Javadoc)
      * 
      * @see
-     * org.ow2.petals.jbi.messaging.routing.Router#sendSync(org.ow2.petals.jbi
-     * .component.context.ComponentContextImpl,
-     * org.ow2.petals.jbi.messaging.exchange.MessageExchangeImpl, long)
+     * org.ow2.petals.jbi.messaging.routing.RouterService#sendSync(org.ow2.petals
+     * .jbi.component.context.ComponentContext,
+     * org.ow2.petals.jbi.messaging.exchange.MessageExchangeDecorator, long)
      */
-    public org.ow2.petals.jbi.messaging.exchange.MessageExchange sendSync(
-            final ComponentContext source,
-            final org.ow2.petals.jbi.messaging.exchange.MessageExchange exchange, final long timeout)
+    public void sendSync(final ComponentContext source,
+            final MessageExchangeWrapper exchangeDecorator, final long timeout)
             throws RoutingException {
         this.log.call();
 
         this.checkStopTraffic();
 
         // clean unused messages
-        exchange.cleanMessages();
+        exchangeDecorator.getMessageExchange().cleanMessages();
 
-        this.removeBypassMessageExchange(exchange);
+        this.removeBypassMessageExchange(exchangeDecorator);
 
-        // Get the list of elected endpoints from the sender modules
+        long currentTime = 0;
+        if (timeout > 0) {
+            currentTime = System.currentTimeMillis();
+
+            exchangeDecorator.setProperty(PROPERTY_ROUTER_TIMETOLIVE, currentTime + timeout);
+        }
+
         final Map<ServiceEndpoint, TransportSendContext> electedDestinations = new LinkedHashMap<ServiceEndpoint, TransportSendContext>();
         for (org.petalslink.dsb.kernel.messaging.router.SenderModule senderModule : routerModuleManager
                 .getSenders()) {
             if (log.isDebugEnabled()) {
                 log.debug(String.format("Sender module %s is called", senderModule.getName()));
             }
-            senderModule.electEndpoints(electedDestinations, source, exchange);
+            senderModule.electEndpoints(electedDestinations, source, exchangeDecorator);
         }
 
-        if (MessageExchange.Role.CONSUMER.equals(exchange.getRole())) {
-            exchange.setRole(MessageExchange.Role.PROVIDER);
-        } else {
-            exchange.setRole(MessageExchange.Role.CONSUMER);
-        }
-
-        org.ow2.petals.jbi.messaging.exchange.MessageExchange responseExchange = null;
-        if (MessageExchange.Role.PROVIDER.equals(exchange.getRole())) {
-            responseExchange = this.sendToProvider(electedDestinations, source, exchange, true,
-                    timeout);
-        } else {
-            // only one destination for a consumer
-            final TransportSendContext transportSendContext = electedDestinations.values()
-                    .iterator().next();
-            responseExchange = this.sendToConsumer(transportSendContext, exchange, true, timeout);
-        }
-
-        for (org.petalslink.dsb.kernel.messaging.router.ReceiverModule receiverModule : routerModuleManager
-                .getReceivers()) {
-            if (log.isDebugEnabled()) {
-                log.debug(String.format("Receiver module %s is called", receiverModule.getName()));
+        long currentTimeout = timeout;
+        if (currentTimeout > 0) {
+            currentTimeout -= System.currentTimeMillis() - currentTime;
+            if (currentTimeout == 0) {
+                currentTimeout = -1;
             }
-            receiverModule.receiveExchange(responseExchange, source);
         }
 
-        return responseExchange;
+        if (currentTimeout >= 0) {
+            final Role originalRole = exchangeDecorator.getRole();
+            try {
+                exchangeDecorator.setObserverRole(null);
+                if (CONSUMER.equals(exchangeDecorator.getRole())) {
+                    exchangeDecorator.setRole(PROVIDER);
+                    this.sendToProvider(electedDestinations, source, exchangeDecorator, true,
+                            timeout);
+                } else {
+                    exchangeDecorator.setRole(CONSUMER);
+                    // only one destination for a consumer
+                    final TransportSendContext transportSendContext = electedDestinations.values()
+                            .iterator().next();
+                    this.sendToConsumer(transportSendContext, exchangeDecorator, true, timeout);
+                }
+
+                if (!exchangeDecorator.isTimeout()) {
+                    if (this.routerMonitorService != null) {
+                        this.routerMonitorService.exchangeReceived(exchangeDecorator);
+                    }
+                    for (org.petalslink.dsb.kernel.messaging.router.ReceiverModule receiverModule : routerModuleManager
+                            .getReceivers()) {
+                        if (log.isDebugEnabled()) {
+                            log.debug(String.format("Receiver module %s is called", receiverModule.getName()));
+                        }
+                        receiverModule.receiveExchange(exchangeDecorator, source);
+                    }
+                }
+            } finally {
+                exchangeDecorator.setRole(originalRole);
+                exchangeDecorator.setObserverRole(originalRole);
+            }
+        } else {
+            exchangeDecorator.setTimeout(true);
+        }
     }
 
     /*
@@ -465,7 +551,7 @@ public class RouterServiceImpl implements RouterService, TransportListener, Rout
         boolean done = false;
         try {
             while (System.currentTimeMillis() < timeout && !done) {
-                for (final BlockingQueue<org.ow2.petals.jbi.messaging.exchange.MessageExchange> queue : this.exchangeQueues
+                for (final BlockingQueue<MessageExchangeWrapper> queue : this.exchangeQueues
                         .values()) {
                     if (queue.size() > 0) {
                         // sleep for 1 second
@@ -512,14 +598,15 @@ public class RouterServiceImpl implements RouterService, TransportListener, Rout
      */
     @LifeCycle(on = LifeCycleType.START)
     protected void start() throws RoutingException {
-        this.log = new LoggingUtil(this.logger);
-        this.log.call();
-
+        // CHA 2012
+        this.log = new LoggingUtil(logger);
         this.routerModuleManager = new RouterModuleManagerImpl();
 
-        this.exchangeQueues = new ConcurrentHashMap<String, BlockingQueue<org.ow2.petals.jbi.messaging.exchange.MessageExchange>>();
-        this.pendingMessageExchanges = new ConcurrentHashMap<String, List<org.ow2.petals.jbi.messaging.exchange.MessageExchange>>();
-        this.exchangeForkedStreamCache = new ConcurrentHashMap<String, Map<String, InputStreamForker>>();
+        // -CHA 2012
+        
+        this.log.call();
+        this.exchangeQueues = new ConcurrentHashMap<String, BlockingQueue<MessageExchangeWrapper>>();
+        this.pendingMessageExchanges = new ConcurrentHashMap<String, List<MessageExchangeWrapper>>();
         this.threadsList = new Vector<Thread>(100);
     }
 
@@ -545,97 +632,31 @@ public class RouterServiceImpl implements RouterService, TransportListener, Rout
     }
 
     /**
-     * Clean the potential duplicated Sources.
-     * 
-     * @param exchange
-     * @throws MessagingException
-     */
-    private void cleanExchangeSources(
-            final org.ow2.petals.jbi.messaging.exchange.MessageExchange exchange) {
-        final Map<String, InputStreamForker> exchangeStreamForked = this.exchangeForkedStreamCache
-                .remove(exchange.getExchangeId());
-        if (exchangeStreamForked != null) {
-            for (final InputStreamForker streamForker : exchangeStreamForked.values()) {
-                try {
-                    streamForker.getInputStreamTwo().close();
-                } catch (final IOException e) {
-                    this.log.warning("Failed to clean a forked Source", e);
-                }
-            }
-        }
-    }
-
-    /**
-     * Handle streaming issue. Duplicate sources if they are StreamSource. TODO
-     * : extend the mechanism to the attachments.
-     * 
-     * @param exchange
-     * @throws MessagingException
-     */
-    private void forkExchangeSources(
-            final org.ow2.petals.jbi.messaging.exchange.MessageExchange exchange)
-            throws MessagingException {
-
-        Map<String, InputStreamForker> exchangeStreamForked = this.exchangeForkedStreamCache
-                .get(exchange.getExchangeId());
-        if (exchangeStreamForked == null) {
-            exchangeStreamForked = new HashMap<String, InputStreamForker>();
-            this.exchangeForkedStreamCache.put(exchange.getExchangeId(), exchangeStreamForked);
-        }
-
-        final Map<String, NormalizedMessage> messages = exchange.getMessages();
-        for (final String messageName : messages.keySet()) {
-            // TODO Handle the Streaming issue for the Attachments??
-            final Source content = messages.get(messageName).getContent();
-            if (content instanceof StreamSource) {
-                InputStreamForker streamForker = exchangeStreamForked.get(messageName);
-                if (streamForker != null) {
-                    streamForker = new InputStreamForker(streamForker.getInputStreamTwo());
-                } else {
-                    final StreamSource streamContent = (StreamSource) content;
-                    final InputStream isContent = streamContent.getInputStream();
-                    if (isContent != null) {
-                        // The StreamSource was created from an InputStream
-                        streamForker = new InputStreamForker(isContent);
-                    } else {
-                        // The StreamSource was created from a Reader
-                        // we wrap it as an InputStream
-                        streamForker = new InputStreamForker(new ReaderInputStream(
-                                streamContent.getReader()));
-                    }
-                }
-                exchangeStreamForked.put(messageName, streamForker);
-                final Source source = new StreamSource(streamForker.getInputStreamOne());
-                messages.get(messageName).setContent(source);
-            }
-        }
-    }
-
-    /**
      * If the message exchange to send is marked to be bypassed, remove the mark
      * and log a warning message.
      * 
-     * @param exchange
+     * @param exchangeDecorator
      *            The exchange to check
      */
-    private boolean removeBypassMessageExchange(
-            final org.ow2.petals.jbi.messaging.exchange.MessageExchange exchange) {
+    private boolean removeBypassMessageExchange(final MessageExchangeWrapper exchangeDecorator) {
         this.log.call();
 
         final boolean bypass = false;
 
-        if (exchange.isTerminated()) {
-            if (MessageExchange.Role.CONSUMER.equals(exchange.getRole())) {
-                if (exchange.getProperty(RouterService.PROPERTY_ROUTER_CONSUMER_NOACK) != null) {
-                    exchange.setProperty(RouterService.PROPERTY_ROUTER_CONSUMER_NOACK, "false");
+        if (exchangeDecorator.isTerminated()) {
+            if (CONSUMER.equals(exchangeDecorator.getRole())) {
+                if (exchangeDecorator.getProperty(RouterService.PROPERTY_ROUTER_CONSUMER_NOACK) != null) {
+                    exchangeDecorator.setProperty(RouterService.PROPERTY_ROUTER_CONSUMER_NOACK,
+                            "false");
                     this.log.warning("Property '" + RouterService.PROPERTY_ROUTER_CONSUMER_NOACK
-                            + "' is not supported by a synchronous sending");
+                            + "' is not supported in synchronous send mode");
                 }
             } else {
-                if (exchange.getProperty(RouterService.PROPERTY_ROUTER_PROVIDER_NOACK) != null) {
-                    exchange.setProperty(RouterService.PROPERTY_ROUTER_PROVIDER_NOACK, "false");
+                if (exchangeDecorator.getProperty(RouterService.PROPERTY_ROUTER_PROVIDER_NOACK) != null) {
+                    exchangeDecorator.setProperty(RouterService.PROPERTY_ROUTER_PROVIDER_NOACK,
+                            "false");
                     this.log.warning("Property '" + RouterService.PROPERTY_ROUTER_PROVIDER_NOACK
-                            + "' is not supported by a synchronous sending");
+                            + "' is not supported in synchronous send mode");
                 }
             }
         }
@@ -653,17 +674,15 @@ public class RouterServiceImpl implements RouterService, TransportListener, Rout
      *            {@code true} is the send is synchronous
      * @param timeout
      *            timeout of the message (in ms). 0 for no timeout
-     * @return the response exchange if a synchronous send is processed
+     * @return {@code true} if the send is not synchronous and local
      * @throws RoutingException
-     *             impossible to send the message to the consumer
      */
-    private org.ow2.petals.jbi.messaging.exchange.MessageExchange sendToConsumer(
-            final TransportSendContext transportSendContext,
-            final org.ow2.petals.jbi.messaging.exchange.MessageExchange exchange,
-            final boolean sync, final long timeout) throws RoutingException {
+    private boolean sendToConsumer(final TransportSendContext transportSendContext,
+            final MessageExchangeWrapper exchangeDecorator, final boolean sync, final long timeout)
+            throws RoutingException {
         this.log.start();
 
-        org.ow2.petals.jbi.messaging.exchange.MessageExchange responseExchange = null;
+        boolean result = false;
 
         final long startTime = System.currentTimeMillis();
         boolean retry = true;
@@ -679,10 +698,11 @@ public class RouterServiceImpl implements RouterService, TransportListener, Rout
                 }
             }
             try {
-                if (transportSendContext.attempt > 1) {
+                if (transportSendContext.attempt > 1
+                        || exchangeDecorator.getMessageExchange().isPersisted()) {
                     // fork the exchange if it contains stream source(s)
                     try {
-                        this.forkExchangeSources(exchange);
+                        SourcesForkerUtil.forkExchangeSources(exchangeDecorator);
                     } catch (final MessagingException e) {
                         throw new RoutingException(e);
                     }
@@ -693,22 +713,22 @@ public class RouterServiceImpl implements RouterService, TransportListener, Rout
                         final long elapseTime = System.currentTimeMillis() - startTime;
                         if (elapseTime > timeout) {
                             // The timeout is reached
-                            exchange.setRole(MessageExchange.Role.PROVIDER);
-                            retry = false;
+                            exchangeDecorator.setTimeout(true);
                             break;
                         }
                         transportSendContext.timeout = timeout - elapseTime;
                     }
-                    responseExchange = ((Transporter) this.transporters
-                            .get(TRANSPORTER_FRACTAL_PREFIX + "-" + transportSendContext.transport))
-                            .sendSync(exchange, transportSendContext);
-                    if (responseExchange == null) {
-                        // The timeout is reached
-                        exchange.setRole(MessageExchange.Role.PROVIDER);
-                    }
+                    ((Transporter) this.transporters.get(TRANSPORTER_FRACTAL_PREFIX + "-"
+                            + transportSendContext.transport)).sendSync(exchangeDecorator,
+                            transportSendContext);
                 } else {
                     ((Transporter) this.transporters.get(TRANSPORTER_FRACTAL_PREFIX + "-"
-                            + transportSendContext.transport)).send(exchange, transportSendContext);
+                            + transportSendContext.transport)).send(exchangeDecorator,
+                            transportSendContext);
+                    if (Transporter.LOCAL_FRACTAL_TRANSPORTER
+                            .equals(transportSendContext.transport)) {
+                        result = true;
+                    }
                 }
                 retry = false;
             } catch (final TransportException e) {
@@ -719,17 +739,20 @@ public class RouterServiceImpl implements RouterService, TransportListener, Rout
                     retry = true;
                     attemptDelay = transportSendContext.delay;
                 } else {
-                    // Restore the Role if the message has not been sent
-                    exchange.setRole(MessageExchange.Role.PROVIDER);
                     throw new RoutingException(e);
+                }
+            } finally {
+                try {
+                    SourcesForkerUtil.cleanExchangeSources(exchangeDecorator);
+                } catch (IOException e) {
+                    // do nothing
                 }
             }
         }
 
-        this.cleanExchangeSources(exchange);
-
         this.log.end();
-        return responseExchange;
+
+        return result;
     }
 
     /**
@@ -738,25 +761,21 @@ public class RouterServiceImpl implements RouterService, TransportListener, Rout
      * @param source
      *            the source
      * @param exchange
-     *            the exchange
+     *            the exchange decorator
      * @param sync
      *            {@code true} is the send is synchronous
      * @param timeout
      *            timeout of the message (in ms). 0 for no timeout one
-     * @return the response exchange if a synchronous send is processed,
-     *         {@code null} if the timeout is reached
+     * @return {@code true} if the send is not synchronous and local
      * @throws RoutingException
-     *             impossible to send the message to the provider
-     * @throws
      */
-    private org.ow2.petals.jbi.messaging.exchange.MessageExchange sendToProvider(
+    private boolean sendToProvider(
             final Map<ServiceEndpoint, TransportSendContext> endpointDestinations,
-            final ComponentContext source,
-            final org.ow2.petals.jbi.messaging.exchange.MessageExchange exchange,
+            final ComponentContext source, final MessageExchangeWrapper exchangeDecorator,
             final boolean sync, final long timeout) throws RoutingException {
         this.log.start();
 
-        org.ow2.petals.jbi.messaging.exchange.MessageExchange responseExchange = null;
+        boolean result = false;
 
         TransportSendContext transportSendContext = null;
         final long startTime = System.currentTimeMillis();
@@ -765,7 +784,8 @@ public class RouterServiceImpl implements RouterService, TransportListener, Rout
 
         while (retry) {
             if (attemptDelay != 0) {
-                this.log.debug("Wait " + attemptDelay + " millisecond before the next send attempt");
+                this.log
+                        .debug("Wait " + attemptDelay + " millisecond before the next send attempt");
                 try {
                     Thread.sleep(attemptDelay);
                 } catch (final InterruptedException e) {
@@ -774,110 +794,90 @@ public class RouterServiceImpl implements RouterService, TransportListener, Rout
             }
             retry = false;
             final Iterator<ServiceEndpoint> iterator = endpointDestinations.keySet().iterator();
-            while (iterator.hasNext()) {
-                final ServiceEndpoint electedEndpoint = iterator.next();
-                transportSendContext = endpointDestinations.get(electedEndpoint);
-                if (transportSendContext.attempt > 0) {
-                    this.log.debug("Send attempt to endpoint '" + electedEndpoint.getEndpointName()
-                            + "'");
-                    try {
-                        exchange.setEndpoint(electedEndpoint);
-                        exchange.setService(electedEndpoint.getServiceName());
-                        // the interface list contains 1 interface
-                        exchange.setInterfaceName(electedEndpoint.getInterfaces()[0]);
-                        if (iterator.hasNext() || attemptDelay > 0
-                                || transportSendContext.attempt > 1) {
-                            // fork the exchange if it contains stream source(s)
-                            try {
-                                this.forkExchangeSources(exchange);
-                            } catch (final MessagingException e) {
+            try {
+                while (iterator.hasNext()) {
+                    final ServiceEndpoint electedEndpoint = iterator.next();
+                    transportSendContext = endpointDestinations.get(electedEndpoint);
+                    if (transportSendContext.attempt > 0) {
+                        this.log.debug("Send attempt to endpoint '"
+                                + electedEndpoint.getEndpointName() + "'");
+                        try {
+                            exchangeDecorator.setEndpoint(electedEndpoint);
+                            exchangeDecorator.setService(electedEndpoint.getServiceName());
+                            // the interface list contains 1 interface
+                            exchangeDecorator.setInterfaceName(electedEndpoint.getInterfacesName().get(0));
+                            if (iterator.hasNext() || attemptDelay > 0
+                                    || transportSendContext.attempt > 1
+                                    || exchangeDecorator.getMessageExchange().isPersisted()) {
+                                // fork the exchange if it contains stream
+                                // source(s)
+                                try {
+                                    SourcesForkerUtil.forkExchangeSources(exchangeDecorator);
+                                } catch (final MessagingException e) {
+                                    throw new RoutingException(e);
+                                }
+                            }
+
+                            if (sync) {
+                                if (timeout > 0) {
+                                    final long elapseTime = System.currentTimeMillis() - startTime;
+                                    if (elapseTime > timeout) {
+                                        this.log.debug("Timeout reached!");
+                                        exchangeDecorator.setTimeout(true);
+                                        // The timeout is reached
+                                        retry = false;
+                                        break;
+                                    }
+                                    transportSendContext.timeout = timeout - elapseTime;
+                                }
+                                ((Transporter) this.transporters.get(TRANSPORTER_FRACTAL_PREFIX
+                                        + "-" + transportSendContext.transport)).sendSync(
+                                        exchangeDecorator, transportSendContext);
+                            } else {
+                                ((Transporter) this.transporters.get(TRANSPORTER_FRACTAL_PREFIX
+                                        + "-" + transportSendContext.transport)).send(
+                                        exchangeDecorator, transportSendContext);
+                                if (Transporter.LOCAL_FRACTAL_TRANSPORTER
+                                        .equals(transportSendContext.transport)) {
+                                    result = true;
+                                }
+                            }
+                            retry = false;
+                            break;
+                        } catch (final TransportException e) {
+                            transportSendContext.attempt -= 1;
+                            if (transportSendContext.attempt > 0) {
+                                retry = true;
+                                // get the max delay
+                                if (transportSendContext.delay > attemptDelay) {
+                                    attemptDelay = transportSendContext.delay;
+                                }
+                            }
+
+                            if (iterator.hasNext() || retry) {
+                                this.log.warning("The send attempt to the endpoint '"
+                                        + electedEndpoint.getEndpointName() + "' with destination "
+                                        + transportSendContext.destination + " failed", e);
+                            } else {
                                 throw new RoutingException(e);
                             }
                         }
-
-                        if (sync) {
-                            if (timeout > 0) {
-                                final long elapseTime = System.currentTimeMillis() - startTime;
-                                if (elapseTime > timeout) {
-                                    this.log.debug("Timeout reached!");
-                                    // The timeout is reached
-                                    exchange.setRole(MessageExchange.Role.CONSUMER);
-                                    retry = false;
-                                    break;
-                                }
-                                transportSendContext.timeout = timeout - elapseTime;
-                            }
-                            responseExchange = ((Transporter) this.transporters
-                                    .get(TRANSPORTER_FRACTAL_PREFIX + "-"
-                                            + transportSendContext.transport)).sendSync(exchange,
-                                    transportSendContext);
-                            if (responseExchange == null) {
-                                // The timeout is reached
-                                exchange.setRole(MessageExchange.Role.CONSUMER);
-                            }
-                        } else {
-                            ((Transporter) this.transporters.get(TRANSPORTER_FRACTAL_PREFIX + "-"
-                                    + transportSendContext.transport)).send(exchange,
-                                    transportSendContext);
-                        }
-                        retry = false;
-                        break;
-                    } catch (final TransportException e) {
-                        transportSendContext.attempt -= 1;
-                        if (transportSendContext.attempt > 0) {
-                            retry = true;
-                            // get the max delay
-                            if (transportSendContext.delay > attemptDelay) {
-                                attemptDelay = transportSendContext.delay;
-                            }
-                        }
-
-                        if (iterator.hasNext() || retry) {
-                            this.log.warning(
-                                    "The send attempt to the endpoint '"
-                                            + electedEndpoint.getEndpointName()
-                                            + "' with destination "
-                                            + transportSendContext.destination + " failed", e);
-                        } else {
-                            // restore the Role if the message has not been sent
-                            exchange.setRole(MessageExchange.Role.CONSUMER);
-                            throw new RoutingException(e);
-                        }
                     }
+                }
+            } finally {
+                try {
+                    SourcesForkerUtil.cleanExchangeSources(exchangeDecorator);
+                } catch (IOException e) {
+                    // do nothing
                 }
             }
         }
 
-        this.cleanExchangeSources(exchange);
-
         this.log.end();
-        return responseExchange;
+        return result;
     }
-
-    /**
-     * Check if the message exchange to send is marked to be bypassed.
-     * 
-     * @param exchange
-     *            The exchange to check
-     */
-    private static final boolean checkBypassMessageExchange(
-            final org.ow2.petals.jbi.messaging.exchange.MessageExchange exchange) {
-
-        boolean bypass = false;
-        Object noAck = null;
-
-        if (exchange.isTerminated()) {
-            if (MessageExchange.Role.CONSUMER.equals(exchange.getRole())) {
-                noAck = exchange.getProperty(RouterService.PROPERTY_ROUTER_PROVIDER_NOACK);
-            } else {
-                noAck = exchange.getProperty(RouterService.PROPERTY_ROUTER_CONSUMER_NOACK);
-            }
-            bypass = noAck != null && noAck.toString().toLowerCase().equals("true");
-        }
-
-        return bypass;
-    }
-
+    
+    // CHA 2012
     // Router Module ACK
     /**
      * Load the modules into the manager
@@ -913,7 +913,7 @@ public class RouterServiceImpl implements RouterService, TransportListener, Rout
         this.routerModuleManager.add(new org.petalslink.dsb.kernel.messaging.router.SenderModule() {
             public void electEndpoints(Map<ServiceEndpoint, TransportSendContext> electedEndpoints,
                     ComponentContext sourceComponentContext,
-                    org.ow2.petals.jbi.messaging.exchange.MessageExchange exchange)
+                    org.ow2.petals.jbi.messaging.exchange.MessageExchangeWrapper exchange)
                     throws RoutingException {
                 sender.electEndpoints(electedEndpoints, sourceComponentContext, exchange);
             }
@@ -940,7 +940,7 @@ public class RouterServiceImpl implements RouterService, TransportListener, Rout
                 .add(new org.petalslink.dsb.kernel.messaging.router.ReceiverModule() {
 
                     public boolean receiveExchange(
-                            org.ow2.petals.jbi.messaging.exchange.MessageExchange exchange,
+                            org.ow2.petals.jbi.messaging.exchange.MessageExchangeWrapper exchange,
                             ComponentContext sourceComponentContext) throws RoutingException {
                         return receiver.receiveExchange(exchange, sourceComponentContext);
                     }

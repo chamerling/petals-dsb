@@ -179,4 +179,9 @@ public class StrandardOutputLogger implements Logger {
         return "foo";
     }
 
+    public java.util.logging.Logger getLogger() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

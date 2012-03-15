@@ -17,6 +17,14 @@
 	<description>The Service poller integration into the DSB kernel to provide a management service for polling services</description>
 
 	<dependencies>
+			<!--  CHA2012 : Fix API changes -->
+		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>dsb-removed</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<!--  END API CHANGES -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
