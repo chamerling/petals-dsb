@@ -1,0 +1,20 @@
+<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope">
+    <soap:Header>
+        <wsa:To xmlns:wsa="http://www.w3.org/2005/08/addressing">http://localhost:9090/wsn-consumer/services/WsResource</wsa:To>
+        <wsa:Action xmlns:wsa="http://www.w3.org/2005/08/addressing">http://docs.oasis-open.org/wsn/bw-2/NotificationProducer/SubscribeRequest</wsa:Action>
+        <wsa:MessageID xmlns:wsa="http://www.w3.org/2005/08/addressing">uuid:9888fa43-281f-ea0f-ec21-09e9119366c6</wsa:MessageID>
+        <wsa:From xmlns:wsa="http://www.w3.org/2005/08/addressing">
+            <wsa:Address>http://www.w3.org/2005/08/addressing/role/anonymous</wsa:Address>
+        </wsa:From>
+    </soap:Header>
+    <soap:Body>
+        <wsnt:Subscribe xmlns:wsnt="http://docs.oasis-open.org/wsn/b-2">
+            <wsnt:ConsumerReference>
+                <wsa:Address xmlns:wsa="http://www.w3.org/2005/08/addressing">http://127.0.1.1:9090/wsn-consumer/services/consumer</wsa:Address>
+            </wsnt:ConsumerReference>
+            <wsnt:Filter>
+                  <wsnt:TopicExpression Dialect="xsd:anyURI">TestTopic</wsnt:TopicExpression>
+            </wsnt:Filter>
+        </wsnt:Subscribe>
+    </soap:Body>
+</soap:Envelope>

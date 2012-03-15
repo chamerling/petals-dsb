@@ -1,0 +1,3 @@
+<handler name="RequestURIBasedDispatcher"
+	class="org.apache.axis2.dispatchers.RequestURIBasedDispatcher">
+</handler>

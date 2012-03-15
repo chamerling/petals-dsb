@@ -18,26 +18,31 @@
  * $Id$
  * -------------------------------------------------------------------------
  */
+
 package org.ow2.petals.binding.soap.listener.outgoing;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * @author Christophe HAMERLING - eBM WebSourcing
  * 
  */
-public class SOAPCallerTest extends TestCase {
+public class SOAPCallerTest {
 
     /**
      * Creates a new instance of SOAPCallerTest
      * 
      * @param name
      */
-    public SOAPCallerTest(String name) {
-        super(name);
+    public SOAPCallerTest() {
     }
 
     /*
@@ -45,8 +50,8 @@ public class SOAPCallerTest extends TestCase {
      * 
      * @see junit.framework.TestCase#setUp()
      */
-    protected void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public void setUp() throws Exception {
     }
 
     /*
@@ -54,16 +59,17 @@ public class SOAPCallerTest extends TestCase {
      * 
      * @see junit.framework.TestCase#tearDown()
      */
-    protected void tearDown() throws Exception {
-        super.tearDown();
+    @After
+    public void tearDown() throws Exception {
     }
 
+    @Test
     public void testFilter() throws Exception {
         SOAPCaller caller = new SOAPCaller(null, null);
         List<String> filters = new ArrayList<String>();
         filters.add("org.ow2.petals.test");
         filters.add("org.ow2.petals.junit");
-        
+
         assertTrue(caller.isFilteredValue("org.ow2.petals.test", filters));
         assertTrue(caller.isFilteredValue("org.ow2.petals.junit", filters));
         assertFalse(caller.isFilteredValue("org.ow2.petals.ch.ham", filters));

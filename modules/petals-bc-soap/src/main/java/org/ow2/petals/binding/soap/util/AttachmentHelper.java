@@ -20,9 +20,9 @@
  */
 package org.ow2.petals.binding.soap.util;
 
-import java.util.ArrayList;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Iterator;
-import java.util.List;
 
 import javax.activation.DataHandler;
 import javax.xml.namespace.QName;
@@ -30,95 +30,97 @@ import javax.xml.namespace.QName;
 import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMNode;
-import org.apache.axiom.om.OMText;
 
 /**
  * Helper class for SOAP attachment handling
  * 
  * @author chamerling - eBMWebSourcing
- * 
  */
 public final class AttachmentHelper {
-    
-    /**
-     * No constructor because it's a class conytaining only static methods.
-     */
-    private AttachmentHelper() {
-        // NOP
-    }
 
-    /**
-     * Get all the direct attachments from an {@link OMElement}
-     * 
-     * @param omElement
-     * @return
-     */
-    public static List<DataHandler> getAttachments(final OMElement omElement) {
-        final List<DataHandler> result = new ArrayList<DataHandler>();
-        final Iterator<?> iter = omElement.getChildren();
-        while (iter.hasNext()) {
-            final OMNode node = (OMNode) iter.next();
-            if (node instanceof OMElement) {
-                final OMElement element = (OMElement) node;
-                // all the nodes that have an href attributes are attachments
-                final OMAttribute attr = element.getAttribute(new QName("href"));
-                if ((attr != null) && (node instanceof OMText)) {
-                    final OMText binaryNode = (OMText) node;
-                    final DataHandler dh = (DataHandler) binaryNode.getDataHandler();
-                    result.add(dh);
-                }
-            }
-        }
-        return result;
-    }
+	/**
+	 * No constructor because it's a class conytaining only static methods.
+	 */
+	private AttachmentHelper() {
+		// NOP
+	}
 
-    /**
-     * Test if the given {@link OMElement} has an attachment corresponding to
-     * the provided CID. If it exists, it this replace by itself using AXIOM
-     * API. This replacement is needed by Axis2
-     * 
-     * @param omElement
-     * @param dh
-     * @param cid
-     *            the attachment content id
-     * @return The OMElement containing the attachement link (ie. containing:
-     *         &lt;xop:Include href="..."/&gt; in case of a XOP attachement, the
-     *         element containing the attribut "href" in case of Swa)
-     */
-    public static OMElement hasAttachmentElement(final OMElement omElement, final DataHandler dh,
-            final String cid) {
-        OMElement result = null;
-        // get attachments
-        final Iterator<?> iter = omElement.getChildren();
-        while (iter.hasNext() && (result == null)) {
-            final OMNode node = (OMNode) iter.next();
-            if (node instanceof OMElement) {
-                final OMElement element = (OMElement) node;
-                // all the nodes that are attachments have an href attribute
-                final OMAttribute attr = element.getAttribute(new QName("href"));
-                if (attr != null) {
-                    if ("Include".equalsIgnoreCase(element.getLocalName())
-                            && "http://www.w3.org/2004/08/xop/include".equalsIgnoreCase(element
-                                    .getNamespace().getNamespaceURI())) {
-                        // MTOM/XOP
-                        if ( attr.getAttributeValue().substring(0, 3).equalsIgnoreCase("cid")
-                                && attr.getAttributeValue().substring(4).equals(cid) ) {
 
-                            result = omElement;
-                        } 
-                    } else {
-                        // SwA : SOAP with attachment
-                        if ( attr.getAttributeValue().equals(cid) ) {
+	/**
+	 * Test if the given {@link OMElement} has an attachment corresponding to
+	 * the provided CID. If it exists, it this replace by itself using AXIOM
+	 * API. This replacement is needed by Axis2
+	 * 
+	 * @param omElement
+	 * @param dh
+	 * @param cid
+	 *            the attachment content id
+	 * @return The OMElement containing the attachement link (ie. containing:
+	 *         &lt;xop:Include href="..."/&gt; in case of a XOP attachement, the
+	 *         element containing the attribut "href" in case of Swa)
+	 * @throws UnsupportedEncodingException
+	 */
+	public static OMElement hasAttachmentElement(final OMElement omElement, final DataHandler dh,
+			final String cid) throws UnsupportedEncodingException {
+		OMElement result = null;
+		// get attachments
+		final Iterator<?> iter = omElement.getChildren();
+		while (iter.hasNext() && (result == null)) {
+			final OMNode node = (OMNode) iter.next();
+			if (node instanceof OMElement) {
+				final OMElement element = (OMElement) node;
+				// all the nodes that are attachments have an href attribute
+				final OMAttribute attr = element.getAttribute(new QName("href"));
+				if (attr != null) {
+					if ("Include".equalsIgnoreCase(element.getLocalName())
+							&& "http://www.w3.org/2004/08/xop/include".equalsIgnoreCase(element
+									.getNamespace().getNamespaceURI())) {
 
-                            result = element;
-                        }
-                    }
-                } else {
-                    // try to go down in children
-                    result = AttachmentHelper.hasAttachmentElement(element, dh, cid);
-                }
-            }
-        }
-        return result;
-    }
+
+						// MTOM/XOP
+						if ( attr.getAttributeValue().substring(0, 3).equalsIgnoreCase("cid")
+								&& (compare(attr.getAttributeValue().substring(4),cid))) {
+
+							result = (OMElement) element.getParent();
+						}
+					} else {
+						// SwA : SOAP with attachment
+						if ( attr.getAttributeValue().equals(cid) ) {
+
+							result = element;
+						}
+					}
+				} else {
+					// try to go down in children
+					result = AttachmentHelper.hasAttachmentElement(element, dh, cid);
+				}
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Compare two strings, the first is encoded as an URL and not the second
+	 * @param text1
+	 * @param text2
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
+	private static boolean compare(String text1, String text2) throws UnsupportedEncodingException {
+
+		if (text1.equals(text2))
+			return true;
+
+		// In some cases, the attachment ID is encoded as an URL
+		text2 = URLEncoder.encode(text2, "UTF-8");
+		if (text1.equals(text2))
+			return true;
+
+		// Last attempt
+		text1  = text1.replace("@", "%40");
+		if (text1.equals(text2))
+			return true;
+
+		return false;
+	}
 }

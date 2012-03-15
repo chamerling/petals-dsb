@@ -1,0 +1,8 @@
+<phase name="Transport">
+	<handler name="RequestURIBasedDispatcher"
+		class="org.apache.axis2.dispatchers.RequestURIBasedDispatcher">
+	</handler>
+	<handler name="SOAPActionBasedDispatcher"
+		class="org.apache.axis2.dispatchers.SOAPActionBasedDispatcher">
+	</handler>
+</phase>

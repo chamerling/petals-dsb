@@ -21,24 +21,22 @@
 
 package org.ow2.petals.binding.soap.listener.incoming;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+import java.io.File;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
+import java.util.MissingResourceException;
 import java.util.Set;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.jbi.messaging.DeliveryChannel;
+import javax.jbi.JBIException;
 
 import org.apache.axis2.AxisFault;
-import org.apache.axis2.engine.Handler;
-import org.apache.axis2.engine.Phase;
-import org.ow2.petals.binding.soap.SoapComponent;
+import org.apache.axis2.engine.AxisConfiguration;
 import org.ow2.petals.binding.soap.SoapComponentContext;
-import org.ow2.petals.binding.soap.listener.incoming.jetty.SoapServer;
+import org.ow2.petals.binding.soap.listener.incoming.jetty.AxisServletServer;
 import org.ow2.petals.binding.soap.util.ComponentPropertiesHelper;
-import org.ow2.petals.binding.soap.util.NetworkUtil;
+import org.ow2.petals.component.framework.AbstractComponent;
+import org.ow2.petals.component.framework.PetalsBindingComponent;
 import org.ow2.petals.component.framework.api.configuration.ConfigurationExtensions;
 import org.ow2.petals.component.framework.su.AbstractServiceUnitManager;
 
@@ -58,13 +56,11 @@ public class SoapExternalListenerManager {
 
     protected Set<String> addresses;
 
-    protected DeliveryChannel channel;
-
-    protected SoapComponent component;
+    protected AbstractComponent component;
 
     protected AbstractServiceUnitManager bindingSUM;
 
-    protected SoapServer httpServer;
+    protected AxisServletServer httpServer;
 
     protected SoapServerConfig serverConfig;
 
@@ -76,204 +72,136 @@ public class SoapExternalListenerManager {
      * Creates a new instance of {@link SoapExternalListenerManager}
      * 
      * @param ccontext
-     * @param dchannel
      * @param bindingSUM
      * @param soapContext
      * @param propertiesManager
-     * @param log
+     * @param logger
+     * 
+     * @throws JBIException
+     *             if the specified host in the component extension is not a
+     *             valid address
      */
-    public SoapExternalListenerManager(final SoapComponent component,
-            final DeliveryChannel dchannel, final AbstractServiceUnitManager bindingSUM,
+    public SoapExternalListenerManager(final AbstractComponent component,
+            final AbstractServiceUnitManager bindingSUM,
             final SoapComponentContext soapContext, final PetalsReceiver petalsReceiver,
-            final Logger log) {
-        super();
-        this.logger = log;
+            final Logger logger) throws JBIException {
+        this.logger = logger;
         this.addresses = new HashSet<String>();
         this.bindingSUM = bindingSUM;
-        this.channel = dchannel;
         this.component = component;
         this.soapContext = soapContext;
-        this.serverConfig = this.createServerConfig();
-        this.petalsReceiver = petalsReceiver;
-    }
-
-    /**
-     * Starts the listener manager : Start the embedded HTTP server and
-     * initialize the dispatcher.
-     * 
-     * @throws AxisFault
-     */
-    public void start() throws AxisFault {
-
-        // start the axis http server
-        this.startHttpServer();
-
-        /*
-         * The PetalsDispatcher object used by Axis is dynamicaly created by the
-         * Axis http server. Some attributes have to be set to this object to
-         * help it working well. The PetalsDispatcher object is retieved from
-         * the axis2 http server configuration.
-         */
-        final PetalsDispatcher petalsDispatcher = this
-                .retrievePetalsDispatcherFromAxisConfiguration();
-        petalsDispatcher.init(this.component, this.channel, this.bindingSUM, this.petalsReceiver,
-                this.logger);
-
-        this.logger.info("Component Information is available at "
-                + this.serverConfig.getBaseURL());
-    }
-
-    /**
-     * Stops the listener manager : Stop the embedded HTTP server that handles
-     * incoming requests.
-     * 
-     * @throws AxisFault
-     */
-    public void stop() throws AxisFault {
-        this.stopHttpServer();
-    }
-
-    /**
-     * Init and start the HTTP server which will handle external SOAP request.
-     * The axis2.xml defines a Petals dispatcher that will catch incoming
-     * requests.
-     * 
-     * @throws AxisFault
-     */
-    protected void startHttpServer() throws AxisFault {
-        // start the Jetty server
-        this.httpServer = new SoapServer(this.serverConfig,
-                this.soapContext, this.logger);
-        this.httpServer.start();
-    }
-
-    /**
-     * Stop the HTTP server
-     * 
-     */
-    protected void stopHttpServer() throws AxisFault {
-        this.httpServer.stop();
-    }
-
-    /**
-     * Retrieve from the AxisConfiguration the PetalsDispatcher object.
-     * (AxisConfiguration/GlobalInFlow/Dispatch/PetalsDispatcher)
-     * 
-     * @return PetalsDispatcher object
-     * @throws AxisFault
-     *             PetalsDispatcher object not found
-     * 
-     */
-    protected PetalsDispatcher retrievePetalsDispatcherFromAxisConfiguration() throws AxisFault {
-
-        PetalsDispatcher petalsDispatcher = null;
-
-        final List<?> axisPhases = this.httpServer.getConfigurationContext().getAxisConfiguration()
-                .getInFlowPhases();
-
-        for (final Iterator<?> iter = axisPhases.iterator(); iter.hasNext()
-                && (petalsDispatcher == null);) {
-
-            final Phase phase = (Phase) iter.next();
-
-            if (phase.getPhaseName().equalsIgnoreCase("Dispatch")) {
-                for (final Iterator<?> iterator = phase.getHandlers().iterator(); iterator.hasNext()
-                        && (petalsDispatcher == null);) {
-
-                    final Handler handler = (Handler) iterator.next();
-
-                    if (handler.getName().toString().equalsIgnoreCase("PetalsDispatcher")) {
-                        petalsDispatcher = (PetalsDispatcher) handler;
-                    }
-                }
-            }
-        }
-
-        if (petalsDispatcher == null) {
-            throw new AxisFault(
-                    "The PetalsDispatcher object can not be retrieved from the AxisConfiguration.");
-        }
-        return petalsDispatcher;
-    }
-
-    /**
-     * Create the SOAP server configuration
-     * 
-     * @return
-     */
-    private SoapServerConfig createServerConfig() {
-        final SoapServerConfig soapConfig = new SoapServerConfig();
-        ConfigurationExtensions extensions = this.component.getComponentExtensions();
-        // get the port from the container if any
+        this.serverConfig = createServerConfig(logger, component.getComponentExtensions());
+        
         int port = 0;
-        String containerPort = this.component.getContainerConfiguration("port");
+        String containerPort = ((PetalsBindingComponent)component).getContainerConfiguration("port");
         if (containerPort != null) {
             try {
                 port = Integer.parseInt(containerPort.trim());
             } catch (NumberFormatException e) {
             }
         }
-        if (port == 0) {
-            port = ComponentPropertiesHelper.getHttpPort(extensions);
+        if (port != 0) {
+        	this.serverConfig.setHttpPort(port);
         }
-        soapConfig.setPort(port);
+        
+        this.petalsReceiver = petalsReceiver;
+    }
+
+    /**
+     * Create the SOAP server configuration
+     * 
+     * @return the SOAP server configuration
+     * 
+     * @throws JBIException
+     *             if the specified host is not a valid address
+     */
+    private static final SoapServerConfig createServerConfig(Logger logger,
+            ConfigurationExtensions extensions) throws JBIException {
+        
+        final String host = ComponentPropertiesHelper.getHttpHostName(extensions);
+        int httpPort = ComponentPropertiesHelper.getHttpPort(logger, extensions);
+        final SoapServerConfig soapConfig = new SoapServerConfig(logger, host, httpPort);
+
         soapConfig.setProvidesList(ComponentPropertiesHelper.isProvidingServicesList(extensions));
-        soapConfig.setProtocol(ComponentPropertiesHelper.getProtocol());
-        soapConfig.setJettyThreadMaxPoolSize(ComponentPropertiesHelper.getHttpThreadMaxPoolSize(extensions));
-        soapConfig.setJettyThreadMinPoolSize(ComponentPropertiesHelper.getHttpThreadMinPoolSize(extensions));
-        soapConfig.setJettyAcceptors(ComponentPropertiesHelper.getHttpAcceptors(extensions));
         soapConfig.setServicesContext(ComponentPropertiesHelper.getServicesContext(extensions));
         soapConfig.setServicesMapping(ComponentPropertiesHelper.getServicesMapping(extensions));
 
-        String host = ComponentPropertiesHelper.getHttpHostName(extensions);
-        this.validateHost(soapConfig, host);
+        soapConfig.setJettyThreadMaxPoolSize(ComponentPropertiesHelper.getHttpThreadMaxPoolSize(
+                logger, extensions));
+        soapConfig.setJettyThreadMinPoolSize(ComponentPropertiesHelper.getHttpThreadMinPoolSize(
+                logger, extensions));
+        soapConfig
+                .setJettyAcceptors(ComponentPropertiesHelper.getHttpAcceptors(logger, extensions));
+
+        setHttpsServerConfig(logger, extensions, soapConfig);
+
         return soapConfig;
     }
-    
-    /**
-     * 
-     * @param config
-     */
-    protected void validateHost(SoapServerConfig config, String host) {
-//        InetAddress localhost = null;
-//        try {
-//            localhost = InetAddress.getLocalHost();
-//        } catch (UnknownHostException e1) {
-//            this.logger.fine("Can not get localhost InetAddress");
-//        }
-        
-        if ((host == null) || (host.length() == 0) || host.equals("null")) {
-            // no host specified, do not restrict and use all addresses
-            config.addAddresses(NetworkUtil.getAllIPv4InetAddresses());
-            config.setRestrict(false);
-        } else {
-            // host specified
-            // 1. Check if we can resolve the specified host name
-            InetAddress address = null;
-            try {
-                address = InetAddress.getByName(host);
-            } catch (UnknownHostException e) {
-                this.logger.warning("Host name '" + host
-                        + "' can not be resolved, using the wildcard address");
-                config.addAddresses(NetworkUtil.getAllIPv4InetAddresses());
-                config.setRestrict(false);
-                return;
-            }
-            
-            // address exists; check if it is a local one
-            if (NetworkUtil.isLocalAddress(address)) {
-                // yes : restrict access
-                config.addAddress(address);
-                config.setRestrict(true);
+
+    private static void setHttpsServerConfig(Logger logger, ConfigurationExtensions extensions,
+            final SoapServerConfig soapConfig) {
+        boolean isHttpsEnabled = ComponentPropertiesHelper.isHttpsEnabled(extensions);
+        if (isHttpsEnabled) {
+            soapConfig.setHttpsPort(ComponentPropertiesHelper.getHttpsPort(logger, extensions));
+
+            // a keystore is mandatory for HTTPS
+            String httpsKeystoreFile = ComponentPropertiesHelper.getHttpsKeystoreFile(extensions);
+            if (httpsKeystoreFile != null && !httpsKeystoreFile.trim().equals("")) {
+                File httpsKeystore = new File(httpsKeystoreFile);
+                
+                // check the existence of the keystore file
+                if (httpsKeystore.exists()) {
+                    soapConfig.setHttpsKeytoreFile(httpsKeystoreFile);
+                    soapConfig.setHttpsKeytoreType(ComponentPropertiesHelper
+                            .getHttpsKeystoreType(extensions));
+                    soapConfig.setHttpsKeytorePassword(ComponentPropertiesHelper
+                            .getHttpsKeystorePassword(extensions));
+                    soapConfig.setHttpsKeyPassword(ComponentPropertiesHelper
+                            .getHttpsKeyPassword(extensions));
+
+                    // check the existence of the truststore file
+                    String httpsTruststoreFile = ComponentPropertiesHelper
+                            .getHttpsTruststoreFile(extensions);
+                    if (httpsTruststoreFile != null && !httpsTruststoreFile.trim().equals("")) {
+                        File httpsTruststore = new File(httpsTruststoreFile);
+                        if (httpsTruststore.exists()) {
+                            soapConfig.setHttpsTruststoreType(ComponentPropertiesHelper
+                                    .getHttpsTruststoreType(extensions));
+                            soapConfig.setHttpsTruststoreFile(httpsTruststoreFile);
+                            soapConfig.setHttpsTruststorePassword(ComponentPropertiesHelper
+                                    .getHttpsTruststorePassword(extensions));
+                        } else {
+                            if (logger.isLoggable(Level.WARNING)) {
+                                logger
+                                        .log(
+                                                Level.WARNING,
+                                                "HTTPS Client authentication in the consumer "
+                                                        + "role is disabled because the truststore file does not exist.");
+                            }
+                        }
+                    }
+                } else {
+                    if (logger.isLoggable(Level.WARNING)) {
+                        logger.log(Level.WARNING,
+                                "HTTPS is disabled because the keystore file does not exist.");
+                    }
+                    isHttpsEnabled = false;
+                }
             } else {
-                this.logger.warning(address + " is not a valid local address, using the wildcard one");
-                // no : set to localhost  and do not restrict (FIXME : To be defined)
-                config.setRestrict(false);
-                config.addAddresses(NetworkUtil.getAllIPv4InetAddresses());
+                if (logger.isLoggable(Level.WARNING)) {
+                    logger.log(Level.WARNING,
+                            "HTTPS is disabled because the keystore file is not correctly set.");
+                }
+                isHttpsEnabled = false;
             }
         }
+        soapConfig.setHttpsEnabled(isHttpsEnabled);
     }
-    
+
+    public Set<String> getAddresses() {
+        return this.addresses;
+    }
+
     /**
      * Get the URL where services can be accessed
      * 
@@ -283,8 +211,53 @@ public class SoapExternalListenerManager {
         return this.serverConfig;
     }
 
-    public Set<String> getAddresses() {
-        return this.addresses;
+    /**
+     * Starts the listener manager : Start the embedded HTTP server and
+     * initialize the dispatcher.
+     * 
+     * @param axisConfiguration
+     * 
+     * @throws AxisFault
+     * @throws JBIException
+     * @throws MissingResourceException
+     */
+    public void start(AxisConfiguration axisConfiguration) throws AxisFault,
+            MissingResourceException, JBIException {
+
+        // Get a specific logger for the HTTP server
+        Logger jettyLogger = this.component.getContext().getLogger("jetty", null);
+
+        /*
+         * Init and start the HTTP server which will handle external SOAP
+         * request (only if the specified host is valid). The axis2.xml defines
+         * a Petals dispatcher that will catch incoming requests.
+         */
+        this.httpServer = new AxisServletServer(jettyLogger, this.serverConfig, this.soapContext.getAxis2ConfigurationContext());
+        if (this.serverConfig.isValidHostName()) {
+            this.httpServer.start();
+        } else if (this.logger.isLoggable(Level.WARNING)) {
+            this.logger.log(Level.WARNING,
+                    "Specified host name in component isn't valid, consequently "
+                            + "the HTTP server is not started");
+        }
+
+        if (this.serverConfig.isValidHostName() && this.logger.isLoggable(Level.INFO)) {
+            this.logger.log(Level.INFO, "Component Information is available at "
+                    + this.serverConfig.getBaseURL());
+        }
     }
 
+    /**
+     * Stops the listener manager : Stop the embedded HTTP server that handles
+     * incoming requests.
+     * 
+     * @throws AxisFault
+     */
+    public void stop() throws AxisFault {
+        this.httpServer.stop();
+    }
+
+    public AxisServletServer getHttpServer() {
+        return this.httpServer;
+    }
 }

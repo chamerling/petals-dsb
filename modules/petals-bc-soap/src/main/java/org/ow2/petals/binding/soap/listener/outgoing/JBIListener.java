@@ -21,20 +21,15 @@
 
 package org.ow2.petals.binding.soap.listener.outgoing;
 
-import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.jbi.messaging.MessagingException;
 
 import org.ow2.petals.binding.soap.SoapComponent;
 import org.ow2.petals.binding.soap.SoapComponentContext;
-import org.ow2.petals.binding.soap.util.SUPropertiesHelper;
 import org.ow2.petals.component.framework.api.configuration.ConfigurationExtensions;
 import org.ow2.petals.component.framework.api.message.Exchange;
 import org.ow2.petals.component.framework.listener.AbstractJBIListener;
+
+import com.ebmwebsourcing.easycommons.logger.Level;
 
 /**
  * Listener for incoming JBI messages. A SOAP message is created from the JBI
@@ -52,110 +47,40 @@ public class JBIListener extends AbstractJBIListener {
     protected Logger logger;
 
     /**
-     * The SOAP Component Context
+     * The SOAP caller
      */
-    protected SoapComponentContext soapContext;
+    private SOAPCaller soapCaller;
 
-    /**
-     * Map of service callers. One instance of each caller is available on each
-     * worker.
-     */
-    protected Map<String, AbstractExternalServiceCaller> callers;
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.ow2.petals.component.framework.listener.AbstractListener#init()
-     */
     @Override
     public void init() {
-        this.soapContext = ((SoapComponent) this.getComponent()).getSoapContext();
-        this.logger = this.getLogger();
-        this.callers = new HashMap<String, AbstractExternalServiceCaller>(3);
-        this.initCallers();
+        SoapComponentContext soapContext = ((SoapComponent) getComponent()).getSoapContext();
+        logger = getLogger();
+        soapCaller = new SOAPCaller(soapContext, logger);
     }
 
     /**
-     * Instantiate and initialize the service callers.
-     * 
-     */
-    protected void initCallers() {
-        this.addCaller(new SOAPCaller(this.soapContext, this.logger));
-        this.addCaller(new WSNotifier(this.soapContext, this.logger));
-        this.addCaller(new RESTCaller(this.soapContext, this.logger));
-        // TODO : Need to be tested
-        this.addCaller(new JSONCaller(this.soapContext, this.logger));
-    }
-
-    /**
-     * 
-     * @param dispatcher
-     */
-    protected void addCaller(final AbstractExternalServiceCaller caller) {
-        this.callers.put(caller.getCallerType().toLowerCase(), caller);
-    }
-
-    /**
-     * Called by the JBI channel listener when a jbi message is accepted. The
-     * call is dispatched like this :
-     * <ul>
-     * <li>If the extensions contains a topic-name property, the message will be
-     * published in the topic</li>
-     * <li>If there is no topic-name extension property, the JBI message is sent
-     * to an external web service. The external web service address is the one
-     * defined in the adress extension</li>
-     * </ul>
+     * Called by the JBI channel listener when a jbi message is accepted.
      * 
      * @param exchange
      * @param extensions
      */
     @Override
     public boolean onJBIMessage(final Exchange exchange) {
-        if (exchange.isProviderRole()) {
-            if (this.logger.isLoggable(Level.FINE)) {
-                this.logger.fine("JBI message received on SOAP JBI listener");
-            }
-            this.invokeCaller(exchange);
-        } else {
-            this.logger.info("Role not supported in SOAP JBIListener : " + exchange.getRole());
-        }
+        if (exchange.isActiveStatus()) {
+            if (exchange.isProviderRole()) {
+                if (logger.isLoggable(Level.FINE)) {
+                    logger.log(Level.FINE, "JBI message received on SOAP JBI listener");
+                }
 
-        // FIXME : What is the return value for?
+                ConfigurationExtensions extensions = getExtensions();
+                soapCaller.call(exchange, extensions, getProvides());
+            } else {
+                if (logger.isLoggable(Level.FINE)) {
+                    logger.log(Level.INFO,
+                            "Role not supported in SOAP JBIListener : " + exchange.getRole());
+                }
+            }
+        }
         return true;
-    }
-
-    /**
-     * Dispatch the outgoing WS call. The good dispatcher is retrieved from the
-     * MODE parameter if it exists. If no valid dispatcher has been found for
-     * the specified MODE, the SOAP one is used.
-     * 
-     * @param exchange
-     * @param extensions
-     * @param address
-     */
-    protected void invokeCaller(final Exchange exchange) {
-        final ConfigurationExtensions extensions = this.getExtensions();
-        final String mode = SUPropertiesHelper.getMode(extensions);
-
-        // Possible feature : Create a caller from a user class... The caller
-        // will be
-        // loaded here and added to the callers list.
-        final ExternalServiceCaller caller = this.callers.get(mode.toLowerCase());
-
-        if (caller == null) {
-            // should never happen...
-
-            try {
-                exchange.setFault(new SOAP11FaultServerException("No outgoing dispatcher found"));
-            } catch (final URISyntaxException e) {
-                this.logger.log(Level.SEVERE, "Can't create SOAP11FaultServerException", e);
-            } catch (final MessagingException e) {
-                this.logger.log(Level.SEVERE, "Can't return fault to consumer", e);
-            }
-        }
-
-        if (caller != null) {
-            caller.call(exchange, extensions, this.getProvides());
-        }
     }
 }

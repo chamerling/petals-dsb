@@ -1,0 +1,13 @@
+<service name='MyService'>
+
+	<transports>
+		<transport>http</transport>
+	</transports>
+
+	<operation name='myOperation1'>
+		<actionMapping>canBeASoapAction</actionMapping>
+		<actionMapping>canBeAWsaAction</actionMapping>
+	</operation>
+	<operation name='myOperation2' />
+
+</service>

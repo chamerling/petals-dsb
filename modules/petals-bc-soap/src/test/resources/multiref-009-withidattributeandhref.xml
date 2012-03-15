@@ -1,0 +1,12 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<soapenv:Body>
+		<createEventsResponse soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+			<createEventsReturn id="0"><foo>bar</foo></createEventsReturn>
+			<myelement href="#id0" />
+		</createEventsResponse>
+		<multiRef id="id0" soapenc:root="0" soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xsi:type="ns2:BusinessEventsCreationResult" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+			xmlns:ns2="http://ws.foobar.com/2008_07_01/businessEvent">
+			<message xsi:type="xsd:string">BusinessEventManager.createEvents : An internal error occured. Events not created.</message>
+		</multiRef>
+	</soapenv:Body>
+</soapenv:Envelope>

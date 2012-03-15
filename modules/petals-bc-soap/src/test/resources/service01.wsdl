@@ -51,7 +51,7 @@
 
 <wsdl:service name="EchoService"> 
   <wsdl:port name="Echo" binding="tns:EchoSOAPBinding">
-    <wsdlsoap:address location="http://localhost:8080/ACTSoap/Echo"/> </wsdl:port> 
+    <wsdlsoap:address location="http://localhost:7899/ACTSoap/Echo"/> </wsdl:port> 
 </wsdl:service>
  
 </wsdl:definitions>

@@ -1,0 +1,2 @@
+<messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-only"
+	class="org.apache.axis2.receivers.RawXMLINOnlyMessageReceiver" />

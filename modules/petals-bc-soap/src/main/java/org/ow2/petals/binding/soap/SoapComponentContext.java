@@ -22,34 +22,42 @@
 package org.ow2.petals.binding.soap;
 
 import java.io.File;
+import java.io.StringReader;
 import java.net.URI;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.jbi.component.ComponentContext;
 import javax.jbi.messaging.MessagingException;
 import javax.xml.namespace.QName;
+import javax.xml.stream.XMLStreamException;
 
+import org.apache.axiom.om.OMAttribute;
+import org.apache.axiom.om.OMElement;
+import org.apache.axis2.AxisFault;
 import org.apache.axis2.context.ConfigurationContext;
+import org.apache.axis2.deployment.DeploymentConstants;
+import org.apache.axis2.deployment.DeploymentErrorMsgs;
+import org.apache.axis2.deployment.DeploymentException;
+import org.apache.axis2.description.AxisService;
+import org.apache.axis2.description.Parameter;
+import org.apache.axis2.i18n.Messages;
+import org.apache.axis2.util.XMLUtils;
 import org.apache.commons.pool.ObjectPool;
 import org.apache.commons.pool.impl.GenericObjectPool;
-import org.ow2.petals.binding.soap.listener.outgoing.ServiceClient;
+import org.ow2.petals.binding.soap.listener.outgoing.PetalsServiceClient;
 import org.ow2.petals.binding.soap.listener.outgoing.ServiceClientPoolObjectFactory;
-import org.ow2.petals.binding.soap.util.SUPropertiesHelper;
 import org.ow2.petals.component.framework.api.Message.MEPConstants;
 import org.ow2.petals.component.framework.api.configuration.ConfigurationExtensions;
 import org.ow2.petals.component.framework.jbidescriptor.generated.Component;
 import org.ow2.petals.component.framework.jbidescriptor.generated.Consumes;
 import org.ow2.petals.component.framework.jbidescriptor.generated.Jbi;
 import org.ow2.petals.component.framework.jbidescriptor.generated.Provides;
-import org.ow2.petals.ws.notification.WsnManager;
-import org.ow2.petals.ws.notification.WsnPersistance;
-import org.ow2.petals.ws.notification.handlers.request.GetCurrentMessageHandler;
-import org.ow2.petals.ws.notification.handlers.request.SubscribeHandler;
-import org.ow2.petals.ws.notification.handlers.request.UnsubscribeHandler;
 
 /**
  * The SOAP component context. The context is filled by the SU listener (adding
@@ -60,7 +68,7 @@ import org.ow2.petals.ws.notification.handlers.request.UnsubscribeHandler;
  */
 public class SoapComponentContext {
 
-    private class ServiceClientKey {
+    private static class ServiceClientKey {
         protected final String address;
 
         protected final String operation;
@@ -90,9 +98,9 @@ public class SoapComponentContext {
             final boolean bRes;
 
             if (obj instanceof ServiceClientKey) {
-                bRes = this.address.equals(((ServiceClientKey) obj).address)
-                        && this.operation.equals(((ServiceClientKey) obj).operation)
-                        && this.mep.equals(((ServiceClientKey) obj).mep);
+                bRes = address.equals(((ServiceClientKey) obj).address)
+                        && operation.equals(((ServiceClientKey) obj).operation)
+                        && mep.equals(((ServiceClientKey) obj).mep);
             } else {
                 bRes = false;
             }
@@ -107,35 +115,15 @@ public class SoapComponentContext {
          */
         @Override
         public int hashCode() {
-            return this.address.hashCode() + this.operation.hashCode() + this.mep.hashCode();
+            return address.hashCode() + operation.hashCode() + mep.hashCode();
         }
     }
 
-    public class ServiceManager<E> {
+    public static class ServiceManager<E> {
         private final Map<E, ServiceContext<E>> contexts;
 
         public ServiceManager() {
             this.contexts = new HashMap<E, ServiceContext<E>>();
-        }
-
-        /**
-         * 
-         * @param consumes
-         * @return
-         */
-        public ServiceContext<E> createServiceContext(final E e) {
-            ServiceContext<E> context = new ServiceContext<E>(e);
-            this.contexts.put(e, context);
-            return context;
-        }
-
-        /**
-         * Delete the service context
-         * 
-         * @param consumes
-         */
-        public ServiceContext<E> deleteServiceContext(final E e) {
-            return this.contexts.remove(e);
         }
 
         /**
@@ -155,11 +143,23 @@ public class SoapComponentContext {
         }
 
         /**
-         * @param
+         * 
+         * @param consumes
          * @return
          */
-        public ServiceContext<E> getServiceContext(final E e) {
-            return this.contexts.get(e);
+        public ServiceContext<E> createServiceContext(final E e) {
+            final ServiceContext<E> context = new ServiceContext<E>(e);
+            this.contexts.put(e, context);
+            return context;
+        }
+
+        /**
+         * Delete the service context
+         * 
+         * @param consumes
+         */
+        public ServiceContext<E> deleteServiceContext(final E e) {
+            return this.contexts.remove(e);
         }
 
         /**
@@ -170,7 +170,7 @@ public class SoapComponentContext {
          *         contains the addressing module
          */
         public List<String> getModules(final E e) {
-            ServiceContext<E> ctx = getServiceContext(e);
+            final ServiceContext<E> ctx = getServiceContext(e);
             if (ctx != null) {
                 return ctx.getModules();
             }
@@ -178,66 +178,11 @@ public class SoapComponentContext {
         }
 
         /**
-         * Set parameters to a serviceAddress
-         * 
-         * @param serviceAddress
-         *            the service address
-         * @param parameters
-         *            the parameters to set
-         */
-        public void setServicePamameters(final E e, final String parameters) {
-            if (e == null) {
-                throw new IllegalArgumentException("Element could not be null");
-            }
-            ServiceContext<E> ctx = this.getServiceContext(e);
-            if (ctx == null) {
-                ctx = createServiceContext(e);
-            }
-            ctx.setServiceParams(parameters);
-        }
-
-        /**
-         * Get the policy path
-         * 
-         * @param serviceAddress
+         * @param
          * @return
          */
-        public File getPolicyPath(final E e) {
-            ServiceContext<E> serviceContext = this.getServiceContext(e);
-            if (serviceContext != null) {
-                return serviceContext.getPolicyPath();
-            }
-            return null;
-        }
-
-        /**
-         * Set the policy path
-         * 
-         * @param serviceAddress
-         * @param absolutePath
-         */
-        public void setPolicyPath(final E e, final File absolutePath) {
-            ServiceContext<E> ctx = this.getServiceContext(e);
-            if (ctx == null) {
-                ctx = createServiceContext(e);
-            }
-            ctx.setPolicyPath(absolutePath);
-        }
-
-        /**
-         * Get the parameters for the given serviceAddress.
-         * 
-         * @param serviceAddress
-         *            the service address
-         * @return a string containing the parameters of the given
-         *         serviceAddress.
-         */
-        public String getServiceParameters(final E e) {
-            ServiceContext<E> ctx = this.getServiceContext(e);
-            if (ctx != null) {
-                return ctx.getServiceParams();
-            }
-            return null;
+        public ServiceContext<E> getServiceContext(final E e) {
+            return this.contexts.get(e);
         }
 
         /**
@@ -252,6 +197,129 @@ public class SoapComponentContext {
                 ctx = createServiceContext(e);
             }
             ctx.setClassloader(classLoader);
+        }
+
+        /**
+         * Add the service parameters to the specified Axis 2 service
+         * 
+         * @param e
+         *            consume or provide
+         * @param axisService
+         *            the Axis 2 service
+         * @throws XMLStreamException
+         * @throws DeploymentException
+         * @throws AxisFault
+         */
+        public void addServiceParameters(E e, AxisService axisService) throws XMLStreamException,
+                DeploymentException, AxisFault {
+
+            final OMElement parametersElements = getServiceParameters(e);
+
+            if (parametersElements != null) {
+                // get an iterator on all <parameter> children
+                @SuppressWarnings("unchecked")
+				final Iterator<OMElement> itr = parametersElements.getChildrenWithName(new QName(
+                        DeploymentConstants.TAG_PARAMETER));
+
+                // iterate on parameters and set them to the associated
+                // axisService
+                while (itr.hasNext()) {
+                    final OMElement parameterElement = itr.next();
+
+                    if (DeploymentConstants.TAG_PARAMETER.equalsIgnoreCase(parameterElement
+                            .getLocalName())) {
+                        axisService.addParameter(getParameter(parameterElement));
+                    }
+                }
+            }
+        }
+
+        /**
+         * Get the parameters for the given serviceAddress.
+         * 
+         * @param serviceAddress
+         *            the service address
+         * @return a string containing the parameters of the given
+         *         serviceAddress.
+         * @throws XMLStreamException
+         */
+        private OMElement getServiceParameters(final E e) throws XMLStreamException {
+            OMElement serviceParameters = null;
+
+            final ServiceContext<E> ctx = this.getServiceContext(e);
+
+            if (ctx != null) {
+                String serviceParams = ctx.getServiceParams();
+
+                if (serviceParams != null) {
+                    serviceParameters = buildParametersOM(serviceParams);
+                }
+            }
+
+            return serviceParameters;
+        }
+
+        /**
+         * Creates the OMElement corresponding to the parameters String,
+         * included in parameters tags.
+         * 
+         * @param parameters
+         *            the parameters
+         * @return Returns the service parameters node
+         * @throws XMLStreamException
+         */
+        private static final OMElement buildParametersOM(String parameters)
+                throws XMLStreamException {
+            OMElement element = null;
+            if (parameters != null) {
+                parameters = "<parameters>" + parameters + "</parameters>";
+                element = (OMElement) XMLUtils.toOM(new StringReader(parameters));
+                if (element != null) {
+                    element.build();
+                }
+            }
+            return element;
+        }
+
+        /**
+         * Process the parameterElement object from the OM, and returns the
+         * corresponding Parameter.
+         * 
+         * @param parameterElement
+         *            <code>OMElement</code>
+         * @return the Parameter parsed
+         * @throws DeploymentException
+         *             if bad paramName
+         */
+        private static Parameter getParameter(final OMElement parameterElement)
+                throws DeploymentException {
+            final Parameter parameter = new Parameter();
+
+            // setting parameterElement
+            parameter.setParameterElement(parameterElement);
+
+            // setting parameter Name
+            final OMAttribute paramName = parameterElement.getAttribute(new QName(
+                    DeploymentConstants.ATTRIBUTE_NAME));
+
+            if (paramName == null) {
+                throw new DeploymentException(Messages.getMessage(
+                        DeploymentErrorMsgs.BAD_PARAMETER_ARGUMENT, parameterElement.toString()));
+            }
+            parameter.setName(paramName.getAttributeValue());
+
+            // setting parameter Value (the child element of the parameter)
+            final OMElement paramValue = parameterElement.getFirstElement();
+            if (paramValue != null) {
+                parameter.setValue(paramValue);
+                parameter.setParameterType(Parameter.OM_PARAMETER);
+            } else {
+                final String paratextValue = parameterElement.getText();
+                parameter.setValue(paratextValue);
+                parameter.setParameterType(Parameter.TEXT_PARAMETER);
+            }
+
+            return parameter;
         }
     }
 
@@ -279,9 +347,9 @@ public class SoapComponentContext {
     private final Map<ServiceClientKey, ObjectPool> serviceClientPools;
 
     /**
-     * The web service notification manager
+     * A map used to link the provides instance to the pools which use it
      */
-    protected WsnManager wsnManager;
+    private final Map<Provides, Set<ServiceClientKey>> providesServiceClientPools;
 
     /**
      * The component configuration information
@@ -317,29 +385,22 @@ public class SoapComponentContext {
      */
     public SoapComponentContext(final ComponentContext context,
             final Component componentConfiguration, final Logger logger) {
+    	assert componentConfiguration != null;
+    	assert componentConfiguration.getProcessorPoolSize() != null;
+    	assert componentConfiguration.getAcceptorPoolSize() != null;
+    	
         this.logger = logger;
         this.componentConfiguration = componentConfiguration;
-        this.jbiDescriptors = new HashMap<String, Jbi>();
-        this.servicesDescriptors = new HashMap<String, File>();
+        jbiDescriptors = new HashMap<String, Jbi>();
+        servicesDescriptors = new HashMap<String, File>();
 
         // managers
-        this.consumersManager = new ServiceManager<Consumes>();
-        this.providersManager = new ServiceManager<Provides>();
+        consumersManager = new ServiceManager<Consumes>();
+        providersManager = new ServiceManager<Provides>();
 
         // Service client pools creation
-        this.serviceClientPools = new ConcurrentHashMap<ServiceClientKey, ObjectPool>();
-
-        this.wsnManager = new WsnManager(this.logger);
-        this.wsnManager.setPersistance(new WsnPersistance(new File(context.getInstallRoot(),
-                "topics")));
-
-        // add handlers to manager
-        final SubscribeHandler subHandler = new SubscribeHandler();
-        this.wsnManager.addHandler(subHandler);
-        final GetCurrentMessageHandler currentHandler = new GetCurrentMessageHandler();
-        this.wsnManager.addHandler(currentHandler);
-        final UnsubscribeHandler unsubHandler = new UnsubscribeHandler();
-        this.wsnManager.addHandler(unsubHandler);
+        serviceClientPools = new HashMap<ServiceClientKey, ObjectPool>();
+        providesServiceClientPools = new HashMap<Provides, Set<ServiceClientKey>>();
     }
 
     /**
@@ -352,28 +413,7 @@ public class SoapComponentContext {
         if (serviceUnitName == null) {
             throw new IllegalArgumentException("Service unit name could not be null");
         }
-        this.jbiDescriptors.put(serviceUnitName, jbiDescriptor);
-    }
-
-    /**
-     * Get the JBI descriptor for the given address.
-     * 
-     * @param address
-     * @return the {@link JBIDescriptor} if found, else return null
-     */
-    public Jbi getJbiDescriptor(final String serviceUnitName) {
-        return this.jbiDescriptors.get(serviceUnitName);
-    }
-
-    /**
-     * Remove the {@link JBIDescriptor} for the given address
-     * 
-     * @param address
-     */
-    public void removeJbiDescriptor(final String serviceUnitName) {
-        if (this.jbiDescriptors != null) {
-            this.jbiDescriptors.remove(serviceUnitName);
-        }
+        jbiDescriptors.put(serviceUnitName, jbiDescriptor);
     }
 
     /**
@@ -386,59 +426,7 @@ public class SoapComponentContext {
         if (serviceUnitName == null) {
             throw new IllegalArgumentException("Service unit name could not be null");
         }
-        this.servicesDescriptors.put(serviceUnitName, serviceDescriptor);
-    }
-
-    /**
-     * Get the service descriptor as {@link File} of the given service unit if
-     * available.
-     * 
-     * @param address
-     * @return the file (services.xml) or null if no service descriptor is
-     *         available
-     */
-    public File getServiceDescriptor(final String serviceUnitName) {
-        return this.servicesDescriptors.get(serviceUnitName);
-    }
-
-    /**
-     * Remove the {@link JBIDescriptor} for the given service unit
-     * 
-     * @param address
-     */
-    public void removeServiceDescriptor(final String serviceUnitName) {
-        this.servicesDescriptors.remove(serviceUnitName);
-    }
-
-    /**
-     * @return the notificationManager
-     */
-    public WsnManager getWsnManager() {
-        return this.wsnManager;
-    }
-
-    /**
-     * @param wsnManager
-     *            the notificationManager to set
-     */
-    public void setWsnManager(final WsnManager wsnManager) {
-        this.wsnManager = wsnManager;
-    }
-
-    /**
-     * 
-     * @return
-     */
-    public Component getComponentConfiguration() {
-        return this.componentConfiguration;
-    }
-
-    /**
-     * 
-     * @param componentConfiguration
-     */
-    public void setComponentConfiguration(final Component componentConfiguration) {
-        this.componentConfiguration = componentConfiguration;
+        servicesDescriptors.put(serviceUnitName, serviceDescriptor);
     }
 
     /**
@@ -449,7 +437,7 @@ public class SoapComponentContext {
      * <p>
      * <b>This service client must be returned to the pool after usage using
      * API:
-     * <code>{@link #returnServiceClient(String, QName, URI, ServiceClient)}</code>
+     * <code>{@link #returnServiceClient(String, QName, URI, PetalsServiceClient)}</code>
      * .</b>
      * </p>
      * 
@@ -466,41 +454,48 @@ public class SoapComponentContext {
      * @param provides
      *            the provides block of the endpoint which is creating the
      *            external WS call
-     * @param ramprtUserName 
      * @return a ServiceClient. Not null. Must be returned to the pool after
      *         usage using API:
-     *         <code>{@link #returnServiceClient(String, QName, URI, ServiceClient)}</code>
+     *         <code>{@link #returnServiceClient(String, QName, URI, PetalsServiceClient)}</code>
      * @throws HandlingException
      */
-    public ServiceClient borrowServiceClient(final String address, final QName operation,
+    public PetalsServiceClient borrowServiceClient(final String address, final QName operation,
             final String soapAction, final URI mep, final ConfigurationExtensions cdkExtensions,
-            final Provides provides, String rampartUserName) throws MessagingException {
-
+            final Provides provides) throws MessagingException {    	
         try {
-            
             String resolvedOp;
-            if (operation != null ){
+            if (operation != null) {
                 resolvedOp = operation.toString();
-            }else if (soapAction != null){
+            } else if (soapAction != null) {
                 resolvedOp = soapAction;
-            }else {
-                throw new MessagingException("Unable to resolve the operation. Set it in the Jbi exchange or SoapAction.");
+            } else {
+                throw new MessagingException(
+                        "Unable to resolve the operation. Set it in the Jbi exchange or SoapAction.");
             }
-            
-            
+
             final ServiceClientKey key = new ServiceClientKey(address, resolvedOp, mep);
-            ObjectPool pool = this.serviceClientPools.get(key);
+            ObjectPool pool = serviceClientPools.get(key);
             if (pool == null) {
+
+                long maxWait;
+            	Long timeout = provides.getTimeout();
+                if((MEPConstants.IN_OUT_PATTERN.equals(mep)  || MEPConstants.IN_OPTIONAL_OUT_PATTERN.equals(mep))
+                		&& timeout != null) {
+                	maxWait = timeout;
+                } else {
+                	maxWait = 300000l;
+                }
+
                 // TODO: The pool max size should be limited by the JBI worker
                 // number
-                pool = new GenericObjectPool(
+				pool = new GenericObjectPool(
                 // object factory
                         new ServiceClientPoolObjectFactory(address, operation, mep, cdkExtensions,
-                                this, provides, this.logger, soapAction, rampartUserName),
+                                this, provides, logger, soapAction),
 
                         // max number of borrowed object sized to the number of
                         // JBI message processors
-                        this.componentConfiguration.getProcessorPoolSize().getValue(),
+                        componentConfiguration.getProcessorPoolSize().getValue().intValue(),
 
                         // getting an object blocks until a new or idle object
                         // is available
@@ -509,16 +504,13 @@ public class SoapComponentContext {
                         // if getting an object is blocked for at most this
                         // delay, a NoSuchElementException will be thrown. In
                         // case of a synchronous call the delay is sized to the
-                        // value of the SU's parameter "synchronous-timeout",
+                        // value of the SU's parameter "timeout",
                         // otherwise it sized to 5 minutes.
-                        MEPConstants.IN_OUT_PATTERN.equals(mep)
-                                || MEPConstants.IN_OPTIONAL_OUT_PATTERN.equals(mep) ? SUPropertiesHelper
-                                .retrieveTimeout(cdkExtensions)
-                                : 300000l,
+                        maxWait,
 
                         // max number of idle object in the pool. Sized to the
                         // number of JBI acceptors.
-                        this.componentConfiguration.getAcceptorPoolSize().getValue(),
+                        componentConfiguration.getAcceptorPoolSize().getValue().intValue(),
 
                         // min number of idle object in the pool. Sized to 0
                         // (ie when no activity no object in pool)
@@ -558,47 +550,23 @@ public class SoapComponentContext {
                         // order
                         true);
 
-                this.serviceClientPools.put(key, pool);
+                synchronized (serviceClientPools) {
+                    serviceClientPools.put(key, pool);
+                    Set<ServiceClientKey> serviceClientKeysSet;
+                    if (providesServiceClientPools.containsKey(provides)) {
+                        serviceClientKeysSet = providesServiceClientPools.get(provides);
+                    } else {
+                        serviceClientKeysSet = new HashSet<ServiceClientKey>();
+                    }
+                    serviceClientKeysSet.add(key);
+                    providesServiceClientPools.put(provides, serviceClientKeysSet);
+                }
             }
 
-            return (ServiceClient) pool.borrowObject();
+            return (PetalsServiceClient) pool.borrowObject();
 
         } catch (final Exception e) {
-            throw new MessagingException("Can't create get an Axis service client from the pool", e);
-        }
-    }
-
-    /**
-     * Release the service client to the pool
-     * 
-     * @param address
-     * @param operation
-     * @param mep
-     * @param serviceClient
-     * @throws MessagingException
-     */
-    public void returnServiceClient(final String address, final QName operation, final URI mep,
-            final ServiceClient serviceClient, final String soapAction) throws MessagingException {
-
-        try {
-            
-            String resolvedOp = null;
-            if (operation != null){
-                resolvedOp = operation.toString();
-            }else if (soapAction != null){
-                resolvedOp = soapAction;
-            }else {
-                throw new MessagingException("Unable to resolve the operation. Set it in the Jbi exchange or SoapAction.");
-            }
-            
-            ObjectPool pool = this.serviceClientPools.get(new ServiceClientKey(address, resolvedOp,
-                    mep));
-            if (pool != null) {
-                pool.returnObject(serviceClient);
-            }
-
-        } catch (final Exception e) {
-            throw new MessagingException("Can't return the Axis service client to the pool", e);
+            throw new MessagingException("Cannot create or get an Axis service client from the pool", e);
         }
     }
 
@@ -610,18 +578,47 @@ public class SoapComponentContext {
     }
 
     /**
-     * @param axis2ConfigurationContext
-     *            the axis2ConfigurationContext to set
-     */
-    public void setAxis2ConfigurationContext(ConfigurationContext axis2ConfigurationContext) {
-        this.axis2ConfigurationContext = axis2ConfigurationContext;
-    }
-
-    /**
      * @return the consumersManager
      */
     public ServiceManager<Consumes> getConsumersManager() {
         return consumersManager;
+    }
+
+    /**
+     * Get the JBI descriptor for the given address.
+     * 
+     * @param address
+     * @return the {@link JBIDescriptor} if found, else return null
+     */
+    public Jbi getJbiDescriptor(final String serviceUnitName) {
+        return jbiDescriptors.get(serviceUnitName);
+    }
+
+    /**
+     * The connection factory JNDI name used by the JMS transport layer.
+     * 
+     * @return The connection factory JNDI name used by the JMS transport layer.
+     */
+    public String getJmsConnectionFactoryName() {
+        return jmsConnectionFactoryName;
+    }
+
+    /**
+     * The JNDI initial factory used by the JMS transport layer.
+     * 
+     * @return The JNDI initial factory used by the JMS transport layer.
+     */
+    public String getJmsJndiInitialFactory() {
+        return jmsJndiInitialFactory;
+    }
+
+    /**
+     * The JNDI provider URL used by the JMS transport layer.
+     * 
+     * @return The JNDI provider URL used by the JMS transport layer.
+     */
+    public String getJmsJndiProviderUrl() {
+        return jmsJndiProviderUrl;
     }
 
     /**
@@ -632,12 +629,108 @@ public class SoapComponentContext {
     }
 
     /**
-     * The JNDI initial factory used by the JMS transport layer.
+     * Get the service descriptor as {@link File} of the given service unit if
+     * available.
      * 
-     * @return The JNDI initial factory used by the JMS transport layer.
+     * @param address
+     * @return the file (services.xml) or null if no service descriptor is
+     *         available
      */
-    public String getJmsJndiInitialFactory() {
-        return jmsJndiInitialFactory;
+    public File getServiceDescriptor(final String serviceUnitName) {
+        return servicesDescriptors.get(serviceUnitName);
+    }
+
+    /**
+     * Remove the {@link JBIDescriptor} for the given address
+     * 
+     * @param address
+     */
+    public void removeJbiDescriptor(final String serviceUnitName) {
+        if (jbiDescriptors != null) {
+            jbiDescriptors.remove(serviceUnitName);
+        }
+    }
+
+    /**
+     * Remove the {@link JBIDescriptor} for the given service unit
+     * 
+     * @param address
+     */
+    public void removeServiceDescriptor(final String serviceUnitName) {
+        servicesDescriptors.remove(serviceUnitName);
+    }
+
+    /**
+     * Delete all the service client pools which used the provides instance
+     * 
+     * @param provides
+     */
+    public void deleteServiceClientPools(final Provides provides) {
+        synchronized (serviceClientPools) {
+            Set<ServiceClientKey> serviceClientKeysSet = providesServiceClientPools
+                    .remove(provides);
+            // if at least a SOAP request has been done for the SU provide
+            if (serviceClientKeysSet != null) {
+                for (ServiceClientKey key : serviceClientKeysSet) {
+                    serviceClientPools.remove(key);
+                }
+            }
+        }
+    }
+
+    /**
+     * Release the service client to the pool
+     * 
+     * @param address
+     * @param operation
+     * @param mep
+     * @param petalsServiceClient
+     * @throws MessagingException
+     */
+    public void returnServiceClient(final String address, final QName operation, final URI mep,
+            final PetalsServiceClient petalsServiceClient, final String soapAction)
+            throws MessagingException {
+
+        try {
+
+            String resolvedOp = null;
+            if (operation != null) {
+                resolvedOp = operation.toString();
+            } else if (soapAction != null) {
+                resolvedOp = soapAction;
+            } else {
+                throw new MessagingException(
+                        "Unable to resolve the operation. Set it in the Jbi exchange or SoapAction.");
+            }
+
+            final ObjectPool pool = serviceClientPools.get(new ServiceClientKey(address,
+                    resolvedOp, mep));
+            if (pool != null) {
+                pool.returnObject(petalsServiceClient);
+            }
+
+        } catch (final Exception e) {
+            throw new MessagingException("Can't return the Axis service client to the pool", e);
+        }
+    }
+
+    /**
+     * @param axis2ConfigurationContext
+     *            the axis2ConfigurationContext to set
+     */
+    public void setAxis2ConfigurationContext(final ConfigurationContext axis2ConfigurationContext) {
+        this.axis2ConfigurationContext = axis2ConfigurationContext;
+    }
+
+    /**
+     * Set the connection factory JNDI name used by the JMS transport layer.
+     * 
+     * @param jmsConnectionFactoryName
+     *            The connection factory JNDI name used by the JMS transport
+     *            layer.
+     */
+    public void setJmsConnectionFactoryName(final String jmsConnectionFactoryName) {
+        this.jmsConnectionFactoryName = jmsConnectionFactoryName;
     }
 
     /**
@@ -651,15 +744,6 @@ public class SoapComponentContext {
     }
 
     /**
-     * The JNDI provider URL used by the JMS transport layer.
-     * 
-     * @return The JNDI provider URL used by the JMS transport layer.
-     */
-    public String getJmsJndiProviderUrl() {
-        return this.jmsJndiProviderUrl;
-    }
-
-    /**
      * Set the JNDI provider URL used by the JMS transport layer.
      * 
      * @param jmsJndiProviderUrl
@@ -667,25 +751,5 @@ public class SoapComponentContext {
      */
     public void setJmsJndiProviderUrl(final String jmsJndiProviderUrl) {
         this.jmsJndiProviderUrl = jmsJndiProviderUrl;
-    }
-
-    /**
-     * The connection factory JNDI name used by the JMS transport layer.
-     * 
-     * @return The connection factory JNDI name used by the JMS transport layer.
-     */
-    public String getJmsConnectionFactoryName() {
-        return this.jmsConnectionFactoryName;
-    }
-
-    /**
-     * Set the connection factory JNDI name used by the JMS transport layer.
-     * 
-     * @param jmsConnectionFactoryName
-     *            The connection factory JNDI name used by the JMS transport
-     *            layer.
-     */
-    public void setJmsConnectionFactoryName(final String jmsConnectionFactoryName) {
-        this.jmsConnectionFactoryName = jmsConnectionFactoryName;
     }
 }

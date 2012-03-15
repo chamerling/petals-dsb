@@ -40,11 +40,11 @@ import org.ow2.petals.component.framework.util.XMLUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import static org.ow2.petals.binding.soap.Constants.Axis2.AXIS2_XML;
-import static org.ow2.petals.binding.soap.Constants.Axis2.MODULES_PATH;
-import static org.ow2.petals.binding.soap.Constants.Axis2.MODULE_ARCHIVE_EXTENSION;
-
 import com.ebmwebsourcing.easycommons.xml.XMLHelper;
+
+import static org.ow2.petals.binding.soap.SoapConstants.Axis2.AXIS2_XML;
+import static org.ow2.petals.binding.soap.SoapConstants.Axis2.MODULES_PATH;
+import static org.ow2.petals.binding.soap.SoapConstants.Axis2.MODULE_ARCHIVE_EXTENSION;
 
 /**
  * The operations which are exposed during bootstrap phase
@@ -143,9 +143,10 @@ public class SoapBootstrapOperations {
         if ((moduleFile == null) || !moduleFile.exists()) {
             throw new IllegalArgumentException("Bad module file");
         }
-
-        final File modules = new File(this.installContext.getInstallRoot(), MODULES_PATH);
-        final File configFile = new File(this.installContext.getInstallRoot(), AXIS2_XML);
+        
+        final String workspaceRootDir = this.installContext.getContext().getWorkspaceRoot();
+        final File modules = new File(workspaceRootDir, MODULES_PATH);
+        final File configFile = new File(workspaceRootDir, AXIS2_XML);
 
         // get module name from file
         final String moduleName = moduleFile.getName().substring(0,

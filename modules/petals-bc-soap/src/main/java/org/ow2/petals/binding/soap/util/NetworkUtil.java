@@ -31,147 +31,45 @@ import java.util.Set;
 /**
  * A network class util used to manipulate network related stuff
  * 
- * @author Christophe HAMERLING - eBM WebSourcing
- * 
  */
 public class NetworkUtil {
 
     /**
-     * Get all the interfaces which are not loopback ones
+     * Get all the IPv4 {@link InetAddress} of the local host
      * 
-     * @return
-     */
-    public static Set<NetworkInterface> getAllLocalInterfaces() {
-        Set<NetworkInterface> result = new HashSet<NetworkInterface>();
-        try {
-            Enumeration<NetworkInterface> e = NetworkInterface.getNetworkInterfaces();
-            while (e.hasMoreElements()) {
-                NetworkInterface ni = e.nextElement();
-                
-                Enumeration<InetAddress> set = ni.getInetAddresses();
-                // assume that all the inet addresses of the interface are all
-                // loopback or not all loopback...
-                if (set.hasMoreElements()) {
-                    InetAddress address = set.nextElement();
-                    if (!address.isLoopbackAddress()) {
-                        result.add(ni);
-                    }
-                }
-            }
-        } catch (SocketException e) {
-        }
-        return result;
-    }
-
-    /**
-     * Get all the host interfaces including the loopback one
+     * @return all the local IPv4
      * 
-     * @return
+     * @throws SocketException if an I/O error occurs 
      */
-    public static Set<NetworkInterface> getAllInterfaces() {
-        Set<NetworkInterface> result = new HashSet<NetworkInterface>();
-        try {
-            Enumeration<NetworkInterface> e = NetworkInterface.getNetworkInterfaces();
-            while (e.hasMoreElements()) {
-                result.add(e.nextElement());
-            }
-        } catch (SocketException e) {
-        }
-        return result;
-    }
-
-    /**
-     * Get all the IPv4 {@link InetAddress} of the local host which are not
-     * loopback ones
-     * 
-     * @return
-     */
-    public static Set<Inet4Address> getAllLocalIPv4InetAddresses() {
+    public static Set<Inet4Address> getAllLocalIPv4InetAddresses() throws SocketException {
         Set<Inet4Address> result = new HashSet<Inet4Address>();
-        Set<NetworkInterface> iset = getAllLocalInterfaces();
-        for (NetworkInterface networkInterface : iset) {
-            Enumeration<InetAddress> e = networkInterface.getInetAddresses();
-            while (e.hasMoreElements()) {
-                InetAddress elem = e.nextElement();
-                if (elem instanceof Inet4Address) {
-                    result.add((Inet4Address) elem);
-                }
-            }
+        Enumeration<NetworkInterface> niEnum = NetworkInterface.getNetworkInterfaces();
+        while (niEnum.hasMoreElements()) {
+            NetworkInterface ni = niEnum.nextElement();
+            Set<Inet4Address> ipForNi =  getIPv4InetAdressesFromNetworkInterface(ni);
+            result.addAll(ipForNi);          
         }
         return result;
     }
 
     /**
-     * Get all the local IPV4 addresses without the loopback one
+     * Get the IPv4  {@link InetAddress} of the specified network interface
      * 
-     * @return
+     * @param ni a network interface
+     * 
+     * @return all the IPv4 for the specified network interface
      */
-    public static Set<Inet4Address> getAllIPv4InetAddresses() {
+    private static final Set<Inet4Address> getIPv4InetAdressesFromNetworkInterface(NetworkInterface ni) {
         Set<Inet4Address> result = new HashSet<Inet4Address>();
-        Set<NetworkInterface> iset = getAllInterfaces();
-        for (NetworkInterface networkInterface : iset) {
-            Enumeration<InetAddress> e = networkInterface.getInetAddresses();
-            while (e.hasMoreElements()) {
-                InetAddress elem = e.nextElement();
-                if (elem instanceof Inet4Address) {
-                    result.add((Inet4Address) elem);
-                }
+        
+        Enumeration<InetAddress> e = ni.getInetAddresses();
+        while (e.hasMoreElements()) {
+            InetAddress ia = e.nextElement();
+            if (ia instanceof Inet4Address) {
+                result.add((Inet4Address) ia);
             }
         }
+        
         return result;
-    }
-
-    /**
-     * Returns true if the given address is not null and is one of the local
-     * host address including the loopback address
-     * 
-     * @param address
-     * @return
-     */
-    public static boolean isLocalAddress(InetAddress address) {
-        boolean result = false;
-        if (address != null) {
-            try {
-                Enumeration<NetworkInterface> itfs = NetworkInterface.getNetworkInterfaces();
-                while (itfs.hasMoreElements()) {
-                    NetworkInterface itf = itfs.nextElement();
-                    Enumeration<InetAddress> iaenum = itf.getInetAddresses();
-                    while (iaenum.hasMoreElements() && !result) {
-                        InetAddress ia = iaenum.nextElement();
-                        result = ia.equals(address);
-                    }
-                }
-            } catch (SocketException e) {
-            }
-        }
-        return result;
-    }
-
-    /**
-     * Test if the given address is a loopback one ie localhost or 127.0.0.1
-     * 
-     * @param addr
-     * @return
-     */
-    public static boolean isLoopbackAddress(InetAddress addr) {
-        return addr.isLoopbackAddress();
-        // JAVA 6
-        // boolean result = false;
-        // Set<NetworkInterface> itfs = getAllInterfaces();
-        // for (NetworkInterface networkInterface : itfs) {
-        // try {
-        // if (networkInterface.isLoopback()) {
-        // Enumeration<InetAddress> e = networkInterface.getInetAddresses();
-        // while (e.hasMoreElements()) {
-        // InetAddress elem = e.nextElement();
-        // if (elem.equals(addr)) {
-        // return true;
-        // }
-        // }
-        // }
-        // } catch (SocketException e) {
-        // }
-        // }
-        // return result;
     }
 }

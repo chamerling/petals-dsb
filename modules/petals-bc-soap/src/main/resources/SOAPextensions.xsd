@@ -14,61 +14,159 @@
 			<xs:documentation xml:lang="fr">Port du serveur HTTP Jetty embarqué</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	
-	<xs:element name="http-host" type="xs:string" default="localhost">
+
+	<xs:element name="http-host" type="petalsCDK:settablestring">
 		<xs:annotation>
 			<xs:documentation>Local Hostname to be used, can be hostname or host IP address</xs:documentation>
 			<xs:documentation xml:lang="fr">Nom de l'hote local ou addresse IP</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	
-	<xs:element name="http-service-list" type="xs:boolean"
-		default="true">
+	<xs:element name="http-service-list" type="petalsCDK:settableboolean" default="true">
 		<xs:annotation>
 			<xs:documentation>Display the available Web Service list</xs:documentation>
 			<xs:documentation xml:lang="fr">Affiche la liste des Web Services disponibles</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:element name="http-service-context" type="xs:string"
-		default="petals">
+	<xs:element name="http-service-context" type="petalsCDK:settablestring"	default="petals">
 		<xs:annotation>
 			<xs:documentation>The URL context</xs:documentation>
 			<xs:documentation xml:lang="fr">L'URL du contexte</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:element name="http-service-mapping" type="xs:string"
-		default="services">
+	<xs:element name="http-service-mapping" type="petalsCDK:settablestring" default="services">
 		<xs:annotation>
 			<xs:documentation>The URL service mapping</xs:documentation>
 			<xs:documentation xml:lang="fr">L'URL des services</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:element name="http-thread-pool-size-max" type="xs:int"
-		default="255">
+	<xs:element name="http-thread-pool-size-max" type="petalsCDK:settableint" default="255">
 		<xs:annotation>
 			<xs:documentation>The maximum size of the HTTP thread pool</xs:documentation>
 			<xs:documentation xml:lang="fr">Taille maximum du pool de threads HTTP</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:element name="http-thread-pool-size-min" type="xs:int"
-		default="2">
+	<xs:element name="http-thread-pool-size-min" type="petalsCDK:settableint" default="2">
 		<xs:annotation>
 			<xs:documentation>The minimum size of the HTTP thread pool</xs:documentation>
 			<xs:documentation xml:lang="fr">Taille minimum du pool de thread HTTP</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:element name="http-acceptors" type="xs:int" default="4">
+	<xs:element name="http-acceptors" type="petalsCDK:settableint" default="4">
 		<xs:annotation>
 			<xs:documentation>Number of HTTP acceptors</xs:documentation>
 			<xs:documentation xml:lang="fr">Nombre d'accepteurs HTTP</xs:documentation>
 		</xs:annotation>
 	</xs:element>
+	<!-- JMS transport layer extensions -->	
+	<xs:element name="java-naming-factory-initial" type="petalsCDK:settablestring">
+		<xs:annotation>
+			<xs:documentation>The initial context factory class needed to access the JNDI server where the JMS connection factory can be found.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="java-naming-provider-url" type="petalsCDK:settablestring">
+		<xs:annotation>
+			<xs:documentation>The JNDI provider URL where the JMS connection factory can be found.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="jms-connection-factory-jndiname" type="petalsCDK:settablestring">
+		<xs:annotation>
+			<xs:documentation>Name of the default JMS connection factory in the JNDI.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<!-- HTTPS extensions -->		
+	<xs:element name="https-enabled" type="xs:boolean" default="false">
+		<xs:annotation>
+			<xs:documentation>Define if HTTPS is enabled</xs:documentation>
+			<xs:documentation xml:lang="fr">Définie si HTTPS est activé</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="https-port" type="xs:int" default="8083">
+		<xs:annotation>
+			<xs:documentation>HTTPS port</xs:documentation>
+			<xs:documentation xml:lang="fr">Port HTTPS</xs:documentation>
+		</xs:annotation>
+	</xs:element>	
+	<xs:element name="https-keystore-type" type="soap:KeystoreType" default="JKS">
+		<xs:annotation>
+			<xs:documentation>Type of the keystore (JKS / PKCS12)</xs:documentation>
+			<xs:documentation xml:lang="fr">Type du keystore (JKS / PKCS12)</xs:documentation>
+		</xs:annotation>
+	</xs:element>	
+	<xs:element name="https-key-password" type="petalsCDK:settablestring">
+		<xs:annotation>
+			<xs:documentation>Password of the key</xs:documentation>
+			<xs:documentation xml:lang="fr">Mot de passe de la clé</xs:documentation>
+		</xs:annotation>
+	</xs:element>	
+	<xs:element name="https-truststore-type" type="soap:KeystoreType" default="JKS">
+		<xs:annotation>
+			<xs:documentation>Type of the truststore (JKS / PKCS12)</xs:documentation>
+			<xs:documentation xml:lang="fr">Type du truststore (JKS / PKCS12)</xs:documentation>
+		</xs:annotation>
+	</xs:element>	
 	
-	<!-- Services elements -->
+	<!-- Service / Component elements -->
+	<xs:element name="https-keystore-file" type="petalsCDK:settablestring">
+		<xs:annotation>
+			<xs:documentation>Absolute path of the keystore file</xs:documentation>
+			<xs:documentation xml:lang="fr">Chemin absolu du fichier keystore</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="https-keystore-password" type="petalsCDK:settablestring">
+		<xs:annotation>
+			<xs:documentation>Password of the keystore</xs:documentation>
+			<xs:documentation xml:lang="fr">Mot de passe du keystore</xs:documentation>
+		</xs:annotation>
+	</xs:element>		
+	<xs:element name="https-truststore-file" type="petalsCDK:settablestring">
+		<xs:annotation>
+			<xs:documentation>Absolute path of the truststore file</xs:documentation>
+			<xs:documentation xml:lang="fr">Chemin absolu du fichier truststore</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="https-truststore-password" type="petalsCDK:settablestring">
+		<xs:annotation>
+			<xs:documentation>Password of the trustore</xs:documentation>
+			<xs:documentation xml:lang="fr">Mot de passe du truststore</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	
+	<!-- Service elements -->
 	<xs:element name="address" type="xs:string">
 		<xs:annotation>
 			<xs:documentation>Address of the external Web Service (provides mode) or Web Service name to expose (consumes mode)</xs:documentation>
 			<xs:documentation xml:lang="fr">Adresse du Web Service externe (mode provides) ou nom du Web Service à exposer (mode consumes)</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="service-name" type="xs:string">
+		<xs:annotation>
+			<xs:documentation>Web Service name to expose (consumes mode)</xs:documentation>
+			<xs:documentation xml:lang="fr">Nom du Web Service à exposer (mode consumes)</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="wsa-to" type="xs:string">
+		<xs:annotation>
+			<xs:documentation>Address of the external Web Service (provides mode)</xs:documentation>
+			<xs:documentation xml:lang="fr">Adresse du Web Service externe (mode provides)</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="wsa-replyto" type="xs:string">
+		<xs:annotation>
+			<xs:documentation>Address of the external Web Service (provides mode) or Web Service name to reply (consumes mode)</xs:documentation>
+			<xs:documentation xml:lang="fr">Adresse du Web Service externe (mode provides) ou nom du Web Service auquel répondre (mode consumes)</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="wsa-from" type="xs:string">
+		<xs:annotation>
+			<xs:documentation>Address of the external Web Service (provides mode) or Web Service name wich invoke (consumes mode)</xs:documentation>
+			<xs:documentation xml:lang="fr">Adresse du Web Service externe (mode provides) ou nom du Web Service qui invoque (mode consumes)</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="wsa-faultto" type="xs:string">
+		<xs:annotation>
+			<xs:documentation>Address of the external Web Service (provides mode) or Web Service name to reply when a fault occurs (consumes mode)</xs:documentation>
+			<xs:documentation xml:lang="fr">Adresse du Web Service externe (mode provides) ou nom du Web Service auquel répondre lorsqu'une faute a été retournée (mode consumes)</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:element name="soap-version" type="soap:SoapVersion"
@@ -84,28 +182,10 @@
 			<xs:documentation xml:lang="fr">La SOAP action a utiliser pour l'appel du Web Service, surcharge l'operation du message JBI</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:element name="add-root" type="xs:boolean" default="false">
-		<xs:annotation>
-			<xs:documentation>Add a root element to build the SOAP body, the root element name is the SOAP action (outgoing mode)</xs:documentation>
-			<xs:documentation xml:lang="fr">Ajout d'un élément racine lors de la construction du SOAP body, le nom de l'élément est la SOAP action (mode sortant)</xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:element name="remove-root" type="xs:boolean" default="false">
-		<xs:annotation>
-			<xs:documentation>Remove the root element of the SOAP body to build the JBI message (incoming mode)</xs:documentation>
-			<xs:documentation xml:lang="fr">Supprimer l'élément racine du SOAP body lors de la construction du message JBI (mode entrant)</xs:documentation>
-		</xs:annotation>
-	</xs:element>
 	<xs:element name="chunked-mode" type="xs:boolean" default="false">
 		<xs:annotation>
 			<xs:documentation>Activate the HTTP chunked mode on Web Service calls</xs:documentation>
 			<xs:documentation xml:lang="fr">Activer le mode chunk HTTP lors de l'appel de Web Service</xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:element name="synchronous-timeout" type="xs:long">
-		<xs:annotation>
-			<xs:documentation>The timout value (in ms) to be used when sending JBI message in the bus (incoming mode)</xs:documentation>
-			<xs:documentation xml:lang="fr">Le timeout (en ms) utilisé lors de l'envoi d'un message JBI dans le bus (mode entrant)</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:element name="cleanup-transport" type="xs:boolean"
@@ -115,63 +195,36 @@
 			<xs:documentation xml:lang="fr">Nettoyer le transport HTTP après chaque appel de Web Service</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<!--
-	### Not used in this version
-	<xs:element name="authentication-basic-username" type="xs:string">
-		<xs:annotation>
-			<xs:documentation>TODO</xs:documentation>
-			<xs:documentation xml:lang="fr">TODO</xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:element name="authentication-basic-password" type="xs:string">
-		<xs:annotation>
-			<xs:documentation>TODO</xs:documentation>
-			<xs:documentation xml:lang="fr">TODO</xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	-->
-	<xs:element name="mode" type="soap:Mode" default="SOAP">
-		<xs:annotation>
-			<xs:documentation>The Web Service mode to use</xs:documentation>
-			<xs:documentation xml:lang="fr">Le mode du Web Service à utiliser</xs:documentation>
-		</xs:annotation>
-	</xs:element>
 	<xs:element name="enable-http-transport" type="xs:boolean" default="true">
 		<xs:annotation>
 			<xs:documentation>Enable the HTTP transport layer to send or receive SOAP messages</xs:documentation>
 			<xs:documentation xml:lang="fr">Autorise le transport HTTP pour recevoir ou envoyer les messages SOAP</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:element name="enable-jms-transport" type="xs:boolean" default="true">
+	<xs:element name="enable-https-transport" type="xs:boolean" default="false">
+		<xs:annotation>
+			<xs:documentation>Enable the HTTPS transport layer to send or receive SOAP messages</xs:documentation>
+			<xs:documentation xml:lang="fr">Autorise le transport HTTPS pour recevoir ou envoyer les messages SOAP</xs:documentation>
+		</xs:annotation>
+	</xs:element>	
+	<xs:element name="enable-jms-transport" type="xs:boolean" default="false">
 		<xs:annotation>
 			<xs:documentation>Enable the JMS transport layer to send or receive SOAP messages</xs:documentation>
 			<xs:documentation xml:lang="fr">Autorise le transport JMS pour recevoir ou envoyer les messages SOAP</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:element name="rest-add-namespace-uri" type="xs:anyURI">
+	<xs:element name="enable-wsa" type="xs:boolean" default="false">
 		<xs:annotation>
-			<xs:documentation>The namespace URI to be used in the the generated JBI message payload</xs:documentation>
-			<xs:documentation xml:lang="fr">Le namespace URI à utiliser lors de la construction du message JBI depuis la requête REST</xs:documentation>
+			<xs:documentation>Add the WSA headers</xs:documentation>
+			<xs:documentation xml:lang="fr">Ajoute les en-têtes WSA</xs:documentation>			
 		</xs:annotation>
 	</xs:element>
-	<xs:element name="rest-add-namespace-prefix" type="xs:string" default="soapbc">
+	<xs:element name="enable-compatibility-for" type="soap:Compatibility">
 		<xs:annotation>
-			<xs:documentation>The namespace prefix to be used in the the generated JBI message payload (used when NS URI is defined)</xs:documentation>
-			<xs:documentation xml:lang="fr">Le prefixe du namespace à utiliser lors de la construction du message JBI (utile lorsque le NS URI est précisé)</xs:documentation>
+			<xs:documentation>Enable the compatibility for a specified webservice stack</xs:documentation>
+			<xs:documentation xml:lang="fr">Active la compatibilité avec une pile de webservice spécifiée</xs:documentation>			
 		</xs:annotation>
-	</xs:element>
-	<xs:element name="rest-remove-prefix-on-response" type="xs:string">
-		<xs:annotation>
-			<xs:documentation>A list of NS prefixes to remove from the JBI message response (Coma Separated Values)</xs:documentation>
-			<xs:documentation xml:lang="fr">Liste des prefixes de namespaces a supprimer du message de réponse JBI (Coma Separated Values)</xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<xs:element name="rest-http-method" type="soap:HTTPMethod">
-		<xs:annotation>
-			<xs:documentation>The HTTP method to be used in REST mode</xs:documentation>
-			<xs:documentation xml:lang="fr">La méthode HTTP à utiliser en mode REST</xs:documentation>
-		</xs:annotation>
-	</xs:element>
+	</xs:element>	
 	<xs:element name="modules" type="xs:string">
 		<xs:annotation>
 			<xs:documentation>A list of Axis2 modules names to engage (separated by comas)</xs:documentation>
@@ -224,24 +277,26 @@
 			<xs:documentation>Inject the JBI headers (javax.jbi.messaging.protocol.headers property) into the outgoing SOAP message (in SOAP Header)</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-
-	<!-- JMS transport layer extensions -->
-	<xs:element name="java-naming-factory-initial" type="xs:string">
+	<xs:element name="headers-to-inject" type="xs:string">
 		<xs:annotation>
-			<xs:documentation>The initial context factory class needed to access the JNDI server where the JMS connection factory can be found.</xs:documentation>
+			<xs:documentation>Set of XML headers (CDATA) to be injected into the outgoing SOAP message (in SOAP Header)</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:element name="java-naming-provider-url" type="xs:string">
+	<xs:element name="http-basic-auth-username" type="xs:string">
 		<xs:annotation>
-			<xs:documentation>The JNDI provider URL where the JMS connection factory can be found.</xs:documentation>
+			<xs:documentation>Username for Basic Authentication</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:element name="jms-connection-factory-jndiname" type="xs:string">
+	<xs:element name="http-basic-auth-password" type="xs:string">
 		<xs:annotation>
-			<xs:documentation>Name of the default JMS connection factory in the JNDI.</xs:documentation>
+			<xs:documentation>Password for Basic Authentication</xs:documentation>
 		</xs:annotation>
-	</xs:element>
-	
+	</xs:element>	
+	<xs:element name="http-services-redirection" type="xs:string">
+		<xs:annotation>
+			<xs:documentation>HTTP redirection alias(es) for Consumes web service (comma-separated).</xs:documentation>
+		</xs:annotation>
+	</xs:element>	
 	
 	<!-- TYPES -->
 	<xs:simpleType name="SoapVersion">
@@ -250,34 +305,30 @@
 			<xs:enumeration value="1.2" />
 		</xs:restriction>
 	</xs:simpleType>
-	<xs:simpleType name="Mode">
+	<xs:simpleType name="Compatibility">
 		<xs:restriction base="xs:string">
-			<xs:enumeration value="SOAP">
+			<xs:enumeration value="AXIS1">
 				<xs:annotation>
-					<xs:documentation>Use Web Services in basic SOAP mode, the address field will be the name of the exposed Web Service or the URL of the Web Service to consume</xs:documentation>
-					<xs:documentation xml:lang="fr">Utiliser les Web Services en mode SOAP, le champ 'address' sera le nom du Web Service exposé ou l'URL du Web Service à consommer</xs:documentation>
-				</xs:annotation>
-			</xs:enumeration>
-			<xs:enumeration value="REST">
-				<xs:annotation>
-					<xs:documentation>Use the Web Service in REST mode, the address field will be the name of the REST Service or the REST Service to consume</xs:documentation>
-					<xs:documentation xml:lang="fr">Utiliser les Web Services en mode REST, le champ 'address' sera le nom du service REST exposé ou l'URL du service REST à consommer</xs:documentation>
-				</xs:annotation>
-			</xs:enumeration>
-			<xs:enumeration value="TOPIC">
-				<xs:annotation>
-					<xs:documentation>Use the Web Service in TOPIC mode, the address field will be the name of the WSN topic to create</xs:documentation>
-					<xs:documentation xml:lang="fr">Utiliser les Web Service en mode TOPIC, le champ 'address' sera le nom de la topic WSN à créer</xs:documentation>
+					<xs:documentation>Enable compatibility for Axis 1 webservice stack (multiref + SOAP Fault only for provider mode)</xs:documentation>
+					<xs:documentation xml:lang="fr">Activer la compatibilité pour une pile de webservices Axis 1 (multiref + SOAP Fault seulement en mode provide)</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
 		</xs:restriction>
 	</xs:simpleType>
-	<xs:simpleType name="HTTPMethod">
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="GET" />
-			<xs:enumeration value="POST" />
-			<xs:enumeration value="PUT" />
-			<xs:enumeration value="DELETE" />
+	<xs:simpleType name="KeystoreType">
+		<xs:restriction base="petalsCDK:settablestring">
+			<xs:enumeration value="JKS">
+				<xs:annotation>
+					<xs:documentation>JKS keystore/truststore</xs:documentation>
+					<xs:documentation xml:lang="fr">keystore/truststore JKS</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="PKCS12">
+				<xs:annotation>
+					<xs:documentation>PKCS12 keystore/truststore</xs:documentation>
+					<xs:documentation xml:lang="fr">keystore/truststore PKCS12</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>			
 		</xs:restriction>
-	</xs:simpleType>
+	</xs:simpleType>	
 </xs:schema>

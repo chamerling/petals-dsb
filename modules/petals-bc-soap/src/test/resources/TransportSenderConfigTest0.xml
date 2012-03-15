@@ -1,0 +1,6 @@
+<transportSender name='http'
+	class='org.apache.axis2.transport.http.CommonsHTTPTransportSender'>
+	
+	<parameter name='Protocol'>HTTP/1.1</parameter>
+	<parameter name='Transfer-Encoding'>chunked</parameter>
+</transportSender>

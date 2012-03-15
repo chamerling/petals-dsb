@@ -1,0 +1,7 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<soapenv:Body>
+		<ns1:createEventsResponse soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:ns1="http://ws.foobar.com/2008_07_01/businessEvent/service">
+			<createEventsReturn>0</createEventsReturn>
+		</ns1:createEventsResponse>
+	</soapenv:Body>
+</soapenv:Envelope>

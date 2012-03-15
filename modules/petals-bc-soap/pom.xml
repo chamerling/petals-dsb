@@ -1,271 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<artifactId>dsb-parent</artifactId>
-		<groupId>org.petalslink.dsb</groupId>
-		<version>1.0-SNAPSHOT</version>
-		<relativePath>../dsb-parent/pom.xml</relativePath>
-	</parent>
-	
-	<name>Petals Binding Component :: SOAP</name>
-	<artifactId>petals-bc-soap</artifactId>
-	<groupId>org.petalslink.dsb</groupId>
-
-	<packaging>jbi-component</packaging>
-	<description> The PEtALS SOAP JBI binding component based on Axis2 and
-		Jetty. Based on PETALS BC SOAP 4.0.1</description>
-		
-	<developers>
-		<developer>
-			<name>Christophe Hamerling</name>
-			<email>christophe.hamerling@ebmwebsourcing.com</email>
-			<id>chamerling</id>
-			<organization>eBM WebSourcing</organization>
-			<organizationUrl> http://www.ebmwebsourcing.com </organizationUrl>
-			<roles>
-				<role>Developer</role>
-			</roles>
-			<timezone>+1</timezone>
-			<url>http://www.ebmwebsourcing.com/chamerling</url>
-		</developer>
-		<developer>
-			<name>Christophe Deneux</name>
-			<email>christophe.deneux@capgemini.com</email>
-			<id>chamerling</id>
-			<organization>Capgemini Sud</organization>
-			<organizationUrl> http://www.capgemini.com </organizationUrl>
-			<roles>
-				<role>Developer</role>
-			</roles>
-			<timezone>+1</timezone>
-		</developer>
-	</developers>
-
-	<!-- Source code management -->
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>petals-components-sls-parent</artifactId>
+    <groupId>org.ow2.petals</groupId>
+    <relativePath>../parent/pom.xml</relativePath>
+    <version>5.0.0</version>
+  </parent>
+  
+  <name>petals-bc-soap</name>
+  <artifactId>petals-bc-soap</artifactId>
+  <groupId>org.petalslink.dsb</groupId>
+  <version>4.1.0</version>
+  
+  <packaging>jbi-component</packaging>
+  <description>The PEtALS SOAP JBI binding component based on Axis2 and Jetty. From version 4.1.0</description>
+  <dependencies>
+    <dependency>
+      <groupId>org.mortbay.jetty</groupId>
+      <artifactId>jetty</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.mortbay.jetty</groupId>
+      <artifactId>jetty-sslengine</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>commons-httpclient</groupId>
+      <artifactId>commons-httpclient-contrib</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.axis2</groupId>
+      <artifactId>axis2</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.xerces</groupId>
+          <artifactId>xercesImpl</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.axis2</groupId>
+      <artifactId>axis2-transport-http</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>xalan</groupId>
+          <artifactId>xalan</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.ant</groupId>
+          <artifactId>ant</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.geronimo.specs</groupId>
+          <artifactId>geronimo-javamail_1.4_spec</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.geronimo.specs</groupId>
+          <artifactId>geronimo-activation_1.1_spec</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.geronimo.specs</groupId>
+          <artifactId>geronimo-stax-api_1.0_spec</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.axis2</groupId>
+      <artifactId>axis2-transport-local</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>xalan</groupId>
+          <artifactId>xalan</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.geronimo.specs</groupId>
+          <artifactId>geronimo-stax-api_1.0_spec</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.axis2</groupId>
+      <artifactId>axis2-transport-jms</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.rampart</groupId>
+      <artifactId>rampart-core</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.xerces</groupId>
+          <artifactId>xercesImpl</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.xalan</groupId>
+          <artifactId>xalan</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.commons.ssl</groupId>
+          <artifactId>not-yet-commons-ssl</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.axis2</groupId>
+      <artifactId>addressing</artifactId>
+      <type>mar</type>
+      <version>1.5.6</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.xerces</groupId>
+          <artifactId>xercesImpl</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>xalan</groupId>
+          <artifactId>xalan</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.rampart</groupId>
+      <artifactId>rampart</artifactId>
+      <type>mar</type>
+      <version>1.5.2</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.xerces</groupId>
+          <artifactId>xercesImpl</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <!-- Aspect dependencies -->
+    <dependency>
+      <groupId>org.aspectj</groupId>
+      <artifactId>aspectjrt</artifactId>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.petalslink.dsb</groupId>
+      <artifactId>petals-cdk</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.geronimo.specs</groupId>
+          <artifactId>geronimo-javamail_1.4_spec</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    
+    <dependency>
+      <groupId>com.ebmwebsourcing.easycommons</groupId>
+      <artifactId>easycommons-logger</artifactId>
+      <type>test-jar</type>
+      <scope>test</scope>
+      <version>1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.ebmwebsourcing.easycommons</groupId>
+      <artifactId>easycommons-io</artifactId>
+      <type>test-jar</type>
+      <scope>test</scope>
+      <version>1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.ebmwebsourcing.easycommons</groupId>
+      <artifactId>easycommons-thread</artifactId>
+      <type>test-jar</type>
+      <scope>test</scope>
+      <version>1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.ebmwebsourcing.easycommons</groupId>
+      <artifactId>easycommons-thread</artifactId>
+      <version>1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.ebmwebsourcing.wsstar</groupId>
+      <artifactId>ws-addressing-definition</artifactId>
+      <version>1.3.0</version>
+    </dependency>
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.ow2.petals</groupId>
+        <artifactId>maven-petals-plugin</artifactId>
+        <extensions>true</extensions>
+        <version>2.2.0</version>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>attach-jar-artifact</id>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-jbi-test-resources</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.apache.rampart</groupId>
+                  <artifactId>rampart</artifactId>
+                  <type>mar</type>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.apache.axis2</groupId>
+                  <artifactId>addressing</artifactId>
+                  <type>mar</type>
+                </artifactItem>
+              </artifactItems>
+              <outputDirectory>${project.build.testOutputDirectory}</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+  <repositories>
+    <repository>
+      <id>bouncy</id>
+      <url>http://www.eviware.com/repository/maven2/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+        <updatePolicy>daily</updatePolicy>
+      </snapshots>
+    </repository>	
+    <repository>
+      <id>shibboleth</id>
+      <url>http://shibboleth.internet2.edu/downloads/maven2/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+        <updatePolicy>daily</updatePolicy>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>ebmws-public.release</id>
+      <url>http://maven.petalslink.com/public</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+        <updatePolicy>daily</updatePolicy>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>ebmws-public.snapshot</id>
+      <url>http://maven.petalslink.com/public-snapshot</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>daily</updatePolicy>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>ebmws-public-plugin.snapshot</id>
+      <url>http://maven.petalslink.com/public-snapshot</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>daily</updatePolicy>
+      </snapshots>
+    </repository>
+  </repositories>
   <scm>
-      <connection>scm:svn:https://svn.petalslink.com/svnroot/trunk/research/commons/dsb/modules/petals-bc-soap</connection>
-      <developerConnection>${project.scm.connection}</developerConnection>
+    <connection>scm:svn:https://svn.petalslink.org/svnroot/tags/petals-bc-soap-4.1.0</connection>
+    <developerConnection>scm:svn:https://svn.petalslink.org/svnroot/tags/petals-bc-soap-4.1.0</developerConnection>
   </scm>
-
-	<properties>
-		<axis2.version>1.4.1</axis2.version>
-		<rampart.version>1.4</rampart.version>
-		<topDirectoryLocation>../..</topDirectoryLocation>
-	</properties>
-	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.petalslink.dsb</groupId>
-			<artifactId>petals-cdk</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.ow2.petals</groupId>
-			<artifactId>petals-ws-star</artifactId>
-			<version>1.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.axis2</groupId>
-			<artifactId>axis2-kernel</artifactId>
-			<version>${axis2.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>xerces</groupId>
-					<artifactId>xercesImpl</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>xalan</groupId>
-					<artifactId>xalan</artifactId>
-				</exclusion>
-				<!-- Ant dependencies are unneeded -->
-				<exclusion>
-					<groupId>org.apache.ant</groupId>
-					<artifactId>ant</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.axis2</groupId>
-			<artifactId>axis2-json</artifactId>
-			<version>${axis2.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>xerces</groupId>
-					<artifactId>xercesImpl</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>xalan</groupId>
-					<artifactId>xalan</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>commons-lang</groupId>
-			<artifactId>commons-lang</artifactId>
-		</dependency>
-		<!-- TODO: check why version of Axiom must be forced -->
-		<!--
-			<dependency> <groupId>org.apache.ws.commons.axiom</groupId>
-			<artifactId>axiom-api</artifactId> <version>1.2.5</version>
-			</dependency> <dependency>
-			<groupId>org.apache.ws.commons.axiom</groupId>
-			<artifactId>axiom-impl</artifactId> <version>1.2.5</version>
-			</dependency> <dependency>
-			<groupId>org.apache.ws.commons.axiom</groupId>
-			<artifactId>axiom-dom</artifactId> <version>1.2.5</version>
-			</dependency>
-		-->
-		<!-- End TODO -->
-		<!--
-			The dependency on org.apache.rampart:rampart:1.3:mar can not be used
-			because it depends on a version SNAPSHOT. So we add rampart jars
-			dependencies and add the file .mar in the directory META-INF
-		-->
-		<!--
-			<dependency> <groupId>org.apache.rampart</groupId>
-			<artifactId>rampart</artifactId> <version>${axis2.version}</version>
-			<type>mar</type> </dependency>
-		-->
-		<dependency>
-			<groupId>org.apache.rampart</groupId>
-			<artifactId>rampart-core</artifactId>
-			<version>${rampart.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>com.sun.jmx</groupId>
-					<artifactId>jmxri</artifactId>
-				</exclusion>
-				<!--
-					exclusion> <groupId>xalan</groupId> <artifactId>xalan</artifactId>
-					</exclusion -->
-				<exclusion>
-					<groupId>xerces</groupId>
-					<artifactId>xercesImpl</artifactId>
-				</exclusion>
-				<!--
-					exclusion> <groupId>bouncycastle</groupId>
-					<artifactId>bcprov-jdk15</artifactId> </exclusion -->
-				<exclusion>
-					<groupId>com.sun.jdmk</groupId>
-					<artifactId>jmxtools</artifactId>
-				</exclusion>
-				<!-- Ant dependencies are unneeded -->
-				<exclusion>
-					<groupId>org.apache.ant</groupId>
-					<artifactId>ant-launcher</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.ant</groupId>
-					<artifactId>ant</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.ant</groupId>
-					<artifactId>ant-nodeps</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.rampart</groupId>
-			<artifactId>rampart</artifactId>
-			<type>mar</type>
-			<version>${rampart.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>com.sun.jdmk</groupId>
-					<artifactId>jmxtools</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.sun.jmx</groupId>
-					<artifactId>jmxri</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>xerces</groupId>
-					<artifactId>xercesImpl</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>xalan</groupId>
-					<artifactId>xalan</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>bouncycastle</groupId>
-					<artifactId>bcprov-jdk15</artifactId>
-				</exclusion>
-				<!-- Ant dependencies are unneeded -->
-				<exclusion>
-					<groupId>org.apache.ant</groupId>
-					<artifactId>ant-launcher</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.ant</groupId>
-					<artifactId>ant</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.ant</groupId>
-					<artifactId>ant-nodeps</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.mortbay.jetty</groupId>
-			<artifactId>jetty</artifactId>
-			<version>6.1.9</version>
-		</dependency>
-		<!--  JBI Shared Library -->
-		<!--
-			<dependency> <groupId>org.ow2.petals.sl.jms.activemq</groupId>
-			<artifactId>petals-sl-jms</artifactId> <version>5.2.0</version>
-			<type>jbi-shared-library</type> <scope>provided</scope> </dependency>
-		-->
-	</dependencies>
-	<repositories>
-		<!--
-			The following repository is needed to get
-			bouncycastle:bcprov-jdk15:jar:132 needed by
-			org.apache.rampart:rampart:1.3:mar, waiting
-			http://ws.zones.apache.org/repository2
-		-->
-		<repository>
-			<!-- This is to bypass the httpcore nio bad dependency on Apache which has moved and so the redirect does not work...-->
-			<id>ebmws-others.release</id>
-			<url>http://maven.petalslink.com/others</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>ws02</id>
-			<name>WSO2 Oxygen Tank</name>
-			<url>http://dist.wso2.org/maven2</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-eclipse-plugin</artifactId>
-				<version>2.7</version>
-				<configuration>
-					<addGroupIdToProjectName>true</addGroupIdToProjectName>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.ow2.petals</groupId>
-				<artifactId>maven-petals-plugin</artifactId>
-				<version>2.1.1</version>
-				<extensions>true</extensions>
-			</plugin>
-		</plugins>
-	</build>
 </project>

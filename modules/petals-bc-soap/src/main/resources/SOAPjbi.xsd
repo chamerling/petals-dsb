@@ -1,34 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-	targetNamespace="http://java.sun.com/xml/ns/jbi"
-	xmlns:jbi="http://java.sun.com/xml/ns/jbi"
+	targetNamespace="http://java.sun.com/xml/ns/jbi" xmlns:jbi="http://java.sun.com/xml/ns/jbi"
 	xmlns:petalsCDK="http://petals.ow2.org/components/extensions/version-5"
 	xmlns:soap="http://petals.ow2.org/components/soap/version-4"
 	elementFormDefault="qualified">
 
-	<xs:import
-		namespace="http://petals.ow2.org/components/soap/version-4"
+	<xs:import namespace="http://petals.ow2.org/components/soap/version-4"
 		schemaLocation="SOAPextensions.xsd" />
-		
+
 	<xs:redefine schemaLocation="abstractCDKjbi.xsd">
 		<xs:complexType name="Provides">
 			<xs:complexContent>
 				<xs:extension base="jbi:Provides">
 					<xs:sequence>
-						<xs:element ref="soap:address" maxOccurs="1" minOccurs="1" />
+						<xs:choice minOccurs="0" maxOccurs="1">
+							<!--  address is deprecated -->
+							<xs:element ref="soap:address" />
+							<xs:element ref="soap:wsa-to" />
+						</xs:choice>
+						<xs:element ref="soap:wsa-replyto" maxOccurs="1"
+							minOccurs="0" />
+						<xs:element ref="soap:wsa-from" maxOccurs="1"
+							minOccurs="0" />
+						<xs:element ref="soap:wsa-faultto" maxOccurs="1"
+							minOccurs="0" />
 						<xs:element ref="soap:soap-version" maxOccurs="1"
-							minOccurs="1" />
-						<xs:element ref="soap:add-root" maxOccurs="1"
 							minOccurs="1" />
 						<xs:element ref="soap:chunked-mode" maxOccurs="1"
 							minOccurs="1" />
-						<xs:element ref="soap:synchronous-timeout" maxOccurs="1"
-							minOccurs="0" />
 						<xs:element ref="soap:cleanup-transport" maxOccurs="1"
 							minOccurs="1" />
-						<xs:element ref="soap:mode" maxOccurs="1" minOccurs="1" />
-						<xs:element ref="soap:rest-http-method" maxOccurs="1"
-							minOccurs="0" />
+						<xs:element ref="soap:mode" maxOccurs="1" 
+							minOccurs="1" />
 						<xs:element ref="soap:proxy-host" maxOccurs="1"
 							minOccurs="0" />
 						<xs:element ref="soap:proxy-port" maxOccurs="1"
@@ -39,6 +42,29 @@
 							minOccurs="0" />
 						<xs:element ref="soap:proxy-domain" maxOccurs="1"
 							minOccurs="0" />
+						<xs:element ref="soap:headers-filter" maxOccurs="1"
+							minOccurs="0" />
+						<xs:element ref="soap:inject-headers" maxOccurs="1"
+							minOccurs="0" />
+						<xs:element ref="soap:headers-to-inject" maxOccurs="1"
+							minOccurs="0" />
+						<xs:element ref="soap:http-basic-auth-username" maxOccurs="1"
+							minOccurs="0" />
+						<xs:element ref="soap:http-basic-auth-password" maxOccurs="1"
+							minOccurs="0" />
+						<xs:element ref="soap:enable-compatibility-for" maxOccurs="1"
+							minOccurs="0" />
+						<xs:element ref="soap:enable-wsa" maxOccurs="1"
+							minOccurs="0" />							
+						<!-- HTTPS extensions -->
+						<xs:element ref="soap:https-truststore-file" maxOccurs="1"
+							minOccurs="0" />
+						<xs:element ref="soap:https-truststore-password" maxOccurs="1"
+							minOccurs="0" />
+						<xs:element ref="soap:https-keystore-file" maxOccurs="1"
+							minOccurs="0" />
+						<xs:element ref="soap:https-keystore-password" maxOccurs="1"
+							minOccurs="0" />										
 					</xs:sequence>
 				</xs:extension>
 			</xs:complexContent>
@@ -47,28 +73,33 @@
 			<xs:complexContent>
 				<xs:extension base="jbi:Consumes">
 					<xs:sequence>
-						<xs:element ref="soap:address" maxOccurs="1" minOccurs="1" />
-						<xs:element ref="soap:soap-action" maxOccurs="1" minOccurs="0" />
-						<xs:element ref="soap:remove-root" maxOccurs="1"
-							minOccurs="1" />
-						<xs:element ref="soap:synchronous-timeout" maxOccurs="1"
+						<xs:choice minOccurs="0" maxOccurs="1">
+							<!--  address is deprecated -->
+							<xs:element ref="soap:address" />
+							<xs:element ref="soap:service-name" />
+						</xs:choice>						
+						<xs:element ref="soap:soap-action" maxOccurs="1"
 							minOccurs="0" />
-						<xs:element ref="soap:mode" maxOccurs="1" minOccurs="1" />
-						<xs:element ref="soap:rest-add-namespace-uri"
-							maxOccurs="1" minOccurs="0" />
-						<xs:element ref="soap:rest-add-namespace-prefix"
-							maxOccurs="1" minOccurs="0" />
-						<xs:element ref="soap:rest-remove-prefix-on-response"
-							maxOccurs="1" minOccurs="0" />
-						<xs:element ref="soap:modules" maxOccurs="1" minOccurs="0" />
+						<xs:element ref="soap:modules" maxOccurs="1" 
+							minOccurs="0" />
 						<xs:element ref="soap:service-parameters" maxOccurs="1"
 							minOccurs="0">
 							<xs:annotation>
 								<xs:documentation>NO HCI</xs:documentation>
 							</xs:annotation>
 						</xs:element>
-						<xs:element ref="soap:enable-http-transport" maxOccurs="1" minOccurs="0" />
-						<xs:element ref="soap:enable-jms-transport" maxOccurs="1" minOccurs="0" />
+						<xs:element ref="soap:enable-http-transport" maxOccurs="1"
+							minOccurs="0" />
+						<xs:element ref="soap:enable-https-transport" maxOccurs="1"
+							minOccurs="0" />
+						<xs:element ref="soap:enable-jms-transport" maxOccurs="1"
+							minOccurs="0" />
+						<xs:element ref="soap:enable-compatibility-for" maxOccurs="1"
+							minOccurs="0" />
+						<xs:element ref="soap:enable-wsa" maxOccurs="1"
+							minOccurs="0" />															
+						<xs:element ref="soap:http-services-redirection" maxOccurs="1"
+							minOccurs="0" />															
 					</xs:sequence>
 				</xs:extension>
 			</xs:complexContent>
@@ -76,26 +107,58 @@
 		<xs:complexType name="Component">
 			<xs:complexContent>
 				<xs:extension base="jbi:Component">
-                    <xs:sequence>
-                        <xs:element ref="soap:http-port" maxOccurs="1" minOccurs="0" />
-                        <xs:element ref="soap:http-host" maxOccurs="1" minOccurs="0" />
-                        <xs:element ref="soap:http-service-list" maxOccurs="1" minOccurs="0" />
-                        <xs:element ref="soap:http-service-context" maxOccurs="1" minOccurs="0" />
-                        <xs:element ref="soap:http-service-mapping" maxOccurs="1" minOccurs="0" />
-                        <xs:element ref="soap:http-thread-pool-size-min" maxOccurs="1" minOccurs="0" />
-                        <xs:element ref="soap:http-thread-pool-size-max" maxOccurs="1" minOccurs="0" />
-                        <xs:element ref="soap:http-acceptors" maxOccurs="1" minOccurs="0" />
-                        
-                        <!-- JMS transport layer extensions -->
-                        <xs:element ref="soap:java-naming-factory-initial" maxOccurs="1" minOccurs="0" />
-                        <xs:element ref="soap:java-naming-provider-url" maxOccurs="1" minOccurs="0" />
-                        <xs:element ref="soap:jms-connection-factory-jndiname" maxOccurs="1" minOccurs="0" />
-                    </xs:sequence>
+					<xs:sequence>
+						<xs:element ref="soap:http-port" maxOccurs="1"
+							minOccurs="0" />
+						<xs:element ref="soap:http-host" maxOccurs="1"
+							minOccurs="0" />
+						<xs:element ref="soap:http-service-list" maxOccurs="1"
+							minOccurs="0" />
+						<xs:element ref="soap:http-service-context" maxOccurs="1"
+							minOccurs="0" />
+						<xs:element ref="soap:http-service-mapping" maxOccurs="1"
+							minOccurs="0" />
+						<xs:element ref="soap:http-thread-pool-size-min"
+							maxOccurs="1" minOccurs="0" />
+						<xs:element ref="soap:http-thread-pool-size-max"
+							maxOccurs="1" minOccurs="0" />
+						<xs:element ref="soap:http-acceptors" maxOccurs="1"
+							minOccurs="0" />
+						<!-- JMS transport layer extensions -->
+						<xs:element ref="soap:java-naming-factory-initial"
+							maxOccurs="1" minOccurs="0" />
+						<xs:element ref="soap:java-naming-provider-url"
+							maxOccurs="1" minOccurs="0" />
+						<xs:element ref="soap:jms-connection-factory-jndiname"
+							maxOccurs="1" minOccurs="0" />
+						<!-- HTTPS extensions -->
+						<xs:element ref="soap:https-enabled"
+							maxOccurs="1" minOccurs="0" />
+						<xs:element ref="soap:https-port"
+							maxOccurs="1" minOccurs="0" />
+						<xs:element ref="soap:https-keystore-type"
+							maxOccurs="1" minOccurs="0" />							
+						<xs:element ref="soap:https-keystore-file"
+							maxOccurs="1" minOccurs="0" />
+						<xs:element ref="soap:https-keystore-password"
+							maxOccurs="1" minOccurs="0" />
+						<xs:element ref="soap:https-key-password"
+							maxOccurs="1" minOccurs="0" />
+						<xs:element ref="soap:https-truststore-type"
+							maxOccurs="1" minOccurs="0" />							
+						<xs:element ref="soap:https-truststore-file"
+							maxOccurs="1" minOccurs="0" />
+						<xs:element ref="soap:https-truststore-password"
+							maxOccurs="1" minOccurs="0" />		
+					</xs:sequence>
 				</xs:extension>
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:redefine>
 
-	<!-- The definition of the root element here takes account of the redefined types -->
-	<xs:element name="jbi" type="jbi:Jbi"/>
+	<!--
+		The definition of the root element here takes account of the redefined
+		types
+	-->
+	<xs:element name="jbi" type="jbi:Jbi" />
 </xs:schema>

@@ -1,0 +1,4 @@
+<operation name='myOperation'>
+	<actionMapping>canBeASoapAction</actionMapping>
+	<actionMapping>canBeAWsaAction</actionMapping>
+</operation>

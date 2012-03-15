@@ -3,9 +3,7 @@
  */
 package org.ow2.petals.binding.soap;
 
-import java.io.File;
 import java.util.List;
-import java.util.Map;
 
 import org.ow2.easywsdl.extensions.wsdl4complexwsdl.api.Description;
 
@@ -29,17 +27,10 @@ public class ServiceContext<E> {
      * The service class loader
      */
     private ClassLoader classloader;
-
-    private File policyPath;
-
-    private String wsaTo;
-
-    private String wsaFrom;
-
-    private String wsaReplyTo;
-
-    private Map<String, String> soapActionMap;
     
+    /**
+     * The service description
+     */
     private Description serviceDescription;
 
     /**
@@ -70,42 +61,10 @@ public class ServiceContext<E> {
     }
 
     /**
-     * @return the policyPath
-     */
-    public File getPolicyPath() {
-        return policyPath;
-    }
-
-    /**
      * @return the serviceParams
      */
     public String getServiceParams() {
         return serviceParams;
-    }
-
-    public Map<String, String> getSoapActionMap() {
-        return soapActionMap;
-    }
-
-    /**
-     * @return the wsaFrom
-     */
-    public String getWsaFrom() {
-        return wsaFrom;
-    }
-
-    /**
-     * @return the wsaReplyTo
-     */
-    public String getWsaReplyTo() {
-        return wsaReplyTo;
-    }
-
-    /**
-     * @return the wsaTo
-     */
-    public String getWsaTo() {
-        return wsaTo;
     }
 
     /**
@@ -125,47 +84,11 @@ public class ServiceContext<E> {
     }
 
     /**
-     * @param policyPath
-     *            the policyPath to set
-     */
-    public void setPolicyPath(File policyPath) {
-        this.policyPath = policyPath;
-    }
-
-    /**
      * @param serviceParams
      *            the serviceParams to set
      */
     public void setServiceParams(String serviceParams) {
         this.serviceParams = serviceParams;
-    }
-
-    public void setSoapActionMap(Map<String, String> soapActionMap) {
-        this.soapActionMap = soapActionMap;
-    }
-
-    /**
-     * @param wsaFrom
-     *            the wsaFrom to set
-     */
-    public void setWsaFrom(String wsaFrom) {
-        this.wsaFrom = wsaFrom;
-    }
-
-    /**
-     * @param wsaReplyTo
-     *            the wsaReplyTo to set
-     */
-    public void setWsaReplyTo(String wsaReplyTo) {
-        this.wsaReplyTo = wsaReplyTo;
-    }
-
-    /**
-     * @param wsaTo
-     *            the wsaTo to set
-     */
-    public void setWsaTo(String wsaTo) {
-        this.wsaTo = wsaTo;
     }
 
     public Description getServiceDescription() {
