@@ -25,6 +25,7 @@ import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URLClassLoader;
 import java.util.List;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -50,6 +51,8 @@ import org.ow2.petals.binding.soap.listener.incoming.SoapServerConfig;
 import org.ow2.petals.binding.soap.listener.incoming.jetty.AxisServletServer;
 import org.ow2.petals.binding.soap.util.ComponentPropertiesHelper;
 import org.ow2.petals.binding.soap.util.SUPropertiesHelper;
+import org.ow2.petals.component.framework.ComponentInformation;
+import org.ow2.petals.component.framework.PetalsBindingComponent;
 import org.ow2.petals.component.framework.api.configuration.ConfigurationExtensions;
 import org.ow2.petals.component.framework.api.exception.PEtALSCDKException;
 import org.ow2.petals.component.framework.bc.AbstractBindingComponent;
@@ -230,9 +233,16 @@ public class SoapSUManager extends BindingComponentServiceUnitManager {
                 // (necessary to set the transport before adding the Axis
                 // service to Axis configuration)
                 axisService.setEnableAllTransports(false);
-                setTransportHttpsToAxisService(axisService,
+                String httpsURL = setTransportHttpsToAxisService(axisService,
                         this.component.getComponentExtensions(), extensions);
-                setTransportHttpToAxisService(axisService, extensions);
+                if (httpsURL != null) {
+                	this.addToExpose(httpsURL);
+                }
+                
+                String httpURL = setTransportHttpToAxisService(axisService, extensions);
+                if (httpURL != null) {
+                	this.addToExpose(httpURL);
+                }
                 setTransportJmsToAxisService(axisService, extensions);
 
                 // populate service with service descriptor
@@ -366,6 +376,7 @@ public class SoapSUManager extends BindingComponentServiceUnitManager {
                     if (serviceName == null) {
                         serviceName = SUPropertiesHelper.getAddress(extensions);
                     }
+                    
                     // Comma-separated list of redirection aliases
                     StringTokenizer st = new StringTokenizer(redirect, ",;|");
                     while (st.hasMoreTokens()) {
@@ -382,6 +393,9 @@ public class SoapSUManager extends BindingComponentServiceUnitManager {
                 final ConfigurationExtensions extensions = suDatahandler
                         .getConfigurationExtensions(provides);
                 checkProvide(extensions);
+                
+                this.addToConsume(SUPropertiesHelper.getAddress(extensions));
+                
                 final ServiceContext<Provides> context = soapContext.getProvidersManager()
                         .getServiceContext(provides);
                 final ServiceEndpoint srvEp = componentContext.getEndpoint(provides
@@ -426,7 +440,7 @@ public class SoapSUManager extends BindingComponentServiceUnitManager {
                 final ConfigurationExtensions extensions = suDatahandler
                         .getConfigurationExtensions(consumes);
                 unregisterAxisService(extensions);
-
+                
                 String redirect = extensions.get("http-services-redirection");
                 if (redirect != null) {
                     // Comma-separated list of redirection aliases
@@ -436,6 +450,15 @@ public class SoapSUManager extends BindingComponentServiceUnitManager {
                                 st.nextToken().trim());
                     }
                 }
+            }
+            
+            final List<Provides> providesList = descriptor.getServices().getProvides();
+            for (final Provides provides : providesList) {
+                if (suDatahandler == null) {
+                    suDatahandler = this.getSUDataHandlerForService(provides);
+                }
+                this.removeFromConsume(SUPropertiesHelper.getAddress(suDatahandler
+                        .getConfigurationExtensions(provides)));
             }
         }
     }
@@ -540,7 +563,7 @@ public class SoapSUManager extends BindingComponentServiceUnitManager {
      * 
      * @param axisService
      */
-    private void setTransportHttpsToAxisService(final AxisService axisService,
+    private String setTransportHttpsToAxisService(final AxisService axisService,
             final ConfigurationExtensions componentExtensions,
             final ConfigurationExtensions suExtensions) {
 
@@ -553,7 +576,10 @@ public class SoapSUManager extends BindingComponentServiceUnitManager {
                     + "' has been registered and is available at '"
                     + soapServerConfig.getServiceURL(axisService.getName(),
                             Constants.TRANSPORT_HTTPS) + "'");
+            return soapServerConfig.getServiceURL(axisService.getName(),
+                    Constants.TRANSPORT_HTTPS);
         }
+        return null;
     }
 
     /**
@@ -561,7 +587,7 @@ public class SoapSUManager extends BindingComponentServiceUnitManager {
      * 
      * @param axisService
      */
-    private void setTransportHttpToAxisService(final AxisService axisService,
+    private String setTransportHttpToAxisService(final AxisService axisService,
             final ConfigurationExtensions extensions) {
 
         if (SUPropertiesHelper.isHttpTransportEnabled(extensions)) {
@@ -572,7 +598,10 @@ public class SoapSUManager extends BindingComponentServiceUnitManager {
                     + "' has been registered and is available at '"
                     + soapServerConfig.getServiceURL(axisService.getName(),
                             Constants.TRANSPORT_HTTP) + "'");
+            return soapServerConfig.getServiceURL(axisService.getName(),
+                    Constants.TRANSPORT_HTTP);
         }
+        return null;
     }
 
     /**
@@ -620,6 +649,12 @@ public class SoapSUManager extends BindingComponentServiceUnitManager {
             if (axisService != null) {
                 axisConfig.removeServiceGroup(serviceName);
                 axisService.getAxisConfiguration().removeService(serviceName);
+                
+                this.removeFromExpose(soapServerConfig.getServiceURL(axisService.getName(),
+                        Constants.TRANSPORT_HTTPS));
+                this.removeFromExpose(soapServerConfig.getServiceURL(axisService.getName(),
+                        Constants.TRANSPORT_HTTP));
+                        
             } else {
                 logger.log(Level.WARNING, "Service '" + serviceName
                         + "' not found, can not be unregistered from Axis2");
@@ -628,4 +663,52 @@ public class SoapSUManager extends BindingComponentServiceUnitManager {
             throw new PEtALSCDKException("Can not remove service from Axis context", e);
         }
     }
+    
+    /**
+     * @param restService
+     */
+    private void addToExpose(String serviceURL) {
+        if (this.getComponentInformation() == null) {
+            return;
+        }
+        Set<String> exposed = this.getComponentInformation().getExposedServices();
+        if (exposed != null) {
+            exposed.add(serviceURL);
+        }
+    }
+
+    private void removeFromExpose(String serviceURL) {
+        if (this.getComponentInformation() == null) {
+            return;
+        }
+        Set<String> exposed = this.getComponentInformation().getExposedServices();
+        if (exposed != null) {
+            exposed.remove(serviceURL);
+        }
+    }
+
+    private void addToConsume(String serviceURL) {
+        if (this.getComponentInformation() == null) {
+            return;
+        }
+        Set<String> services = this.getComponentInformation().getConsumedServices();
+        if (services != null) {
+            services.add(serviceURL);
+        }
+    }
+
+    private void removeFromConsume(String serviceURL) {
+        if (this.getComponentInformation() == null) {
+            return;
+        }
+        Set<String> services = this.getComponentInformation().getConsumedServices();
+        if (services != null) {
+            services.remove(serviceURL);
+        }
+    }
+
+    public ComponentInformation getComponentInformation() {
+        return ((PetalsBindingComponent) this.component).getPlugin(ComponentInformation.class);
+    }
+    
 }

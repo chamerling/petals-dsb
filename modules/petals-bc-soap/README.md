@@ -7,3 +7,4 @@
 5. Change the port handing which is configured in the container component.properties in SoapExternalListenerManager
 6. Add eviware repository for bouncy dependency
 7. Add <petalsCDK:ignored-status>DONE_AND_ERROR_IGNORED</petalsCDK:ignored-status> in the jbi.xml. If not present JBI XML validation fails at installation.
+8. SOAPSUManager : Add addToExpose, addToConsume ... Change the doStart, doStop and createAxisService/unregisterAxisService to handle services URLs
