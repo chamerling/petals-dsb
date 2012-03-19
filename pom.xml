@@ -88,7 +88,9 @@
 		<!-- SOAP 410 to be updated-->
 		<module>modules/petals-bc-soap</module>
 		<!-- OLD DSB ONE -->
+		<!--
 		<module>modules/petals-bc-soap401</module>
+		-->
 		
 		<module>modules/petals-bc-restproxy</module>
 		<module>modules/petals-bc-soapproxy</module>

@@ -30,10 +30,9 @@
 		</dependency>
 		
 		<!--  Dependencies taken from petals-launcher and version updated -->
-				<dependency>
+		<dependency>
 			<groupId>org.ow2.petals</groupId>
 			<artifactId>petals-kernel-api</artifactId>
-			<version>2.1.0</version>
 		</dependency>
 
 		<dependency>

@@ -32,6 +32,11 @@
 			<artifactId>dsb-launcher</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.ow2.petals</groupId>
+			<artifactId>petals-jbi</artifactId>
+		</dependency>
 
 		<!-- FIXME : Uncomment when merged -->
 		<!-- <dependency> <groupId>org.petalslink.dsb</groupId> <artifactId>dsb-federationtransporter</artifactId> 
