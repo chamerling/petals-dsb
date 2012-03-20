@@ -214,7 +214,8 @@ public class DSBDestination extends AbstractDestination implements MessageListen
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            // TODO
+            // TODO there is a timeout while invoking the service...
+            System.out.println("Timeout or exception while invokiing the service...");
         }
         return result;
     }

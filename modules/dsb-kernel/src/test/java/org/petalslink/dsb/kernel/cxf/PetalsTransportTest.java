@@ -145,14 +145,10 @@ public class PetalsTransportTest extends TestCase {
             public Message sendReceive(Message message) throws ClientException {
                 System.out.println("Sending message " + message);
                 try {
-                    System.out.println("Foo");
-
                     System.out.println("Payload " + XMLHelper.createStringFromDOMDocument(message.getPayload()));
                 } catch (TransformerException e) {
                     e.printStackTrace();
                 }
-                System.out.println("Foo");
-                
                 // pass the message to the server listener...
                 return server.getListener().onMessage(message);
             }

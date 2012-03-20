@@ -83,6 +83,8 @@ public class DSBDestinationOutputStream extends CachedOutputStream {
                     out.getProperties().put(DSBDestination.CORRELATION,
                             inMessage.get(DSBDestination.CORRELATION).toString());
                 }
+                out.setPayload(doc);
+                // TODO : other properties may be needed...
                 // notify incoming listener that the response is available...
                 responseListener.onMessage(out);
 

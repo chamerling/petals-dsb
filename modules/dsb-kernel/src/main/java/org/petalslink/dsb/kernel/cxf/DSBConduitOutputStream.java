@@ -161,11 +161,20 @@ public class DSBConduitOutputStream extends CachedOutputStream {
                 Message inMessage = new MessageImpl();
                 inMessage.setExchange(exchange);
 
-                if (LOG.isLoggable(Level.INFO))
-                    LOG.info("RESPONSE from service : "
+                if (LOG.isLoggable(Level.INFO)) {
+                    if (out.getPayload() != null) {
+                        LOG.info("RESPONSE from service : "
                             + com.ebmwebsourcing.easycommons.xml.XMLHelper.createStringFromDOMDocument(out.getPayload()));
+                    } else {
+                        LOG.info("RESPONSE from service is empty and should not (InOut message)");
+                    }
+                }
 
-                InputStream ins = XMLHelper.getInputStream(out.getPayload());
+                InputStream ins = null;
+                if (out.getPayload() != null) {
+                    ins = XMLHelper.getInputStream(out.getPayload());
+                }
+                
                 if (ins == null) {
                     throw new IOException(new org.apache.cxf.common.i18n.Message(
                             "UNABLE.RETRIEVE.MESSAGE", LOG).toString());
