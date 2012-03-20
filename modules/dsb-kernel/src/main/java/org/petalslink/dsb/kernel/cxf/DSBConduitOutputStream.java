@@ -118,6 +118,7 @@ public class DSBConduitOutputStream extends CachedOutputStream {
             message.setInterface(interfaceName);
             message.setEndpoint(endpointName);
             message.setOperation(bop.getName());
+            message.setPayload(doc);
 
             message.getProperties().put(Constants.MESSAGE_TYPE, Constants.DSB_INVOKE);
             message.getProperties().put(
