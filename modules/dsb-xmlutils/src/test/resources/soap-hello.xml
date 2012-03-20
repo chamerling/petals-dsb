@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ns2:sayHello xmlns:ns2="http://api.ws.dsb.petalslink.org/"><arg0>bar</arg0></ns2:sayHello></soap:Body></soap:Envelope>
