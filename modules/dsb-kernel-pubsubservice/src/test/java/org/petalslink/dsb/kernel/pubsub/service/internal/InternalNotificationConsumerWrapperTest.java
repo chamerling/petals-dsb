@@ -4,12 +4,14 @@
 package org.petalslink.dsb.kernel.pubsub.service.internal;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import junit.framework.TestCase;
 
+import org.petalslink.dsb.annotations.notification.Mode;
 import org.petalslink.dsb.kernel.pubsub.service.internal.test.MockWithDocument;
 import org.petalslink.dsb.kernel.pubsub.service.internal.test.MockWithNParameters;
 import org.petalslink.dsb.kernel.pubsub.service.internal.test.MockWithNothing;
@@ -49,12 +51,13 @@ public class InternalNotificationConsumerWrapperTest extends TestCase {
         MockWithDocument mock = new MockWithDocument(report);
         bean.m = mock.getClass().getMethod("mockMe", Document.class);
         bean.target = mock;
+        bean.mode = Mode.WSN;
 
         InternalNotificationConsumerWrapper wrapper = new InternalNotificationConsumerWrapper(bean, null);
         wrapper.notify(getNotify());
 
         assertTrue(report.ok);
-        assertNull(report.e.getMessage(), report.e);
+        assertNull(report.e);
     }
 
     public void testInvokeWithNothing() throws Exception {
@@ -62,32 +65,42 @@ public class InternalNotificationConsumerWrapperTest extends TestCase {
         Report report = new Report();
 
         MockWithNothing mock = new MockWithNothing(report);
-        bean.m = mock.getClass().getMethod("mockMe", (Class<?>) null);
+        Method[] methods = mock.getClass().getMethods();
+        for (Method method : methods) {
+            if (method.getName().equals("mockMe")) {
+                bean.m = method;
+            }
+        }
+
         bean.target = mock;
 
         InternalNotificationConsumerWrapper wrapper = new InternalNotificationConsumerWrapper(bean, null);
-        wrapper.notify(getNotify());
+        wrapper.notify(null);
 
         assertTrue(report.ok);
-        assertNull(report.e.getMessage(), report.e);
+        assertNull(report.e);
     }
 
-    public void testInvokeWithNotify() throws Exception {
+    public void testInvokeWithNotify() throws SecurityException, NoSuchMethodException {
         NotificationTargetBean bean = new NotificationTargetBean();
         Report report = new Report();
 
         MockWithNotify mock = new MockWithNotify(report);
         bean.m = mock.getClass().getMethod("mockMe", Notify.class);
         bean.target = mock;
+        bean.mode = Mode.WSN;
 
         InternalNotificationConsumerWrapper wrapper = new InternalNotificationConsumerWrapper(bean, null);
-        wrapper.notify(getNotify());
+        try {
+            wrapper.notify(getNotify());
+            fail("This is not supported and should not happen...");
+        } catch (WsnbException e) {
+            // success...
+        }
 
-        assertTrue(report.ok);
-        assertNull(report.e.getMessage(), report.e);
     }
 
-    public void testInvokeWithNParameters() throws Exception {
+    public void testInvokeWithNParameters() throws SecurityException, NoSuchMethodException {
         NotificationTargetBean bean = new NotificationTargetBean();
         Report report = new Report();
 
@@ -96,10 +109,12 @@ public class InternalNotificationConsumerWrapperTest extends TestCase {
         bean.target = mock;
 
         InternalNotificationConsumerWrapper wrapper = new InternalNotificationConsumerWrapper(bean, null);
-        wrapper.notify(getNotify());
-
-        assertTrue(report.ok);
-        assertNull(report.e.getMessage(), report.e);
+        try {
+            wrapper.notify(getNotify());
+            fail("This should not happen...");
+        } catch (WsnbException e) {
+            // success
+        }
     }
 
     private Notify getNotify() {

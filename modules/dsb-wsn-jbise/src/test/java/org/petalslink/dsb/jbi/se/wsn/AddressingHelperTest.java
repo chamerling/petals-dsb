@@ -22,11 +22,6 @@ public class AddressingHelperTest extends TestCase {
         assertFalse(AddressingHelper.isExternalService(null));
     }
 
-    public void testIsExternalServiceBadInput() throws Exception {
-        URI address = URI.create(Constants.DSB_INTERNAL_SERVICE_NS + "/foo/bar");
-        assertFalse(AddressingHelper.isExternalService(address));
-    }
-
     public void testIsInternalService() throws Exception {
         URI address = URI.create(Constants.DSB_INTERNAL_SERVICE_NS + "/foo/bar");
         assertTrue(AddressingHelper.isInternalService(address));

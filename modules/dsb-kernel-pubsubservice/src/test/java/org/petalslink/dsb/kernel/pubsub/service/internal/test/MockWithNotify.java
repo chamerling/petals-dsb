@@ -6,6 +6,8 @@ package org.petalslink.dsb.kernel.pubsub.service.internal.test;
 import org.petalslink.dsb.annotations.notification.Notify;
 
 /**
+ * NOTE : This is not supported for now...
+ * 
  * @author chamerling
  * 
  */

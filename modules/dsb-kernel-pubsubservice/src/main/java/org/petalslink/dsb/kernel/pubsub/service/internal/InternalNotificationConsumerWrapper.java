@@ -73,8 +73,13 @@ public class InternalNotificationConsumerWrapper implements InternalNotification
 
         if (bean != null && bean.target != null && bean.m != null) {
             Class<?>[] parameters = bean.m.getParameterTypes();
-            Object[] args = new Object[1];
-            if (parameters.length == 1) {
+            Object[] args = null;
+            
+            if (parameters.length == 0) {
+                args = new Object[0];
+            } else if (parameters.length == 1) {
+                args = new Object[1];
+                
                 // hope that the argument is really a document, must be checked!
                 if (bean.mode == Mode.WSN) {
                     args[0] = Wsnb4ServUtils.getWsnbWriter().writeNotifyAsDOM(notify);
@@ -96,7 +101,7 @@ public class InternalNotificationConsumerWrapper implements InternalNotification
             try {
                 bean.m.invoke(bean.target, args);
             } catch (Exception e) {
-                e.printStackTrace();
+                throw new WsnbException("Error while invoking method", e);
             }
         }
     }

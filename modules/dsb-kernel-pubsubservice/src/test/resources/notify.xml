@@ -14,8 +14,8 @@
 			</wsa:Address>
 		</wsnt:ProducerReference>
 		<wsnt:Message>
-			<npex:NotifyContent xmlns:npex="http://petals.ow2.org/aNamespaceSample">This is the content
-				- payload - of the notification</npex:NotifyContent>
+			<npex:NotifyContent xmlns:npex="http://petals.ow2.org/aNamespaceSample"><foo>This is the content
+				- payload - of the notification</foo></npex:NotifyContent>
 		</wsnt:Message>
 	</wsnt:NotificationMessage>-->
 </wsnt:Notify>

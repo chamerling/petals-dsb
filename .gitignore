@@ -5,3 +5,7 @@ target
 .classpath
 */.checkstyle-rules.xml
 .checkstyle-rules.xml
+test
+*/.project
+*/*/.project
+modules/dsb-cxfutils/.project

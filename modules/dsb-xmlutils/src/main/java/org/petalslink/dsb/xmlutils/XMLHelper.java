@@ -114,6 +114,7 @@ public class XMLHelper {
         try {
             transformer.transform(new DOMSource(document), sResult);
         } catch (TransformerException e) {
+            e.printStackTrace();
             throw new IOException("Error while transform DOM2 document to StreamSource", e);
         } finally {
             transformer.reset();

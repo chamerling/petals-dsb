@@ -4,7 +4,6 @@
 package org.petalslink.notification.commons;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -12,7 +11,6 @@ import java.util.Set;
 
 import junit.framework.TestCase;
 
-import org.apache.cxf.common.classloader.FireWallClassLoader;
 import org.petalslink.dsb.notification.commons.PropertiesConfigurationConsumer;
 
 import com.ebmwebsourcing.wsstar.basefaults.datatypes.impl.impl.WsrfbfModelFactoryImpl;
