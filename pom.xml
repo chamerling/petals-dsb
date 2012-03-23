@@ -22,14 +22,6 @@
 --><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	
-	<!--
-	<parent>
-		<groupId>org.ow2.petals</groupId>
-		<artifactId>petals-parent</artifactId>
-		<version>17</version>
-	</parent>
-	-->
-	
 	<name>Petals DSB Builder</name>
 	<artifactId>petals-dsb-builder</artifactId>
 	<groupId>org.petalslink.dsb</groupId>
@@ -51,10 +43,7 @@
 		<module>modules/dsb-client-servicebinder</module>
 		<module>modules/dsb-kernel-wsapi</module>
 		<module>modules/dsb-kernel-api</module>
-		<module>modules/dsb-kernel</module>
-		
-		<!--<module>modules/dsb-petals-oldies</module>-->
-		
+		<module>modules/dsb-kernel</module>		
 		<module>modules/dsb-webapp</module>
 		<module>modules/dsb-webappapi</module>
 		<module>modules/dsb-transport-api</module>
@@ -123,7 +112,6 @@
 		<!--<module>modules/dsb-bundle-bpelgenerator</module>-->
 		
 		<module>modules/dsb-bpelgenerator-jbise</module>
-		
 		
 		<!-- Monitoring -->
 		<module>modules/dsb-kernel-monitoringservice</module>
@@ -212,8 +200,13 @@
 			<id>distributions</id>
 			<modules>
 				<module>distributions/dsb-distribution</module>
-				<!--<module>distributions/fdsb-distribution</module>-->
-				<module>distributions/dsb-installer</module>
+				<module>distributions/dsb-fulldistribution</module>
+			</modules>
+		</profile>
+		<profile>
+			<id>integration</id>
+			<modules>
+				<module>integration/dsb-integration-wsapi</module>
 			</modules>
 		</profile>
 	</profiles>

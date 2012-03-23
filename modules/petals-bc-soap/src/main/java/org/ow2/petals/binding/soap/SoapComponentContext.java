@@ -478,7 +478,10 @@ public class SoapComponentContext {
             if (pool == null) {
 
                 long maxWait;
-            	Long timeout = provides.getTimeout();
+                Long timeout = null;
+                if (provides != null) {
+                	timeout = provides.getTimeout();
+                }
                 if((MEPConstants.IN_OUT_PATTERN.equals(mep)  || MEPConstants.IN_OPTIONAL_OUT_PATTERN.equals(mep))
                 		&& timeout != null) {
                 	maxWait = timeout;

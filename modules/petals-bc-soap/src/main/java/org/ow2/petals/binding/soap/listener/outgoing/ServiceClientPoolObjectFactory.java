@@ -140,9 +140,13 @@ public class ServiceClientPoolObjectFactory extends BasePoolableObjectFactory {
         }
 
         // set the timeout
-        final Long timeout = this.provides.getTimeout();
-        if(timeout != null) {
-        	options.setTimeOutInMilliSeconds(timeout);
+        if (this.provides != null) {
+        	final Long timeout = this.provides.getTimeout();
+        	if(timeout != null) {
+        		options.setTimeOutInMilliSeconds(timeout);
+        	}
+        } else {
+        	// NOP
         }
         
         // Get the soapEnvelopeNamespaceURI version to use - optional,
@@ -348,6 +352,10 @@ public class ServiceClientPoolObjectFactory extends BasePoolableObjectFactory {
      * @throws AxisFault
      */
     private void engageModules(final PetalsServiceClient petalsServiceClient) throws AxisFault {
+    	if (provides == null) {
+    		return;
+    	}
+    	
         final List<String> modules = soapContext.getProvidersManager().getServiceContext(provides)
                 .getModules();
         if (modules != null) {
@@ -377,8 +385,12 @@ public class ServiceClientPoolObjectFactory extends BasePoolableObjectFactory {
         final ServiceManager<Provides> providersManager = soapContext.getProvidersManager();
         final ServiceContext<Provides> serviceContext = providersManager
                 .getServiceContext(provides);
-        final ClassLoader cl = serviceContext.getClassloader();
-        axisService.setClassLoader(cl);
+        
+        // WSA support...
+        if (serviceContext != null) {
+        	final ClassLoader cl = serviceContext.getClassloader();
+        	axisService.setClassLoader(cl);
+        }
 
         final AxisOperation axisOperation;
         if (MEPConstants.IN_ONLY_PATTERN.equals(mep)) {

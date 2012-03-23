@@ -438,7 +438,8 @@ public class SOAPCaller {
             // no error to throw on this property research
         }
         final Addressing suAddressing = WSAHelper.getAddressing(extensions);
-        return WSAHelper.merge(wsAddressing, suAddressing);
+        final Addressing wsaToAddressing = WSAHelper.getAddressing(exchange.getInAddressing());
+        return WSAHelper.merge(wsAddressing, wsaToAddressing, suAddressing);
     }
 
     private String retrieveSoapActionFromWsdl(final Exchange exchange, final Provides provides) {

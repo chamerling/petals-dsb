@@ -30,6 +30,8 @@
 
 - Need to delete /org.petalslink.dsb.dsb-xmlutils/src/main/java/org/petalslink/dsb/xmlutils/XMLHelper.java and use direclty utils
 
+- BC SOAP: Add WSAAddressing endpoint, handle null extensions on outgoing listener.
+
 
 ## New but not used
 - org.ow2.petals.jbi.messaging.exchange.PersistedMessageExchangeWrapper dans TransporterNIO

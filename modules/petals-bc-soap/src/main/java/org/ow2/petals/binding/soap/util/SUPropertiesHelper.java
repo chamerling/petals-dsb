@@ -90,6 +90,9 @@ public class SUPropertiesHelper {
      */
     protected static final boolean checkPresent(final String parameterName,
             final ConfigurationExtensions extensions) {
+    	if (extensions == null) {
+    		return false;
+    	}
         final String tmp = extensions.get(parameterName);
         return tmp != null && tmp.trim().length() > 0;
     }
@@ -117,6 +120,9 @@ public class SUPropertiesHelper {
     protected static final boolean getBoolean(final String parameterName,
             final ConfigurationExtensions extensions) {
         boolean result = true;
+        if (extensions == null) {
+        	return result;
+        }
         final String tmp = extensions.get(parameterName);
         if (tmp != null) {
             result = Boolean.parseBoolean(tmp.trim());
@@ -127,6 +133,9 @@ public class SUPropertiesHelper {
     protected static final boolean getBoolean(final String parameterName,
             final ConfigurationExtensions extensions, final boolean defaultValue) {
         boolean result = true;
+        if (extensions == null) {
+        	return defaultValue;
+        }
         final String tmp = extensions.get(parameterName);
         if (tmp == null) {
             result = defaultValue;
@@ -159,6 +168,9 @@ public class SUPropertiesHelper {
      */
     protected static final String getString(final String parameterName,
             final ConfigurationExtensions extensions) {
+    	if (extensions == null) {
+    		return null;
+    	}
         String result = extensions.get(parameterName);
         if (result != null) {
             result = result.trim();
@@ -250,6 +262,10 @@ public class SUPropertiesHelper {
      */
     public static List<String> retrieveHeaderList(final ConfigurationExtensions extensions) {
         List<String> result = null;
+        if (extensions == null) {
+        	return result;
+        }
+        
         final String tmp = extensions.get(HEADERS_FILTER);
         if (tmp != null) {
             result = new ArrayList<String>();
@@ -316,6 +332,9 @@ public class SUPropertiesHelper {
      * @return true if the Axis 1 compatibility is enabled, otherwise false
      */
     public static boolean isAxis1CompatibilityEnabled(final ConfigurationExtensions extensions) {
+    	if (extensions == null) {
+    		return false;
+    	}
         String compatibility = extensions.get(COMPATIBILITY);
         return compatibility != null && compatibility.equals(AXIS1);
     }
@@ -327,6 +346,9 @@ public class SUPropertiesHelper {
      * @return the keystore file location
      */
     public static String getKeystoreFile(final ConfigurationExtensions extensions) {
+    	if (extensions == null) {
+    		return null;
+    	}
         return extensions.get(KEYSTORE_FILE);
     }
 
@@ -338,6 +360,9 @@ public class SUPropertiesHelper {
      * @return the keystore password
      */
     public static String getKeystorePassword(final ConfigurationExtensions extensions) {
+    	if (extensions == null) {
+    		return null;
+    	}
         return extensions.get(KEYSTORE_PASSWORD);
     }
 
@@ -348,6 +373,9 @@ public class SUPropertiesHelper {
      * @return the truststore file location
      */
     public static String getTruststoreFile(final ConfigurationExtensions extensions) {
+    	if (extensions == null) {
+    		return null;
+    	}
         return extensions.get(TRUSTSTORE_FILE);
     }
 
@@ -358,6 +386,9 @@ public class SUPropertiesHelper {
      * @return the truststore password
      */
     public static String getTruststorePassword(final ConfigurationExtensions extensions) {
+    	if (extensions == null) {
+    		return null;
+    	}
         return extensions.get(TRUSTSTORE_PASSWORD);
     }
 
@@ -378,6 +409,9 @@ public class SUPropertiesHelper {
      * @return the Basic Authentication username
      */
     public static String getBasicAuthUser(final ConfigurationExtensions extensions) {
+    	if (extensions == null) {
+    		return null;
+    	}
         return extensions.get(BASIC_AUTH_USERNAME);
     }   
     
@@ -388,6 +422,9 @@ public class SUPropertiesHelper {
      * @return the Basic Authentication password
      */
     public static String getBasicAuthPwd(final ConfigurationExtensions extensions) {
+    	if (extensions == null) {
+    		return null;
+    	}
         return extensions.get(BASIC_AUTH_PASSWORD);
     }
     
@@ -399,6 +436,9 @@ public class SUPropertiesHelper {
      */
     public static final List<String> getModules(final ConfigurationExtensions extensions) {
         final List<String> result = new ArrayList<String>();
+        if (extensions == null) {
+    		return result;
+    	}
 
         // get modules from extension
         final String token = extensions.get(MODULES);
@@ -425,6 +465,9 @@ public class SUPropertiesHelper {
      * @return the services parameters (XML)
      */
     public static final String getServiceParameters(final ConfigurationExtensions extensions) {
+    	if (extensions == null) {
+    		return null;
+    	}
         return extensions.get(SERVICE_PARAMETERS);
     }
     
@@ -442,6 +485,9 @@ public class SUPropertiesHelper {
     public static final String retrieveSOAPEnvelopeNamespaceURI(
             final ConfigurationExtensions extensions) {
         String soapEnvelopeNamespaceURI = SOAP11Constants.SOAP_ENVELOPE_NAMESPACE_URI;
+        if (extensions == null) {
+        	return soapEnvelopeNamespaceURI;
+        }
         final String soapVersion = extensions.get(SOAP_VERSION);
 
         if (SOAP_VERSION_12.equals(soapVersion)) {
@@ -459,6 +505,10 @@ public class SUPropertiesHelper {
      * @return the value of the cleanup-transport property (true if the property is not present)
      */
     public  static final boolean retrieveCleanupTransport(final ConfigurationExtensions extensions) {
+    	if (extensions == null) {
+    		return true;
+    	}
+    	
         final String clean = extensions.get(CLEANUP_TRANSPORT);
         
         if (clean == null) {
@@ -476,6 +526,9 @@ public class SUPropertiesHelper {
      * @return the chunked mode property value
      */
     public final static String retrieveChunkedMode(final ConfigurationExtensions extensions) {
+    	if (extensions == null) {
+    		return null;
+    	}
         return extensions.get(CHUNKED_MODE);
     }
 
@@ -489,6 +542,9 @@ public class SUPropertiesHelper {
      * @return the default SOAP action
      */
     public final static String retrieveDefaultSOAPAction(final ConfigurationExtensions extensions) {
+    	if (extensions == null) {
+    		return null;
+    	}
         final String soapAction = extensions.get(SOAP_ACTION);
         return soapAction;
     }
@@ -504,6 +560,9 @@ public class SUPropertiesHelper {
      */
     public static final HttpTransportProperties.ProxyProperties retrieveProxySettings(
             final ConfigurationExtensions extensions) {
+    	if (extensions == null) {
+    		return null;
+    	}
 
         HttpTransportProperties.ProxyProperties proxyProperties = null;
         if (extensions.get(PROXY_HOST) != null) {
