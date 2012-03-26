@@ -464,13 +464,21 @@ public class SOAPCaller {
                 }
             }
         } catch (final MessagingException e1) {
-            e1.printStackTrace();
-            logger.warning("Error '" + e1.getMessage()
+        	if (logger.isLoggable(Level.FINE)) {
+        		logger.log(Level.WARNING, "Error '" + e1.getMessage()
+                        + "' while trying to get elements to resolve soapAction.", e1);
+        	} else {
+        		logger.warning("Error '" + e1.getMessage()
                     + "' While trying to get elements to resolve soapAction.");
+        	} 
         } catch (final Exception e) {
-            e.printStackTrace();
-            logger.warning("Error '" + e.getMessage()
-                    + "' while trying to get elements to resolve soapAction.");
+        	if (logger.isLoggable(Level.FINE)) {
+        		logger.log(Level.WARNING, "Error '" + e.getMessage()
+                        + "' while trying to get elements to resolve soapAction.", e);
+        	} else {            
+        		logger.warning("Error '" + e.getMessage()
+                        + "' while trying to get elements to resolve soapAction.");
+        	}
         }
 
         return soapAction;
