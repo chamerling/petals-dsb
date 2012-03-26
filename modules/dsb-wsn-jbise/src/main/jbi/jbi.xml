@@ -16,11 +16,15 @@
 		<jbi:bootstrap-class-path>
 			<jbi:path-element />
 		</jbi:bootstrap-class-path>
+		
 		<!-- CDK specific fields -->
 		<petalsCDK:acceptor-pool-size>5</petalsCDK:acceptor-pool-size>
 		<petalsCDK:processor-pool-size>10</petalsCDK:processor-pool-size>
-		<petalsCDK:ignored-status>DONE_AND_ERROR_IGNORED</petalsCDK:ignored-status>
-		<petalsCDK:jbi-listener-class-name>org.petalslink.dsb.jbi.se.wsn.listeners.JBIListener</petalsCDK:jbi-listener-class-name>
+		<petalsCDK:processor-max-pool-size>50</petalsCDK:processor-max-pool-size>
+		<petalsCDK:properties-file />
+		
+		<!-- <petalsCDK:ignored-status>DONE_AND_ERROR_IGNORED</petalsCDK:ignored-status>-->
+		<petalsCDK:jbi-listener-class-name>org.petalslink.dsb.jbi.se.wsn.listeners.NotificationV2JBIListener</petalsCDK:jbi-listener-class-name>
 		<petalsCDK:external-listener-class-name>org.petalslink.dsb.jbi.se.wsn.listeners.ExternalListener</petalsCDK:external-listener-class-name>
 		<!-- Component specific configuration -->
 	</jbi:component>
