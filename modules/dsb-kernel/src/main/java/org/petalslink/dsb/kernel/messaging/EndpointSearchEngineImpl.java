@@ -243,7 +243,11 @@ public class EndpointSearchEngineImpl implements EndpointSearchEngine, PetalsSer
 
         List<Object> strategyParameters;
         try {
-            strategyParameters = analyseStrategy(strategy);
+            String st = strategy;
+            if (st == null) {
+                st = configurationService.getContainerConfiguration().getRouterStrategy();
+            }
+            strategyParameters = analyseStrategy(st);
         } catch (RoutingException e1) {
            throw new SearchException(e1.getMessage());
         }
@@ -305,6 +309,10 @@ public class EndpointSearchEngineImpl implements EndpointSearchEngine, PetalsSer
 
         List<Object> strategyParameters;
         try {
+            String st = strategy;
+            if (st == null) {
+                st = configurationService.getContainerConfiguration().getRouterStrategy();
+            }
             strategyParameters = analyseStrategy(strategy);
         } catch (RoutingException e1) {
             throw new SearchException(e1.getMessage());
@@ -412,7 +420,7 @@ public class EndpointSearchEngineImpl implements EndpointSearchEngine, PetalsSer
             throws RoutingException {
         final List<Object> result = new ArrayList<Object>();
         final List<String> parameters = new ArrayList<String>();
-
+        
         final StringTokenizer st = new StringTokenizer(strategy, EndpointResolverModule.STRATEGY_SEPARATOR);
         while (st.hasMoreTokens()) {
             parameters.add(st.nextToken().trim());
