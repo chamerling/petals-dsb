@@ -56,7 +56,14 @@ public class JAXBHelper {
                 JAXBElement<ReportListBean> element = new JAXBElement<ReportListBean>(new QName(
                         "org.petalslink.dsb.monitoring.api", "ReportListBean"),
                         ReportListBean.class, null, reportList);
-                marshaller.marshal(element, os);
+                
+                System.out.println(element);
+
+                if (element != null) {
+                    synchronized (marshaller) {
+                        marshaller.marshal(element, os);
+                    }
+                }
             } catch (JAXBException ex) {
                 throw new MessageExchangeException(
                         "Can not marshall the message to the output stream", ex);

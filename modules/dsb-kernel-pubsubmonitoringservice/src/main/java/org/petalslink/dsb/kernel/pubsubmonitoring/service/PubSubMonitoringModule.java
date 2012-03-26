@@ -150,6 +150,10 @@ public class PubSubMonitoringModule implements SenderModule, ReceiverModule,
     }
 
     private void sendReport(ReportListBean reports) throws Exception {
+        
+        if (reports == null) {
+            return;
+        }
 
         // TODO : Another thread can do this asynchronously...
 
