@@ -92,7 +92,12 @@ public class PubSubMonitoringModule implements SenderModule, ReceiverModule,
         if (!state.get()) {
             return;
         }
+        
+        if (exchange == null) {
+            return;
+        }
 
+        // skip monitoring on some messages, for example the monitoring ones...
         if (exchange.getMessage("in") != null
                 && exchange.getMessage("in").getProperty(Constants.MESSAGE_SKIP_MONITORING) != null) {
             return;
@@ -116,6 +121,10 @@ public class PubSubMonitoringModule implements SenderModule, ReceiverModule,
             throws RoutingException {
 
         if (!state.get()) {
+            return true;
+        }
+        
+        if (exchange == null) {
             return true;
         }
 
