@@ -57,8 +57,6 @@ public class JAXBHelper {
                         "org.petalslink.dsb.monitoring.api", "ReportListBean"),
                         ReportListBean.class, null, reportList);
                 
-                System.out.println(element);
-
                 if (element != null) {
                     synchronized (marshaller) {
                         marshaller.marshal(element, os);
