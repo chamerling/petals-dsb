@@ -12,7 +12,6 @@ import javax.jbi.messaging.NormalizedMessage;
 import javax.xml.namespace.QName;
 import javax.xml.transform.TransformerException;
 
-import org.ow2.petals.component.framework.NotificationListener;
 import org.ow2.petals.component.framework.api.exception.PEtALSCDKException;
 import org.ow2.petals.component.framework.api.message.Exchange;
 import org.ow2.petals.component.framework.listener.AbstractJBIListener;
@@ -33,12 +32,11 @@ import com.ebmwebsourcing.wsstar.wsnb.services.impl.util.Wsnb4ServUtils;
 import com.ebmwebsourcing.wsstar.wsrfbf.services.faults.AbsWSStarFault;
 
 /**
- * FIXME = Is it really used? Not sure since the jbi descriptor does not mention it
  * 
  * @author chamerling
  * 
  */
-public abstract class NotificationV2JBIListener extends NotificationListener {
+public class NotificationV2JBIListener extends AbstractJBIListener {
 
     // TODO : put in a common project
     static final String LOCATION_COMPONENT = "consumer.location.component";
@@ -55,7 +53,7 @@ public abstract class NotificationV2JBIListener extends NotificationListener {
      * (org.ow2.petals.component.framework.api.message.Exchange)
      */
     @Override
-    public boolean onNotificationMessage(Exchange exchange) {
+    public boolean onJBIMessage(Exchange exchange) {
 
         // bypass the old stuff and add new one...
         if (getLogger().isLoggable(Level.FINE)) {

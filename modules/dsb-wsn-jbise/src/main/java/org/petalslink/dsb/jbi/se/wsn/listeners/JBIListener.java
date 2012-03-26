@@ -49,6 +49,7 @@ public class JBIListener extends NotificationV2JBIListener {
      * @see org.ow2.petals.component.framework.listener.AbstractJBIListener
      */
     public boolean onJBIMessage(final Exchange exchange) {
+        System.out.println("Got a message!!!!");
         NotificationEngine engine = getNotificationEngine();
 
         try {
