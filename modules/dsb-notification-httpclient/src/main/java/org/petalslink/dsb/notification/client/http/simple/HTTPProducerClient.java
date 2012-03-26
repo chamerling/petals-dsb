@@ -45,7 +45,7 @@ public class HTTPProducerClient implements ProducerClient {
         Subscribe subscribe = NotificationHelper.createSubscribe(me, topic);
         try {
             SubscribeResponse response = this.client.subscribe(subscribe);
-            if (response.getSubscriptionReference() != null
+            if (response != null && response.getSubscriptionReference() != null
                     && response.getSubscriptionReference().getReferenceParameters() != null) {
                 result = Wsnb4ServUtils.getSubscriptionIdFromReferenceParams(response
                         .getSubscriptionReference().getReferenceParameters());
