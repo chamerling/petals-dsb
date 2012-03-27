@@ -29,6 +29,10 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-bundle-minimal</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.petalslink.dsb</groupId>
 			<artifactId>dsb-notification-commons</artifactId>
 			<version>${project.version}</version>

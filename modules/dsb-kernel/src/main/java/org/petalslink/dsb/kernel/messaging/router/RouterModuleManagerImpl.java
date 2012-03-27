@@ -11,7 +11,7 @@ import java.util.TreeMap;
 
 import org.ow2.petals.jbi.component.context.ComponentContext;
 import org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint;
-import org.ow2.petals.jbi.messaging.exchange.MessageExchange;
+import org.ow2.petals.jbi.messaging.exchange.MessageExchangeWrapper;
 import org.ow2.petals.jbi.messaging.routing.RoutingException;
 import org.ow2.petals.transport.util.TransportSendContext;
 
@@ -179,7 +179,7 @@ public class RouterModuleManagerImpl implements RouterModuleManager {
          * org.ow2.petals.jbi.messaging.exchange.MessageExchange)
          */
         public void electEndpoints(Map<ServiceEndpoint, TransportSendContext> electedEndpoints,
-                ComponentContext sourceComponentContext, MessageExchange exchange)
+                ComponentContext sourceComponentContext, MessageExchangeWrapper exchange)
                 throws RoutingException {
             if (state) {
                 this.module.electEndpoints(electedEndpoints, sourceComponentContext, exchange);
@@ -225,7 +225,7 @@ public class RouterModuleManagerImpl implements RouterModuleManager {
          * (org.ow2.petals.jbi.messaging.exchange.MessageExchange,
          * org.ow2.petals.jbi.component.context.ComponentContext)
          */
-        public boolean receiveExchange(MessageExchange exchange,
+        public boolean receiveExchange(MessageExchangeWrapper exchange,
                 ComponentContext sourceComponentContext) throws RoutingException {
             if (this.state) {
                 return this.receiver.receiveExchange(exchange, sourceComponentContext);

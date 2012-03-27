@@ -19,7 +19,7 @@
 package org.petalslink.dsb.transport.xmpp;
 
 import org.jivesoftware.smack.packet.Message;
-import org.ow2.petals.jbi.messaging.exchange.MessageExchange;
+import org.ow2.petals.jbi.messaging.exchange.MessageExchangeWrapper;
 import org.petalslink.dsb.transport.api.Client;
 import org.petalslink.dsb.transport.api.ClientException;
 
@@ -42,7 +42,7 @@ public class XMPPClientImpl implements Client {
     /**
      * {@inheritDoc}
      */
-    public void send(MessageExchange exchange, long sendTimeout) throws ClientException {
+    public void send(MessageExchangeWrapper exchange, long sendTimeout) throws ClientException {
         XMPPConnectionManager xmppConnectionManager = XMPPConnectionManager.getInstance();
         Message message = Adapter.createJabberMessage(exchange);
         xmppConnectionManager.send(message, this.jid);

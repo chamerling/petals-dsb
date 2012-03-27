@@ -31,11 +31,12 @@ import org.ow2.petals.component.framework.api.configuration.ConfigurationExtensi
 import org.ow2.petals.component.framework.api.message.Exchange;
 import org.ow2.petals.component.framework.jbidescriptor.generated.Provides;
 import org.ow2.petals.component.framework.listener.AbstractJBIListener;
-import org.ow2.petals.component.framework.util.XMLUtil;
 import org.ow2.petals.messaging.framework.EngineFactory;
 import org.ow2.petals.messaging.framework.message.Message;
 import org.ow2.petals.messaging.framework.message.MessageImpl;
 import org.ow2.petals.messaging.framework.message.MessagingEngine;
+
+import com.ebmwebsourcing.easycommons.xml.XMLHelper;
 
 /**
  * @author chamerling - eBM WebSourcing
@@ -141,7 +142,7 @@ public class JBIListener extends AbstractJBIListener {
                     } else {
                         // if content is null we cannot get properties on
                         // the consumer side... Probably a bug
-                        exchange.setOutMessageContent(XMLUtil.createDocumentFromString("<empty/>"));
+                        exchange.setOutMessageContent(XMLHelper.createDocumentFromString("<empty/>"));
                     }
                     exchange.setOutMessageProperties(result.getAll());
                 } else {

@@ -26,7 +26,7 @@ import org.ow2.petals.jbi.management.deployment.AtomicDeploymentService;
 import org.ow2.petals.kernel.api.server.PetalsException;
 import org.ow2.petals.tools.generator.commons.Constants;
 import org.ow2.petals.tools.generator.jbi.api.JBIGenerationException;
-import org.ow2.petals.util.LoggingUtil;
+import org.ow2.petals.util.oldies.LoggingUtil;
 import org.petalslink.dsb.servicepoller.api.ServicePoller;
 import org.petalslink.dsb.servicepoller.api.ServicePollerException;
 import org.petalslink.dsb.servicepoller.api.ServicePollerInformation;

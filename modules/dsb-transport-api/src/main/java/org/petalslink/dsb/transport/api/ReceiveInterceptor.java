@@ -18,7 +18,7 @@
  */
 package org.petalslink.dsb.transport.api;
 
-import org.ow2.petals.jbi.messaging.exchange.MessageExchange;
+import org.ow2.petals.jbi.messaging.exchange.MessageExchangeWrapper;
 
 /**
  * @author chamerling - eBM WebSourcing
@@ -26,6 +26,6 @@ import org.ow2.petals.jbi.messaging.exchange.MessageExchange;
  */
 public interface ReceiveInterceptor {
 
-    Constants.STATUS receive(MessageExchange message);
+    Constants.STATUS receive(MessageExchangeWrapper message);
 
 }

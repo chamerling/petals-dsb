@@ -27,12 +27,13 @@ import org.objectweb.fractal.fraclet.annotation.annotations.Provides;
 import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
 import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.jbi.component.context.ComponentContext;
-import org.ow2.petals.jbi.messaging.exchange.MessageExchange;
+import org.ow2.petals.jbi.messaging.exchange.MessageExchangeImpl;
+import org.ow2.petals.jbi.messaging.exchange.MessageExchangeWrapper;
 import org.ow2.petals.jbi.messaging.routing.RoutingException;
 import org.ow2.petals.jbi.messaging.routing.module.ReceiverModule;
 import org.ow2.petals.jbi.messaging.routing.module.SenderModule;
 import org.ow2.petals.transport.util.TransportSendContext;
-import org.ow2.petals.util.LoggingUtil;
+import org.ow2.petals.util.oldies.LoggingUtil;
 import org.petalslink.dsb.kernel.monitoring.service.time.TimeStamperHandler;
 
 /**
@@ -65,14 +66,14 @@ public class TimeStampModule implements SenderModule, ReceiverModule {
      */
     public void electEndpoints(
             Map<org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint, TransportSendContext> electedDestinations,
-            ComponentContext sourceComponentContext, MessageExchange exchange)
+            ComponentContext sourceComponentContext, MessageExchangeWrapper exchange)
             throws RoutingException {
         this.log.call();
 
         this.setTimeStamp(exchange);
     }
 
-    public boolean receiveExchange(MessageExchange exchange, ComponentContext arg1)
+    public boolean receiveExchange(MessageExchangeWrapper exchange, ComponentContext arg1)
             throws RoutingException {
         if (exchange != null) {
             this.setTimeStamp(exchange);
@@ -80,10 +81,10 @@ public class TimeStampModule implements SenderModule, ReceiverModule {
         return true;
     }
 
-    protected void setTimeStamp(MessageExchange exchange) {
+    protected void setTimeStamp(MessageExchangeWrapper exchange) {
         long date = System.currentTimeMillis();
         String t = null;
-        if (MessageExchange.Role.CONSUMER.equals(exchange.getRole())) {
+        if (MessageExchangeImpl.Role.CONSUMER.equals(exchange.getRole())) {
             if (TimeStamperHandler.getInstance().getTimeStamp(exchange).getDateClientIn() == 0L) {
                 TimeStamperHandler.getInstance().getTimeStamp(exchange).setDateClientIn(date);
                 System.out.println("SETTING T1 for " + exchange.getExchangeId());
@@ -96,7 +97,7 @@ public class TimeStampModule implements SenderModule, ReceiverModule {
             }
         }
 
-        if (MessageExchange.Role.PROVIDER.equals(exchange.getRole())) {
+        if (MessageExchangeImpl.Role.PROVIDER.equals(exchange.getRole())) {
             if (TimeStamperHandler.getInstance().getTimeStamp(exchange).getDateProviderIn() == 0L) {
                 TimeStamperHandler.getInstance().getTimeStamp(exchange).setDateProviderIn(date);
                 System.out.println("SETTING T2 for " + exchange.getExchangeId());

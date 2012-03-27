@@ -41,7 +41,7 @@ import org.ow2.petals.jbi.messaging.exchange.MessageExchange;
 import org.ow2.petals.jbi.messaging.exchange.MessageExchangeImpl;
 import org.ow2.petals.jbi.messaging.routing.RoutingException;
 import org.ow2.petals.tools.monitoring.to.Role;
-import org.ow2.petals.util.LoggingUtil;
+import org.ow2.petals.util.oldies.LoggingUtil;
 import org.petalslink.dsb.kernel.monitor.util.TOConverter;
 
 

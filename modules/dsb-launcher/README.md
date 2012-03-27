@@ -1,0 +1,3 @@
+# DSB Launcher
+
+petals-lancher 1.3.x has been forked here while waiting to move to the new launcher...

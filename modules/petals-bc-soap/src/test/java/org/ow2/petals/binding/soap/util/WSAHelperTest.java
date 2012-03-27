@@ -18,25 +18,28 @@
  * $Id$
  * -------------------------------------------------------------------------
  */
+
 package org.ow2.petals.binding.soap.util;
 
-import junit.framework.TestCase;
+import org.junit.Ignore;
+import org.junit.Test;
 
 /**
  * @author chamerling - eBM WebSourcing
- *
+ * 
  */
-public class WSAHelperTest extends TestCase {
+public class WSAHelperTest {
 
     /**
      * @param name
      */
-    public WSAHelperTest(String name) {
-        super(name);
+    public WSAHelperTest() {
     }
-    
+
+    @Test
+    @Ignore
     public void testGetServiceName() throws Exception {
-        
+
     }
 
 }

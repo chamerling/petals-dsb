@@ -1,5 +1,7 @@
 package org.petalslink.dsb.kernel.cxf;
 
+import javax.xml.transform.TransformerException;
+
 import junit.framework.TestCase;
 
 import org.apache.cxf.Bus;
@@ -20,6 +22,8 @@ import org.petalslink.dsb.service.client.Message;
 import org.petalslink.dsb.service.client.MessageListener;
 import org.petalslink.dsb.ws.api.DSBWebServiceException;
 import org.petalslink.dsb.ws.api.HelloService;
+
+import com.ebmwebsourcing.easycommons.xml.XMLHelper;
 
 public class PetalsTransportTest extends TestCase {
 
@@ -59,9 +63,10 @@ public class PetalsTransportTest extends TestCase {
             }
         });
         sf.create();
+        System.out.println("Server created!");
 
         // invoke
-        System.out.println("Client");
+        System.out.println("Creating JAXWS Client");
         // client
         JaxWsProxyFactoryBean factory = new JaxWsProxyFactoryBean();
         factory.setAddress("dsb://localhost/serviceA");
@@ -100,6 +105,7 @@ public class PetalsTransportTest extends TestCase {
             }
             
             public Client getClient(ServiceEndpoint service) {
+                System.out.println("Get client for " + service);
                 return createClient(server);
             }
         };
@@ -137,8 +143,12 @@ public class PetalsTransportTest extends TestCase {
              * Receive what is sent...
              */
             public Message sendReceive(Message message) throws ClientException {
-                System.out.println("Send message " + message);
-                
+                System.out.println("Sending message " + message);
+                try {
+                    System.out.println("Payload " + XMLHelper.createStringFromDOMDocument(message.getPayload()));
+                } catch (TransformerException e) {
+                    e.printStackTrace();
+                }
                 // pass the message to the server listener...
                 return server.getListener().onMessage(message);
             }

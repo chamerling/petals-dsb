@@ -24,7 +24,7 @@ import java.io.ByteArrayOutputStream;
 import javax.jbi.messaging.MessagingException;
 
 import org.jivesoftware.smack.packet.Message;
-import org.ow2.petals.jbi.messaging.exchange.MessageExchange;
+import org.ow2.petals.jbi.messaging.exchange.MessageExchangeWrapper;
 import org.petalslink.dsb.api.MessageExchangeException;
 import org.petalslink.dsb.api.util.JAXBMessageExchangeBuilder;
 
@@ -39,7 +39,7 @@ public class Adapter {
     private Adapter() {
     }
 
-    public static MessageExchange createJBIMessage(Message message) throws MessagingException {
+    public static MessageExchangeWrapper createJBIMessage(Message message) throws MessagingException {
         // get the message content as string
         String body = message.getBody();
         if (body == null) {
@@ -49,12 +49,12 @@ public class Adapter {
         // create the JAXB Element
         org.petalslink.dsb.api.MessageExchange jaxbMessage = fromString(body);
         // use JAXB adapter
-        MessageExchange result = org.petalslink.dsb.transport.Adapter
-                .createJBIMessage(jaxbMessage);
+        MessageExchangeWrapper result = org.petalslink.dsb.transport.Adapter
+                .createJBIMessageWrapper(jaxbMessage);
         return result;
     }
 
-    public static Message createJabberMessage(MessageExchange messageExchange) {
+    public static Message createJabberMessage(MessageExchangeWrapper messageExchange) {
         // create JAXB message
         org.petalslink.dsb.api.MessageExchange jaxbMessage = org.petalslink.dsb.transport.Adapter
                 .createWSMessage(messageExchange);

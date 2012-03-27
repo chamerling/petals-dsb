@@ -28,7 +28,6 @@ import java.util.logging.Logger;
  * A jetty logger implementation based on the root logger of the component.
  * 
  * @author chamerling - eBM WebSourcing
- * 
  */
 public class JettyLogger implements org.mortbay.log.Logger {
 
@@ -36,20 +35,14 @@ public class JettyLogger implements org.mortbay.log.Logger {
      * The component logger
      */
     protected Logger logger;
-
-    /**
-     * The logger name
-     */
-    protected String name;
-
+    
     /**
      * Creates a new instance of {@link JettyLogger}
      * 
      * @param name
      * @param logger
      */
-    public JettyLogger(final String name, final java.util.logging.Logger logger) {
-        this.name = name;
+    public JettyLogger(final java.util.logging.Logger logger) {
         this.logger = logger;
     }
 
@@ -57,10 +50,10 @@ public class JettyLogger implements org.mortbay.log.Logger {
      * (non-Javadoc)
      * 
      * @see org.mortbay.log.Logger#debug(java.lang.String, java.lang.Object,
-     *      java.lang.Object)
+     * java.lang.Object)
      */
     public void debug(final String arg0, final Object arg1, final Object arg2) {
-        this.logger.log(Level.FINE, arg0, new Object[] { arg1, arg2 });
+        logger.log(Level.FINEST, arg0, new Object[] { arg1, arg2 });
     }
 
     /*
@@ -69,7 +62,7 @@ public class JettyLogger implements org.mortbay.log.Logger {
      * @see org.mortbay.log.Logger#debug(java.lang.String, java.lang.Throwable)
      */
     public void debug(final String arg0, final Throwable arg1) {
-        this.logger.log(Level.FINE, arg0, arg1);
+        logger.log(Level.FINEST, arg0, arg1);
     }
 
     /*
@@ -78,21 +71,17 @@ public class JettyLogger implements org.mortbay.log.Logger {
      * @see org.mortbay.log.Logger#getLogger(java.lang.String)
      */
     public org.mortbay.log.Logger getLogger(final String arg0) {
-        if (arg0 == null) {
-            return null;
-        }
-
-        return new JettyLogger(this.name + "." + arg0, this.logger);
+        return this;
     }
 
     /*
      * (non-Javadoc)
      * 
      * @see org.mortbay.log.Logger#info(java.lang.String, java.lang.Object,
-     *      java.lang.Object)
+     * java.lang.Object)
      */
     public void info(final String arg0, final Object arg1, final Object arg2) {
-        this.logger.log(Level.INFO, arg0, new Object[] { arg1, arg2 });
+        logger.log(Level.INFO, arg0, new Object[] { arg1, arg2 });
     }
 
     /*
@@ -101,7 +90,7 @@ public class JettyLogger implements org.mortbay.log.Logger {
      * @see org.mortbay.log.Logger#isDebugEnabled()
      */
     public boolean isDebugEnabled() {
-        return this.logger.isLoggable(Level.FINE);
+        return logger.isLoggable(Level.FINEST);
     }
 
     /*
@@ -110,17 +99,17 @@ public class JettyLogger implements org.mortbay.log.Logger {
      * @see org.mortbay.log.Logger#setDebugEnabled(boolean)
      */
     public void setDebugEnabled(final boolean arg0) {
-        this.logger.setLevel(Level.FINE);
+        logger.setLevel(Level.FINEST);
     }
 
     /*
      * (non-Javadoc)
      * 
      * @see org.mortbay.log.Logger#warn(java.lang.String, java.lang.Object,
-     *      java.lang.Object)
+     * java.lang.Object)
      */
     public void warn(final String arg0, final Object arg1, final Object arg2) {
-        this.logger.log(Level.WARNING, arg0, new Object[] { arg1, arg2 });
+        logger.log(Level.WARNING, arg0, new Object[] { arg1, arg2 });
     }
 
     /*
@@ -129,29 +118,6 @@ public class JettyLogger implements org.mortbay.log.Logger {
      * @see org.mortbay.log.Logger#warn(java.lang.String, java.lang.Throwable)
      */
     public void warn(final String arg0, final Throwable arg1) {
-        this.logger.log(Level.WARNING, arg0, arg1);
-    }
-
-    /**
-     * Initialize the JEtty logger. We provide your own implementation based on
-     * the standard logger.
-     * 
-     */
-    public static void init() {
-        final String old = System.getProperty("org.mortbay.log.class");
-        try {
-            System.setProperty("org.mortbay.log.class", JettyLogger.class.getName());
-            // For the class to be loaded by invoking a public static method
-            final Class cl = Thread.currentThread().getContextClassLoader().loadClass(
-                    "org.mortbay.log.Log");
-            cl.getMethod("isDebugEnabled", new Class[0]).invoke(null, null);
-        } catch (final Exception e) {
-        } finally {
-            if (old != null) {
-                System.setProperty("org.mortbay.log.class", old);
-            } else {
-                System.getProperties().remove("org.mortbay.log.class");
-            }
-        }
+        logger.log(Level.WARNING, arg0, arg1);
     }
 }

@@ -21,9 +21,12 @@
 
 package org.ow2.petals.binding.soap;
 
+import static org.ow2.petals.binding.soap.SoapConstants.Axis2.AXIS2_XML;
+
 import java.io.File;
 import java.util.Iterator;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.jbi.JBIException;
 import javax.naming.Context;
@@ -45,24 +48,18 @@ import org.apache.axis2.engine.AxisConfiguration;
 import org.apache.axis2.phaseresolver.PhaseException;
 import org.apache.axis2.phaseresolver.PhaseHolder;
 import org.apache.axis2.phaseresolver.PhaseMetadata;
+import org.apache.axis2.transport.jms.AxisJMSException;
 import org.apache.axis2.transport.jms.JMSConstants;
 import org.apache.axis2.transport.jms.JMSListener;
-import org.ow2.petals.binding.soap.Constants.Notification;
 import org.ow2.petals.binding.soap.listener.incoming.PetalsReceiver;
 import org.ow2.petals.binding.soap.listener.incoming.SoapExternalListenerManager;
 import org.ow2.petals.component.framework.ComponentInformation;
 import org.ow2.petals.component.framework.PetalsBindingComponent;
+import org.ow2.petals.component.framework.bc.AbstractBindingComponent;
 import org.ow2.petals.component.framework.su.AbstractServiceUnitManager;
-
-import static org.ow2.petals.binding.soap.Constants.Axis2.AXIS2_XML;
-import static org.ow2.petals.binding.soap.Constants.Component.TRANSFORMER_SYSTEM_PROPERY_NAME;
-import static org.ow2.petals.binding.soap.Constants.Component.TRANSFORMER_SYSTEM_PROPERY_VALUE;
 
 /**
  * The SOAP binding component.
- * 
- * @author alouis - EBM Websourcing
- * @author chamerling - EBM Websourcing
  * 
  */
 public class SoapComponent extends PetalsBindingComponent {
@@ -77,147 +74,6 @@ public class SoapComponent extends PetalsBindingComponent {
      * The SOAP component context
      */
     protected SoapComponentContext soapContext;
-
-    /**
-     * The PEtALS receiver
-     */
-    private PetalsReceiver petalsReceiver;
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.objectweb.petals.component.common.AbstractComponent#doStart()
-     */
-    @Override
-    public void doStart() throws JBIException {
-
-        try {
-            this.externalListenerManager.start();
-
-            // Start the JMS transport layer
-            /*
-            try {
-                this.soapContext.getAxis2ConfigurationContext().getAxisConfiguration()
-                        .getTransportIn(Constants.TRANSPORT_JMS).getReceiver().start();
-            } catch (final AxisJMSException e) {
-                this.getLogger().info("The JMS Transport is not available.");
-                this.getLogger().log(
-                        Level.FINE,
-                        "Unable to start the JMS Transport (" + e.getMessage()
-                                + "). SOAP over JMS is not available.", e);
-            }
-            */
-
-        } catch (final AxisFault e) {
-            this.getLogger().severe(e.getMessage());
-            throw new JBIException(e);
-        }
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.objectweb.petals.component.common.AbstractComponent#doStop()
-     */
-    @Override
-    public void doStop() throws JBIException {
-        try {
-            this.externalListenerManager.stop();
-
-            // Stop the JMS transport layer
-            /*
-            this.soapContext.getAxis2ConfigurationContext().getAxisConfiguration().getTransportIn(
-                    Constants.TRANSPORT_JMS).getReceiver().stop();
-*/
-        } catch (final AxisFault e) {
-            this.getLogger().severe(e.getMessage());
-            throw new JBIException(e);
-        }
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.objectweb.petals.component.common.AbstractComponent#doInit()
-     */
-    @Override
-    protected void postDoInit() throws JBIException {
-
-        // create the SOAP component context
-        this.soapContext = new SoapComponentContext(this.getContext(), this
-                .getComponentConfiguration(), this.getLogger());
-
-        // the axis2.xml is required
-        final File axis2File = new File(this.getContext().getInstallRoot(), AXIS2_XML);
-        if (!axis2File.exists()) {
-            throw new JBIException("Can not get axis2 configuration file");
-        }
-
-        // get axis configuration context
-        this.getLogger().fine("Creating Axis configuration context...");
-        ConfigurationContext axisConfigurationContext = null;
-        try {
-            axisConfigurationContext = ConfigurationContextFactory
-                    .createConfigurationContextFromFileSystem(this.getContext().getInstallRoot(),
-                            axis2File.getAbsolutePath());
-
-            this.createJMSTransporter(axisConfigurationContext);
-
-            this.getLogger().fine("Axis configuration context created.");
-            this.soapContext.setAxis2ConfigurationContext(axisConfigurationContext);
-        } catch (final AxisFault e) {
-            this.getLogger().log(Level.WARNING, e.getMessage());
-            throw new JBIException("Can not initialize SOAP BC", e);
-        }
-
-        // create the receiver
-        this.petalsReceiver = new PetalsReceiver(this, this.getChannel(), this.getLogger());
-
-        // set SOAP HTTP Server
-        this.externalListenerManager = new SoapExternalListenerManager(this, this.getChannel(),
-                (AbstractServiceUnitManager) this.getServiceUnitManager(), this.soapContext,
-                this.petalsReceiver, this.getLogger());
-
-        // for each module, we add its flows (if any) to the corresponding axis
-        // phases
-        this.engageModulesHandlers(axisConfigurationContext.getAxisConfiguration());
-
-        ((SoapSUManager) this.getServiceUnitManager()).init(this.soapContext, this.getContext(),
-                this.externalListenerManager.getSoapServerConfig(), this.petalsReceiver, this
-                        .getLogger());
-
-        // initialize the proxy SOAP address of the broker
-        if ((this.getComponentConfiguration().getNotifications() != null)
-                && this.getComponentConfiguration().getNotifications().isValue()) {
-            // TODO: provide the endpoint consuming automatically the broker via
-            // WS-Addressing
-            if (this.notificationBrokerController != null) {
-                this.notificationBrokerController
-                        .setNotificationBrokerReferenceAddress(this.externalListenerManager
-                                .getSoapServerConfig().getServicesURL()
-                                + '/' + Notification.NOTIFICATION_BROKER_SERVICE);
-                this.notificationBrokerController
-                        .setPublisherRegistrationManagerReferenceAddress(this.externalListenerManager
-                                .getSoapServerConfig().getServicesURL()
-                                + '/' + Notification.PUBLISHER_REGISTRATION_MANAGER_SERVICE);
-                this.notificationBrokerController
-                        .setSubscriptionManagerReferenceAddress(this.externalListenerManager
-                                .getSoapServerConfig().getServicesURL()
-                                + '/' + Notification.SUBSCRIPTION_MANAGER_SERVICE);
-            }
-        }
-
-        if (System.getProperty(TRANSFORMER_SYSTEM_PROPERY_NAME) == null) {
-            System.setProperty(TRANSFORMER_SYSTEM_PROPERY_NAME, TRANSFORMER_SYSTEM_PROPERY_VALUE);
-        }
-
-        // share the service path property
-        ComponentInformation componentInformation = this.getPlugin(ComponentInformation.class);
-        if (componentInformation != null) {
-            componentInformation.addProperty("service", this.externalListenerManager
-                    .getSoapServerConfig().getServicesURL());
-        }
-    }
 
     /**
      * <p>
@@ -255,37 +111,35 @@ public class SoapComponent extends PetalsBindingComponent {
         jmsTransportDescription.setReceiver(new JMSListener());
         axisConfigurationContext.getAxisConfiguration().addTransportIn(jmsTransportDescription);
 
-        final String jndiInitialFactory = this.getComponentExtensions().get(
-                org.ow2.petals.binding.soap.Constants.JmsTransportLayer.JNDI_INITIAL_FACTORY);
-        final String jndiProviderUrl = this.getComponentExtensions().get(
-                org.ow2.petals.binding.soap.Constants.JmsTransportLayer.JNDI_PROVIDER_URL);
-        final String confacJndiName = this.getComponentExtensions().get(
-                org.ow2.petals.binding.soap.Constants.JmsTransportLayer.CONFAC_JNDINAME);
-        if ((jndiInitialFactory != null) && (jndiProviderUrl != null) && (confacJndiName != null)
-                && (jndiInitialFactory.length() > 0) && (jndiProviderUrl.length() > 0)
-                && (confacJndiName.length() > 0)) {
+        final String jndiInitialFactory = getComponentExtensions().get(
+                org.ow2.petals.binding.soap.SoapConstants.JmsTransportLayer.JNDI_INITIAL_FACTORY);
+        final String jndiProviderUrl = getComponentExtensions().get(
+                org.ow2.petals.binding.soap.SoapConstants.JmsTransportLayer.JNDI_PROVIDER_URL);
+        final String confacJndiName = getComponentExtensions().get(
+                org.ow2.petals.binding.soap.SoapConstants.JmsTransportLayer.CONFAC_JNDINAME);
+        if (jndiInitialFactory != null && jndiProviderUrl != null && confacJndiName != null
+                && jndiInitialFactory.length() > 0 && jndiProviderUrl.length() > 0
+                && confacJndiName.length() > 0) {
 
-            this.soapContext.setJmsJndiInitialFactory(jndiInitialFactory);
-            this.soapContext.setJmsJndiProviderUrl(jndiProviderUrl);
-            this.soapContext.setJmsConnectionFactoryName(confacJndiName);
+            soapContext.setJmsJndiInitialFactory(jndiInitialFactory);
+            soapContext.setJmsJndiProviderUrl(jndiProviderUrl);
+            soapContext.setJmsConnectionFactoryName(confacJndiName);
 
-            this.getLogger().info(
+            getLogger().info(
                     "Create the default JMS connection factory ('"
                             + JMSConstants.DEFAULT_CONFAC_NAME + "'):");
-            this
-                    .getLogger()
+            getLogger()
                     .info(
                             "\t"
-                                    + org.ow2.petals.binding.soap.Constants.JmsTransportLayer.JNDI_INITIAL_FACTORY
+                                    + org.ow2.petals.binding.soap.SoapConstants.JmsTransportLayer.JNDI_INITIAL_FACTORY
                                     + ": " + jndiInitialFactory);
-            this
-                    .getLogger()
+            getLogger()
                     .info(
                             "\t"
-                                    + org.ow2.petals.binding.soap.Constants.JmsTransportLayer.JNDI_PROVIDER_URL
+                                    + org.ow2.petals.binding.soap.SoapConstants.JmsTransportLayer.JNDI_PROVIDER_URL
                                     + ": " + jndiProviderUrl);
-            this.getLogger().info(
-                    "\t" + org.ow2.petals.binding.soap.Constants.JmsTransportLayer.CONFAC_JNDINAME
+            getLogger().info(
+                    "\t" + org.ow2.petals.binding.soap.SoapConstants.JmsTransportLayer.CONFAC_JNDINAME
                             + ": " + confacJndiName);
 
             final OMFactory omFactory = OMAbstractFactory.getOMFactory();
@@ -305,7 +159,7 @@ public class SoapComponent extends PetalsBindingComponent {
             final OMElement connectionFactoryName = omFactory.createOMElement(new QName(
                     DeploymentConstants.TAG_PARAMETER));
             connectionFactoryName.addAttribute(DeploymentConstants.ATTRIBUTE_NAME,
-                    JMSConstants.CONFAC_JNDI_NAME_PARAM, null);
+                    JMSConstants.PARAM_CONFAC_JNDI_NAME, null);
             connectionFactoryName.setText(confacJndiName);
 
             final OMElement defaultConnectionFactory = omFactory.createOMElement(new QName(
@@ -318,30 +172,140 @@ public class SoapComponent extends PetalsBindingComponent {
                     defaultConnectionFactory));
 
         } else {
-            this.getLogger().info(
+            getLogger().info(
                     "The JMS transport layer configuration is not complete. It is disabled.");
         }
 
     }
 
-    /**
-     * @param axisConfiguration
-     * @throws JBIException
+    /*
+     * (non-Javadoc)
+     * 
+     * @seeorg.ow2.petals.component.framework.bc.AbstractBindingComponent#
+     * createServiceUnitManager()
      */
-    @SuppressWarnings("unchecked")
-    private void engageModulesHandlers(final AxisConfiguration axisConfiguration)
-            throws JBIException {
-        final Iterator<String> moduleNames = axisConfiguration.getModules().keySet().iterator();
-        while (moduleNames.hasNext()) {
-            try {
-                this.engageModuleHandlersIntoPhases(
-                        axisConfiguration.getModule(moduleNames.next()), axisConfiguration);
-            } catch (final PhaseException e) {
-                this.getLogger().log(Level.WARNING, e.getMessage());
-                throw new JBIException("Can not initialize SOAP BC", e);
-            }
+    @Override
+    protected AbstractServiceUnitManager createServiceUnitManager() {
+
+        return new SoapSUManager(this);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.objectweb.petals.component.common.AbstractComponent#doInit()
+     */
+    @Override
+    protected void postDoInit() throws JBIException {
+
+        // create the SOAP component context
+        this.soapContext = new SoapComponentContext(getContext(), getComponentConfiguration(),
+                getLogger());
+
+        // the axis2.xml is required
+        final File axis2File = new File(getContext().getWorkspaceRoot(), AXIS2_XML);
+        if (!axis2File.exists()) {
+            throw new JBIException("Can not get axis2 configuration file");
         }
-        this.getLogger().fine("Axis modules flows added");
+
+        // get axis configuration context
+        if (getLogger().isLoggable(Level.FINE)) {
+            getLogger().log(Level.FINE, "Creating Axis configuration context...");
+        }
+        ConfigurationContext axisConfigurationContext = null;
+        try {
+            axisConfigurationContext = ConfigurationContextFactory
+                    .createConfigurationContextFromFileSystem(getContext().getWorkspaceRoot(),
+                            axis2File.getAbsolutePath());
+
+            createJMSTransporter(axisConfigurationContext);
+
+            this.soapContext.setAxis2ConfigurationContext(axisConfigurationContext);
+
+            if (getLogger().isLoggable(Level.FINE)) {
+                getLogger().log(Level.FINE, "Axis configuration context set.");
+            }
+        } catch (final AxisFault e) {
+            if (getLogger().isLoggable(Level.SEVERE)) {
+                getLogger().log(Level.SEVERE, e.getMessage());
+            }
+            throw new JBIException("Can not initialize SOAP BC", e);
+        }
+
+        // create the receiver
+        PetalsReceiver petalsReceiver = new PetalsReceiver(getLogger());
+
+        // set SOAP HTTP Server
+        this.externalListenerManager = new SoapExternalListenerManager(this,
+                (AbstractServiceUnitManager) getServiceUnitManager(), this.soapContext, petalsReceiver,
+                getLogger());
+
+        AxisConfiguration axisConfiguration = axisConfigurationContext.getAxisConfiguration();
+                
+        // for each module, we add its flows (if any) to the corresponding axis
+        // phases
+        engageModulesHandlers(this.getLogger(), axisConfiguration);
+
+        ((SoapSUManager) getServiceUnitManager()).init(this.soapContext, getContext(),
+                this.externalListenerManager.getSoapServerConfig(), petalsReceiver, getLogger());
+        
+        ComponentInformation componentInformation = this.getPlugin(ComponentInformation.class);
+        if (componentInformation != null) {
+            componentInformation.addProperty("service", this.externalListenerManager
+                    .getSoapServerConfig().buildServiceAddress("http", ""));
+        }
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.objectweb.petals.component.common.AbstractComponent#doStart()
+     */
+    @Override
+    public void doStart() throws JBIException {
+        try {
+            // Start the HTTP/HTTPS server
+            AxisConfiguration axisConfiguration = soapContext.getAxis2ConfigurationContext()
+                    .getAxisConfiguration();
+            this.externalListenerManager.start(axisConfiguration);
+
+            // Start the JMS transport layer
+            try {
+                axisConfiguration.getTransportIn(Constants.TRANSPORT_JMS).getReceiver().start();
+            } catch (final AxisJMSException e) {
+                if (this.getLogger().isLoggable(Level.WARNING)) {
+                    this.getLogger().log(Level.WARNING,
+                            "The JMS Transport is not available. SOAP over JMS is not available.");
+                }
+            }
+        } catch (final AxisFault e) {
+            if (this.getLogger().isLoggable(Level.SEVERE)) {
+                this.getLogger().log(Level.SEVERE,
+                        e.getMessage());
+            }
+            throw new JBIException(e);
+        }
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.objectweb.petals.component.common.AbstractComponent#doStop()
+     */
+    @Override
+    public void doStop() throws JBIException {
+        try {
+            this.externalListenerManager.stop();
+            // Stop the JMS transport layer
+            this.soapContext.getAxis2ConfigurationContext().getAxisConfiguration().getTransportIn(
+                    Constants.TRANSPORT_JMS).getReceiver().stop();
+        } catch (final AxisFault e) {
+            if (this.getLogger().isLoggable(Level.SEVERE)) {
+                this.getLogger().log(Level.SEVERE,
+                        e.getMessage());
+            }
+            throw new JBIException(e);
+        }
     }
 
     /**
@@ -354,13 +318,15 @@ public class SoapComponent extends PetalsBindingComponent {
      * @throws PhaseException
      *             can the thrown by method addHandler()
      */
-    private void engageModuleHandlersIntoPhases(final AxisModule module,
+    private static final void engageModuleHandlersIntoPhases(final Logger logger, final AxisModule module,
             final AxisConfiguration axisConfiguration) throws PhaseException {
         Flow moduleFlow = null;
         PhaseHolder phaseHolder = null;
 
-        this.getLogger().fine("Engaging module " + module.getName() + " in flows");
-
+        if(logger.isLoggable(Level.FINE)) {
+            logger.fine("Engaging module " + module.getName() + " in flows");
+        }
+        
         // for each phase, we add the corresponding module's handlers if any
         for (int type = PhaseMetadata.IN_FLOW; type <= PhaseMetadata.FAULT_OUT_FLOW; type++) {
 
@@ -385,7 +351,7 @@ public class SoapComponent extends PetalsBindingComponent {
                 moduleFlow = module.getFaultOutFlow();
             }
 
-            if ((moduleFlow != null) && (phaseHolder != null)) {
+            if (moduleFlow != null && phaseHolder != null) {
                 for (int j = 0; j < moduleFlow.getHandlerCount(); j++) {
                     phaseHolder.addHandler(moduleFlow.getHandler(j));
                 }
@@ -394,31 +360,34 @@ public class SoapComponent extends PetalsBindingComponent {
     }
 
     /**
-     * 
-     * @return
+     * @param axisConfiguration
+     * @throws JBIException
      */
-    public SoapComponentContext getSoapContext() {
-        return this.soapContext;
+    private static final void engageModulesHandlers(final Logger logger, final AxisConfiguration axisConfiguration)
+            throws JBIException {
+        final Iterator<AxisModule> modules = axisConfiguration.getEngagedModules().iterator();
+        while (modules.hasNext()) {
+            try {
+                AxisModule module = modules.next();
+                engageModuleHandlersIntoPhases(logger, module, axisConfiguration);
+            } catch (final PhaseException e) {
+                if (logger.isLoggable(Level.SEVERE)) {
+                    logger.log(Level.SEVERE, e.getMessage());
+                }
+                throw new JBIException("Can not initialize SOAP BC", e);
+            }
+        }
+        
+        if (logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE, "Axis modules flows added.");
+        }
     }
 
-    /**
-     * 
-     * @return
-     */
     public SoapExternalListenerManager getExternalListenerManager() {
         return this.externalListenerManager;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @seeorg.ow2.petals.component.framework.bc.AbstractBindingComponent#
-     * createServiceUnitManager()
-     */
-    @Override
-    protected AbstractServiceUnitManager createServiceUnitManager() {
-
-        return new SoapSUManager(this);
+    public SoapComponentContext getSoapContext() {
+        return this.soapContext;
     }
-
 }

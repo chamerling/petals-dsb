@@ -1,10 +1,10 @@
 package org.petalslink.dsb.kernel.monitoring.service.time;
 
-import org.ow2.petals.jbi.messaging.exchange.MessageExchange;
+import org.ow2.petals.jbi.messaging.exchange.MessageExchangeWrapper;
 
 public class TimeStamperImpl implements TimeStamper {
 
-    private MessageExchange me;
+    private MessageExchangeWrapper me;
 
     public TimeStamperImpl() {
     }
@@ -125,11 +125,11 @@ public class TimeStamperImpl implements TimeStamper {
         }
     }
 
-    public MessageExchange getMessageExchange() {
+    public MessageExchangeWrapper getMessageExchange() {
         return this.me;
     }
 
-    public void setMessageExchange(MessageExchange me) {
+    public void setMessageExchange(MessageExchangeWrapper me) {
         this.me = me;
     }
 

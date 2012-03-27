@@ -38,7 +38,7 @@ import org.ow2.petals.kernel.server.FractalHelper;
 import org.ow2.petals.kernel.ws.api.InformationService;
 import org.ow2.petals.kernel.ws.api.InstallationService;
 import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
-import org.ow2.petals.util.LoggingUtil;
+import org.ow2.petals.util.oldies.LoggingUtil;
 import org.petalslink.dsb.webapp.api.DSBManagement;
 import org.petalslink.dsb.ws.api.DSBInformationService;
 import org.petalslink.dsb.ws.api.DSBWebServiceException;

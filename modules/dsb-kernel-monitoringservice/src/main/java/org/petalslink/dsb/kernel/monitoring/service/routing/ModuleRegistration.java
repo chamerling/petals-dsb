@@ -20,7 +20,7 @@ import org.ow2.petals.jbi.messaging.routing.RoutingException;
 import org.ow2.petals.jbi.messaging.routing.module.ReceiverModule;
 import org.ow2.petals.jbi.messaging.routing.module.SenderModule;
 import org.ow2.petals.transport.util.TransportSendContext;
-import org.ow2.petals.util.LoggingUtil;
+import org.ow2.petals.util.oldies.LoggingUtil;
 import org.petalslink.dsb.annotations.LifeCycleListener;
 import org.petalslink.dsb.kernel.messaging.router.RouterModuleManager;
 
@@ -86,7 +86,7 @@ public class ModuleRegistration {
         this.routerModuleManager.add(new org.petalslink.dsb.kernel.messaging.router.SenderModule() {
             public void electEndpoints(Map<ServiceEndpoint, TransportSendContext> electedEndpoints,
                     ComponentContext sourceComponentContext,
-                    org.ow2.petals.jbi.messaging.exchange.MessageExchange exchange)
+                    org.ow2.petals.jbi.messaging.exchange.MessageExchangeWrapper exchange)
                     throws RoutingException {
                 sender.electEndpoints(electedEndpoints, sourceComponentContext, exchange);
             }
@@ -109,7 +109,7 @@ public class ModuleRegistration {
                 .add(new org.petalslink.dsb.kernel.messaging.router.ReceiverModule() {
 
                     public boolean receiveExchange(
-                            org.ow2.petals.jbi.messaging.exchange.MessageExchange exchange,
+                            org.ow2.petals.jbi.messaging.exchange.MessageExchangeWrapper exchange,
                             ComponentContext sourceComponentContext) throws RoutingException {
                         return receiver.receiveExchange(exchange, sourceComponentContext);
                     }

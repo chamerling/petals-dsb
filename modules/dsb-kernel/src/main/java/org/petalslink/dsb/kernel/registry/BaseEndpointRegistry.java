@@ -19,7 +19,6 @@
 package org.petalslink.dsb.kernel.registry;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +30,6 @@ import org.apache.commons.lang.NullArgumentException;
 import org.ow2.petals.jbi.descriptor.original.generated.LinkType;
 import org.ow2.petals.jbi.messaging.endpoint.JBIServiceEndpointImpl;
 import org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint;
-import org.ow2.petals.jbi.messaging.registry.RegistryListener;
 import org.ow2.petals.kernel.api.service.Location;
 import org.ow2.petals.kernel.api.service.ServiceEndpoint.EndpointType;
 import org.ow2.petals.kernel.configuration.ConfigurationService;
@@ -39,12 +37,13 @@ import org.ow2.petals.registry.api.Endpoint;
 import org.ow2.petals.registry.api.LocalRegistry;
 import org.ow2.petals.registry.api.Query;
 import org.ow2.petals.registry.api.exception.RegistryException;
-import org.ow2.petals.registry.api.util.XMLUtil;
 import org.ow2.petals.registry.client.api.RegistryClient;
 import org.petalslink.dsb.api.DSBException;
 import org.petalslink.dsb.jbi.Adapter;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentFragment;
+
+import com.ebmwebsourcing.easycommons.xml.XMLHelper;
 
 /**
  * @author chamerling - eBM WebSourcing
@@ -75,23 +74,22 @@ public abstract class BaseEndpointRegistry extends AbstractEndpointRegistry {
      */
     public ServiceEndpoint activateEndpoint(QName serviceName, String endpointName,
             ServiceEndpoint address) throws org.ow2.petals.jbi.messaging.registry.RegistryException {
-        return this.activateEndpoint(serviceName, endpointName, null, null, address, null);
+        return this.activateEndpoint(serviceName, endpointName, null, null, address);
     }
 
     /**
      * {@inheritDoc}
      */
     public ServiceEndpoint activateEndpoint(QName serviceName, String endpointName,
-            QName[] interfaces, Document description, ServiceEndpoint address,
-            Map<String, String> properties)
+            List<QName> interfaces, Document description, ServiceEndpoint address)
             throws org.ow2.petals.jbi.messaging.registry.RegistryException {
         final JBIServiceEndpointImpl endpoint = new JBIServiceEndpointImpl();
         endpoint.setServiceName(serviceName);
         endpoint.setEndpointName(endpointName);
-        endpoint.setInterfacesName(Arrays.asList(interfaces));
+        endpoint.setInterfacesName(interfaces);
         endpoint.setLocation(address.getLocation());
         endpoint.setDescription(description);
-        endpoint.setProperties(properties);
+        //endpoint.setProperties(properties);
 
         this.registerEndpoint(endpoint);
 
@@ -112,7 +110,7 @@ public abstract class BaseEndpointRegistry extends AbstractEndpointRegistry {
                                 + "' on new endpoint");
                     }
                     // status check is done at the manager level...
-                    listener.onRegister(Adapter.createServiceEndpoint(endpoint));
+                    listener.onRegister(Adapter.createDSBServiceEndpoint(endpoint));
                 } catch (DSBException e) {
                     log.warning("Got an error while calling registry listener", e);
                 }
@@ -134,12 +132,11 @@ public abstract class BaseEndpointRegistry extends AbstractEndpointRegistry {
 
         org.ow2.petals.registry.api.Endpoint endpoint = new org.ow2.petals.registry.api.Endpoint();
         if (serviceEndpoint.getDescription() != null) {
-            // TODO = Use a common library!
             try {
                 // let's say that the description is an XML one!
-                endpoint.setDescription(XMLUtil.createStringFromDOMDocument(serviceEndpoint
+                endpoint.setDescription(XMLHelper.createStringFromDOMDocument(serviceEndpoint
                         .getDescription()));
-            } catch (TransformerException e) {
+            } catch (Exception e) {
                 this.log.warning(e.getMessage());
             }
         }
@@ -230,7 +227,7 @@ public abstract class BaseEndpointRegistry extends AbstractEndpointRegistry {
                         this.log.debug("Calling registry listener '" + listener.getName()
                                 + "' on endpoint unregistration");
                     }
-                    listener.onUnregister(Adapter.createServiceEndpoint(endpoint));
+                    listener.onUnregister(Adapter.createDSBServiceEndpoint(endpoint));
                 } catch (DSBException e) {
                     log.warning("Got an error while calling registry listener", e);
                 }
@@ -347,9 +344,9 @@ public abstract class BaseEndpointRegistry extends AbstractEndpointRegistry {
             try {
                 Endpoint e = this.client.get(this.getKey(endpoint), true);
                 if ((e != null) && (e.getDescription() != null)) {
-                    result = XMLUtil.createDocumentFromString(e.getDescription());
+                    result = XMLHelper.createDocumentFromString(e.getDescription());
                 }
-            } catch (RegistryException e) {
+            } catch (Exception e) {
                 throw new org.ow2.petals.jbi.messaging.registry.RegistryException(e.getMessage());
             }
         }
@@ -610,7 +607,7 @@ public abstract class BaseEndpointRegistry extends AbstractEndpointRegistry {
     /**
      * {@inheritDoc}
      */
-    public Document getDescription(String serviceName, String endpointName)
+    public String getDescription(String serviceName, String endpointName)
             throws org.ow2.petals.jbi.messaging.registry.RegistryException {
 
         if (this.log.isDebugEnabled()) {
@@ -662,7 +659,16 @@ public abstract class BaseEndpointRegistry extends AbstractEndpointRegistry {
                 return null;
             }
         };
-        return this.getEndpointDescriptorForEndpoint(endpoint);
+        // TODO : CHA2012 : check new implementation
+        Document doc = this.getEndpointDescriptorForEndpoint(endpoint);
+        if (doc != null) {
+            try {
+                return XMLHelper.createStringFromDOMDocument(doc);
+            } catch (TransformerException e1) {
+                throw new org.ow2.petals.jbi.messaging.registry.RegistryException(e1);
+            }
+        }
+        return null;
     }
 
     private String getKey(ServiceEndpoint ep) {

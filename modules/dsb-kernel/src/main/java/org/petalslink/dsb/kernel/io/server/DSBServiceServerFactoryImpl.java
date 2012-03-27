@@ -24,13 +24,12 @@ import org.ow2.petals.jbi.component.context.ComponentContext;
 import org.ow2.petals.jbi.component.context.ComponentContextImpl;
 import org.ow2.petals.jbi.descriptor.original.generated.Jbi;
 import org.ow2.petals.jbi.management.admin.AdminService;
-import org.ow2.petals.jbi.messaging.endpoint.EndpointPropertiesService;
 import org.ow2.petals.jbi.messaging.registry.EndpointRegistry;
 import org.ow2.petals.jbi.messaging.routing.RouterService;
 import org.ow2.petals.jbi.messaging.routing.RoutingException;
 import org.ow2.petals.kernel.api.service.Location;
 import org.ow2.petals.kernel.configuration.ConfigurationService;
-import org.ow2.petals.util.LoggingUtil;
+import org.ow2.petals.util.oldies.LoggingUtil;
 import org.petalslink.dsb.kernel.api.service.Constants;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentFragment;
@@ -105,8 +104,10 @@ public class DSBServiceServerFactoryImpl implements DSBServiceServerFactory {
                 return router;
             }
 
-            public Logger getLogger() {
-                return logger;
+            public java.util.logging.Logger getLogger() {
+                // CHA 2012 : Don't care about the level...
+                java.util.logging.Logger log = java.util.logging.Logger.getLogger(logger.getName());
+                return log;
             }
 
             public Jbi getJBIDescriptor() {
@@ -122,10 +123,6 @@ public class DSBServiceServerFactoryImpl implements DSBServiceServerFactory {
             }
 
             public EndpointRegistry getEndpointRegistry() {
-                return null;
-            }
-
-            public EndpointPropertiesService getEndpointPropertiesService() {
                 return null;
             }
 

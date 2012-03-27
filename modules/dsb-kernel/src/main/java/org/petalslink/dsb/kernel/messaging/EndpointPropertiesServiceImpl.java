@@ -36,8 +36,7 @@ import org.ow2.petals.jbi.descriptor.original.generated.Provides;
 import org.ow2.petals.jbi.descriptor.original.generated.ServiceAssembly;
 import org.ow2.petals.jbi.descriptor.original.generated.ServiceUnit;
 import org.ow2.petals.jbi.management.admin.AdminService;
-import org.ow2.petals.jbi.messaging.endpoint.EndpointPropertiesService;
-import org.ow2.petals.util.LoggingUtil;
+import org.ow2.petals.util.oldies.LoggingUtil;
 import org.w3c.dom.Element;
 
 /**
@@ -47,7 +46,8 @@ import org.w3c.dom.Element;
  * @author chamerling - eBM WebSourcing
  * 
  */
-public class EndpointPropertiesServiceImpl implements EndpointPropertiesService {
+// CHA 2012 : Not used in DSB and org.ow2.petals.jbi.messaging.endpoint.EndpointPropertiesService dispaeared...
+public class EndpointPropertiesServiceImpl { //implements EndpointPropertiesService {
 
     @Monolog(name = "logger")
     private Logger logger;

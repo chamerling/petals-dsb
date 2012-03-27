@@ -18,7 +18,9 @@
  */
 package org.petalslink.dsb.transport.api;
 
-import org.ow2.petals.jbi.messaging.exchange.MessageExchange;
+import javax.jbi.messaging.MessageExchange;
+
+import org.ow2.petals.jbi.messaging.exchange.MessageExchangeWrapper;
 
 /**
  * The receiver is called when a new message is receipted on the core transport
@@ -36,6 +38,6 @@ public interface Receiver {
      * 
      * @param message
      */
-    void onMessage(MessageExchange message);
+    void onMessage(MessageExchangeWrapper message);
 
 }

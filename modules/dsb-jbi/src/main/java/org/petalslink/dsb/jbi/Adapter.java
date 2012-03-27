@@ -16,7 +16,6 @@ import javax.xml.transform.dom.DOMSource;
 import org.ow2.petals.jbi.messaging.endpoint.JBIServiceEndpointImpl;
 import org.ow2.petals.jbi.messaging.exchange.NormalizedMessageImpl;
 import org.ow2.petals.kernel.api.service.Location;
-import org.ow2.petals.util.XMLUtil;
 import org.petalslink.dsb.service.client.Message;
 import org.petalslink.dsb.xmlutils.XMLHelper;
 import org.w3c.dom.Document;
@@ -26,8 +25,20 @@ import org.w3c.dom.Document;
  * 
  */
 public class Adapter {
+    // 
+    public static org.petalslink.dsb.api.ServiceEndpoint createServiceEndpointFromJBI(javax.jbi.servicedesc.ServiceEndpoint serviceEndpoint) {
+        if (serviceEndpoint == null) {
+            return null;
+        }
+        org.petalslink.dsb.api.ServiceEndpoint se = new org.petalslink.dsb.api.ServiceEndpoint();
+       
+        se.setEndpointName(serviceEndpoint.getEndpointName());
+        se.setServiceName(serviceEndpoint.getServiceName());
+        se.setInterfaces(serviceEndpoint.getInterfaces());
+        return se;
+    }
 
-    public static org.petalslink.dsb.api.ServiceEndpoint createServiceEndpoint(
+    public static org.petalslink.dsb.api.ServiceEndpoint createDSBServiceEndpoint(
             org.ow2.petals.kernel.api.service.ServiceEndpoint serviceEndpoint) {
         if (serviceEndpoint == null) {
             return null;
@@ -45,7 +56,7 @@ public class Adapter {
 
         if (serviceEndpoint.getDescription() != null) {
             try {
-                se.setDescription(XMLUtil.createStringFromDOMDocument(serviceEndpoint
+                se.setDescription(com.ebmwebsourcing.easycommons.xml.XMLHelper.createStringFromDOMDocument(serviceEndpoint
                         .getDescription()));
             } catch (TransformerException e) {
             }
@@ -60,7 +71,7 @@ public class Adapter {
         return se;
     }
 
-    public static JBIServiceEndpointImpl createServiceEndpoint(
+    public static JBIServiceEndpointImpl createJBIServiceEndpoint(
             org.petalslink.dsb.api.ServiceEndpoint serviceEndpoint) {
         JBIServiceEndpointImpl se = new JBIServiceEndpointImpl();
         if (serviceEndpoint != null) {
@@ -82,7 +93,11 @@ public class Adapter {
             }
 
             if (serviceEndpoint.getDescription() != null) {
-                se.setDescription(XMLUtil.createDocumentFromString(serviceEndpoint.getDescription()));
+                try {
+                    se.setDescription(com.ebmwebsourcing.easycommons.xml.XMLHelper.createDocumentFromString(serviceEndpoint.getDescription()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
         return se;

@@ -20,6 +20,7 @@ package org.petalslink.dsb.transport;
 
 import javax.jbi.messaging.ExchangeStatus;
 import javax.jbi.messaging.Fault;
+import javax.jbi.messaging.MessagingException;
 import javax.jbi.messaging.NormalizedMessage;
 
 import org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint;
@@ -40,21 +41,28 @@ public class MessageExchange extends MessageExchangeImpl {
      * @param consumerEndpoint
      */
     public MessageExchange(ServiceEndpoint consumerEndpoint) {
-        super(consumerEndpoint);
+        this.setConsumerEndpoint(consumerEndpoint);
+        //super(consumerEndpoint);
     }
 
     /**
      * @param valueOf
      */
     public void setCoreStatus(ExchangeStatus status) {
-        this.status = status;
+        try {
+            this.setStatus(status);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+        //this.status = status;
     }
 
     /**
      * @param createNormalizedMessage
      */
     public void setCoreFault(Fault fault) {
-        this.fault = fault;
+        this.getMessages().put(FAULT_MSG, fault);
+        //this.fault = fault;
     }
 
     /**
@@ -63,14 +71,16 @@ public class MessageExchange extends MessageExchangeImpl {
      * @param name
      */
     public void setCoreMessage(NormalizedMessage message, String name) {
-        this.messages.put(name.toLowerCase(), message);
+        this.getMessages().put(name.toLowerCase(), message);
+        //this.messages.put(name.toLowerCase(), message);
     }
 
     /**
      * @param exception
      */
     public void setCoreError(Exception exception) {
-        this.error = exception;
+        //this.error = exception;
+        this.setError(exception);
     }
 
 }

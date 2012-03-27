@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jbi:jbi version="1.0" xmlns:jbi="http://java.sun.com/xml/ns/jbi"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:petalsCDK="http://petals.ow2.org/components/extensions/version-5"
+	xmlns:soap="http://petals.ow2.org/components/soap/version-4">
+	<jbi:component type="binding-component"
+		bootstrap-class-loader-delegation="parent-first">
+		<jbi:identification>
+			<jbi:name>petals-bc-soap</jbi:name>
+			<jbi:description> The SOAP Binding Component (based on Axis2 + Jetty)</jbi:description>
+		</jbi:identification>
+		<jbi:component-class-name>org.ow2.petals.binding.soap.SoapComponent</jbi:component-class-name>
+		<jbi:component-class-path><jbi:path-element/></jbi:component-class-path>
+		<jbi:bootstrap-class-name>org.ow2.petals.binding.soap.SoapBootstrap</jbi:bootstrap-class-name>
+		<jbi:bootstrap-class-path><jbi:path-element/></jbi:bootstrap-class-path>
+
+		<petalsCDK:acceptor-pool-size>5</petalsCDK:acceptor-pool-size>
+		<petalsCDK:processor-pool-size>10</petalsCDK:processor-pool-size>
+		<petalsCDK:ignored-status>DONE_AND_ERROR_IGNORED</petalsCDK:ignored-status>
+		<petalsCDK:properties-file />
+		<petalsCDK:notifications>false</petalsCDK:notifications>
+		<petalsCDK:jbi-listener-class-name>org.ow2.petals.binding.soap.listener.outgoing.JBIListener</petalsCDK:jbi-listener-class-name>
+		<petalsCDK:external-listener-class-name>org.ow2.petals.binding.soap.listener.incoming.SoapExternalListener</petalsCDK:external-listener-class-name>
+		
+		<soap:http-port>8084</soap:http-port>
+		<soap:http-host>*.*.*.*</soap:http-host>
+		<soap:http-services-list>true</soap:http-services-list>
+		<soap:http-services-context>petals</soap:http-services-context>
+		<soap:http-services-mapping>services</soap:http-services-mapping>
+		<soap:http-thread-pool-size-min>2</soap:http-thread-pool-size-min>
+		<soap:http-thread-pool-size-max>50</soap:http-thread-pool-size-max>
+		<soap:http-acceptors>4</soap:http-acceptors>		
+		<!-- JMS transport layer, default JMS connection factory, uncommented to activate -->
+		<!--<soap:java-naming-factory-initial>org.apache.activemq.jndi.ActiveMQInitialContextFactory</soap:java-naming-factory-initial> -->
+		<!--<soap:java-naming-provider-url>tcp://localhost:61616</soap:java-naming-provider-url> -->
+		<!--<soap:jms-connection-factory-jndiname>QueueConnectionFactory</soap:jms-connection-factory-jndiname> -->		
+	</jbi:component>
+</jbi:jbi>

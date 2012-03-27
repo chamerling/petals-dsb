@@ -29,7 +29,7 @@ import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.communication.RemoteCheckerClient;
 import org.ow2.petals.communication.topology.TopologyService;
 import org.ow2.petals.kernel.configuration.ContainerConfiguration;
-import org.ow2.petals.util.LoggingUtil;
+import org.ow2.petals.util.oldies.LoggingUtil;
 
 /**
  * Remote checker fractal component based on web service communication

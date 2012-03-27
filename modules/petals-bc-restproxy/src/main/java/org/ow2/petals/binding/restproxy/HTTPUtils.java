@@ -25,7 +25,7 @@ import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.transform.Source;
 
-import org.ow2.petals.component.framework.util.UtilFactory;
+import org.ow2.petals.component.framework.util.SourceUtil;
 import org.ow2.petals.component.framework.util.XMLUtil;
 import org.w3c.dom.Document;
 
@@ -44,7 +44,7 @@ public class HTTPUtils {
             if ((request != null) && (request.getInputStream() != null)) {
                 Document doc = XMLUtil.loadDocument(request.getInputStream());
                 if (doc != null) {
-                    result = UtilFactory.getSourceUtil().createStreamSource(doc);
+                    result = SourceUtil.createStreamSource(doc);
                 }
             }
         } catch (Exception e) {

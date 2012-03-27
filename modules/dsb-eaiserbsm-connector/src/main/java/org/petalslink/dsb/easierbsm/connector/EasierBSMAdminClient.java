@@ -57,8 +57,10 @@ public class EasierBSMAdminClient implements MonitoringAdminClient {
                     wsdmProviderEndpointName, true);
         } catch (AdminExceptionMsg e) {
             final String message = "Error while sending request to monitoring layer";
-            if (logger.isLoggable(Level.INFO)) {
+            if (logger.isLoggable(Level.FINE)) {
                 logger.log(Level.WARNING, message, e);
+            } else {
+                logger.log(Level.WARNING, message);
             }
             throw new DSBException(message, e);
         }

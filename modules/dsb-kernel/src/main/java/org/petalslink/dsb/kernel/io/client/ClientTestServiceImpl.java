@@ -3,6 +3,7 @@
  */
 package org.petalslink.dsb.kernel.io.client;
 
+import java.io.IOException;
 import java.util.Map;
 
 import javax.xml.namespace.QName;
@@ -15,13 +16,15 @@ import org.objectweb.fractal.fraclet.annotation.annotations.Monolog;
 import org.objectweb.fractal.fraclet.annotation.annotations.Provides;
 import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
 import org.objectweb.util.monolog.api.Logger;
-import org.ow2.petals.registry.api.util.XMLUtil;
-import org.ow2.petals.util.LoggingUtil;
+import org.ow2.petals.util.oldies.LoggingUtil;
 import org.petalslink.dsb.api.ServiceEndpoint;
 import org.petalslink.dsb.service.client.Client;
 import org.petalslink.dsb.service.client.ClientException;
 import org.petalslink.dsb.service.client.Message;
 import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
+
+import com.ebmwebsourcing.easycommons.xml.XMLHelper;
 
 /**
  * @author chamerling
@@ -65,9 +68,14 @@ public class ClientTestServiceImpl implements ClientTestService {
                 Message message = new Message() {
 
                     public Document getPayload() {
-                        return XMLUtil
-                                .createDocumentFromString("<api:sayHello xmlns:api=\"http://api.ws.dsb.petalslink.org/\"><arg0>Call "
-                                        + j + "</arg0></api:sayHello>");
+                        try {
+                            return XMLHelper
+                                    .createDocumentFromString("<api:sayHello xmlns:api=\"http://api.ws.dsb.petalslink.org/\"><arg0>Call "
+                                            + j + "</arg0></api:sayHello>");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        return null;
                     }
 
                     public QName getOperation() {
@@ -133,7 +141,7 @@ public class ClientTestServiceImpl implements ClientTestService {
                 Message response = client.sendReceive(message);
                 try {
                     System.out.println("Got response on DSB service client for call " + i + " : "
-                            + XMLUtil.createStringFromDOMDocument(response.getPayload()));
+                            + XMLHelper.createStringFromDOMDocument(response.getPayload()));
                 } catch (TransformerException e) {
                     e.printStackTrace();
                 }

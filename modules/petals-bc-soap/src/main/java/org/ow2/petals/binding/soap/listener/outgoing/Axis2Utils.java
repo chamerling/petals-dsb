@@ -21,18 +21,12 @@
 
 package org.ow2.petals.binding.soap.listener.outgoing;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.net.URI;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.logging.Logger;
 
 import javax.jbi.messaging.MessagingException;
 import javax.xml.namespace.QName;
-import javax.xml.stream.XMLStreamException;
 
-import org.apache.axiom.om.impl.builder.StAXOMBuilder;
 import org.apache.axis2.AxisFault;
 import org.apache.axis2.client.ServiceClient;
 import org.apache.axis2.context.ConfigurationContext;
@@ -42,11 +36,12 @@ import org.apache.axis2.description.AxisService;
 import org.apache.axis2.description.OutInAxisOperation;
 import org.apache.axis2.description.OutOnlyAxisOperation;
 import org.apache.axis2.description.RobustOutOnlyAxisOperation;
-import org.apache.neethi.Policy;
-import org.apache.neethi.PolicyEngine;
-import org.ow2.petals.binding.soap.listener.incoming.PetalsAxisService;
+import org.ow2.petals.commons.Constants;
 import org.ow2.petals.component.framework.api.Message.MEPConstants;
-import org.ow2.petals.component.framework.util.UtilFactory;
+
+import static org.ow2.petals.binding.soap.SoapConstants.Axis2.OUTGOING_SERVICE_CLIENT_PREFIX;
+
+import com.ebmwebsourcing.easycommons.uuid.QualifiedUUIDGenerator;
 
 /**
  * @author chamerling - eBM WebSourcing
@@ -65,20 +60,18 @@ public class Axis2Utils {
      */
     private static ConfigurationContext axisCtx = null;
 
+    /**
+     * The fault created during the creation of the configuration.
+     */
+    private static AxisFault axisFault = null;
+
     static {
         try {
             axisCtx = ConfigurationContextFactory.createConfigurationContextFromFileSystem(null,
                     null);
         } catch (final AxisFault ae) {
-            System.err.println("WARNING : Error while creating the Axis Configuration Context");
+            axisFault = ae;
         }
-    }
-
-    /**
-     * Creates a new instance of {@link Axis2Utils}
-     * 
-     */
-    private Axis2Utils() {
     }
 
     /**
@@ -96,8 +89,9 @@ public class Axis2Utils {
         ServiceClient client = null;
 
         final AxisService service = new AxisService(
-                PetalsAxisService.OUTGOING_SERVICE_CLIENT_PREFIX
-                        + UtilFactory.getIdUtil().createId() + serviceCounter.incrementAndGet());
+                OUTGOING_SERVICE_CLIENT_PREFIX
+                        + new QualifiedUUIDGenerator(Constants.UUID_DOMAIN).getNewID()
+                        + serviceCounter.incrementAndGet());
 
         AxisOperation axisOperation = null;
         if (MEPConstants.IN_ONLY_PATTERN.equals(mep)) {
@@ -110,40 +104,23 @@ public class Axis2Utils {
         }
         service.addOperation(axisOperation);
 
-        try {
-            client = new ServiceClient(axisCtx, service);
-        } catch (final AxisFault e) {
-            throw new MessagingException("Can't create ServiceClient", e);
+        if (axisFault != null) {
+            throw new MessagingException("Can't create the configuration", axisFault);
+        } else {
+            try {
+                client = new ServiceClient(axisCtx, service);
+            } catch (final AxisFault e) {
+                throw new MessagingException("Can't create ServiceClient", e);
+            }
         }
         return client;
     }
-    
-    /**
-     * Load the policy from the SU configuration files.
-     * 
-     * @param extensions
-     * @return null if no policy has been found or the policy loaded from the
-     *         policy.xml file
-     */
-     public static Policy loadPolicy(final File path, final Logger logger) {
-        Policy policy = null;
-        if (path == null) {
-            return null;
-        }
 
-        File policyFile = new File(path, org.ow2.petals.binding.soap.Constants.Policy.POLICY_FILE);
-        logger.info("Get the policy from " + policyFile.getAbsolutePath());
-        if (policyFile.exists()) {
-            try {
-                StAXOMBuilder builder = new StAXOMBuilder(new FileInputStream(policyFile));
-                policy = PolicyEngine.getPolicy(builder.getDocumentElement());
-            } catch (FileNotFoundException e) {
-                logger.warning(e.getMessage());
-            } catch (XMLStreamException e) {
-                logger.warning(e.getMessage());
-            }
-        }
-        return policy;
+    /**
+     * Creates a new instance of {@link Axis2Utils}
+     * 
+     */
+    private Axis2Utils() {
     }
 
 }

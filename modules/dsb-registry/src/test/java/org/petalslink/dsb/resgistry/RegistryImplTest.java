@@ -35,27 +35,26 @@ import junit.framework.TestCase;
  */
 public class RegistryImplTest extends TestCase {
 
-	public void testTTL() throws Exception {
 
-		final AtomicInteger accessCount = new AtomicInteger(0);
+    public void testTTL() throws Exception {
+
+        final AtomicInteger accessCount = new AtomicInteger(0);
+
 
 		RegistryEntryLoader loader = new RegistryEntryLoader() {
 
-			@Override
 			public List<String> getByInterface(String key) {
 				System.out.println("Getting entries for key " + key);
 				accessCount.incrementAndGet();
 				return new ArrayList<String>();
 			}
 
-			@Override
 			public List<String> getByServiceInterface(String key) {
 				System.out.println("Getting entries for key " + key);
 				accessCount.incrementAndGet();
 				return new ArrayList<String>();
 			}
 
-			@Override
 			public List<String> getByServiceInterfaceEndpoint(String key) {
 				System.out.println("Getting entries for key " + key);
 				accessCount.incrementAndGet();

@@ -96,7 +96,6 @@ public class RegistryImpl implements Registry<String> {
 	 * @see org.petalslink.dsb.registry.Registry#get(java.lang.String,
 	 * javax.xml.namespace.QName, javax.xml.namespace.QName)
 	 */
-	@Override
 	public List<String> get(String endpoint, QName service, QName itf) {
 		String key = toKey(endpoint, service, itf);
 

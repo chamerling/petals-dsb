@@ -35,7 +35,7 @@ import org.ow2.petals.jbi.messaging.registry.EndpointRegistry;
 import org.ow2.petals.jbi.messaging.registry.RegistryException;
 import org.ow2.petals.kernel.configuration.ConfigurationService;
 import org.ow2.petals.kernel.ws.api.PEtALSWebServiceException;
-import org.ow2.petals.util.LoggingUtil;
+import org.ow2.petals.util.oldies.LoggingUtil;
 import org.petalslink.dsb.kernel.api.management.component.ComponentInformationService;
 import org.petalslink.dsb.kernel.util.EndpointHelper;
 import org.petalslink.dsb.ws.api.DSBWebServiceException;

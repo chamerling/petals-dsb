@@ -1,9 +1,8 @@
 package org.petalslink.dsb.kernel.monitoring.service.time;
 
 import java.net.URI;
-import java.util.Date;
 
-import org.ow2.petals.jbi.messaging.exchange.MessageExchange;
+import org.ow2.petals.jbi.messaging.exchange.MessageExchangeWrapper;
 
 public interface TimeStamper {
 
@@ -35,7 +34,7 @@ public interface TimeStamper {
 
 	long getDateProviderOut();
 
-	MessageExchange getMessageExchange();
+	MessageExchangeWrapper getMessageExchange();
 
-	void setMessageExchange(MessageExchange me);
+	void setMessageExchange(MessageExchangeWrapper me);
 }

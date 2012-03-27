@@ -24,7 +24,7 @@ import javax.jbi.messaging.NormalizedMessage;
 
 import org.ow2.petals.component.framework.api.exception.PEtALSCDKException;
 import org.ow2.petals.component.framework.api.message.Exchange;
-import org.ow2.petals.component.framework.util.UtilFactory;
+import org.ow2.petals.component.framework.util.SourceUtil;
 import org.petalslink.dsb.jbi.se.wsn.Component;
 import org.petalslink.dsb.jbi.se.wsn.NotificationEngine;
 import org.w3c.dom.Document;
@@ -49,6 +49,7 @@ public class JBIListener extends NotificationV2JBIListener {
      * @see org.ow2.petals.component.framework.listener.AbstractJBIListener
      */
     public boolean onJBIMessage(final Exchange exchange) {
+        System.out.println("Got a message!!!!");
         NotificationEngine engine = getNotificationEngine();
 
         try {
@@ -56,31 +57,20 @@ public class JBIListener extends NotificationV2JBIListener {
                 if (exchange.getFault() != null) {
 
                     if (this.getLogger().isLoggable(Level.WARNING)) {
-                        if (UtilFactory.getExchangeUtil().isPetalsException(exchange.getFault())) {
-                            this.getLogger().warning(
-                                    "notification technical fault message content: "
-                                            + UtilFactory.getSourceUtil().createString(
-                                                    exchange.getFault().getContent()));
-                        } else {
-                            this.getLogger().warning(
-                                    "notification business fault message content: "
-                                            + UtilFactory.getSourceUtil().createString(
-                                                    exchange.getFault().getContent()));
-                        }
+                       this.getLogger().warning("Exchange is fault");
                     }
 
                 } else {
                     System.out.println("Got a message = " + exchange.getOperationName());
                     NormalizedMessage normalizedMessage = exchange.getInMessage();
-                    Document document = UtilFactory.getSourceUtil().createDocument(
+                    Document document = SourceUtil.createDocument(
                             normalizedMessage.getContent());
                     org.petalslink.dsb.soap.Exchange e = new org.petalslink.dsb.soap.Exchange();
                     e.setIn(document);
                     engine.getServiceEngine().invoke(e);
                     if (e.getOut() != null) {
                         normalizedMessage = exchange.getOutMessage();
-                        normalizedMessage.setContent(UtilFactory.getSourceUtil()
-                                .createStreamSource(document));
+                        normalizedMessage.setContent(SourceUtil.createStreamSource(document));
                         exchange.setOutMessage(normalizedMessage);
                     }
                     if (e.getFault() != null) {

@@ -30,6 +30,33 @@
 		<dependency>
 			<artifactId>wsn-b-services-impl</artifactId>
 			<groupId>com.ebmwebsourcing.deprecated.oasis-ws-basenotification</groupId>
+			<!-- Do not want to use bindled CXF version which is not useful here... -->
+			<exclusions>
+			 <exclusion>
+      			<groupId>org.apache.cxf</groupId>
+      			<artifactId>cxf-rt-transports-http-jetty</artifactId>
+			    </exclusion>
+			    <exclusion>
+			      <groupId>org.apache.cxf</groupId>
+			      <artifactId>cxf-rt-transports-http</artifactId>
+			    </exclusion>
+			    <exclusion>
+			      <groupId>org.apache.cxf</groupId>
+			      <artifactId>cxf-common-utilities</artifactId>
+			    </exclusion>
+			    <exclusion>
+			      <groupId>org.apache.cxf</groupId>
+			      <artifactId>cxf-api</artifactId>
+			    </exclusion>
+			    <exclusion>
+			      <groupId>org.apache.cxf</groupId>
+			      <artifactId>cxf-rt-core</artifactId>
+			    </exclusion>
+			    <exclusion>
+			      <groupId>org.apache.cxf</groupId>
+			      <artifactId>cxf-rt-frontend-jaxws</artifactId>
+			    </exclusion>
+			</exclusions>
 		</dependency>
 		
 	</dependencies>

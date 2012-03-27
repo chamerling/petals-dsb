@@ -17,7 +17,7 @@ import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.communication.topology.TopologyService;
 import org.ow2.petals.kernel.configuration.ConfigurationService;
 import org.ow2.petals.kernel.configuration.ContainerConfiguration;
-import org.ow2.petals.util.LoggingUtil;
+import org.ow2.petals.util.oldies.LoggingUtil;
 import org.petalslink.gms.Peer;
 import org.petalslink.gms.PeerManager;
 

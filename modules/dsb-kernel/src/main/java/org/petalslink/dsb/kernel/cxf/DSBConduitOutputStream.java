@@ -37,7 +37,6 @@ import org.apache.cxf.message.MessageImpl;
 import org.apache.cxf.service.model.BindingOperationInfo;
 import org.apache.cxf.ws.addressing.EndpointReferenceType;
 import org.apache.cxf.wsdl.EndpointReferenceUtils;
-import org.ow2.petals.registry.api.util.XMLUtil;
 import org.petalslink.dsb.api.ServiceEndpoint;
 import org.petalslink.dsb.kernel.io.Constants;
 import org.petalslink.dsb.kernel.io.client.ClientFactoryRegistry;
@@ -119,6 +118,7 @@ public class DSBConduitOutputStream extends CachedOutputStream {
             message.setInterface(interfaceName);
             message.setEndpoint(endpointName);
             message.setOperation(bop.getName());
+            message.setPayload(doc);
 
             message.getProperties().put(Constants.MESSAGE_TYPE, Constants.DSB_INVOKE);
             message.getProperties().put(
@@ -136,7 +136,7 @@ public class DSBConduitOutputStream extends CachedOutputStream {
                     Boolean.TRUE.toString());
 
             if (LOG.isLoggable(Level.INFO))
-                LOG.info("Sending the message : " + XMLUtil.createStringFromDOMDocument(doc));
+                LOG.info("Sending the message : " + com.ebmwebsourcing.easycommons.xml.XMLHelper.createStringFromDOMDocument(doc));
 
             // get a client
             ServiceEndpoint serviceEndpoint = new ServiceEndpoint();
@@ -161,11 +161,20 @@ public class DSBConduitOutputStream extends CachedOutputStream {
                 Message inMessage = new MessageImpl();
                 inMessage.setExchange(exchange);
 
-                if (LOG.isLoggable(Level.INFO))
-                    LOG.info("RESPONSE from service : "
-                            + XMLUtil.createStringFromDOMDocument(out.getPayload()));
+                if (LOG.isLoggable(Level.INFO)) {
+                    if (out.getPayload() != null) {
+                        LOG.info("RESPONSE from service : "
+                            + com.ebmwebsourcing.easycommons.xml.XMLHelper.createStringFromDOMDocument(out.getPayload()));
+                    } else {
+                        LOG.info("RESPONSE from service is empty and should not (InOut message)");
+                    }
+                }
 
-                InputStream ins = XMLHelper.getInputStream(out.getPayload());
+                InputStream ins = null;
+                if (out.getPayload() != null) {
+                    ins = XMLHelper.getInputStream(out.getPayload());
+                }
+                
                 if (ins == null) {
                     throw new IOException(new org.apache.cxf.common.i18n.Message(
                             "UNABLE.RETRIEVE.MESSAGE", LOG).toString());

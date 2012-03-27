@@ -24,13 +24,13 @@ import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.communication.topology.TopologyService;
 import org.ow2.petals.jbi.component.context.ComponentContext;
 import org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint;
-import org.ow2.petals.jbi.messaging.exchange.MessageExchange;
+import org.ow2.petals.jbi.messaging.exchange.MessageExchangeWrapper;
 import org.ow2.petals.jbi.messaging.routing.RoutingException;
 import org.ow2.petals.jbi.messaging.routing.module.SenderModule;
 import org.ow2.petals.kernel.api.service.Location;
 import org.ow2.petals.kernel.configuration.ContainerConfiguration;
 import org.ow2.petals.transport.util.TransportSendContext;
-import org.ow2.petals.util.LoggingUtil;
+import org.ow2.petals.util.oldies.LoggingUtil;
 import org.petalslink.dsb.kernel.io.Constants;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentFragment;
@@ -66,7 +66,7 @@ public class CoreServiceRouterModule implements SenderModule {
     }
 
     public void electEndpoints(Map<ServiceEndpoint, TransportSendContext> electedEndpoints,
-            ComponentContext sourceComponentContext, MessageExchange exchange)
+            ComponentContext sourceComponentContext, MessageExchangeWrapper exchange)
             throws RoutingException {
         // check if it is a kernel service invocation
         NormalizedMessage nm = exchange.getMessage("in");
@@ -106,7 +106,7 @@ public class CoreServiceRouterModule implements SenderModule {
      * @return
      */
     public List<ServiceEndpoint> resolve(ComponentContext sourceComponentContext,
-            MessageExchange exchange) {
+            MessageExchangeWrapper exchange) {
         List<ServiceEndpoint> result = new ArrayList<ServiceEndpoint>();
         // get the targeted container and set the required data so that the
         // global router knows where to send message

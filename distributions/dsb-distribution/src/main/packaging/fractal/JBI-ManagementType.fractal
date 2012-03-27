@@ -3,8 +3,8 @@
 
 <definition name="JBI-ManagementType">
   <interface signature="org.ow2.petals.jbi.management.admin.AdminService" role="server" name="adminService"/>
-  <interface signature="org.ow2.petals.jbi.management.deployment.DeploymentServiceMBean" role="server" name="deploymentService"/>
-  <interface signature="org.ow2.petals.jbi.management.installation.InstallationServiceMBean" role="server" name="installationService"/>
+  <interface signature="org.ow2.petals.jbi.management.deployment.DeploymentService" role="server" name="deploymentService"/>
+  <interface signature="org.ow2.petals.jbi.management.installation.InstallationService" role="server" name="installationService"/>
   <interface signature="org.ow2.petals.jbi.management.installation.ComponentInstallationService" role="server" name="componentInstallationService"/>
   <interface signature="org.ow2.petals.jbi.management.deployment.AtomicDeploymentService" role="server" name="atomicDeploymentService"/>
   <interface signature="javax.transaction.TransactionManager" role="server" name="transactionManager"/>

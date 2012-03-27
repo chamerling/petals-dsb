@@ -28,12 +28,13 @@ import org.objectweb.util.monolog.api.Logger;
 import org.ow2.easywsdl.schema.api.XmlException;
 import org.ow2.easywsdl.schema.util.SourceHelper;
 import org.ow2.petals.jbi.component.context.ComponentContext;
-import org.ow2.petals.jbi.messaging.exchange.MessageExchange;
+import org.ow2.petals.jbi.messaging.exchange.MessageExchangeImpl;
+import org.ow2.petals.jbi.messaging.exchange.MessageExchangeWrapper;
 import org.ow2.petals.jbi.messaging.routing.RoutingException;
 import org.ow2.petals.jbi.messaging.routing.module.ReceiverModule;
 import org.ow2.petals.jbi.messaging.routing.module.SenderModule;
 import org.ow2.petals.transport.util.TransportSendContext;
-import org.ow2.petals.util.LoggingUtil;
+import org.ow2.petals.util.oldies.LoggingUtil;
 import org.petalslink.dsb.api.DSBException;
 import org.petalslink.dsb.kernel.api.Constants;
 import org.petalslink.dsb.kernel.monitoring.service.time.TimeStamperHandler;
@@ -84,14 +85,19 @@ public class PubSubMonitoringModule implements SenderModule, ReceiverModule,
 
     public void electEndpoints(
             Map<org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint, TransportSendContext> electedDestinations,
-            ComponentContext sourceComponentContext, MessageExchange exchange)
+            ComponentContext sourceComponentContext, MessageExchangeWrapper exchange)
             throws RoutingException {
         this.log.call();
 
         if (!state.get()) {
             return;
         }
+        
+        if (exchange == null) {
+            return;
+        }
 
+        // skip monitoring on some messages, for example the monitoring ones...
         if (exchange.getMessage("in") != null
                 && exchange.getMessage("in").getProperty(Constants.MESSAGE_SKIP_MONITORING) != null) {
             return;
@@ -111,10 +117,14 @@ public class PubSubMonitoringModule implements SenderModule, ReceiverModule,
         }
     }
 
-    public boolean receiveExchange(MessageExchange exchange, ComponentContext arg1)
+    public boolean receiveExchange(MessageExchangeWrapper exchange, ComponentContext arg1)
             throws RoutingException {
 
         if (!state.get()) {
+            return true;
+        }
+        
+        if (exchange == null) {
             return true;
         }
 
@@ -140,6 +150,10 @@ public class PubSubMonitoringModule implements SenderModule, ReceiverModule,
     }
 
     private void sendReport(ReportListBean reports) throws Exception {
+        
+        if (reports == null) {
+            return;
+        }
 
         // TODO : Another thread can do this asynchronously...
 
@@ -166,17 +180,17 @@ public class PubSubMonitoringModule implements SenderModule, ReceiverModule,
         }
     }
 
-    protected ReportListBean createReportListFromExchange(MessageExchange exchange)
+    protected ReportListBean createReportListFromExchange(MessageExchangeWrapper exchange)
             throws DSBException {
         ReportListBean res = new ReportListBean();
         try {
             // flash on request in
-            if (MessageExchange.Role.CONSUMER.equals(exchange.getRole())) {
+            if (MessageExchangeImpl.Role.CONSUMER.equals(exchange.getRole())) {
 
                 // handle in request
-                if ((MessageExchange.IN_ONLY_PATTERN.equals(exchange.getPattern()) && !exchange
+                if ((MessageExchangeImpl.IN_ONLY_PATTERN.equals(exchange.getPattern()) && !exchange
                         .isTerminated())
-                        || (((MessageExchange.IN_OUT_PATTERN.equals(exchange.getPattern()) || (MessageExchange.IN_OPTIONAL_OUT_PATTERN
+                        || (((MessageExchangeImpl.IN_OUT_PATTERN.equals(exchange.getPattern()) || (MessageExchangeImpl.IN_OPTIONAL_OUT_PATTERN
                                 .equals(exchange.getPattern())))
                                 && (exchange.getMessage("out") == null) && !exchange.isTerminated()))) {
                     // stock message
@@ -203,7 +217,7 @@ public class PubSubMonitoringModule implements SenderModule, ReceiverModule,
                 }
 
                 // handle done request
-                if (MessageExchange.IN_ONLY_PATTERN.equals(exchange.getPattern())
+                if (MessageExchangeImpl.IN_ONLY_PATTERN.equals(exchange.getPattern())
                         && exchange.isTerminated()) {
 
                     // create date client in
@@ -265,7 +279,7 @@ public class PubSubMonitoringModule implements SenderModule, ReceiverModule,
                 }
 
                 // handle out request
-                if ((MessageExchange.IN_OUT_PATTERN.equals(exchange.getPattern()) || MessageExchange.IN_OPTIONAL_OUT_PATTERN
+                if ((MessageExchangeImpl.IN_OUT_PATTERN.equals(exchange.getPattern()) || MessageExchangeImpl.IN_OPTIONAL_OUT_PATTERN
                         .equals(exchange.getPattern()))
                         && ((exchange.getMessage("out") != null) || (exchange.getFault() != null) || (exchange
                                 .getError() != null))) {
@@ -346,7 +360,7 @@ public class PubSubMonitoringModule implements SenderModule, ReceiverModule,
         return res;
     }
 
-    private void setSOACommonInformation(MessageExchange exchange, ReportBean report) {
+    private void setSOACommonInformation(MessageExchangeWrapper exchange, ReportBean report) {
         // TODO : Get the MEX information for WS-Addressing information and
         // inject it in the report.
         // exchange.getProperty("WSA:TO");

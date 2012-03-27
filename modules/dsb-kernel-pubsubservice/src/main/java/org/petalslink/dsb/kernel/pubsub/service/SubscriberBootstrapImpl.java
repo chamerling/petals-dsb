@@ -13,8 +13,7 @@ import org.objectweb.fractal.fraclet.annotation.annotations.LifeCycle;
 import org.objectweb.fractal.fraclet.annotation.annotations.Monolog;
 import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
 import org.objectweb.util.monolog.api.Logger;
-import org.ow2.petals.util.LoggingUtil;
-import org.ow2.petals.util.XMLUtil;
+import org.ow2.petals.util.oldies.LoggingUtil;
 import org.petalslink.dsb.annotations.LifeCycleListener;
 import org.petalslink.dsb.annotations.Phase;
 import org.petalslink.dsb.notification.commons.PropertiesConfigurationProducer;
@@ -22,6 +21,7 @@ import org.petalslink.dsb.notification.commons.api.ConfigurationProducer;
 import org.petalslink.dsb.notification.commons.api.NotificationManager;
 import org.w3c.dom.Document;
 
+import com.ebmwebsourcing.easycommons.xml.XMLHelper;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Subscribe;
 import com.ebmwebsourcing.wsstar.wsnb.services.impl.engines.NotificationProducerEngine;
 import com.ebmwebsourcing.wsstar.wsnb.services.impl.util.Wsnb4ServUtils;
@@ -95,7 +95,7 @@ public class SubscriberBootstrapImpl {
                         Document doc = Wsnb4ServUtils.getWsnbWriter().writeSubscribeResponseAsDOM(
                                 subscribeResponse);
                         log.debug("KERNEL SUBSCRIBE RESPONSE = "
-                                + XMLUtil.createStringFromDOMDocument(doc));
+                                + XMLHelper.createStringFromDOMDocument(doc));
                     }
                 } catch (Exception e) {
                     log.warning("Error while subscribing", e);

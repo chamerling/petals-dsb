@@ -25,6 +25,15 @@
 			<version>3.8.1</version>
 			<scope>test</scope>
 		</dependency>
+		
+		<!--  CHA2012 : Fix API changes -->
+		<dependency>
+			<groupId>org.petalslink.dsb</groupId>
+			<artifactId>dsb-removed</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<!--  END API CHANGES -->
 
 		<dependency>
 			<groupId>org.ow2.petals</groupId>

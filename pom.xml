@@ -22,14 +22,6 @@
 --><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	
-	<!--
-	<parent>
-		<groupId>org.ow2.petals</groupId>
-		<artifactId>petals-parent</artifactId>
-		<version>17</version>
-	</parent>
-	-->
-	
 	<name>Petals DSB Builder</name>
 	<artifactId>petals-dsb-builder</artifactId>
 	<groupId>org.petalslink.dsb</groupId>
@@ -51,8 +43,12 @@
 		<module>modules/dsb-client-servicebinder</module>
 		<module>modules/dsb-kernel-wsapi</module>
 		<module>modules/dsb-kernel-api</module>
+<<<<<<< HEAD
 		<module>modules/dsb-kernel</module>
 		<!--<module>modules/dsb-petals-oldies</module>-->
+=======
+		<module>modules/dsb-kernel</module>		
+>>>>>>> petals-esb4-update
 		<module>modules/dsb-webapp</module>
 		<module>modules/dsb-webappapi</module>
 		<module>modules/dsb-transport-api</module>
@@ -66,7 +62,7 @@
 		<module>modules/dsb-router</module>
 		<module>modules/dsb-microkernel</module>
 		
-   		<module>modules/dsb-monitoring</module>
+   		<!--<module>modules/dsb-monitoring</module>-->
    		<module>modules/dsb-service-client</module>
 
 		<!-- Service Polling -->
@@ -81,7 +77,15 @@
 		<module>modules/dsb-launcher</module>
 		<!-- Petals ESB related things -->
 		<module>modules/petals-cdk</module>
+		
+		<!-- DSB UPDATE, commented until update to latest SOAP commponent -->
+		<!-- SOAP 410 to be updated-->
 		<module>modules/petals-bc-soap</module>
+		<!-- OLD DSB ONE -->
+		<!--
+		<module>modules/petals-bc-soap401</module>
+		-->
+		
 		<module>modules/petals-bc-restproxy</module>
 		<module>modules/petals-bc-soapproxy</module>
 		<module>modules/petals-messaging</module>
@@ -113,7 +117,6 @@
 		<!--<module>modules/dsb-bundle-bpelgenerator</module>-->
 		
 		<module>modules/dsb-bpelgenerator-jbise</module>
-		
 		
 		<!-- Monitoring -->
 		<module>modules/dsb-kernel-monitoringservice</module>
@@ -163,14 +166,23 @@
 		<module>modules/dsb-logger-jbise</module>
 		
 		<!-- Cloud -->
+<<<<<<< HEAD
 		<!--<module>modules/dsb-cloud-kernel</module>-->
+=======
+		<!--
+		<module>modules/dsb-cloud-kernel</module>
+		-->
+>>>>>>> petals-esb4-update
 		
 		<!-- prototypes -->
 		<!--
 		<module>modules/dsb-node-manager</module>
 		-->
 		<!-- samples -->
-		<module>samples/dsb-wsn-sample</module>		
+		<module>samples/dsb-wsn-sample</module>	
+		
+		<!-- Removed stuff from Petals 3.0 to 3.2 -->
+		<module>modules/dsb-removed</module>	
 		
   </modules>
 
@@ -187,13 +199,6 @@
 					<!--<module>modules/dsb-kernel-federationservice</module>-->
 			</modules>
 		</profile>
-		<profile>
-		<!-- Deprecated, to be deleted after BSM implementation -->
-			<id>fork</id>
-			<modules>
-				<module>forks/wsdm-monitoring</module>
-			</modules>
-		</profile>
 			<profile>
 				<id>mocks</id>
 				<modules>
@@ -204,16 +209,13 @@
 			<id>distributions</id>
 			<modules>
 				<module>distributions/dsb-distribution</module>
-				<!--<module>distributions/fdsb-distribution</module>-->
-				<module>distributions/dsb-installer</module>
+				<module>distributions/dsb-fulldistribution</module>
 			</modules>
 		</profile>
 		<profile>
-			<!-- This profile may contain modules which depends on other profiles...-->
-			<id>sandbox</id>
+			<id>integration</id>
 			<modules>
-				<module>sandbox/dsb-wsdm</module>
-				<module>sandbox/dsb-wsdm-distribution</module>
+				<module>integration/dsb-integration-wsapi</module>
 			</modules>
 		</profile>
 	</profiles>

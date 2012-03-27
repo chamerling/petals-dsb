@@ -28,9 +28,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
-import java.util.Set;
-import java.util.Vector;
 
+import javax.jbi.management.AdminServiceMBean;
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
 import javax.naming.InitialContext;
@@ -53,7 +52,6 @@ import org.ow2.petals.communication.jndi.client.JNDIService;
 import org.ow2.petals.communication.topology.TopologyService;
 import org.ow2.petals.container.ContainerService;
 import org.ow2.petals.jbi.management.ManagementException;
-import org.ow2.petals.jbi.management.admin.AdminServiceMBean;
 import org.ow2.petals.jbi.management.deployment.DeploymentServiceMBean;
 import org.ow2.petals.jbi.management.installation.InstallationServiceMBean;
 import org.ow2.petals.jbi.management.recovery.SystemRecoveryService;
@@ -64,7 +62,6 @@ import org.ow2.petals.jbi.messaging.routing.RouterService;
 import org.ow2.petals.kernel.admin.PetalsAdminInterface;
 import org.ow2.petals.kernel.admin.PetalsAdminServiceMBean;
 import org.ow2.petals.kernel.api.server.PetalsException;
-import org.ow2.petals.kernel.api.server.PetalsStateListener;
 import org.ow2.petals.kernel.api.server.util.SystemUtil;
 import org.ow2.petals.kernel.api.service.ServiceEndpoint;
 import org.ow2.petals.kernel.configuration.ConfigurationService;
@@ -79,7 +76,6 @@ import org.ow2.petals.tools.ws.WebServiceManager;
 import org.ow2.petals.transport.Transporter;
 import org.ow2.petals.util.JNDIUtil;
 import org.petalslink.dsb.kernel.api.listener.LifeCycleManager;
-import org.petalslink.dsb.kernel.listener.LifeCycleListenerManager;
 
 import static org.ow2.petals.kernel.server.FractalHelper.AUTOLOADER_COMPONENT;
 import static org.ow2.petals.kernel.server.FractalHelper.COMMUNICATION_COMPOSITE;
@@ -103,11 +99,6 @@ public class PetalsServerImpl extends org.ow2.petals.kernel.server.PetalsServerI
     private static final String LOGGER_PROPERTIES_FILE_NAME = "loggers.properties";
 
     private static final String[] MONOLOG_FILE_HANDLERS = { "petalsFile" };
-
-    /**
-     * Listener called back when petals is started or stopped
-     */
-    private final List<PetalsStateListener> petalsListeners;
 
     /**
      * Thread used to stop Petals in an isolate thread
@@ -152,7 +143,6 @@ public class PetalsServerImpl extends org.ow2.petals.kernel.server.PetalsServerI
      */
     public PetalsServerImpl(boolean observer) throws PetalsException {
         this.petalsStopThread = new PetalsStopThread(this);
-        this.petalsListeners = new Vector<PetalsStateListener>();
     }
 
     /**
@@ -222,14 +212,6 @@ public class PetalsServerImpl extends org.ow2.petals.kernel.server.PetalsServerI
             throw new PetalsException("Failed to start Petals DSB", exception);
         }
 
-        // get listeners which have been defined by configuration (Fractal)
-        this.initListeners();
-
-        // notify the listener if there is one
-        for (PetalsStateListener petalsListener : this.petalsListeners) {
-            petalsListener.onPetalsStarted();
-        }
-        
         this.launchStartActions();
 
         System.out.println("");
@@ -260,32 +242,6 @@ public class PetalsServerImpl extends org.ow2.petals.kernel.server.PetalsServerI
         }
     }
 
-    /**
-     * @deprecated use annotations for that intialisation!
-     */
-    @Deprecated
-    private void initListeners() {
-        // get the component which owns the listeners
-        Component listenerManagerComponent = FractalHelper.getRecursiveComponentByName(
-                this.petalsContentController, Constants.FRACTAL_LISTENERS_MANAGER);
-        
-        if (listenerManagerComponent != null) {
-            try {
-                LifeCycleListenerManager manager = (LifeCycleListenerManager) listenerManagerComponent
-                        .getFcInterface("service");
-
-                if (manager != null) {
-                    Set<PetalsStateListener> listeners = manager.getListeners();
-                    for (PetalsStateListener petalsStateListener : listeners) {
-                        this.addPetalsStateListener(petalsStateListener);
-                    }
-                } else {
-                }
-            } catch (Exception e) {
-            }
-        }
-    }
-
     /*
      * (non-Javadoc)
      * 
@@ -300,15 +256,6 @@ public class PetalsServerImpl extends org.ow2.petals.kernel.server.PetalsServerI
             exception = e;
         }
 
-        // notify the listener if there is one
-        for (PetalsStateListener petalsListener : this.petalsListeners) {
-            if (exception == null) {
-                petalsListener.onPetalsStopped(true, null);
-            } else {
-                petalsListener.onPetalsStopped(false, exception);
-            }
-        }
-        
         this.launchStopActions();
 
         // NOTE : unreachable part if the listener exists the system
@@ -320,30 +267,6 @@ public class PetalsServerImpl extends org.ow2.petals.kernel.server.PetalsServerI
                 throw new PetalsException(exception);
             }
         }
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.ow2.petals.kernel.api.server.PetalsServer#addPetalsStateListener(
-     * org.ow2.petals.kernel.api.server.PetalsStateListener)
-     */
-    @Override
-    public void addPetalsStateListener(PetalsStateListener petalsListener) {
-        this.petalsListeners.add(petalsListener);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.ow2.petals.kernel.api.server.PetalsServer#removePetalsStateListener
-     * (org.ow2.petals.kernel.api.server.PetalsStateListener)
-     */
-    @Override
-    public boolean removePetalsStateListener(PetalsStateListener petalsListener) {
-        return this.petalsListeners.remove(petalsListener);
     }
 
     /*
@@ -746,6 +669,7 @@ public class PetalsServerImpl extends org.ow2.petals.kernel.server.PetalsServerI
     }
 
     protected void registerMBeans() throws Exception {
+        // CHA 2012 : check the difference with the MBeanHeler!
         ContentController contentController = Fractal.getContentController(this.petalsComposite);
 
         // unactivate the method invokation cache for the Fractal MBeans
@@ -802,6 +726,8 @@ public class PetalsServerImpl extends org.ow2.petals.kernel.server.PetalsServerI
          */
 
         // register the Monolog
+        
+        // CHA 2012 : This is not the same in Petals Kernel 3.2
         jmxServer.registerMBean(Introspector.createMBean(new MonologFactoryMBeanImpl()),
                 new ObjectName(DOMAIN + ":name=" + LOGGER_MBEAN + ",type=service"));
     }

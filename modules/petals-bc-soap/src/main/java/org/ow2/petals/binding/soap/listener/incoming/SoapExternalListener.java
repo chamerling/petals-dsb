@@ -23,13 +23,20 @@ package org.ow2.petals.binding.soap.listener.incoming;
 
 import java.util.logging.Level;
 
+import org.apache.axis2.AxisFault;
+import org.apache.axis2.context.ConfigurationContext;
+import org.apache.axis2.description.AxisService;
+import org.apache.axis2.description.Parameter;
+import org.apache.axis2.engine.AxisConfiguration;
 import org.ow2.petals.binding.soap.SoapComponent;
 import org.ow2.petals.binding.soap.util.SUPropertiesHelper;
+import org.ow2.petals.component.framework.api.exception.PEtALSCDKException;
 import org.ow2.petals.component.framework.listener.AbstractExternalListener;
 
+import static org.ow2.petals.binding.soap.SoapConstants.Axis2.SOAP_EXTERNAL_LISTENER_SERVICE_PARAM;
+
 /**
- * The SOAP external listener. TODO : To be refactored with
- * {@link PetalsReceiver}
+ * The SOAP external listener.
  * 
  * @author Christophe HAMERLING - eBM WebSourcing
  * 
@@ -38,38 +45,58 @@ public class SoapExternalListener extends AbstractExternalListener {
 
     private SoapExternalListenerManager externalListenerManager;
 
-    private String address;
+    private String serviceName = null;
 
     /*
      * (non-Javadoc)
+     * 
      * @see org.ow2.petals.component.framework.listener.AbstractListener#init()
      */
     @Override
     public void init() {
-        this.externalListenerManager = ((SoapComponent) this.getComponent())
+        this.externalListenerManager = ((SoapComponent) getComponent())
                 .getExternalListenerManager();
-        this.address = SUPropertiesHelper.getServiceName(this.getExtensions());
+        this.serviceName = SUPropertiesHelper.getServiceName(getExtensions());
+
+        // allow address
+        if (this.serviceName == null) {
+            this.serviceName = SUPropertiesHelper.getAddress(getExtensions());
+        }
     }
 
     /**
      * As there is a single SOAP listener for all incoming soap requests, this
      * method only references the given address. External calls for non
      * registered addresses will be ignored.
+     * 
+     * @throws PEtALSCDKException
      */
     @Override
-    public void start() {
-        this.getLogger().log(Level.FINE, "Starting listening on " + this.address);
-        this.externalListenerManager.getAddresses().add(this.address);
+    public void start() throws PEtALSCDKException {
+        this.getLogger().log(Level.FINE, "Starting listening on " + this.serviceName);
+        this.externalListenerManager.getAddresses().add(this.serviceName);
+
+        ConfigurationContext axisConfiguration = ((SoapComponent) getComponent()).getSoapContext()
+                .getAxis2ConfigurationContext();
+        AxisConfiguration axisConf = axisConfiguration.getAxisConfiguration();
+
+        try {
+            AxisService axisService = axisConf.getService(this.serviceName);
+            Parameter soapExternalListenerParam = new Parameter(SOAP_EXTERNAL_LISTENER_SERVICE_PARAM, this);
+            axisService.addParameter(soapExternalListenerParam);
+        } catch (AxisFault af) {
+            throw new PEtALSCDKException(af);
+        }
     }
 
     /**
-     * unreference the given address. After address removal, it will be
+     * Unreference the given address. After address removal, it will be
      * impossible to contact service from outside.
      */
     @Override
     public void stop() {
-        this.getLogger().log(Level.FINE, "Stopping listening on " + this.address);
-        this.externalListenerManager.getAddresses().remove(this.address);
+        this.getLogger().log(Level.FINE, "Stopping listening on " + this.serviceName);
+        this.externalListenerManager.getAddresses().remove(this.serviceName);
     }
 
 }

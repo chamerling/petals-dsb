@@ -21,14 +21,13 @@ package org.petalslink.dsb.transport.cxf;
 import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.transport.http.HTTPConduit;
 import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
+import org.ow2.petals.jbi.messaging.exchange.MessageExchangeWrapper;
+import org.ow2.petals.util.oldies.LoggingUtil;
 import org.petalslink.dsb.api.TransportException;
 import org.petalslink.dsb.api.TransportService;
 import org.petalslink.dsb.transport.Adapter;
 import org.petalslink.dsb.transport.api.Client;
 import org.petalslink.dsb.transport.api.ClientException;
-import org.ow2.petals.jbi.messaging.exchange.MessageExchange;
-import org.ow2.petals.util.LoggingUtil;
-
 
 /**
  * @author chamerling - eBM WebSourcing
@@ -54,7 +53,7 @@ public class CXFClientImpl implements Client {
     /**
      * {@inheritDoc}
      */
-    public void send(MessageExchange exchange, long sendTimeout) throws ClientException {
+    public void send(MessageExchangeWrapper exchange, long sendTimeout) throws ClientException {
         if (this.log.isDebugEnabled()) {
             this.log.debug("Sending message exchange...");
         }

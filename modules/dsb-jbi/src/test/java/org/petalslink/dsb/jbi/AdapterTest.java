@@ -47,7 +47,7 @@ public class AdapterTest extends TestCase {
 
     public void testNull() throws Exception {
         assertNull(Adapter
-                .createServiceEndpoint((org.ow2.petals.kernel.api.service.ServiceEndpoint) null));
+                .createDSBServiceEndpoint((org.ow2.petals.kernel.api.service.ServiceEndpoint) null));
     }
 
     public void testFullyFilled() throws Exception {
@@ -83,7 +83,7 @@ public class AdapterTest extends TestCase {
             }
 
         };
-        org.petalslink.dsb.api.ServiceEndpoint result = Adapter.createServiceEndpoint(endpoint);
+        org.petalslink.dsb.api.ServiceEndpoint result = Adapter.createDSBServiceEndpoint(endpoint);
         assertNotNull(result);
         assertEquals(result.getEndpointName(), endpoint.getEndpointName());
         assertEquals(result.getServiceName(), endpoint.getServiceName());

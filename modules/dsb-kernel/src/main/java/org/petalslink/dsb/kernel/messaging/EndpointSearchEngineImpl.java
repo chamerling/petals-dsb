@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.StringTokenizer;
+import java.util.logging.Logger;
 
 import javax.xml.namespace.QName;
 
@@ -31,11 +32,12 @@ import org.ow2.petals.jbi.descriptor.original.generated.LinkType;
 import org.ow2.petals.jbi.messaging.registry.EndpointRegistry;
 import org.ow2.petals.jbi.messaging.registry.RegistryException;
 import org.ow2.petals.jbi.messaging.routing.RoutingException;
+import org.ow2.petals.jbi.messaging.routing.module.EndpointResolverModule;
 import org.ow2.petals.jbi.messaging.routing.module.endpoint.EndpointOrderer;
 import org.ow2.petals.kernel.api.service.ServiceEndpoint.EndpointType;
 import org.ow2.petals.kernel.configuration.ConfigurationService;
 import org.ow2.petals.kernel.configuration.ContainerConfiguration;
-import org.ow2.petals.util.LoggingUtil;
+import org.ow2.petals.util.oldies.LoggingUtil;
 import org.petalslink.dsb.api.ServiceEndpoint;
 import org.petalslink.dsb.jbi.Adapter;
 import org.petalslink.dsb.kernel.api.PetalsService;
@@ -70,7 +72,7 @@ public class EndpointSearchEngineImpl implements EndpointSearchEngine, PetalsSer
      * The default hardcoded strategy parameters: highest,3,2,1
      */
     public static final List<Object> DEFAULT_STRATEGY_PARAMETERS = Arrays.asList(new Object[] {
-            EndpointOrderer.HIGHEST, new Float(3f), new Float(2f), new Float(1f) });
+            EndpointResolverModule.HIGHEST, new Float(3f), new Float(2f), new Float(1f) });
 
     /**
      * the default configured strategy parameters.
@@ -109,13 +111,15 @@ public class EndpointSearchEngineImpl implements EndpointSearchEngine, PetalsSer
 
         // TODO not very clean to initialize the static variable like that
         try {
-            defaultStrategyParameters = tokenizeAndAnalyseStrategy(containerConfiguration
+            defaultStrategyParameters = analyseStrategy(containerConfiguration
                     .getRouterStrategy());
-        } catch (final SearchException e) {
+        } catch (final RoutingException e) {
             defaultStrategyParameters = DEFAULT_STRATEGY_PARAMETERS;
         }
 
-        this.endpointOrderer = new EndpointOrderer(this.log, containerConfiguration,
+        Logger jdkLogger = Logger.getLogger(this.log.getName());
+        org.ow2.petals.util.LoggingUtil logging = new org.ow2.petals.util.LoggingUtil(jdkLogger);
+        this.endpointOrderer = new EndpointOrderer(logging, containerConfiguration,
                 this.topologyService);
         this.random = new Random();
     }
@@ -167,7 +171,7 @@ public class EndpointSearchEngineImpl implements EndpointSearchEngine, PetalsSer
                     org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint serviceEndpoint = this.endpointRegistry
                             .getEndpoint(givenEndpoint.getServiceName(),
                                     givenEndpoint.getEndpointName());
-                    targetedEndpoint = Adapter.createServiceEndpoint(serviceEndpoint);
+                    targetedEndpoint = Adapter.createDSBServiceEndpoint(serviceEndpoint);
                 } catch (RegistryException e) {
                     throw new SearchException(e);
                 }
@@ -196,7 +200,7 @@ public class EndpointSearchEngineImpl implements EndpointSearchEngine, PetalsSer
         try {
             org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint serviceEndpoint = this.endpointRegistry.getEndpoint(givenEndpoint.getServiceName(),
                     givenEndpoint.getEndpointName());
-            targetedEndpoint = Adapter.createServiceEndpoint(serviceEndpoint);
+            targetedEndpoint = Adapter.createDSBServiceEndpoint(serviceEndpoint);
         } catch (RegistryException e) {
             throw new SearchException(e.getMessage());
         }
@@ -237,7 +241,16 @@ public class EndpointSearchEngineImpl implements EndpointSearchEngine, PetalsSer
             throw new SearchException(e);
         }
 
-        List<Object> strategyParameters = getAndAnalyseStrategy(strategy);
+        List<Object> strategyParameters;
+        try {
+            String st = strategy;
+            if (st == null) {
+                st = configurationService.getContainerConfiguration().getRouterStrategy();
+            }
+            strategyParameters = analyseStrategy(st);
+        } catch (RoutingException e1) {
+           throw new SearchException(e1.getMessage());
+        }
 
         List<org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint> orderedEndpoints = null;
         if (retrievedEndpoints.size() == 1) {
@@ -245,8 +258,8 @@ public class EndpointSearchEngineImpl implements EndpointSearchEngine, PetalsSer
             orderedEndpoints.add(retrievedEndpoints.get(0));
         } else if (retrievedEndpoints.size() > 1) {
             try {
-                orderedEndpoints = this.endpointOrderer.orderEndpoints(retrievedEndpoints, null,
-                        strategyParameters, this.random);
+                orderedEndpoints = this.endpointOrderer.orderEndpoints(retrievedEndpoints,
+                        strategyParameters);
             } catch (RoutingException e) {
                 throw new SearchException(e);
             }
@@ -260,7 +273,7 @@ public class EndpointSearchEngineImpl implements EndpointSearchEngine, PetalsSer
         // transform
         List<ServiceEndpoint> result = new ArrayList<ServiceEndpoint>();
         for (org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint serviceEndpoint : orderedEndpoints) {
-            result.add(Adapter.createServiceEndpoint(serviceEndpoint));
+            result.add(Adapter.createDSBServiceEndpoint(serviceEndpoint));
         }
 
         return result;
@@ -294,7 +307,16 @@ public class EndpointSearchEngineImpl implements EndpointSearchEngine, PetalsSer
             throw new SearchException(e);
         }
 
-        List<Object> strategyParameters = getAndAnalyseStrategy(strategy);
+        List<Object> strategyParameters;
+        try {
+            String st = strategy;
+            if (st == null) {
+                st = configurationService.getContainerConfiguration().getRouterStrategy();
+            }
+            strategyParameters = analyseStrategy(strategy);
+        } catch (RoutingException e1) {
+            throw new SearchException(e1.getMessage());
+        }
 
         List<org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint> orderedEndpoints = null;
         if (retrievedEndpoints.size() == 1) {
@@ -302,8 +324,8 @@ public class EndpointSearchEngineImpl implements EndpointSearchEngine, PetalsSer
             orderedEndpoints.add(retrievedEndpoints.get(0));
         } else if (retrievedEndpoints.size() > 1) {
             try {
-                orderedEndpoints = this.endpointOrderer.orderEndpoints(retrievedEndpoints, null,
-                        strategyParameters, this.random);
+                orderedEndpoints = this.endpointOrderer.orderEndpoints(retrievedEndpoints, 
+                        strategyParameters);
             } catch (RoutingException e) {
                 throw new SearchException(e);
             }
@@ -319,7 +341,7 @@ public class EndpointSearchEngineImpl implements EndpointSearchEngine, PetalsSer
 
         List<ServiceEndpoint> result = new ArrayList<ServiceEndpoint>();
         for (org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint serviceEndpoint : orderedEndpoints) {
-            result.add(Adapter.createServiceEndpoint(serviceEndpoint));
+            result.add(Adapter.createDSBServiceEndpoint(serviceEndpoint));
         }
         return result;
     }
@@ -372,26 +394,16 @@ public class EndpointSearchEngineImpl implements EndpointSearchEngine, PetalsSer
      * @return the analyzed list of parameters
      */
     private static List<Object> getAndAnalyseStrategy(final String strategy)
-            throws SearchException {
+            throws RoutingException {
 
         final List<Object> result;
         if (strategy == null) {
             result = defaultStrategyParameters;
         } else {
-            result = tokenizeAndAnalyseStrategy(strategy);
+            result = analyseStrategy(strategy);
 
         }
         return result;
-    }
-
-    private static List<Object> tokenizeAndAnalyseStrategy(final String strategy)
-            throws SearchException {
-        final List<String> temp = new ArrayList<String>();
-        final StringTokenizer st = new StringTokenizer(strategy, EndpointOrderer.STRATEGY_SEPARATOR);
-        while (st.hasMoreTokens()) {
-            temp.add(st.nextToken().trim());
-        }
-        return analyseStrategy(temp);
     }
 
     /**
@@ -403,36 +415,53 @@ public class EndpointSearchEngineImpl implements EndpointSearchEngine, PetalsSer
      * @throws RoutingException
      *             impossible to analyze the default routing strategy.
      */
-    private static List<Object> analyseStrategy(final List<String> parameters)
-            throws SearchException {
-        List<Object> result = null;
-        try {
-            if ((parameters != null)
-                    && (parameters.size() == EndpointOrderer.NUMBER_STRATEGY_PARAMETERS)) {
-
-                try {
-                    EndpointOrderer.verifStrategyParameters(parameters.get(0).toLowerCase(), Float
-                            .valueOf(parameters.get(1)), Float.valueOf(parameters.get(2)), Float
-                            .valueOf(parameters.get(3)));
-                } catch (RoutingException e) {
-                    throw new SearchException(e);
-                }
-
-                result = new ArrayList<Object>();
-                result.add(parameters.get(0).toLowerCase());
-                result.add(Float.valueOf(parameters.get(1)));
-                result.add(Float.valueOf(parameters.get(2)));
-                result.add(Float.valueOf(parameters.get(3)));
-            } else {
-                throw new SearchException("Invalid Parameters: "
-                        + "4 parameters are required to configure the routing strategy");
-            }
-        } catch (NumberFormatException e) {
-            throw new SearchException("Impossible to convert the "
-                    + "parameters to realize the routing strategy");
+    // CHA 2012 : update to EndpointResolverModule Method
+    private final static List<Object> analyseStrategy(final String strategy)
+            throws RoutingException {
+        final List<Object> result = new ArrayList<Object>();
+        final List<String> parameters = new ArrayList<String>();
+        
+        final StringTokenizer st = new StringTokenizer(strategy, EndpointResolverModule.STRATEGY_SEPARATOR);
+        while (st.hasMoreTokens()) {
+            parameters.add(st.nextToken().trim());
         }
+
+        if (parameters.size() != EndpointResolverModule.NUMBER_STRATEGY_PARAMETERS) {
+            throw new RoutingException("4 parameters are required for a routing strategy '"
+                    + strategy + "'");
+        }
+
+        final String type = parameters.get(0).toLowerCase();
+        final Float localWeighting;
+        final Float remoteActiveWeighting;
+        final Float remoteInactiveWeighting;
+        try {
+            localWeighting = Float.valueOf(parameters.get(1));
+            remoteActiveWeighting = Float.valueOf(parameters.get(2));
+            remoteInactiveWeighting = Float.valueOf(parameters.get(3));
+        } catch (final NumberFormatException e) {
+            throw new RoutingException("Impossible to convert a "
+                    + "parameter to a float for the routing strategy '" + strategy + "'");
+        }
+
+        if ((!type.equals(EndpointResolverModule.HIGHEST)) && (!type.equals(EndpointResolverModule.RANDOM))) {
+            throw new RoutingException("the " + type + " routing strategy is unknown");
+        }
+        if ((localWeighting < 0) || (remoteActiveWeighting < 0) || (remoteInactiveWeighting < 0)) {
+            throw new RoutingException("Negative parameter is forbidden in routing strategy");
+        }
+        if (localWeighting == 0 && remoteActiveWeighting == 0 && remoteInactiveWeighting == 0) {
+            throw new RoutingException("Weightings '0,0,0' is forbidden");
+        }
+
+        result.add(type);
+        result.add(localWeighting);
+        result.add(remoteActiveWeighting);
+        result.add(remoteInactiveWeighting);
+
         return result;
     }
+    
 
     public TopologyService getTopologyService() {
         return this.topologyService;
@@ -467,7 +496,7 @@ public class EndpointSearchEngineImpl implements EndpointSearchEngine, PetalsSer
             List<org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint> eps = this.endpointRegistry.getEndpoints();
             if (eps != null) {
                 for (org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint serviceEndpoint : eps) {
-                    result.add(Adapter.createServiceEndpoint(serviceEndpoint));
+                    result.add(Adapter.createDSBServiceEndpoint(serviceEndpoint));
                 }
             }
             

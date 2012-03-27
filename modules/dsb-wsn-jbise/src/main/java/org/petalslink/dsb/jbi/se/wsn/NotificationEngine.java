@@ -15,7 +15,7 @@ import org.ow2.easywsdl.wsdl.api.WSDLException;
 import org.ow2.petals.component.framework.AbstractComponent;
 import org.ow2.petals.component.framework.ComponentWsdl;
 import org.ow2.petals.component.framework.api.Wsdl;
-import org.ow2.petals.component.framework.util.UtilFactory;
+import org.ow2.petals.component.framework.util.WSDLUtilImpl;
 import org.petalslink.dsb.api.util.EndpointHelper;
 import org.petalslink.dsb.notification.commons.AbstractNotificationSender;
 import org.petalslink.dsb.notification.commons.NotificationException;
@@ -198,8 +198,7 @@ public class NotificationEngine {
      */
     private Wsdl loadDocument(String string) {
         try {
-            return new ComponentWsdl(UtilFactory.getWSDLUtil().createWsdlDescription(
-                    AbstractComponent.class.getResource("/" + string), true));
+            return new ComponentWsdl(WSDLUtilImpl.createWsdlDescription(AbstractComponent.class.getResource("/" + string)));
         } catch (WSDLException e) {
             e.printStackTrace();
         }

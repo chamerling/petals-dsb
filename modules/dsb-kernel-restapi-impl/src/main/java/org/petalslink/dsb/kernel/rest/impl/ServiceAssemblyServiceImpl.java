@@ -16,7 +16,7 @@ import org.objectweb.fractal.fraclet.annotation.annotations.type.LifeCycleType;
 import org.objectweb.util.monolog.api.Logger;
 import org.ow2.petals.jbi.management.deployment.AtomicDeploymentService;
 import org.ow2.petals.kernel.api.server.PetalsException;
-import org.ow2.petals.util.LoggingUtil;
+import org.ow2.petals.util.oldies.LoggingUtil;
 import org.petalslink.dsb.annotations.service.RESTService;
 import org.petalslink.dsb.kernel.rest.api.ServiceAssembly;
 import org.petalslink.dsb.kernel.rest.api.beans.SA;

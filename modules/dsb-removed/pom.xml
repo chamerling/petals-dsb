@@ -1,0 +1,49 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<artifactId>dsb-parent</artifactId>
+		<groupId>org.petalslink.dsb</groupId>
+		<version>1.0-SNAPSHOT</version>
+		<relativePath>../dsb-parent/pom.xml</relativePath>
+	</parent>
+
+	<groupId>org.petalslink.dsb</groupId>
+	<artifactId>dsb-removed</artifactId>
+	<packaging>jar</packaging>
+
+	<name>dsb-removed</name>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- DONT KNOW WHY THE BAD VERSION ARE PROVIDED BY THE KERNEL DEP... -->
+		<dependency>
+			<groupId>org.objectweb.monolog</groupId>
+			<artifactId>monolog</artifactId>
+			<version>2.1.10</version>
+		</dependency>
+		<dependency>
+			<groupId>org.objectweb.monolog</groupId>
+			<artifactId>monolog-api</artifactId>
+			<version>2.1.10</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ow2.petals</groupId>
+			<artifactId>petals-kernel-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+	</dependencies>
+</project>

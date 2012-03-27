@@ -36,12 +36,12 @@ import org.ow2.easywsdl.wsdl.api.WSDLException;
 import org.ow2.petals.component.framework.PetalsBindingComponent;
 import org.ow2.petals.component.framework.api.Wsdl;
 import org.ow2.petals.component.framework.util.ServiceEndpointKey;
-import org.ow2.petals.component.framework.util.UtilFactory;
-import org.ow2.petals.component.framework.util.XMLUtil;
+import org.ow2.petals.component.framework.util.WSDLUtilImpl;
 import org.petalslink.dsb.notification.commons.PropertiesConfigurationProducer;
 import org.petalslink.dsb.notification.commons.api.ConfigurationProducer;
 import org.w3c.dom.Document;
 
+import com.ebmwebsourcing.easycommons.xml.XMLHelper;
 import com.ebmwebsourcing.wsstar.basenotification.datatypes.api.abstraction.Subscribe;
 import com.ebmwebsourcing.wsstar.wsnb.services.impl.util.Wsnb4ServUtils;
 
@@ -159,7 +159,7 @@ public class Component extends PetalsBindingComponent {
                         if (subscribe != null) {
                             Document doc = Wsnb4ServUtils.getWsnbWriter()
                                     .writeSubscribeAsDOM(subscribe);
-                            getLogger().info(XMLUtil.createStringFromDOMDocument(doc));
+                            getLogger().info(XMLHelper.createStringFromDOMDocument(doc));
                         }
                     }
                     
@@ -172,7 +172,7 @@ public class Component extends PetalsBindingComponent {
                         if (subscribeResponse != null) {
                             Document doc = Wsnb4ServUtils.getWsnbWriter()
                                     .writeSubscribeResponseAsDOM(subscribeResponse);
-                            getLogger().info(XMLUtil.createStringFromDOMDocument(doc));
+                            getLogger().info(XMLHelper.createStringFromDOMDocument(doc));
                         } else {
                             getLogger().info("No response...");
                         }
@@ -195,43 +195,38 @@ public class Component extends PetalsBindingComponent {
         QName serviceName = null;
         String endpointName = null;
 
-        try {
-            endpointList = UtilFactory.getWSDLUtil().getEndpointList(
-                    this.engine.getProducerWSDL().getDescription());
-            if (endpointList != null) {
-                final Iterator<Endpoint> iterator = endpointList.iterator();
-                if (iterator != null) {
-                    while (iterator.hasNext()) {
-                        final Endpoint endpoint = iterator.next();
-                        if (endpoint != null) {
-                            serviceName = endpoint.getService().getQName();
-                            endpointName = endpoint.getName();
-                            this.activateWSNEndpoint(serviceName, endpointName,
-                                    this.engine.getProducerWSDL());
-                        }
+        endpointList = WSDLUtilImpl.getEndpointList(this.engine.getProducerWSDL().getDescription());
+        if (endpointList != null) {
+            final Iterator<Endpoint> iterator = endpointList.iterator();
+            if (iterator != null) {
+                while (iterator.hasNext()) {
+                    final Endpoint endpoint = iterator.next();
+                    if (endpoint != null) {
+                        serviceName = endpoint.getService().getQName();
+                        endpointName = endpoint.getName();
+                        this.activateWSNEndpoint(serviceName, endpointName,
+                                this.engine.getProducerWSDL());
                     }
                 }
             }
-
-            endpointList = UtilFactory.getWSDLUtil().getEndpointList(
-                    this.engine.getConsumerWSDL().getDescription());
-            if (endpointList != null) {
-                final Iterator<Endpoint> iterator = endpointList.iterator();
-                if (iterator != null) {
-                    while (iterator.hasNext()) {
-                        final Endpoint endpoint = iterator.next();
-                        if (endpoint != null) {
-                            serviceName = endpoint.getService().getQName();
-                            endpointName = endpoint.getName();
-                            this.activateWSNEndpoint(serviceName, endpointName,
-                                    this.engine.getConsumerWSDL());
-                        }
-                    }
-                }
-            }
-        } catch (WSDLException e) {
-            e.printStackTrace();
         }
+
+        endpointList = WSDLUtilImpl.getEndpointList(this.engine.getConsumerWSDL().getDescription());
+        if (endpointList != null) {
+            final Iterator<Endpoint> iterator = endpointList.iterator();
+            if (iterator != null) {
+                while (iterator.hasNext()) {
+                    final Endpoint endpoint = iterator.next();
+                    if (endpoint != null) {
+                        serviceName = endpoint.getService().getQName();
+                        endpointName = endpoint.getName();
+                        this.activateWSNEndpoint(serviceName, endpointName,
+                                this.engine.getConsumerWSDL());
+                    }
+                }
+            }
+        }
+
     }
 
     /**

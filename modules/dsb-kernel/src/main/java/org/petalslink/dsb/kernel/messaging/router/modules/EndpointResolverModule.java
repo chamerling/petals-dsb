@@ -30,14 +30,14 @@ import org.ow2.petals.jbi.component.context.ComponentContext;
 import org.ow2.petals.jbi.descriptor.original.generated.LinkType;
 import org.ow2.petals.jbi.messaging.control.ExchangeCheckerClient;
 import org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint;
-import org.ow2.petals.jbi.messaging.exchange.MessageExchange;
+import org.ow2.petals.jbi.messaging.exchange.MessageExchangeWrapper;
 import org.ow2.petals.jbi.messaging.routing.RouterService;
 import org.ow2.petals.jbi.messaging.routing.RoutingException;
 import org.ow2.petals.jbi.messaging.routing.module.SenderModule;
 import org.ow2.petals.jbi.messaging.routing.module.endpoint.EndpointOrderer;
 import org.ow2.petals.kernel.configuration.ConfigurationService;
 import org.ow2.petals.transport.util.TransportSendContext;
-import org.ow2.petals.util.LoggingUtil;
+import org.ow2.petals.util.oldies.LoggingUtil;
 import org.petalslink.dsb.jbi.Adapter;
 import org.petalslink.dsb.kernel.api.PetalsService;
 import org.petalslink.dsb.kernel.api.messaging.EndpointSearchEngine;
@@ -97,7 +97,7 @@ public class EndpointResolverModule implements SenderModule, PetalsService {
      */
     public void electEndpoints(Map<ServiceEndpoint, TransportSendContext> electedEndpoints,
             ComponentContext sourceComponentContext,
-            org.ow2.petals.jbi.messaging.exchange.MessageExchange exchange) throws RoutingException {
+            org.ow2.petals.jbi.messaging.exchange.MessageExchangeWrapper exchange) throws RoutingException {
         this.log.call();
 
         // if we are a consumer ie we want to invoke a service
@@ -108,10 +108,10 @@ public class EndpointResolverModule implements SenderModule, PetalsService {
                 electedEndpoints.put(endpoint, new TransportSendContext(endpoint.getLocation()));
             }
         } else {
-            // if we are a service provider ie we return a result from a servuce invocation,
-            // we get information defined in the exchange by the consumer
-            electedEndpoints.put(exchange.getConsumerEndpoint(), new TransportSendContext(exchange
-                    .getConsumerEndpoint().getLocation()));
+            // CHA 2012 update : CAST taken from endpointreslover!
+            ServiceEndpoint serviceEndpoint = (ServiceEndpoint) exchange.getConsumerEndpoint();
+            electedEndpoints.put(serviceEndpoint, new TransportSendContext(
+                    serviceEndpoint.getLocation()));
         }
     }
 
@@ -134,11 +134,11 @@ public class EndpointResolverModule implements SenderModule, PetalsService {
      *             registry
      */
     private List<ServiceEndpoint> resolveEndpoints(final Component sourceComponent,
-            final MessageExchange exchange) throws RoutingException {
+            final MessageExchangeWrapper exchange) throws RoutingException {
         this.log.start();
 
         final String strategy = (String) exchange
-                .getProperty(EndpointOrderer.PROPERTY_STRATEGY_PROTOCOLS);
+                .getProperty(org.ow2.petals.jbi.messaging.routing.module.EndpointResolverModule.PROPERTY_STRATEGY_PROTOCOLS);
 
         // get message exchange values
         ServiceEndpoint givenEndpoint = (ServiceEndpoint) exchange.getEndpoint();
@@ -163,8 +163,8 @@ public class EndpointResolverModule implements SenderModule, PetalsService {
             try {
                 org.petalslink.dsb.api.ServiceEndpoint searchResultEndpoint = this.endpointSearchEngine
                         .getTargetedEndpointFromGivenEndpoint(
-                                Adapter.createServiceEndpoint(givenEndpoint), linkType);
-                targetEndpoint = Adapter.createServiceEndpoint(searchResultEndpoint);
+                                Adapter.createDSBServiceEndpoint(givenEndpoint), linkType);
+                targetEndpoint = Adapter.createJBIServiceEndpoint(searchResultEndpoint);
             } catch (SearchException e) {
                 throw new RoutingException(e);
             }
@@ -180,7 +180,7 @@ public class EndpointResolverModule implements SenderModule, PetalsService {
 
                 if (searchResultEndpoints != null) {
                     for (org.petalslink.dsb.api.ServiceEndpoint serviceEndpoint : searchResultEndpoints) {
-                        electedEndpoints.add(Adapter.createServiceEndpoint(serviceEndpoint));
+                        electedEndpoints.add(Adapter.createJBIServiceEndpoint(serviceEndpoint));
                     }
                 }
 
@@ -200,7 +200,7 @@ public class EndpointResolverModule implements SenderModule, PetalsService {
                                 linkType);
                 if (searchResultEndpoints != null) {
                     for (org.petalslink.dsb.api.ServiceEndpoint serviceEndpoint : searchResultEndpoints) {
-                        electedEndpoints.add(Adapter.createServiceEndpoint(serviceEndpoint));
+                        electedEndpoints.add(Adapter.createJBIServiceEndpoint(serviceEndpoint));
                     }
                 }
                 
@@ -233,7 +233,7 @@ public class EndpointResolverModule implements SenderModule, PetalsService {
 
     private boolean controlAcceptationExchange(final Component consumer,
             final org.ow2.petals.jbi.messaging.endpoint.ServiceEndpoint providerEP,
-            final MessageExchange exchange) {
+            final MessageExchangeWrapper exchange) {
         this.log.call();
 
         boolean result = false;

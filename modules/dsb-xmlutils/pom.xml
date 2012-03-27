@@ -28,9 +28,9 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.ow2.petals</groupId>
-			<artifactId>petals-commons</artifactId>
-			<version>1.0.1</version>
+			<groupId>com.ebmwebsourcing.easycommons</groupId>
+			<artifactId>easycommons-util</artifactId>
+			<version>2.0</version>
 		</dependency>
 	</dependencies>
 </project>

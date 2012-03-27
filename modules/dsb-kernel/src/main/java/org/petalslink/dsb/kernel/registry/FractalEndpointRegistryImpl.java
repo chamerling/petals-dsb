@@ -40,7 +40,7 @@ import org.ow2.petals.jbi.messaging.registry.EndpointRegistry;
 import org.ow2.petals.jbi.messaging.registry.RegistryException;
 import org.ow2.petals.jbi.messaging.registry.RegistryListener;
 import org.ow2.petals.kernel.configuration.ConfigurationService;
-import org.ow2.petals.util.LoggingUtil;
+import org.ow2.petals.util.oldies.LoggingUtil;
 import org.petalslink.dsb.annotations.LifeCycleListener;
 import org.petalslink.dsb.api.DSBException;
 import org.petalslink.dsb.kernel.api.messaging.RegistryListenerManager;
@@ -104,10 +104,10 @@ public class FractalEndpointRegistryImpl implements EndpointRegistry, RegistryLi
     }
 
     public ServiceEndpoint activateEndpoint(QName serviceName, String endpointName,
-            QName[] interfaces, Document description, ServiceEndpoint address,
-            Map<String, String> properties) throws RegistryException {
+            List<QName> interfaces, Document description, ServiceEndpoint address) throws RegistryException {
+        System.out.println("Activate Endpoint " + serviceName + " " + endpointName + " " + interfaces + " " + address);
         return this.delegate.activateEndpoint(serviceName, endpointName, interfaces, description,
-                address, properties);
+                address);
     }
 
     public ServiceEndpoint activateEndpoint(QName serviceName, String endpointName,
@@ -146,7 +146,7 @@ public class FractalEndpointRegistryImpl implements EndpointRegistry, RegistryLi
         return this.delegate.getAllInternalEndpoints();
     }
 
-    public Document getDescription(String serviceName, String endpointName)
+    public String getDescription(String serviceName, String endpointName)
             throws RegistryException {
         return this.delegate.getDescription(serviceName, endpointName);
     }
